@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="320" viewBox="0 0 375 320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5B6CF9"/>
+      <stop offset="50%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <!-- Blob shapes para simular contenido detrás -->
+    <radialGradient id="blob1" cx="30%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#60A5FA" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blob2" cx="70%" cy="60%" r="50%">
+      <stop offset="0%" stop-color="#F472B6" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Filtro blur para simular material -->
+    <filter id="blur-ultra">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="blur-thin">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <filter id="blur-regular">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo con gradiente -->
+  <rect width="375" height="320" rx="16" fill="url(#bg)"/>
+  <!-- Blobs decorativos -->
+  <circle cx="80" cy="100" r="90" fill="url(#blob1)"/>
+  <circle cx="280" cy="200" r="100" fill="url(#blob2)"/>
+  <!-- Circles decorativos adicionales -->
+  <circle cx="200" cy="60" r="50" fill="#FBBF24" fill-opacity="0.3"/>
+  <circle cx="100" cy="260" r="60" fill="#34D399" fill-opacity="0.25"/>
+
+  <!-- Título -->
+  <text x="187" y="28" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="13" font-weight="600" fill="rgba(255,255,255,0.9)">Jerarquía de Materiales</text>
+
+  <!-- Tarjeta ultraThinMaterial -->
+  <rect x="20" y="38" width="155" height="56" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="0.5"/>
+  <text x="97" y="62" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.95)">.ultraThinMaterial</text>
+  <text x="97" y="80" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" fill="rgba(255,255,255,0.6)">Más translúcido</text>
+
+  <!-- Tarjeta thinMaterial -->
+  <rect x="200" y="38" width="155" height="56" rx="12" fill="rgba(255,255,255,0.13)" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>
+  <text x="277" y="62" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.95)">.thinMaterial</text>
+  <text x="277" y="80" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" fill="rgba(255,255,255,0.65)">Paneles secundarios</text>
+
+  <!-- Tarjeta regularMaterial -->
+  <rect x="20" y="106" width="155" height="56" rx="12" fill="rgba(255,255,255,0.20)" stroke="rgba(255,255,255,0.35)" stroke-width="0.5"/>
+  <text x="97" y="130" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.95)">.regularMaterial</text>
+  <text x="97" y="148" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">Tarjetas principales</text>
+
+  <!-- Tarjeta thickMaterial -->
+  <rect x="200" y="106" width="155" height="56" rx="12" fill="rgba(255,255,255,0.30)" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/>
+  <text x="277" y="130" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,0.95)">.thickMaterial</text>
+  <text x="277" y="148" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" fill="rgba(255,255,255,0.75)">Mayor opacidad</text>
+
+  <!-- Tarjeta ultraThickMaterial (ancha, centrada) -->
+  <rect x="87" y="174" width="200" height="56" rx="12" fill="rgba(255,255,255,0.45)" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>
+  <text x="187" y="198" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="600" fill="rgba(0,0,0,0.75)">.ultraThickMaterial</text>
+  <text x="187" y="216" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" fill="rgba(0,0,0,0.55)">Casi opaco</text>
+
+  <!-- Flecha indicando dirección -->
+  <line x1="187" y1="244" x2="187" y2="272" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="187" y="252" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">↑ más transparente</text>
+  <text x="187" y="268" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" fill="rgba(255,255,255,0.5)">más opaco ↓</text>
+
+  <!-- Código snippet -->
+  <rect x="20" y="282" width="335" height="26" rx="8" fill="rgba(0,0,0,0.3)"/>
+  <text x="36" y="300" font-family="'SF Mono', 'Menlo', monospace" font-size="11" fill="#93C5FD">.background(</text>
+  <text x="142" y="300" font-family="'SF Mono', 'Menlo', monospace" font-size="11" fill="#86EFAC">.regularMaterial</text>
+  <text x="262" y="300" font-family="'SF Mono', 'Menlo', monospace" font-size="11" fill="#93C5FD">)</text>
+</svg>
