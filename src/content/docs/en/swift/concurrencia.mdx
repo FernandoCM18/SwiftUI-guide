@@ -1,0 +1,191 @@
+---
+title: Concurrency
+description: Master modern Swift 6 concurrency with async/await, Task, actors and structured concurrency.
+---
+
+Concurrency in Swift allows running multiple operations in parallel without blocking the interface. Swift 6 introduces strict concurrency by default, eliminating data races at compile time.
+
+## async/await
+
+Mark a function with `async` to indicate it can suspend. Use `await` to call it.
+
+```swift
+import Foundation
+
+// Async function
+func fetchUser(id: Int) async throws -> String {
+    let url = URL(string: "https://api.example.com/users/\(id)")!
+    let (data, _) = try await URLSession.shared.data(from: url)
+    return String(data: data, encoding: .utf8) ?? ""
+}
+
+// Call from async context
+func loadProfile() async {
+    do {
+        let user = try await fetchUser(id: 1)
+        print("User: \(user)")
+    } catch {
+        print("Error: \(error)")
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Task and TaskGroup
+
+`Task` creates a unit of async work. Use it to launch async work from synchronous context (like `onAppear`).
+
+```swift
+import SwiftUI
+
+struct ProfileView: View {
+    @State private var name = ""
+
+    var body: some View {
+        Text(name.isEmpty ? "Loading..." : name)
+            .onAppear {
+                Task {
+                    // Launch async work from sync context
+                    name = await loadName()
+                }
+            }
+    }
+
+    func loadName() async -> String {
+        try? await Task.sleep(for: .seconds(1))
+        return "Carlos"
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+`TaskGroup` runs multiple tasks in parallel and waits for all to finish:
+
+```swift
+func loadImages(ids: [Int]) async -> [String] {
+    await withTaskGroup(of: String.self) { group in
+        for id in ids {
+            group.addTask {
+                // Each image downloads in parallel
+                await downloadImage(id: id)
+            }
+        }
+
+        var results: [String] = []
+        for await image in group {
+            results.append(image)
+        }
+        return results
+    }
+}
+
+func downloadImage(id: Int) async -> String {
+    try? await Task.sleep(for: .milliseconds(100))
+    return "image_\(id)"
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Actors
+
+An `actor` protects its internal state from concurrent access. Only one task can access its properties at a time.
+
+```swift
+actor SafeCounter {
+    private var value = 0
+
+    func increment() {
+        value += 1
+    }
+
+    func getValue() -> Int {
+        return value
+    }
+}
+
+// Use the actor from async context
+let counter = SafeCounter()
+
+Task {
+    await counter.increment()
+    let total = await counter.getValue()
+    print("Total: \(total)")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use `@MainActor` to guarantee code runs on the main thread — required for UI updates.
+:::
+
+```swift
+@MainActor
+class MyViewModel: ObservableObject {
+    var title = ""
+
+    func load() async {
+        // This function always runs on the main thread
+        title = await fetchTitle()
+    }
+
+    func fetchTitle() async -> String {
+        try? await Task.sleep(for: .seconds(1))
+        return "Hello"
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Sendable
+
+`Sendable` is a protocol that marks a type as safe to pass between concurrency contexts. Swift 6 requires it in strict mode.
+
+```swift
+// ✅ Struct is Sendable automatically (value type)
+struct Product: Sendable {
+    let id: Int
+    let name: String
+}
+
+// ✅ Enum with Sendable associated values
+enum State: Sendable {
+    case loading
+    case ready(Product)
+    case error(String)
+}
+
+// ⚠️ Class needs @unchecked Sendable or to be an actor
+// to comply with Swift 6 strict concurrency
+actor ProductManager {
+    var products: [Product] = []
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Swift 6 — Strict Concurrency
+
+Swift 6 enables strict concurrency checking by default. The compiler detects data races at compile time.
+
+```swift
+// In Swift 6 this generates an error:
+// "Capture of 'data' with non-sendable type"
+class NonConcurrentData {
+    var value = 0
+}
+
+// ✅ Solution: use actor
+actor ConcurrentData {
+    var value = 0
+    func increment() { value += 1 }
+}
+```
+
+:::tip
+To migrate to Swift 6 gradually, set `SWIFT_STRICT_CONCURRENCY = targeted` in Build Settings. Only files that already comply with strict concurrency will be checked.
+:::

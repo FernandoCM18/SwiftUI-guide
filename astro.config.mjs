@@ -23,6 +23,7 @@ export default defineConfig({
             { slug: 'swift/tipos-de-datos' },
             { slug: 'swift/flujo-de-control' },
             { slug: 'swift/funciones' },
+            { slug: 'swift/concurrencia' },
             { slug: 'swift/structs-y-clases' },
             { slug: 'swift/opcionales' },
             { slug: 'swift/protocolos' },
