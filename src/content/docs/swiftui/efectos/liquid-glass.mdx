@@ -1,0 +1,205 @@
+---
+title: Liquid Glass
+description: El nuevo lenguaje visual de Apple en iOS 26 y macOS 26 — materiales translúcidos, efectos de cristal y blur nativo en SwiftUI.
+---
+
+**Liquid Glass** es el nuevo lenguaje visual de Apple presentado en WWDC 2025 con iOS 26 y macOS 26. Los elementos de la interfaz adoptan un aspecto de cristal translúcido que refleja y refracta el contenido detrás de ellos.
+
+## Materiales
+
+SwiftUI ofrece una jerarquía de materiales que aplican el efecto Liquid Glass. Se usan con el modificador `.background()`:
+
+```swift
+import SwiftUI
+
+struct TarjetaGlass: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Liquid Glass")
+                .font(.title2.bold())
+            Text("iOS 26 · macOS 26")
+                .foregroundStyle(.secondary)
+        }
+        .padding(24)
+        .background(.ultraThinMaterial)  // Material más translúcido
+        .clipShape(.rect(cornerRadius: 20))
+    }
+}
+
+#Preview {
+    ZStack {
+        LinearGradient(
+            colors: [.blue, .purple, .pink],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+
+        TarjetaGlass()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Jerarquía de materiales
+
+De más a menos translúcido:
+
+| Material | Uso recomendado |
+|---|---|
+| `.ultraThinMaterial` | Overlays sutiles, barras flotantes |
+| `.thinMaterial` | Paneles secundarios |
+| `.regularMaterial` | Tarjetas, contenedores principales |
+| `.thickMaterial` | Fondos con mayor opacidad |
+| `.ultraThickMaterial` | Fondos casi opacos |
+
+## glassBackgroundEffect
+
+El modificador `.glassBackgroundEffect()` aplica el efecto Liquid Glass nativo de iOS 26 en toda su expresión, incluyendo el reflejo dinámico y la refracción:
+
+```swift
+import SwiftUI
+
+struct BotonGlass: View {
+    var body: some View {
+        Button(action: {}) {
+            Label("Abrir cámara", systemImage: "camera.fill")
+                .font(.headline)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+        }
+        .glassBackgroundEffect()  // Efecto Liquid Glass nativo (iOS 26+)
+    }
+}
+
+#Preview {
+    ZStack {
+        Image(systemName: "photo")
+            .resizable()
+            .scaledToFill()
+            .foregroundStyle(
+                LinearGradient(colors: [.cyan, .blue], startPoint: .top, endPoint: .bottom)
+            )
+            .frame(width: 300, height: 300)
+
+        BotonGlass()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`.glassBackgroundEffect()` está disponible desde iOS 26 / macOS 26. Para versiones anteriores, usa `.background(.regularMaterial)` como fallback.
+:::
+
+## Combinando materiales con vibrancy
+
+El efecto `vibrancy` adapta el color del texto al material subyacente para mejorar la legibilidad:
+
+```swift
+import SwiftUI
+
+struct PanelGlass: View {
+    let titulo: String
+    let subtitulo: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(titulo)
+                .font(.headline)
+
+            Text(subtitulo)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            Divider()
+
+            HStack {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+                Text("Activo")
+                    .foregroundStyle(.primary)
+            }
+        }
+        .padding(20)
+        .background(.ultraThinMaterial)
+        .clipShape(.rect(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.1), radius: 10, y: 4)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Ejemplo completo: Dashboard con Liquid Glass
+
+```swift
+import SwiftUI
+
+struct DashboardView: View {
+    var body: some View {
+        ZStack {
+            // Fondo dinámico
+            LinearGradient(
+                colors: [.indigo, .purple, .pink],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Tarjeta principal
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label("Estado del sistema", systemImage: "cpu")
+                            .font(.headline)
+                        Text("Todo funciona correctamente")
+                            .foregroundStyle(.secondary)
+                        ProgressView(value: 0.72)
+                            .tint(.green)
+                    }
+                    .padding(20)
+                    .background(.regularMaterial)
+                    .clipShape(.rect(cornerRadius: 20))
+
+                    // Fila de estadísticas
+                    HStack(spacing: 12) {
+                        EstadisticaCard(icono: "bolt.fill", valor: "98%", etiqueta: "CPU")
+                        EstadisticaCard(icono: "memorychip", valor: "4.2 GB", etiqueta: "RAM")
+                        EstadisticaCard(icono: "internaldrive", valor: "128 GB", etiqueta: "Disco")
+                    }
+                }
+                .padding()
+            }
+        }
+    }
+}
+
+struct EstadisticaCard: View {
+    let icono: String
+    let valor: String
+    let etiqueta: String
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icono)
+                .font(.title2)
+            Text(valor)
+                .font(.headline)
+            Text(etiqueta)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(.ultraThinMaterial)
+        .clipShape(.rect(cornerRadius: 16))
+    }
+}
+
+#Preview { DashboardView() }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

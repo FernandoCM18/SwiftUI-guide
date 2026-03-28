@@ -89,6 +89,13 @@ export default defineConfig({
                 { slug: 'swiftui/estado/observable' },
               ],
             },
+            {
+              label: 'Efectos',
+              translations: { en: 'Effects' },
+              items: [
+                { slug: 'swiftui/efectos/liquid-glass' },
+              ],
+            },
           ],
         },
 {
