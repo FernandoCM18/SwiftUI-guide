@@ -1,0 +1,180 @@
+---
+title: "@Observable"
+description: El framework Observation de Swift — gestión de estado moderna en SwiftUI con @Observable, @State y @Environment.
+---
+
+El framework **Observation** (iOS 17+) reemplaza `ObservableObject` con el macro `@Observable`. Es más simple, más eficiente y requiere menos código.
+
+## @Observable
+
+Aplica `@Observable` a una clase para que SwiftUI observe automáticamente todos sus cambios de propiedad.
+
+```swift
+import SwiftUI
+import Observation
+
+@Observable
+class ContadorViewModel {
+    var cuenta = 0
+    var historial: [Int] = []
+
+    func incrementar() {
+        cuenta += 1
+        historial.append(cuenta)
+    }
+
+    func reiniciar() {
+        cuenta = 0
+        historial.removeAll()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+A diferencia de `ObservableObject`, no necesitas marcar cada propiedad con `@Published`. El macro instrumenta todas las propiedades almacenadas automáticamente.
+
+## Usar el ViewModel en una vista
+
+Con `@Observable`, crea el ViewModel con `@State` en la vista que lo posee:
+
+```swift
+struct ContadorView: View {
+    @State private var vm = ContadorViewModel()
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Text("\(vm.cuenta)")
+                .font(.system(size: 80, weight: .bold, design: .rounded))
+
+            HStack(spacing: 16) {
+                Button("Reiniciar") { vm.reiniciar() }
+                    .buttonStyle(.bordered)
+
+                Button("Sumar") { vm.incrementar() }
+                    .buttonStyle(.borderedProminent)
+            }
+
+            if !vm.historial.isEmpty {
+                Text("Historial: \(vm.historial.map(String.init).joined(separator: " → "))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+    }
+}
+
+#Preview { ContadorView() }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Con `@Observable`, usa `@State` (no `@StateObject`) para crear el ViewModel. SwiftUI recrea la vista si es necesario, pero el `@State` preserva el ViewModel.
+:::
+
+## Pasar el ViewModel a vistas hijas
+
+Para pasar el ViewModel a una vista hija sin `@EnvironmentObject`, simplemente pásalo como parámetro. `@Observable` no necesita ningún wrapper especial:
+
+```swift
+struct ContadorView: View {
+    @State private var vm = ContadorViewModel()
+
+    var body: some View {
+        VStack {
+            HistorialView(vm: vm)  // Paso directo, sin wrapper
+            ContadorControlesView(vm: vm)
+        }
+    }
+}
+
+struct HistorialView: View {
+    let vm: ContadorViewModel  // Sin @ObservedObject
+
+    var body: some View {
+        List(vm.historial, id: \.self) { valor in
+            Text("\(valor)")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## @Environment con @Observable
+
+Para compartir un ViewModel en toda la jerarquía de vistas, usa `@Environment` con una clave de entorno personalizada:
+
+```swift
+@Observable
+class SesionUsuario {
+    var nombre = ""
+    var estaAutenticado = false
+
+    func iniciarSesion(nombre: String) {
+        self.nombre = nombre
+        estaAutenticado = true
+    }
+
+    func cerrarSesion() {
+        nombre = ""
+        estaAutenticado = false
+    }
+}
+
+struct MiApp: App {
+    @State private var sesion = SesionUsuario()
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environment(sesion)  // Inyectar en el entorno
+        }
+    }
+}
+
+struct PerfilView: View {
+    @Environment(SesionUsuario.self) private var sesion  // Leer del entorno
+
+    var body: some View {
+        if sesion.estaAutenticado {
+            Text("Hola, \(sesion.nombre)")
+            Button("Cerrar sesión") { sesion.cerrarSesion() }
+        } else {
+            Button("Iniciar sesión") { sesion.iniciarSesion(nombre: "Carlos") }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Propiedades ignoradas
+
+Para excluir una propiedad del tracking de observación, usa `@ObservationIgnored`:
+
+```swift
+@Observable
+class ConfiguracionViewModel {
+    var tema: String = "claro"      // Observado — SwiftUI reacciona a cambios
+    var idioma: String = "es"        // Observado
+
+    @ObservationIgnored
+    var cache: [String: Any] = [:]  // No observado — cambios no actualizan la UI
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## @Observable vs ObservableObject
+
+| | `@Observable` (iOS 17+) | `ObservableObject` |
+|---|---|---|
+| Declaración | `@Observable class VM` | `class VM: ObservableObject` |
+| Propiedades | Automáticas | `@Published` en cada una |
+| En vista creadora | `@State` | `@StateObject` |
+| En vista hija | Parámetro directo | `@ObservedObject` |
+| Entorno | `@Environment(Tipo.self)` | `@EnvironmentObject` |
+| Re-renders | Granular por propiedad | Por cualquier `@Published` |

@@ -1,0 +1,180 @@
+---
+title: "@Observable"
+description: Swift's Observation framework — modern state management in SwiftUI with @Observable, @State and @Environment.
+---
+
+The **Observation** framework (iOS 17+) replaces `ObservableObject` with the `@Observable` macro. It's simpler, more efficient and requires less code.
+
+## @Observable
+
+Apply `@Observable` to a class so SwiftUI automatically observes all its property changes.
+
+```swift
+import SwiftUI
+import Observation
+
+@Observable
+class CounterViewModel {
+    var count = 0
+    var history: [Int] = []
+
+    func increment() {
+        count += 1
+        history.append(count)
+    }
+
+    func reset() {
+        count = 0
+        history.removeAll()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+Unlike `ObservableObject`, you don't need to mark each property with `@Published`. The macro instruments all stored properties automatically.
+
+## Using the ViewModel in a view
+
+With `@Observable`, create the ViewModel with `@State` in the owning view:
+
+```swift
+struct CounterView: View {
+    @State private var vm = CounterViewModel()
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Text("\(vm.count)")
+                .font(.system(size: 80, weight: .bold, design: .rounded))
+
+            HStack(spacing: 16) {
+                Button("Reset") { vm.reset() }
+                    .buttonStyle(.bordered)
+
+                Button("Add") { vm.increment() }
+                    .buttonStyle(.borderedProminent)
+            }
+
+            if !vm.history.isEmpty {
+                Text("History: \(vm.history.map(String.init).joined(separator: " → "))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()
+    }
+}
+
+#Preview { CounterView() }
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+With `@Observable`, use `@State` (not `@StateObject`) to create the ViewModel. SwiftUI recreates the view if needed, but `@State` preserves the ViewModel.
+:::
+
+## Passing the ViewModel to child views
+
+To pass the ViewModel to a child view without `@EnvironmentObject`, just pass it as a parameter. `@Observable` doesn't need any special wrapper:
+
+```swift
+struct CounterView: View {
+    @State private var vm = CounterViewModel()
+
+    var body: some View {
+        VStack {
+            HistoryView(vm: vm)      // Direct pass, no wrapper
+            CounterControlsView(vm: vm)
+        }
+    }
+}
+
+struct HistoryView: View {
+    let vm: CounterViewModel  // No @ObservedObject needed
+
+    var body: some View {
+        List(vm.history, id: \.self) { value in
+            Text("\(value)")
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## @Environment with @Observable
+
+To share a ViewModel across the entire view hierarchy, use `@Environment` with a custom environment key:
+
+```swift
+@Observable
+class UserSession {
+    var name = ""
+    var isAuthenticated = false
+
+    func signIn(name: String) {
+        self.name = name
+        isAuthenticated = true
+    }
+
+    func signOut() {
+        name = ""
+        isAuthenticated = false
+    }
+}
+
+struct MyApp: App {
+    @State private var session = UserSession()
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environment(session)  // Inject into environment
+        }
+    }
+}
+
+struct ProfileView: View {
+    @Environment(UserSession.self) private var session  // Read from environment
+
+    var body: some View {
+        if session.isAuthenticated {
+            Text("Hello, \(session.name)")
+            Button("Sign out") { session.signOut() }
+        } else {
+            Button("Sign in") { session.signIn(name: "Carlos") }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Ignored properties
+
+To exclude a property from observation tracking, use `@ObservationIgnored`:
+
+```swift
+@Observable
+class SettingsViewModel {
+    var theme: String = "light"     // Observed — SwiftUI reacts to changes
+    var language: String = "en"      // Observed
+
+    @ObservationIgnored
+    var cache: [String: Any] = [:]  // Not observed — changes don't update UI
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## @Observable vs ObservableObject
+
+| | `@Observable` (iOS 17+) | `ObservableObject` |
+|---|---|---|
+| Declaration | `@Observable class VM` | `class VM: ObservableObject` |
+| Properties | Automatic | `@Published` on each |
+| In owner view | `@State` | `@StateObject` |
+| In child view | Direct parameter | `@ObservedObject` |
+| Environment | `@Environment(Type.self)` | `@EnvironmentObject` |
+| Re-renders | Granular per property | On any `@Published` change |

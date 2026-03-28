@@ -82,6 +82,13 @@ export default defineConfig({
                 { slug: 'swiftui/presentacion/tabview' },
               ],
             },
+            {
+              label: 'Estado',
+              translations: { en: 'State' },
+              items: [
+                { slug: 'swiftui/estado/observable' },
+              ],
+            },
           ],
         },
 {
