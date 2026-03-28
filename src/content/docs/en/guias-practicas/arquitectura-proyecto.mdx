@@ -1,0 +1,391 @@
+---
+title: Project Architecture and Organization
+description: Best practices for organizing folders, code, and architecture in SwiftUI projects.
+---
+
+Good project organization facilitates maintenance, collaboration, and scalability of your app.
+
+## Recommended folder structure
+
+### Small-medium app (MVVM)
+
+```
+MyApp/
+├── MyApp.swift              # @main entry point
+├── ContentView.swift        # Main view
+├── Models/
+│   ├── User.swift
+│   ├── Product.swift
+│   └── Order.swift
+├── ViewModels/
+│   ├── AuthViewModel.swift
+│   ├── ProductsViewModel.swift
+│   └── OrdersViewModel.swift
+├── Views/
+│   ├── Auth/
+│   │   ├── LoginView.swift
+│   │   └── RegisterView.swift
+│   ├── Home/
+│   │   ├── HomeView.swift
+│   │   └── ProductCardView.swift
+│   ├── Profile/
+│   │   └── ProfileView.swift
+│   └── Components/
+│       ├── PrimaryButton.swift
+│       ├── CardView.swift
+│       └── LoadingView.swift
+├── Services/
+│   ├── APIService.swift
+│   ├── AuthService.swift
+│   └── StorageService.swift
+├── Utilities/
+│   ├── Extensions/
+│   │   ├── Color+Hex.swift
+│   │   ├── Date+Format.swift
+│   │   └── View+Modifiers.swift
+│   └── Constants.swift
+├── Resources/
+│   └── Assets.xcassets
+└── Info.plist
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Large app (Feature-based)
+
+For larger apps, organize by **feature** instead of file type:
+
+```
+MyApp/
+├── App/
+│   ├── MyApp.swift
+│   └── AppDelegate.swift
+├── Features/
+│   ├── Auth/
+│   │   ├── Models/
+│   │   │   └── AuthResponse.swift
+│   │   ├── ViewModels/
+│   │   │   └── AuthViewModel.swift
+│   │   ├── Views/
+│   │   │   ├── LoginView.swift
+│   │   │   └── RegisterView.swift
+│   │   └── Services/
+│   │       └── AuthService.swift
+│   ├── Home/
+│   │   ├── Models/
+│   │   ├── ViewModels/
+│   │   ├── Views/
+│   │   └── Services/
+│   └── Profile/
+│       ├── Models/
+│       ├── ViewModels/
+│       ├── Views/
+│       └── Services/
+├── Core/
+│   ├── Network/
+│   │   ├── APIClient.swift
+│   │   ├── Endpoints.swift
+│   │   └── NetworkError.swift
+│   ├── Storage/
+│   │   └── UserDefaults+Keys.swift
+│   └── UI/
+│       ├── Components/
+│       ├── Modifiers/
+│       └── Theme/
+└── Resources/
+```
+
+:::tip
+For small apps, organizing by type (Models/, Views/, ViewModels/) is sufficient. For large apps with multiple features, feature-based organization scales better.
+:::
+
+## Naming conventions
+
+### Files and types
+
+```swift
+// Views: "View" suffix
+struct ProductDetailView: View { }
+struct LoginView: View { }
+
+// ViewModels: "ViewModel" suffix
+class ProductsViewModel { }
+class AuthViewModel { }
+
+// Models: concept name
+struct Product { }
+struct User { }
+
+// Services: "Service" suffix
+class APIService { }
+class AuthService { }
+
+// Reusable components: descriptive
+struct PrimaryButton: View { }
+struct ProductCard: View { }
+```
+
+### Variables and functions
+
+```swift
+// Properties: nouns in camelCase
+var userName: String
+var isLoading: Bool
+var productList: [Product]
+
+// Functions: verbs in camelCase
+func loadData() { }
+func saveProfile() { }
+func deleteProduct(_ product: Product) { }
+
+// Closures/callbacks: "on" + action
+var onSave: () -> Void
+var onSelect: (Product) -> Void
+```
+
+## Architecture patterns
+
+### MVVM (recommended for SwiftUI)
+
+```swift
+// Model: pure data
+struct Task: Identifiable {
+    let id = UUID()
+    var title: String
+    var completed: Bool
+}
+
+// ViewModel: business logic
+@Observable
+class TasksViewModel {
+    var tasks: [Task] = []
+
+    var pending: [Task] {
+        tasks.filter { !$0.completed }
+    }
+
+    func add(_ title: String) {
+        tasks.append(Task(title: title, completed: false))
+    }
+
+    func toggle(_ task: Task) {
+        if let i = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[i].completed.toggle()
+        }
+    }
+}
+
+// View: UI only
+struct TasksView: View {
+    @State private var vm = TasksViewModel()
+
+    var body: some View {
+        List(vm.tasks) { task in
+            Text(task.title)
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Repository Pattern
+
+Abstract the data source behind a protocol:
+
+```swift
+// Protocol
+protocol ProductRepository {
+    func getAll() async throws -> [Product]
+    func getById(_ id: Int) async throws -> Product
+    func create(_ product: Product) async throws -> Product
+}
+
+// Real implementation (API)
+class APIProductRepository: ProductRepository {
+    func getAll() async throws -> [Product] {
+        try await APIService.shared.fetch("/products")
+    }
+
+    func getById(_ id: Int) async throws -> Product {
+        try await APIService.shared.fetch("/products/\(id)")
+    }
+
+    func create(_ product: Product) async throws -> Product {
+        try await APIService.shared.post("/products", body: product)
+    }
+}
+
+// Mock implementation (for previews and tests)
+class MockProductRepository: ProductRepository {
+    func getAll() async throws -> [Product] {
+        [
+            Product(id: 1, name: "iPhone", price: 999, inStock: true),
+            Product(id: 2, name: "iPad", price: 799, inStock: false),
+        ]
+    }
+
+    func getById(_ id: Int) async throws -> Product {
+        Product(id: id, name: "Test", price: 0, inStock: true)
+    }
+
+    func create(_ product: Product) async throws -> Product {
+        product
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Best practices
+
+### 1. Small and composable views
+
+```swift
+// BAD: one giant view with everything
+struct HomeView: View {
+    var body: some View {
+        // 200+ lines of code...
+    }
+}
+
+// GOOD: split into components
+struct HomeView: View {
+    var body: some View {
+        ScrollView {
+            HeaderView()
+            FeaturedProductsView()
+            CategoriesView()
+            PromoBannerView()
+        }
+    }
+}
+```
+
+### 2. Reusable ViewModifiers
+
+```swift
+// Create a custom modifier
+struct CardModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(color: .black.opacity(0.1), radius: 5, y: 2)
+    }
+}
+
+extension View {
+    func cardStyle() -> some View {
+        modifier(CardModifier())
+    }
+}
+
+// Usage
+Text("Content")
+    .cardStyle()
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### 3. Useful Previews
+
+```swift
+#Preview("Normal state") {
+    ProductCardView(product: .preview)
+}
+
+#Preview("Loading") {
+    ProductsView()
+        .environment(ProductsViewModel.loading)
+}
+
+#Preview("Error") {
+    ProductsView()
+        .environment(ProductsViewModel.withError)
+}
+
+// Preview data
+extension Product {
+    static let preview = Product(
+        id: 1, name: "iPhone 16", price: 999, inStock: true
+    )
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### 4. Centralized constants
+
+```swift
+enum AppConstants {
+    static let appName = "MyApp"
+    static let maxItems = 50
+
+    enum API {
+        static let baseURL = "https://api.myapp.com/v1"
+        static let timeout: TimeInterval = 30
+    }
+
+    enum UI {
+        static let cornerRadius: CGFloat = 12
+        static let padding: CGFloat = 16
+        static let animationDuration: Double = 0.3
+    }
+}
+
+// Usage
+Text(AppConstants.appName)
+    .cornerRadius(AppConstants.UI.cornerRadius)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### 5. Dependency injection
+
+```swift
+// Define with protocol
+@Observable
+class ProductsViewModel {
+    private let repository: ProductRepository
+    var products: [Product] = []
+
+    init(repository: ProductRepository = APIProductRepository()) {
+        self.repository = repository
+    }
+
+    func load() async {
+        do {
+            products = try await repository.getAll()
+        } catch {
+            print(error)
+        }
+    }
+}
+
+// In production: uses real API
+let vm = ProductsViewModel()
+
+// In tests/previews: uses mock
+let vmTest = ProductsViewModel(repository: MockProductRepository())
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Avoid using singletons (`shared`) for everything. Dependency injection makes your code more testable and flexible. Only use singletons for truly global services (like the networking layer).
+:::
+
+## Well-organized project checklist
+
+- [ ] Clear folders separating Models, Views, ViewModels, Services
+- [ ] One view per file
+- [ ] ViewModels don't import SwiftUI (only `Foundation`)
+- [ ] Reusable components in `Components/`
+- [ ] Extensions grouped in `Extensions/`
+- [ ] Centralized constants
+- [ ] Previews with sample data
+- [ ] No business logic in Views
+- [ ] Protocols to abstract external dependencies
+- [ ] Descriptive and consistent names

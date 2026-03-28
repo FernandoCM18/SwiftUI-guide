@@ -83,15 +83,14 @@ export default defineConfig({
             },
           ],
         },
-        {
-          label: 'Combine',
-          translations: { en: 'Combine' },
+{
+          label: 'Guías Prácticas',
+          translations: { en: 'Practical Guides' },
           items: [
-            { slug: 'combine' },
-            { slug: 'combine/publishers' },
-            { slug: 'combine/subscribers' },
-            { slug: 'combine/operators' },
-            { slug: 'combine/combine-con-swiftui' },
+            { slug: 'guias-practicas/viewmodels-mvvm' },
+            { slug: 'guias-practicas/conectar-api' },
+            { slug: 'guias-practicas/assets-imagenes-colores' },
+            { slug: 'guias-practicas/arquitectura-proyecto' },
           ],
         },
       ],

@@ -1,0 +1,391 @@
+---
+title: Arquitectura y Organización del Proyecto
+description: Mejores prácticas para organizar carpetas, código y arquitectura en proyectos SwiftUI.
+---
+
+Una buena organización del proyecto facilita el mantenimiento, la colaboración y la escalabilidad de tu app.
+
+## Estructura de carpetas recomendada
+
+### App pequeña-mediana (MVVM)
+
+```
+MiApp/
+├── MiApp.swift              # @main entry point
+├── ContentView.swift        # Vista principal
+├── Models/
+│   ├── Usuario.swift
+│   ├── Producto.swift
+│   └── Pedido.swift
+├── ViewModels/
+│   ├── AuthViewModel.swift
+│   ├── ProductosViewModel.swift
+│   └── PedidosViewModel.swift
+├── Views/
+│   ├── Auth/
+│   │   ├── LoginView.swift
+│   │   └── RegistroView.swift
+│   ├── Home/
+│   │   ├── HomeView.swift
+│   │   └── ProductoCardView.swift
+│   ├── Perfil/
+│   │   └── PerfilView.swift
+│   └── Components/
+│       ├── BotonPrimario.swift
+│       ├── TarjetaView.swift
+│       └── CargandoView.swift
+├── Services/
+│   ├── APIService.swift
+│   ├── AuthService.swift
+│   └── StorageService.swift
+├── Utilities/
+│   ├── Extensions/
+│   │   ├── Color+Hex.swift
+│   │   ├── Date+Format.swift
+│   │   └── View+Modifiers.swift
+│   └── Constants.swift
+├── Resources/
+│   └── Assets.xcassets
+└── Info.plist
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### App grande (Feature-based)
+
+Para apps más grandes, organiza por **funcionalidad** en lugar de por tipo de archivo:
+
+```
+MiApp/
+├── App/
+│   ├── MiApp.swift
+│   └── AppDelegate.swift
+├── Features/
+│   ├── Auth/
+│   │   ├── Models/
+│   │   │   └── AuthResponse.swift
+│   │   ├── ViewModels/
+│   │   │   └── AuthViewModel.swift
+│   │   ├── Views/
+│   │   │   ├── LoginView.swift
+│   │   │   └── RegistroView.swift
+│   │   └── Services/
+│   │       └── AuthService.swift
+│   ├── Home/
+│   │   ├── Models/
+│   │   ├── ViewModels/
+│   │   ├── Views/
+│   │   └── Services/
+│   └── Perfil/
+│       ├── Models/
+│       ├── ViewModels/
+│       ├── Views/
+│       └── Services/
+├── Core/
+│   ├── Network/
+│   │   ├── APIClient.swift
+│   │   ├── Endpoints.swift
+│   │   └── NetworkError.swift
+│   ├── Storage/
+│   │   └── UserDefaults+Keys.swift
+│   └── UI/
+│       ├── Components/
+│       ├── Modifiers/
+│       └── Theme/
+└── Resources/
+```
+
+:::tip
+Para apps pequeñas, la organización por tipo (Models/, Views/, ViewModels/) es suficiente. Para apps grandes con múltiples funcionalidades, la organización por feature escala mejor.
+:::
+
+## Convenciones de nombrado
+
+### Archivos y tipos
+
+```swift
+// Views: sufijo "View"
+struct ProductoDetalleView: View { }
+struct LoginView: View { }
+
+// ViewModels: sufijo "ViewModel"
+class ProductosViewModel { }
+class AuthViewModel { }
+
+// Models: nombre del concepto
+struct Producto { }
+struct Usuario { }
+
+// Services: sufijo "Service"
+class APIService { }
+class AuthService { }
+
+// Componentes reutilizables: descriptivos
+struct BotonPrimario: View { }
+struct TarjetaProducto: View { }
+```
+
+### Variables y funciones
+
+```swift
+// Propiedades: sustantivos en camelCase
+var nombreUsuario: String
+var estaCargando: Bool
+var listaProductos: [Producto]
+
+// Funciones: verbos en camelCase
+func cargarDatos() { }
+func guardarPerfil() { }
+func eliminarProducto(_ producto: Producto) { }
+
+// Closures/callbacks: "on" + acción
+var onGuardar: () -> Void
+var onSeleccionar: (Producto) -> Void
+```
+
+## Patrones de arquitectura
+
+### MVVM (recomendado para SwiftUI)
+
+```swift
+// Model: datos puros
+struct Tarea: Identifiable {
+    let id = UUID()
+    var titulo: String
+    var completada: Bool
+}
+
+// ViewModel: lógica de negocio
+@Observable
+class TareasViewModel {
+    var tareas: [Tarea] = []
+
+    var pendientes: [Tarea] {
+        tareas.filter { !$0.completada }
+    }
+
+    func agregar(_ titulo: String) {
+        tareas.append(Tarea(titulo: titulo, completada: false))
+    }
+
+    func toggle(_ tarea: Tarea) {
+        if let i = tareas.firstIndex(where: { $0.id == tarea.id }) {
+            tareas[i].completada.toggle()
+        }
+    }
+}
+
+// View: solo UI
+struct TareasView: View {
+    @State private var vm = TareasViewModel()
+
+    var body: some View {
+        List(vm.tareas) { tarea in
+            Text(tarea.titulo)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Repository Pattern
+
+Abstrae el origen de datos detrás de un protocolo:
+
+```swift
+// Protocolo
+protocol ProductoRepository {
+    func obtenerTodos() async throws -> [Producto]
+    func obtenerPorId(_ id: Int) async throws -> Producto
+    func crear(_ producto: Producto) async throws -> Producto
+}
+
+// Implementación real (API)
+class APIProductoRepository: ProductoRepository {
+    func obtenerTodos() async throws -> [Producto] {
+        try await APIService.shared.fetch("/productos")
+    }
+
+    func obtenerPorId(_ id: Int) async throws -> Producto {
+        try await APIService.shared.fetch("/productos/\(id)")
+    }
+
+    func crear(_ producto: Producto) async throws -> Producto {
+        try await APIService.shared.post("/productos", body: producto)
+    }
+}
+
+// Implementación mock (para previews y tests)
+class MockProductoRepository: ProductoRepository {
+    func obtenerTodos() async throws -> [Producto] {
+        [
+            Producto(id: 1, name: "iPhone", price: 999, inStock: true),
+            Producto(id: 2, name: "iPad", price: 799, inStock: false),
+        ]
+    }
+
+    func obtenerPorId(_ id: Int) async throws -> Producto {
+        Producto(id: id, name: "Test", price: 0, inStock: true)
+    }
+
+    func crear(_ producto: Producto) async throws -> Producto {
+        producto
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Mejores prácticas
+
+### 1. Vistas pequeñas y componibles
+
+```swift
+// MAL: una vista gigante con todo
+struct HomeView: View {
+    var body: some View {
+        // 200+ líneas de código...
+    }
+}
+
+// BIEN: dividir en componentes
+struct HomeView: View {
+    var body: some View {
+        ScrollView {
+            HeaderView()
+            ProductosDestacadosView()
+            CategoriasView()
+            PromocionBannerView()
+        }
+    }
+}
+```
+
+### 2. ViewModifiers reutilizables
+
+```swift
+// Crear un modifier personalizado
+struct TarjetaModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(color: .black.opacity(0.1), radius: 5, y: 2)
+    }
+}
+
+extension View {
+    func estiloTarjeta() -> some View {
+        modifier(TarjetaModifier())
+    }
+}
+
+// Uso
+Text("Contenido")
+    .estiloTarjeta()
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### 3. Previews útiles
+
+```swift
+#Preview("Estado normal") {
+    ProductoCardView(producto: .preview)
+}
+
+#Preview("Cargando") {
+    ProductosView()
+        .environment(ProductosViewModel.cargando)
+}
+
+#Preview("Error") {
+    ProductosView()
+        .environment(ProductosViewModel.conError)
+}
+
+// Datos de preview
+extension Producto {
+    static let preview = Producto(
+        id: 1, name: "iPhone 16", price: 999, inStock: true
+    )
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### 4. Constantes centralizadas
+
+```swift
+enum AppConstants {
+    static let appName = "MiApp"
+    static let maxItems = 50
+
+    enum API {
+        static let baseURL = "https://api.miapp.com/v1"
+        static let timeout: TimeInterval = 30
+    }
+
+    enum UI {
+        static let cornerRadius: CGFloat = 12
+        static let padding: CGFloat = 16
+        static let animationDuration: Double = 0.3
+    }
+}
+
+// Uso
+Text(AppConstants.appName)
+    .cornerRadius(AppConstants.UI.cornerRadius)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### 5. Inyección de dependencias
+
+```swift
+// Definir con protocolo
+@Observable
+class ProductosViewModel {
+    private let repository: ProductoRepository
+    var productos: [Producto] = []
+
+    init(repository: ProductoRepository = APIProductoRepository()) {
+        self.repository = repository
+    }
+
+    func cargar() async {
+        do {
+            productos = try await repository.obtenerTodos()
+        } catch {
+            print(error)
+        }
+    }
+}
+
+// En producción: usa API real
+let vm = ProductosViewModel()
+
+// En tests/previews: usa mock
+let vmTest = ProductosViewModel(repository: MockProductoRepository())
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Evita usar singletons (`shared`) para todo. La inyección de dependencias hace tu código más testeable y flexible. Usa singletons solo para servicios verdaderamente globales (como la capa de red).
+:::
+
+## Checklist de un proyecto bien organizado
+
+- [ ] Carpetas claras separando Models, Views, ViewModels, Services
+- [ ] Una vista por archivo
+- [ ] ViewModels no importan SwiftUI (solo `Foundation`)
+- [ ] Componentes reutilizables en `Components/`
+- [ ] Extensiones agrupadas en `Extensions/`
+- [ ] Constantes centralizadas
+- [ ] Previews con datos de ejemplo
+- [ ] Sin lógica de negocio en las Views
+- [ ] Protocolos para abstraer dependencias externas
+- [ ] Nombres descriptivos y consistentes

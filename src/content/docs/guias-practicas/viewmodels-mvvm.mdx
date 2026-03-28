@@ -1,0 +1,281 @@
+---
+title: ViewModels y MVVM
+description: Cómo implementar el patrón MVVM en SwiftUI con ViewModels, @StateObject, @Observable y gestión de estado.
+---
+
+El patrón **MVVM** (Model-View-ViewModel) es la arquitectura más utilizada en apps SwiftUI. Separa la lógica de negocio (ViewModel) de la interfaz (View) y los datos (Model).
+
+## Estructura MVVM
+
+```
+View       → Lo que el usuario ve (SwiftUI Views)
+ViewModel  → Lógica de negocio y estado
+Model      → Datos y estructuras
+```
+
+## ViewModel con @Observable (iOS 17+, recomendado)
+
+Desde iOS 17, Apple recomienda usar el macro `@Observable` en lugar de `ObservableObject`:
+
+```swift
+import SwiftUI
+
+@Observable
+class ContadorViewModel {
+    var valor = 0
+    var historial: [Int] = []
+
+    func incrementar() {
+        valor += 1
+        historial.append(valor)
+    }
+
+    func reiniciar() {
+        valor = 0
+        historial.removeAll()
+    }
+}
+
+struct ContadorView: View {
+    @State private var vm = ContadorViewModel()
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("\(vm.valor)")
+                .font(.system(size: 72, weight: .bold))
+
+            HStack(spacing: 16) {
+                Button("Reiniciar") { vm.reiniciar() }
+                    .buttonStyle(.bordered)
+
+                Button("Sumar") { vm.incrementar() }
+                    .buttonStyle(.borderedProminent)
+            }
+
+            if !vm.historial.isEmpty {
+                Text("Historial: \(vm.historial.map(String.init).joined(separator: ", "))")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Con `@Observable`, usa `@State` en la vista que crea el ViewModel. Es más simple que el enfoque anterior con `@StateObject`.
+:::
+
+## ViewModel con ObservableObject (iOS 14-16)
+
+Para compatibilidad con versiones anteriores:
+
+```swift
+class TareasViewModel: ObservableObject {
+    @Published var tareas: [Tarea] = []
+    @Published var estaCargando = false
+    @Published var error: String?
+
+    func cargarTareas() {
+        estaCargando = true
+        // Simular carga
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.tareas = [
+                Tarea(titulo: "Estudiar Swift", completada: false),
+                Tarea(titulo: "Crear app", completada: false),
+            ]
+            self.estaCargando = false
+        }
+    }
+
+    func toggleTarea(_ tarea: Tarea) {
+        if let index = tareas.firstIndex(where: { $0.id == tarea.id }) {
+            tareas[index].completada.toggle()
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Conectar con la Vista
+
+```swift
+struct TareasView: View {
+    // @StateObject: crea y posee el ViewModel
+    @StateObject private var vm = TareasViewModel()
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if vm.estaCargando {
+                    ProgressView("Cargando...")
+                } else {
+                    List(vm.tareas) { tarea in
+                        HStack {
+                            Image(systemName: tarea.completada ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(tarea.completada ? .green : .gray)
+                            Text(tarea.titulo)
+                                .strikethrough(tarea.completada)
+                        }
+                        .onTapGesture { vm.toggleTarea(tarea) }
+                    }
+                }
+            }
+            .navigationTitle("Tareas")
+            .onAppear { vm.cargarTareas() }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## @StateObject vs @ObservedObject vs @EnvironmentObject
+
+| Property Wrapper | Uso | Ciclo de vida |
+|---|---|---|
+| `@StateObject` | Vista que **crea** el ViewModel | Sobrevive re-renders |
+| `@ObservedObject` | Vista hija que **recibe** el ViewModel | Se recrea con la vista |
+| `@EnvironmentObject` | Compartir ViewModel en toda la jerarquía | Global por entorno |
+
+```swift
+// Vista padre: CREA el ViewModel
+struct AppView: View {
+    @StateObject private var authVM = AuthViewModel()
+
+    var body: some View {
+        ContentView()
+            .environmentObject(authVM) // Compartir globalmente
+    }
+}
+
+// Vista hija: RECIBE el ViewModel
+struct PerfilView: View {
+    @EnvironmentObject var authVM: AuthViewModel
+
+    var body: some View {
+        Text("Hola, \(authVM.usuario?.nombre ?? "invitado")")
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Nunca uses `@ObservedObject` para crear un ViewModel. Cada vez que la vista padre se re-renderiza, el ViewModel se destruiría y recrearía. Usa siempre `@StateObject` para la creación.
+:::
+
+## @Observable vs ObservableObject
+
+| Característica | `@Observable` (iOS 17+) | `ObservableObject` (iOS 14+) |
+|---|---|---|
+| Declaración | `@Observable class VM` | `class VM: ObservableObject` |
+| Propiedades | Automáticas | Necesitan `@Published` |
+| En la vista | `@State` | `@StateObject` |
+| Rendimiento | Tracking granular por propiedad | Re-render por cualquier cambio |
+| Complejidad | Menor | Mayor |
+
+:::tip
+Si tu app soporta iOS 17+, usa `@Observable`. Es más simple, más eficiente y requiere menos código boilerplate.
+:::
+
+## Ejemplo completo: App de notas con MVVM
+
+### Model
+
+```swift
+struct Nota: Identifiable, Codable {
+    let id: UUID
+    var titulo: String
+    var contenido: String
+    var fecha: Date
+
+    init(titulo: String, contenido: String) {
+        self.id = UUID()
+        self.titulo = titulo
+        self.contenido = contenido
+        self.fecha = Date()
+    }
+}
+```
+
+### ViewModel
+
+```swift
+@Observable
+class NotasViewModel {
+    var notas: [Nota] = []
+    var notaSeleccionada: Nota?
+    var busqueda = ""
+
+    var notasFiltradas: [Nota] {
+        if busqueda.isEmpty { return notas }
+        return notas.filter {
+            $0.titulo.localizedCaseInsensitiveContains(busqueda) ||
+            $0.contenido.localizedCaseInsensitiveContains(busqueda)
+        }
+    }
+
+    func agregar(titulo: String, contenido: String) {
+        let nota = Nota(titulo: titulo, contenido: contenido)
+        notas.insert(nota, at: 0)
+    }
+
+    func eliminar(at offsets: IndexSet) {
+        notas.remove(atOffsets: offsets)
+    }
+
+    func actualizar(_ nota: Nota, titulo: String, contenido: String) {
+        if let index = notas.firstIndex(where: { $0.id == nota.id }) {
+            notas[index].titulo = titulo
+            notas[index].contenido = contenido
+        }
+    }
+}
+```
+
+### View
+
+```swift
+struct NotasAppView: View {
+    @State private var vm = NotasViewModel()
+    @State private var mostrarFormulario = false
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(vm.notasFiltradas) { nota in
+                    NavigationLink {
+                        DetalleNotaView(vm: vm, nota: nota)
+                    } label: {
+                        VStack(alignment: .leading) {
+                            Text(nota.titulo)
+                                .font(.headline)
+                            Text(nota.contenido)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+                }
+                .onDelete { vm.eliminar(at: $0) }
+            }
+            .navigationTitle("Notas")
+            .searchable(text: $vm.busqueda)
+            .toolbar {
+                Button { mostrarFormulario = true } label: {
+                    Image(systemName: "plus")
+                }
+            }
+            .sheet(isPresented: $mostrarFormulario) {
+                NuevaNotaView(vm: vm)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
