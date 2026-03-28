@@ -90,7 +90,7 @@ struct PerfilView: View {
             Image(systemName: "person.circle.fill")
                 .resizable()
                 .frame(width: 100, height: 100)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
 
             // Información
             VStack(spacing: 4) {
@@ -99,7 +99,7 @@ struct PerfilView: View {
                     .bold()
                 Text("Desarrolladora iOS")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             // Estadísticas
@@ -109,21 +109,21 @@ struct PerfilView: View {
                         .font(.headline)
                     Text("Posts")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 VStack {
                     Text("1.2K")
                         .font(.headline)
                     Text("Seguidores")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 VStack {
                     Text("847")
                         .font(.headline)
                     Text("Siguiendo")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             }
 

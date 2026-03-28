@@ -26,7 +26,7 @@ VStack(alignment: .leading, spacing: 12) {
 
     Text("Bold and Blue")
         .bold()
-        .foregroundColor(.blue)
+        .foregroundStyle(.blue)
 
     Text("Italic Caption")
         .font(.caption)
@@ -68,14 +68,14 @@ Text("Hello, \(name)! You are \(age) years old.")
 | `.font(.title)` | Set font style |
 | `.bold()` | Bold text |
 | `.italic()` | Italic text |
-| `.foregroundColor(.red)` | Text color |
+| `.foregroundStyle(.red)` | Text color |
 | `.multilineTextAlignment(.center)` | Multi-line alignment |
 | `.lineLimit(2)` | Maximum number of lines |
 | `.strikethrough()` | Strikethrough |
 | `.underline()` | Underline |
 
 :::tip
-Combine multiple `Text` views with `+` to create attributed strings: `Text("Hello ").bold() + Text("World").foregroundColor(.blue)`
+Combine multiple `Text` views with `+` to create attributed strings: `Text("Hello ").bold() + Text("World").foregroundStyle(.blue)`
 :::
 
 ## Full Example
@@ -92,12 +92,12 @@ struct WelcomeView: View {
 
             Text("Hello, \(username)")
                 .font(.title2)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             Text("Start building amazing apps with SwiftUI. This framework makes it easy to create beautiful interfaces.")
                 .font(.body)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
                 .padding()
         }
         .padding()

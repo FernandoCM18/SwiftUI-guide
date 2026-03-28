@@ -43,14 +43,14 @@ VStack(spacing: 20) {
 Label {
     Text("Custom Label")
         .font(.headline)
-        .foregroundColor(.primary)
+        .foregroundStyle(.primary)
 } icon: {
     Circle()
         .fill(Color.blue)
         .frame(width: 30, height: 30)
         .overlay(
             Image(systemName: "person")
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
         )
 }
 ```

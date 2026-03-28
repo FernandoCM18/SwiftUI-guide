@@ -75,7 +75,7 @@ struct VolumeControlView: View {
                     Image(systemName: "speaker.wave.3.fill")
                 }
                 Text("Volume: \(Int(volume * 100))%")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             Section("Display") {
                 HStack {

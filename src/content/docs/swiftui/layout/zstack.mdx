@@ -15,7 +15,7 @@ description: Cómo usar ZStack en SwiftUI para superponer vistas en capas.
 ZStack {
     Color.blue           // Fondo
     Text("Hola Mundo")   // Frente
-        .foregroundColor(.white)
+        .foregroundStyle(.white)
         .font(.largeTitle)
 }
 ```
@@ -34,8 +34,8 @@ ZStack(alignment: .bottomTrailing) {
     Text("Nuevo")
         .padding(6)
         .background(Color.red)
-        .foregroundColor(.white)
-        .cornerRadius(8)
+        .foregroundStyle(.white)
+        .clipShape(.rect(cornerRadius: 8))
         .padding(8)
 }
 ```
@@ -67,7 +67,7 @@ ZStack {
     // Capa 3: frente
     Text("SwiftUI")
         .font(.title)
-        .foregroundColor(.white)
+        .foregroundStyle(.white)
 }
 ```
 
@@ -89,19 +89,19 @@ struct TarjetaConBadgeView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Image(systemName: "envelope.fill")
                     .font(.largeTitle)
-                    .foregroundColor(.blue)
+                    .foregroundStyle(.blue)
 
                 Text("Mensajes")
                     .font(.headline)
 
                 Text("Tienes mensajes sin leer")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
             .padding()
             .frame(width: 180, height: 150)
             .background(Color(.systemBackground))
-            .cornerRadius(16)
+            .clipShape(.rect(cornerRadius: 16))
             .shadow(radius: 4)
 
             // Badge de notificación
@@ -109,7 +109,7 @@ struct TarjetaConBadgeView: View {
                 Text("\(notificaciones)")
                     .font(.caption2)
                     .bold()
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .frame(width: 24, height: 24)
                     .background(Color.red)
                     .clipShape(Circle())

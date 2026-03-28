@@ -14,7 +14,7 @@ The `Image` view displays images from assets, SF Symbols, or other sources.
 ```swift
 Image(systemName: "heart.fill")
     .font(.largeTitle)
-    .foregroundColor(.red)
+    .foregroundStyle(.red)
 ```
 
 > [Try in Swift Playground →](https://swiftfiddle.com/)
@@ -76,7 +76,7 @@ struct AvatarView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 120, height: 120)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
                 .shadow(radius: 5)
 
             Text("John Doe")

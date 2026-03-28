@@ -104,11 +104,11 @@ MyColor/
 ```swift
 // Color from Asset Catalog
 Text("Hello")
-    .foregroundColor(Color("MyColor"))
+    .foregroundStyle(Color("MyColor"))
 
 // System colors (automatically adapt to dark mode)
 Text("System")
-    .foregroundColor(.primary)    // Black/White depending on mode
+    .foregroundStyle(.primary)    // Black/White depending on mode
     .background(Color(.systemBackground)) // System background
 
 // Custom color in code
@@ -192,7 +192,7 @@ AsyncImage(url: URL(string: "https://example.com/photo.jpg")) { phase in
             .aspectRatio(contentMode: .fill)
     case .failure:
         Image(systemName: "photo")
-            .foregroundColor(.gray)
+            .foregroundStyle(.gray)
     @unknown default:
         EmptyView()
     }
@@ -226,10 +226,10 @@ struct GalleryView: View {
                                 Text(photo.capitalized)
                                     .font(.caption)
                                     .bold()
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
                                     .padding(8)
                                     .background(.ultraThinMaterial)
-                                    .cornerRadius(6)
+                                    .clipShape(.rect(cornerRadius: 6))
                                     .padding(8)
                             }
                     }

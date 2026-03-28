@@ -77,10 +77,10 @@ struct TarjetaProductoView: View {
             Image(systemName: "cup.and.saucer.fill")
                 .resizable()
                 .frame(width: 60, height: 60)
-                .foregroundColor(.brown)
+                .foregroundStyle(.brown)
                 .padding()
                 .background(Color.brown.opacity(0.1))
-                .cornerRadius(12)
+                .clipShape(.rect(cornerRadius: 12))
 
             // Información
             VStack(alignment: .leading, spacing: 4) {
@@ -88,11 +88,11 @@ struct TarjetaProductoView: View {
                     .font(.headline)
                 Text("Con leche de avena")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
                 HStack {
                     ForEach(0..<5) { i in
                         Image(systemName: i < 4 ? "star.fill" : "star")
-                            .foregroundColor(.yellow)
+                            .foregroundStyle(.yellow)
                             .font(.caption)
                     }
                 }
@@ -107,12 +107,12 @@ struct TarjetaProductoView: View {
                     .bold()
                 Text("MXN")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
         .padding()
         .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .clipShape(.rect(cornerRadius: 16))
         .shadow(radius: 2)
         .padding(.horizontal)
     }

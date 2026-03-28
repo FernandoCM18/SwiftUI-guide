@@ -46,7 +46,7 @@ struct TareasView: View {
             ForEach(tareas) { tarea in
                 HStack {
                     Image(systemName: tarea.completada ? "checkmark.circle.fill" : "circle")
-                        .foregroundColor(tarea.completada ? .green : .gray)
+                        .foregroundStyle(tarea.completada ? .green : .gray)
                     Text(tarea.titulo)
                 }
             }
@@ -139,7 +139,7 @@ struct ContactosView: View {
                 ForEach(contactosFiltrados, id: \.self) { contacto in
                     HStack {
                         Image(systemName: "person.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundStyle(.blue)
                             .font(.title2)
                         Text(contacto)
                     }

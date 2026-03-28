@@ -26,7 +26,7 @@ struct SaludoView: View {
 
             Text("Bienvenido al desarrollo declarativo")
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
         }
         .padding()
     }
@@ -79,11 +79,11 @@ struct TarjetaPerfil: View {
                 .font(.headline)
             Text(rol)
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundStyle(.gray)
         }
         .padding()
         .background(Color(.systemBackground))
-        .cornerRadius(12)
+        .clipShape(.rect(cornerRadius: 12))
         .shadow(radius: 4)
     }
 }
@@ -103,10 +103,10 @@ struct EjemploModificadores: View {
         Text("SwiftUI es increíble")
             .font(.title2)               // Tamaño de fuente
             .fontWeight(.semibold)        // Peso de fuente
-            .foregroundColor(.blue)       // Color del texto
+            .foregroundStyle(.blue)       // Color del texto
             .padding()                    // Espaciado interno
             .background(Color.blue.opacity(0.1))  // Fondo
-            .cornerRadius(10)            // Esquinas redondeadas
+            .clipShape(.rect(cornerRadius: 10))            // Esquinas redondeadas
             .shadow(color: .gray, radius: 3)  // Sombra
     }
 }

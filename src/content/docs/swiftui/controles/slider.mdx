@@ -86,7 +86,7 @@ struct ControlVolumenView: View {
                 }
 
                 Text("Volumen: \(Int(volumen * 100))%")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Section("Pantalla") {
@@ -108,7 +108,7 @@ struct ControlVolumenView: View {
                 }
 
                 Text("Velocidad: \(velocidad, specifier: "%.2f")x")
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }

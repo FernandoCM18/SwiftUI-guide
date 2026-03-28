@@ -104,11 +104,11 @@ MiColor/
 ```swift
 // Color del Asset Catalog
 Text("Hola")
-    .foregroundColor(Color("MiColor"))
+    .foregroundStyle(Color("MiColor"))
 
 // Colores del sistema (se adaptan automáticamente a modo oscuro)
 Text("Sistema")
-    .foregroundColor(.primary)    // Negro/Blanco según modo
+    .foregroundStyle(.primary)    // Negro/Blanco según modo
     .background(Color(.systemBackground)) // Fondo del sistema
 
 // Color personalizado en código
@@ -192,7 +192,7 @@ AsyncImage(url: URL(string: "https://ejemplo.com/foto.jpg")) { phase in
             .aspectRatio(contentMode: .fill)
     case .failure:
         Image(systemName: "photo")
-            .foregroundColor(.gray)
+            .foregroundStyle(.gray)
     @unknown default:
         EmptyView()
     }
@@ -226,10 +226,10 @@ struct GaleriaView: View {
                                 Text(foto.capitalized)
                                     .font(.caption)
                                     .bold()
-                                    .foregroundColor(.white)
+                                    .foregroundStyle(.white)
                                     .padding(8)
                                     .background(.ultraThinMaterial)
-                                    .cornerRadius(6)
+                                    .clipShape(.rect(cornerRadius: 6))
                                     .padding(8)
                             }
                     }

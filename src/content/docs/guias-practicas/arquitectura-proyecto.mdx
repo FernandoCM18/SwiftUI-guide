@@ -271,7 +271,7 @@ struct TarjetaModifier: ViewModifier {
         content
             .padding()
             .background(Color(.systemBackground))
-            .cornerRadius(12)
+            .clipShape(.rect(cornerRadius: 12))
             .shadow(color: .black.opacity(0.1), radius: 5, y: 2)
     }
 }
@@ -337,7 +337,7 @@ enum AppConstants {
 
 // Uso
 Text(AppConstants.appName)
-    .cornerRadius(AppConstants.UI.cornerRadius)
+    .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
 ```
 
 > [Probar en Swift Playground →](https://swiftfiddle.com/)

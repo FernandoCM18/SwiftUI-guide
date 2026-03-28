@@ -55,7 +55,7 @@ struct ContadorView: View {
             if !vm.historial.isEmpty {
                 Text("Historial: \(vm.historial.map(String.init).joined(separator: ", "))")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -180,7 +180,7 @@ struct NotasAppView: View {
                                 .font(.headline)
                             Text(nota.contenido)
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                                 .lineLimit(1)
                         }
                     }

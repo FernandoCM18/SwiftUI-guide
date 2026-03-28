@@ -19,7 +19,7 @@ ScrollView {
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.blue.opacity(0.1))
-                .cornerRadius(10)
+                .clipShape(.rect(cornerRadius: 10))
         }
     }
     .padding()
@@ -120,7 +120,7 @@ struct GaleriaView: View {
                                             .overlay(
                                                 Image(systemName: "photo")
                                                     .font(.largeTitle)
-                                                    .foregroundColor(.accentColor)
+                                                    .foregroundStyle(.accentColor)
                                             )
                                         Text("Foto \(i + 1)")
                                             .font(.caption)

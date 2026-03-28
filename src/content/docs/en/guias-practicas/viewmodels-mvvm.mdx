@@ -55,7 +55,7 @@ struct CounterView: View {
             if !vm.history.isEmpty {
                 Text("History: \(vm.history.map(String.init).joined(separator: ", "))")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -180,7 +180,7 @@ struct NotesAppView: View {
                                 .font(.headline)
                             Text(note.content)
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundStyle(.secondary)
                                 .lineLimit(1)
                         }
                     }

@@ -44,7 +44,7 @@ struct ImagenSistemaEstilos: View {
             // Colores
             Image(systemName: "heart.fill")
                 .font(.system(size: 40))
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
 
             // Peso del símbolo
             HStack(spacing: 20) {
@@ -121,7 +121,7 @@ struct ImagenRedimensionable: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 80, height: 80)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
         }
     }
 }
@@ -145,14 +145,14 @@ struct ImagenFrame: View {
             Image(systemName: "star.fill")
                 .resizable()
                 .frame(width: 50, height: 50)
-                .foregroundColor(.yellow)
+                .foregroundStyle(.yellow)
 
             // Frame con tamaño máximo
             Image(systemName: "rectangle.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(maxWidth: 200, maxHeight: 100)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
         }
     }
 }
@@ -190,7 +190,7 @@ struct ImagenRecorte: View {
                 .frame(width: 200, height: 80)
                 .clipShape(Capsule())
         }
-        .foregroundColor(.gray)
+        .foregroundStyle(.gray)
     }
 }
 ```
@@ -209,14 +209,14 @@ struct ImagenEfectos: View {
             Image(systemName: "heart.fill")
                 .resizable()
                 .frame(width: 60, height: 60)
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
                 .shadow(color: .red.opacity(0.5), radius: 10, x: 0, y: 5)
 
             // Borde con overlay
             Image(systemName: "person.crop.circle")
                 .resizable()
                 .frame(width: 80, height: 80)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
                 .overlay(
                     Circle()
                         .stroke(Color.blue, lineWidth: 3)
@@ -226,7 +226,7 @@ struct ImagenEfectos: View {
             Image(systemName: "sun.max.fill")
                 .resizable()
                 .frame(width: 60, height: 60)
-                .foregroundColor(.orange)
+                .foregroundStyle(.orange)
                 .opacity(0.5)
         }
     }
@@ -263,7 +263,7 @@ struct ImagenAsincrona: View {
                 case .failure:
                     Image(systemName: "exclamationmark.triangle")
                         .font(.largeTitle)
-                        .foregroundColor(.red)
+                        .foregroundStyle(.red)
                 @unknown default:
                     EmptyView()
                 }

@@ -71,19 +71,19 @@ struct LabelPersonalizado: View {
         VStack(spacing: 16) {
             Label("Importante", systemImage: "exclamationmark.triangle.fill")
                 .font(.headline)
-                .foregroundColor(.orange)
+                .foregroundStyle(.orange)
 
             Label("Correcto", systemImage: "checkmark.circle.fill")
                 .font(.title2)
-                .foregroundColor(.green)
+                .foregroundStyle(.green)
 
             Label("Error", systemImage: "xmark.octagon.fill")
                 .font(.title3)
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
 
             Label("Información", systemImage: "info.circle.fill")
                 .font(.body)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
         }
     }
 }
@@ -107,7 +107,7 @@ struct LabelCustom: View {
                     .font(.headline)
             } icon: {
                 Image(systemName: "arrow.down.circle.fill")
-                    .foregroundColor(.green)
+                    .foregroundStyle(.green)
                     .font(.title)
             }
 
@@ -118,12 +118,12 @@ struct LabelCustom: View {
                         .font(.headline)
                     Text("Desarrolladora iOS")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             } icon: {
                 Image(systemName: "person.crop.circle.fill")
                     .font(.largeTitle)
-                    .foregroundColor(.blue)
+                    .foregroundStyle(.blue)
             }
         }
     }
@@ -182,7 +182,7 @@ struct LabelBoton: View {
                     esFavorito ? "Quitar de favoritos" : "Añadir a favoritos",
                     systemImage: esFavorito ? "star.fill" : "star"
                 )
-                .foregroundColor(esFavorito ? .yellow : .gray)
+                .foregroundStyle(esFavorito ? .yellow : .gray)
             }
 
             Button {
@@ -191,8 +191,8 @@ struct LabelBoton: View {
                 Label("Compartir", systemImage: "square.and.arrow.up")
                     .padding()
                     .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                    .foregroundStyle(.white)
+                    .clipShape(.rect(cornerRadius: 10))
             }
         }
     }

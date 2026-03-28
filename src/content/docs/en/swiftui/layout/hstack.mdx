@@ -50,16 +50,16 @@ struct ProductCardView: View {
             Image(systemName: "cup.and.saucer.fill")
                 .resizable()
                 .frame(width: 60, height: 60)
-                .foregroundColor(.brown)
+                .foregroundStyle(.brown)
                 .padding()
                 .background(Color.brown.opacity(0.1))
-                .cornerRadius(12)
+                .clipShape(.rect(cornerRadius: 12))
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Cafe Latte").font(.headline)
                 Text("With oat milk")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Spacer()
@@ -69,7 +69,7 @@ struct ProductCardView: View {
         }
         .padding()
         .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .clipShape(.rect(cornerRadius: 16))
         .shadow(radius: 2)
     }
 }

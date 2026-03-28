@@ -123,16 +123,16 @@ struct TextoColor: View {
     var body: some View {
         VStack(spacing: 12) {
             Text("Color primario")
-                .foregroundColor(.primary)
+                .foregroundStyle(.primary)
 
             Text("Color secundario")
-                .foregroundColor(.secondary)
+                .foregroundStyle(.secondary)
 
             Text("Rojo")
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
 
             Text("Azul")
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
 
             // Gradiente como color (iOS 16+)
             Text("Texto con gradiente")
@@ -227,11 +227,11 @@ struct TextoCombinado: View {
                 .font(.title) +
             Text("mundo")
                 .font(.title)
-                .foregroundColor(.blue)
+                .foregroundStyle(.blue)
                 .bold() +
             Text("!")
                 .font(.title)
-                .foregroundColor(.red)
+                .foregroundStyle(.red)
 
             // Markdown integrado (iOS 15+)
             Text("Texto con **negrita**, *cursiva* y [enlace](https://swift.org)")
@@ -278,7 +278,7 @@ struct TextoEspaciado: View {
 | `.font()` | Tamaño y estilo de fuente |
 | `.bold()` | Texto en negrita |
 | `.italic()` | Texto en cursiva |
-| `.foregroundColor()` | Color del texto |
+| `.foregroundStyle()` | Color del texto |
 | `.multilineTextAlignment()` | Alineación multilínea |
 | `.lineLimit()` | Máximo de líneas |
 | `.lineSpacing()` | Espacio entre líneas |

@@ -91,7 +91,7 @@ struct ContactsView: View {
                 ForEach(filtered, id: \.self) { contact in
                     HStack {
                         Image(systemName: "person.circle.fill")
-                            .foregroundColor(.blue)
+                            .foregroundStyle(.blue)
                         Text(contact)
                     }
                 }

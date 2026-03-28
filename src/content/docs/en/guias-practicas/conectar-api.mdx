@@ -152,7 +152,7 @@ struct ProductsView: View {
                                     .font(.headline)
                                 Text(product.inStock ? "In stock" : "Out of stock")
                                     .font(.caption)
-                                    .foregroundColor(product.inStock ? .green : .red)
+                                    .foregroundStyle(product.inStock ? .green : .red)
                             }
                             Spacer()
                             Text("$\(product.price, specifier: "%.2f")")
@@ -306,11 +306,11 @@ struct WeatherView: View {
                         .font(.system(size: 64, weight: .thin))
                     Text(weather.description)
                         .font(.title3)
-                        .foregroundColor(.secondary)
+                        .foregroundStyle(.secondary)
                 }
             } else if let error = vm.error {
                 Text(error)
-                    .foregroundColor(.red)
+                    .foregroundStyle(.red)
             }
         }
         .padding()
