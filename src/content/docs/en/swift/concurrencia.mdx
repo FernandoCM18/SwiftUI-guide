@@ -123,8 +123,11 @@ Use `@MainActor` to guarantee code runs on the main thread — required for UI u
 :::
 
 ```swift
+import Observation
+
 @MainActor
-class MyViewModel: ObservableObject {
+@Observable
+class MyViewModel {
     var title = ""
 
     func load() async {
@@ -173,13 +176,18 @@ actor ProductManager {
 Swift 6 enables strict concurrency checking by default. The compiler detects data races at compile time.
 
 ```swift
-// In Swift 6 this generates an error:
-// "Capture of 'data' with non-sendable type"
+// In Swift 6, passing a class across concurrency contexts generates an error
 class NonConcurrentData {
     var value = 0
 }
 
-// ✅ Solution: use actor
+let data = NonConcurrentData()
+Task {
+    // ⚠️ Swift 6 error: "Capture of 'data' with non-sendable type 'NonConcurrentData'"
+    print(data.value)
+}
+
+// ✅ Solution: use actor (protects state with strict concurrency)
 actor ConcurrentData {
     var value = 0
     func increment() { value += 1 }

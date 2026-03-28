@@ -123,8 +123,11 @@ Usa `@MainActor` para garantizar que el código se ejecute en el hilo principal 
 :::
 
 ```swift
+import Observation
+
 @MainActor
-class MiViewModel: ObservableObject {
+@Observable
+class MiViewModel {
     var titulo = ""
 
     func cargar() async {
@@ -173,13 +176,18 @@ actor GestorProductos {
 Swift 6 activa la verificación estricta de concurrencia por defecto. El compilador detecta data races en tiempo de compilación.
 
 ```swift
-// En Swift 6 esto genera error:
-// "Capture of 'datos' with non-sendable type"
+// En Swift 6, pasar una clase entre contextos de concurrencia genera error
 class DatosNoConcurrentes {
     var valor = 0
 }
 
-// ✅ Solución: usar actor
+let datos = DatosNoConcurrentes()
+Task {
+    // ⚠️ Swift 6 error: "Capture of 'datos' with non-sendable type 'DatosNoConcurrentes'"
+    print(datos.valor)
+}
+
+// ✅ Solución: usar actor (protege el estado con concurrencia estricta)
 actor DatosConcurrentes {
     var valor = 0
     func incrementar() { valor += 1 }
