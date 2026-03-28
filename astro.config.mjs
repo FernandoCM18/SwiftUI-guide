@@ -114,6 +114,7 @@ export default defineConfig({
             { slug: 'guias-practicas/conectar-api' },
             { slug: 'guias-practicas/assets-imagenes-colores' },
             { slug: 'guias-practicas/arquitectura-proyecto' },
+            { slug: 'guias-practicas/swiftdata' },
           ],
         },
       ],

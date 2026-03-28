@@ -1,0 +1,228 @@
+---
+title: SwiftData
+description: Persistencia de datos en SwiftUI con SwiftData — @Model, @Query, ModelContainer y relaciones entre modelos.
+---
+
+**SwiftData** (iOS 17+) es el framework de persistencia moderno de Apple. Reemplaza Core Data con una sintaxis declarativa basada en macros Swift.
+
+## @Model
+
+El macro `@Model` convierte una clase Swift en un modelo persistente. Todas sus propiedades almacenadas se persisten automáticamente.
+
+```swift
+import SwiftData
+
+@Model
+class Tarea {
+    var titulo: String
+    var completada: Bool
+    var fecha: Date
+
+    init(titulo: String) {
+        self.titulo = titulo
+        self.completada = false
+        self.fecha = Date()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## ModelContainer
+
+`ModelContainer` es el contenedor de la base de datos. Se configura una vez en el punto de entrada de la app:
+
+```swift
+import SwiftUI
+import SwiftData
+
+@main
+struct MiApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .modelContainer(for: Tarea.self)  // Configura el contenedor para Tarea
+    }
+}
+```
+
+Para múltiples modelos:
+
+```swift
+.modelContainer(for: [Tarea.self, Proyecto.self, Etiqueta.self])
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## @Query
+
+`@Query` carga datos desde el contenedor y actualiza la vista automáticamente cuando cambian:
+
+```swift
+import SwiftUI
+import SwiftData
+
+struct ListaTareasView: View {
+    @Query var tareas: [Tarea]
+    @Environment(\.modelContext) private var contexto
+
+    var body: some View {
+        List {
+            ForEach(tareas) { tarea in
+                HStack {
+                    Image(systemName: tarea.completada ? "checkmark.circle.fill" : "circle")
+                        .foregroundStyle(tarea.completada ? .green : .gray)
+                    Text(tarea.titulo)
+                        .strikethrough(tarea.completada)
+                }
+                .onTapGesture {
+                    tarea.completada.toggle()
+                }
+            }
+            .onDelete { indices in
+                for indice in indices {
+                    contexto.delete(tareas[indice])
+                }
+            }
+        }
+        .navigationTitle("Tareas")
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Ordenar y filtrar con @Query
+
+```swift
+// Ordenar por fecha, más reciente primero
+@Query(sort: \Tarea.fecha, order: .reverse) var tareas: [Tarea]
+
+// Solo tareas pendientes
+@Query(filter: #Predicate<Tarea> { !$0.completada }) var pendientes: [Tarea]
+
+// Combinar filtro y orden
+@Query(
+    filter: #Predicate<Tarea> { !$0.completada },
+    sort: \Tarea.fecha,
+    order: .forward
+) var pendientesOrdenadas: [Tarea]
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## ModelContext — crear, modificar y eliminar
+
+`ModelContext` es el objeto de trabajo para modificar datos:
+
+```swift
+struct NuevaTareaView: View {
+    @Environment(\.modelContext) private var contexto
+    @State private var titulo = ""
+    @Environment(\.dismiss) private var cerrar
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Título de la tarea", text: $titulo)
+            }
+            .navigationTitle("Nueva tarea")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Guardar") {
+                        let nuevaTarea = Tarea(titulo: titulo)
+                        contexto.insert(nuevaTarea)  // Insertar
+                        cerrar()
+                    }
+                    .disabled(titulo.isEmpty)
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancelar") { cerrar() }
+                }
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Relaciones entre modelos
+
+SwiftData maneja relaciones con `@Relationship`:
+
+```swift
+import SwiftData
+
+@Model
+class Proyecto {
+    var nombre: String
+    @Relationship(deleteRule: .cascade) var tareas: [Tarea] = []
+
+    init(nombre: String) {
+        self.nombre = nombre
+    }
+}
+
+@Model
+class Tarea {
+    var titulo: String
+    var completada: Bool
+    var proyecto: Proyecto?  // Relación inversa (opcional)
+
+    init(titulo: String) {
+        self.titulo = titulo
+        self.completada = false
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`deleteRule: .cascade` elimina automáticamente todas las tareas cuando se elimina el proyecto. Otros valores: `.nullify` (pone la relación en nil), `.deny` (impide eliminar si hay relaciones).
+:::
+
+## Migración de esquema
+
+Cuando cambias el modelo, SwiftData necesita migrar los datos existentes. Define un `VersionedSchema`:
+
+```swift
+import SwiftData
+
+enum EsquemaTareasV1: VersionedSchema {
+    static var versionIdentifier = Schema.Version(1, 0, 0)
+    static var models: [any PersistentModel.Type] { [Tarea.self] }
+
+    @Model
+    class Tarea {
+        var titulo: String
+        init(titulo: String) { self.titulo = titulo }
+    }
+}
+
+enum EsquemaTareasV2: VersionedSchema {
+    static var versionIdentifier = Schema.Version(2, 0, 0)
+    static var models: [any PersistentModel.Type] { [Tarea.self] }
+
+    @Model
+    class Tarea {
+        var titulo: String
+        var prioridad: Int = 0  // Nueva propiedad en V2
+        init(titulo: String) { self.titulo = titulo }
+    }
+}
+
+// Plan de migración de V1 a V2
+enum PlanMigracion: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] {
+        [EsquemaTareasV1.self, EsquemaTareasV2.self]
+    }
+    static var stages: [MigrationStage] {
+        [MigrationStage.lightweight(fromVersion: EsquemaTareasV1.self, toVersion: EsquemaTareasV2.self)]
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

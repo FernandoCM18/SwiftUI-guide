@@ -1,0 +1,228 @@
+---
+title: SwiftData
+description: Data persistence in SwiftUI with SwiftData — @Model, @Query, ModelContainer and model relationships.
+---
+
+**SwiftData** (iOS 17+) is Apple's modern persistence framework. It replaces Core Data with a declarative syntax based on Swift macros.
+
+## @Model
+
+The `@Model` macro converts a Swift class into a persistent model. All its stored properties are automatically persisted.
+
+```swift
+import SwiftData
+
+@Model
+class Task {
+    var title: String
+    var completed: Bool
+    var date: Date
+
+    init(title: String) {
+        self.title = title
+        self.completed = false
+        self.date = Date()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## ModelContainer
+
+`ModelContainer` is the database container. It's configured once at the app entry point:
+
+```swift
+import SwiftUI
+import SwiftData
+
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .modelContainer(for: Task.self)  // Configure container for Task
+    }
+}
+```
+
+For multiple models:
+
+```swift
+.modelContainer(for: [Task.self, Project.self, Tag.self])
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## @Query
+
+`@Query` loads data from the container and automatically updates the view when it changes:
+
+```swift
+import SwiftUI
+import SwiftData
+
+struct TaskListView: View {
+    @Query var tasks: [Task]
+    @Environment(\.modelContext) private var context
+
+    var body: some View {
+        List {
+            ForEach(tasks) { task in
+                HStack {
+                    Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
+                        .foregroundStyle(task.completed ? .green : .gray)
+                    Text(task.title)
+                        .strikethrough(task.completed)
+                }
+                .onTapGesture {
+                    task.completed.toggle()
+                }
+            }
+            .onDelete { indices in
+                for index in indices {
+                    context.delete(tasks[index])
+                }
+            }
+        }
+        .navigationTitle("Tasks")
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Sort and filter with @Query
+
+```swift
+// Sort by date, most recent first
+@Query(sort: \Task.date, order: .reverse) var tasks: [Task]
+
+// Only incomplete tasks
+@Query(filter: #Predicate<Task> { !$0.completed }) var pending: [Task]
+
+// Combine filter and sort
+@Query(
+    filter: #Predicate<Task> { !$0.completed },
+    sort: \Task.date,
+    order: .forward
+) var sortedPending: [Task]
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## ModelContext — create, modify and delete
+
+`ModelContext` is the working object for modifying data:
+
+```swift
+struct NewTaskView: View {
+    @Environment(\.modelContext) private var context
+    @State private var title = ""
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Task title", text: $title)
+            }
+            .navigationTitle("New task")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        let newTask = Task(title: title)
+                        context.insert(newTask)  // Insert
+                        dismiss()
+                    }
+                    .disabled(title.isEmpty)
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Model relationships
+
+SwiftData handles relationships with `@Relationship`:
+
+```swift
+import SwiftData
+
+@Model
+class Project {
+    var name: String
+    @Relationship(deleteRule: .cascade) var tasks: [Task] = []
+
+    init(name: String) {
+        self.name = name
+    }
+}
+
+@Model
+class Task {
+    var title: String
+    var completed: Bool
+    var project: Project?  // Inverse relationship (optional)
+
+    init(title: String) {
+        self.title = title
+        self.completed = false
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`deleteRule: .cascade` automatically deletes all tasks when the project is deleted. Other values: `.nullify` (sets the relationship to nil), `.deny` (prevents deletion if relationships exist).
+:::
+
+## Schema migration
+
+When you change the model, SwiftData needs to migrate existing data. Define a `VersionedSchema`:
+
+```swift
+import SwiftData
+
+enum TaskSchemaV1: VersionedSchema {
+    static var versionIdentifier = Schema.Version(1, 0, 0)
+    static var models: [any PersistentModel.Type] { [Task.self] }
+
+    @Model
+    class Task {
+        var title: String
+        init(title: String) { self.title = title }
+    }
+}
+
+enum TaskSchemaV2: VersionedSchema {
+    static var versionIdentifier = Schema.Version(2, 0, 0)
+    static var models: [any PersistentModel.Type] { [Task.self] }
+
+    @Model
+    class Task {
+        var title: String
+        var priority: Int = 0  // New property in V2
+        init(title: String) { self.title = title }
+    }
+}
+
+// Migration plan from V1 to V2
+enum MigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] {
+        [TaskSchemaV1.self, TaskSchemaV2.self]
+    }
+    static var stages: [MigrationStage] {
+        [MigrationStage.lightweight(fromVersion: TaskSchemaV1.self, toVersion: TaskSchemaV2.self)]
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
