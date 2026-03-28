@@ -1,0 +1,103 @@
+---
+title: Publishers
+description: Combine Publisher types - Just, Future, PassthroughSubject, and CurrentValueSubject.
+---
+
+A **Publisher** emits a sequence of values over time. It can emit zero or more values and finish with a completion (success or error).
+
+## Just
+
+Emits a single value then completes:
+
+```swift
+import Combine
+
+let publisher = Just(42)
+publisher.sink { print($0) } // 42
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Future
+
+Emits a single value asynchronously:
+
+```swift
+func fetchUser(id: Int) -> Future<String, Error> {
+    Future { promise in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            promise(.success("User \(id)"))
+        }
+    }
+}
+
+let cancellable = fetchUser(id: 1)
+    .sink(
+        receiveCompletion: { print($0) },
+        receiveValue: { print($0) }
+    )
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## PassthroughSubject
+
+A manually controlled publisher that doesn't store the latest value:
+
+```swift
+let subject = PassthroughSubject<String, Never>()
+
+let cancellable = subject.sink { print("Received: \($0)") }
+
+subject.send("Hello")
+subject.send("World")
+subject.send(completion: .finished)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## CurrentValueSubject
+
+Like PassthroughSubject but stores the current value:
+
+```swift
+let subject = CurrentValueSubject<Int, Never>(0)
+print(subject.value) // 0
+
+let cancellable = subject.sink { print($0) }
+subject.send(1)
+subject.send(2)
+print(subject.value) // 2
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## @Published
+
+A property wrapper that automatically creates a publisher:
+
+```swift
+class Counter: ObservableObject {
+    @Published var value = 0
+}
+
+let counter = Counter()
+let cancellable = counter.$value.sink { print($0) }
+counter.value = 5 // Prints: 5
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Comparison
+
+| Publisher | Values | Stores Value | Use Case |
+|---|---|---|---|
+| `Just` | One | No | Immediate value |
+| `Future` | One (async) | No | Async operations |
+| `PassthroughSubject` | Multiple | No | UI events |
+| `CurrentValueSubject` | Multiple | Yes | Mutable state |
+| `@Published` | Multiple | Yes | Observable properties |
+
+:::tip
+Use `PassthroughSubject` for events (like button taps) and `CurrentValueSubject` when you need to access the current value at any time.
+:::

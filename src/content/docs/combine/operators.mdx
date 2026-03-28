@@ -1,0 +1,199 @@
+---
+title: Operadores
+description: Operadores principales de Combine - map, filter, combineLatest, merge, debounce y más.
+---
+
+Los **operadores** transforman, filtran y combinan valores entre un Publisher y un Subscriber. Son el corazón de Combine.
+
+## Operadores de transformación
+
+### map
+
+Transforma cada valor emitido:
+
+```swift
+import Combine
+
+[1, 2, 3, 4, 5].publisher
+    .map { $0 * 2 }
+    .sink { print($0) }
+// 2, 4, 6, 8, 10
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### compactMap
+
+Transforma y descarta valores nil:
+
+```swift
+["1", "dos", "3", "cuatro", "5"].publisher
+    .compactMap { Int($0) }
+    .sink { print($0) }
+// 1, 3, 5
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### flatMap
+
+Transforma cada valor en un nuevo publisher:
+
+```swift
+func buscar(texto: String) -> AnyPublisher<[String], Never> {
+    Just(["Resultado para: \(texto)"])
+        .eraseToAnyPublisher()
+}
+
+$textoBusqueda
+    .flatMap { texto in
+        buscar(texto: texto)
+    }
+    .sink { resultados in
+        print(resultados)
+    }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Operadores de filtrado
+
+### filter
+
+Emite solo valores que cumplen una condición:
+
+```swift
+(1...20).publisher
+    .filter { $0 % 3 == 0 }
+    .sink { print($0) }
+// 3, 6, 9, 12, 15, 18
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### removeDuplicates
+
+Elimina valores consecutivos duplicados:
+
+```swift
+[1, 1, 2, 2, 3, 1, 1].publisher
+    .removeDuplicates()
+    .sink { print($0) }
+// 1, 2, 3, 1
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### debounce
+
+Espera un intervalo de silencio antes de emitir:
+
+```swift
+$textoBusqueda
+    .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+    .sink { texto in
+        print("Buscar: \(texto)")
+    }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### throttle
+
+Emite el valor más reciente en intervalos regulares:
+
+```swift
+subject
+    .throttle(for: .seconds(1), scheduler: RunLoop.main, latest: true)
+    .sink { print($0) }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Operadores de combinación
+
+### combineLatest
+
+Combina el último valor de múltiples publishers:
+
+```swift
+let nombre = CurrentValueSubject<String, Never>("María")
+let edad = CurrentValueSubject<Int, Never>(25)
+
+nombre.combineLatest(edad)
+    .sink { nombre, edad in
+        print("\(nombre) tiene \(edad) años")
+    }
+
+nombre.send("Carlos")  // Carlos tiene 25 años
+edad.send(30)           // Carlos tiene 30 años
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### merge
+
+Une múltiples publishers del mismo tipo en uno solo:
+
+```swift
+let notificaciones = NotificationCenter.default.publisher(for: .init("A"))
+let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+notificaciones.map { _ in "Notificación" }
+    .merge(with: timer.map { _ in "Timer" })
+    .sink { print($0) }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### zip
+
+Empareja valores de publishers (espera a que ambos emitan):
+
+```swift
+let publicador1 = [1, 2, 3].publisher
+let publicador2 = ["A", "B", "C"].publisher
+
+publicador1.zip(publicador2)
+    .sink { numero, letra in
+        print("\(numero)\(letra)")
+    }
+// 1A, 2B, 3C
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Operadores de control
+
+### receive(on:)
+
+Cambia el hilo de ejecución:
+
+```swift
+URLSession.shared.dataTaskPublisher(for: url)
+    .map(\.data)
+    .receive(on: DispatchQueue.main) // Volver al hilo principal
+    .sink { /* actualizar UI */ }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Tabla resumen
+
+| Operador | Tipo | Descripción |
+|---|---|---|
+| `map` | Transformación | Transforma cada valor |
+| `compactMap` | Transformación | Transforma y descarta nil |
+| `flatMap` | Transformación | Transforma en publisher |
+| `filter` | Filtrado | Filtra por condición |
+| `removeDuplicates` | Filtrado | Elimina duplicados consecutivos |
+| `debounce` | Tiempo | Espera silencio |
+| `throttle` | Tiempo | Limita frecuencia |
+| `combineLatest` | Combinación | Combina últimos valores |
+| `merge` | Combinación | Une publishers |
+| `zip` | Combinación | Empareja valores |
+| `receive(on:)` | Control | Cambia scheduler |
+
+:::tip
+`debounce` es perfecto para campos de búsqueda: espera a que el usuario deje de escribir antes de ejecutar la búsqueda.
+:::

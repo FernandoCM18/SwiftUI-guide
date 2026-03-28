@@ -1,0 +1,137 @@
+---
+title: VStack
+description: Cómo usar VStack en SwiftUI para organizar vistas verticalmente.
+---
+
+`VStack` (Vertical Stack) organiza sus vistas hijas en una columna vertical, de arriba hacia abajo.
+
+## Vista previa
+
+![VStack en SwiftUI](../../../../assets/swiftui/vstack.svg)
+
+## Uso básico
+
+```swift
+VStack {
+    Text("Primera línea")
+    Text("Segunda línea")
+    Text("Tercera línea")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Espaciado
+
+```swift
+// Espaciado personalizado
+VStack(spacing: 20) {
+    Text("Con espacio")
+    Text("Entre elementos")
+    Text("De 20 puntos")
+}
+
+// Sin espaciado
+VStack(spacing: 0) {
+    Color.red.frame(height: 50)
+    Color.green.frame(height: 50)
+    Color.blue.frame(height: 50)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Alineación
+
+```swift
+VStack(alignment: .leading) {
+    Text("Título largo de ejemplo")
+        .font(.title)
+    Text("Subtítulo")
+        .font(.subheadline)
+    Text("Descripción corta")
+        .font(.caption)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+Opciones de alineación:
+- `.leading` — Alinea a la izquierda
+- `.center` — Centro (por defecto)
+- `.trailing` — Alinea a la derecha
+
+## Spacer
+
+Usa `Spacer` para empujar elementos dentro del stack:
+
+```swift
+VStack {
+    Text("Arriba")
+    Spacer()
+    Text("Abajo")
+}
+.frame(height: 300)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Combina `VStack` con `HStack` y `ZStack` para crear layouts complejos. Es el patrón fundamental de composición en SwiftUI.
+:::
+
+## Ejemplo completo
+
+```swift
+struct PerfilView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            // Avatar
+            Image(systemName: "person.circle.fill")
+                .resizable()
+                .frame(width: 100, height: 100)
+                .foregroundColor(.blue)
+
+            // Información
+            VStack(spacing: 4) {
+                Text("María García")
+                    .font(.title2)
+                    .bold()
+                Text("Desarrolladora iOS")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+
+            // Estadísticas
+            HStack(spacing: 40) {
+                VStack {
+                    Text("128")
+                        .font(.headline)
+                    Text("Posts")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                VStack {
+                    Text("1.2K")
+                        .font(.headline)
+                    Text("Seguidores")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                VStack {
+                    Text("847")
+                        .font(.headline)
+                    Text("Siguiendo")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            Spacer()
+        }
+        .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

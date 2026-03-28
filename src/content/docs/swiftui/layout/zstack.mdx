@@ -1,0 +1,123 @@
+---
+title: ZStack
+description: Cómo usar ZStack en SwiftUI para superponer vistas en capas.
+---
+
+`ZStack` (Z-axis Stack) superpone sus vistas hijas una encima de otra, creando capas. La primera vista está al fondo y la última al frente.
+
+## Vista previa
+
+![ZStack en SwiftUI](../../../../assets/swiftui/zstack.svg)
+
+## Uso básico
+
+```swift
+ZStack {
+    Color.blue           // Fondo
+    Text("Hola Mundo")   // Frente
+        .foregroundColor(.white)
+        .font(.largeTitle)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Alineación
+
+```swift
+ZStack(alignment: .bottomTrailing) {
+    Image(systemName: "photo")
+        .resizable()
+        .frame(width: 200, height: 200)
+
+    // Insignia en la esquina inferior derecha
+    Text("Nuevo")
+        .padding(6)
+        .background(Color.red)
+        .foregroundColor(.white)
+        .cornerRadius(8)
+        .padding(8)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+Opciones de alineación:
+- `.center` — Centro (por defecto)
+- `.topLeading`, `.top`, `.topTrailing`
+- `.leading`, `.trailing`
+- `.bottomLeading`, `.bottom`, `.bottomTrailing`
+
+## Orden de capas
+
+Las vistas se apilan en orden de declaración:
+
+```swift
+ZStack {
+    // Capa 1: fondo
+    RoundedRectangle(cornerRadius: 20)
+        .fill(Color.purple)
+        .frame(width: 200, height: 200)
+
+    // Capa 2: medio
+    RoundedRectangle(cornerRadius: 15)
+        .fill(Color.purple.opacity(0.6))
+        .frame(width: 150, height: 150)
+
+    // Capa 3: frente
+    Text("SwiftUI")
+        .font(.title)
+        .foregroundColor(.white)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Usa `.zIndex()` para cambiar el orden de apilamiento sin mover las vistas en el código.
+:::
+
+## Ejemplo completo
+
+```swift
+struct TarjetaConBadgeView: View {
+    let notificaciones = 5
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            // Tarjeta principal
+            VStack(alignment: .leading, spacing: 12) {
+                Image(systemName: "envelope.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.blue)
+
+                Text("Mensajes")
+                    .font(.headline)
+
+                Text("Tienes mensajes sin leer")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .frame(width: 180, height: 150)
+            .background(Color(.systemBackground))
+            .cornerRadius(16)
+            .shadow(radius: 4)
+
+            // Badge de notificación
+            if notificaciones > 0 {
+                Text("\(notificaciones)")
+                    .font(.caption2)
+                    .bold()
+                    .foregroundColor(.white)
+                    .frame(width: 24, height: 24)
+                    .background(Color.red)
+                    .clipShape(Circle())
+                    .offset(x: 8, y: -8)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

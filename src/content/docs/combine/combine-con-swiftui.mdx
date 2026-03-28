@@ -1,0 +1,200 @@
+---
+title: Combine con SwiftUI
+description: Cómo integrar Combine con SwiftUI usando @Published, ObservableObject y onReceive.
+---
+
+Combine y SwiftUI están diseñados para trabajar juntos. SwiftUI utiliza Combine internamente para observar cambios de estado y actualizar la interfaz.
+
+## @Published y ObservableObject
+
+La forma más común de usar Combine con SwiftUI:
+
+```swift
+import SwiftUI
+import Combine
+
+class ContadorViewModel: ObservableObject {
+    @Published var valor = 0
+    @Published var mensaje = ""
+
+    func incrementar() {
+        valor += 1
+        mensaje = "Valor actual: \(valor)"
+    }
+}
+
+struct ContadorView: View {
+    @StateObject private var viewModel = ContadorViewModel()
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("\(viewModel.valor)")
+                .font(.largeTitle)
+            Text(viewModel.mensaje)
+                .foregroundColor(.secondary)
+            Button("Sumar") {
+                viewModel.incrementar()
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## @StateObject vs @ObservedObject
+
+```swift
+// @StateObject: Crea y posee la instancia
+// Usar en la vista que CREA el ViewModel
+struct VistaPadre: View {
+    @StateObject private var vm = MiViewModel()
+
+    var body: some View {
+        VistaHija(vm: vm)
+    }
+}
+
+// @ObservedObject: Recibe una instancia existente
+// Usar en vistas hijas que RECIBEN el ViewModel
+struct VistaHija: View {
+    @ObservedObject var vm: MiViewModel
+
+    var body: some View {
+        Text(vm.texto)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## onReceive
+
+Suscribe una vista a un publisher directamente:
+
+```swift
+struct TimerView: View {
+    @State private var hora = Date()
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        Text(hora, style: .time)
+            .font(.largeTitle)
+            .onReceive(timer) { fecha in
+                hora = fecha
+            }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## ViewModel con Combine
+
+Patrón completo de un ViewModel que usa Combine para procesar datos:
+
+```swift
+class BuscadorViewModel: ObservableObject {
+    @Published var textoBusqueda = ""
+    @Published var resultados: [String] = []
+    @Published var estaCargando = false
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        $textoBusqueda
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .filter { !$0.isEmpty }
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.estaCargando = true
+            })
+            .flatMap { texto in
+                // Simular búsqueda de red
+                Just(["Resultado 1 para \(texto)", "Resultado 2 para \(texto)"])
+                    .delay(for: .seconds(0.5), scheduler: RunLoop.main)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] resultados in
+                self?.resultados = resultados
+                self?.estaCargando = false
+            }
+            .store(in: &cancellables)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Vista con el ViewModel
+
+```swift
+struct BuscadorView: View {
+    @StateObject private var vm = BuscadorViewModel()
+
+    var body: some View {
+        NavigationStack {
+            VStack {
+                if vm.estaCargando {
+                    ProgressView()
+                }
+
+                List(vm.resultados, id: \.self) { resultado in
+                    Text(resultado)
+                }
+            }
+            .navigationTitle("Buscar")
+            .searchable(text: $vm.textoBusqueda, prompt: "Escribe para buscar...")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Validación de formularios
+
+```swift
+class RegistroViewModel: ObservableObject {
+    @Published var email = ""
+    @Published var contrasena = ""
+    @Published var confirmar = ""
+    @Published var puedeRegistrarse = false
+    @Published var mensajeError = ""
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        // Validar que las contraseñas coincidan y el email sea válido
+        Publishers.CombineLatest3($email, $contrasena, $confirmar)
+            .map { email, pass, confirm in
+                let emailValido = email.contains("@") && email.contains(".")
+                let passValida = pass.count >= 8
+                let coinciden = pass == confirm && !pass.isEmpty
+
+                if !emailValido && !email.isEmpty {
+                    return (false, "Email no válido")
+                }
+                if !passValida && !pass.isEmpty {
+                    return (false, "Mínimo 8 caracteres")
+                }
+                if !coinciden && !confirm.isEmpty {
+                    return (false, "Las contraseñas no coinciden")
+                }
+
+                return (emailValido && passValida && coinciden, "")
+            }
+            .sink { [weak self] valido, mensaje in
+                self?.puedeRegistrarse = valido
+                self?.mensajeError = mensaje
+            }
+            .store(in: &cancellables)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Con la llegada del macro `@Observable` en iOS 17, muchos casos de uso de Combine + ObservableObject se simplifican. Sin embargo, Combine sigue siendo esencial para operaciones asíncronas complejas como debounce, merge y manejo de errores.
+:::

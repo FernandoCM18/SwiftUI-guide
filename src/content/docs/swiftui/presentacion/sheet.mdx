@@ -1,0 +1,171 @@
+---
+title: Sheet
+description: Cómo usar sheet y fullScreenCover en SwiftUI para presentar vistas modales.
+---
+
+El modificador `.sheet` presenta una vista modal que se desliza desde la parte inferior de la pantalla. Es ideal para formularios, configuraciones o contenido secundario.
+
+## Vista previa
+
+![Sheet en SwiftUI](../../../../assets/swiftui/sheet.svg)
+
+## Uso básico
+
+```swift
+struct SheetEjemplo: View {
+    @State private var mostrarSheet = false
+
+    var body: some View {
+        Button("Abrir Sheet") {
+            mostrarSheet = true
+        }
+        .sheet(isPresented: $mostrarSheet) {
+            Text("¡Hola desde el Sheet!")
+                .font(.title)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Sheet con contenido completo
+
+```swift
+struct DetalleSheet: View {
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        NavigationStack {
+            VStack {
+                Text("Contenido del sheet")
+                    .padding()
+            }
+            .navigationTitle("Detalle")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cerrar") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## fullScreenCover
+
+Cubre toda la pantalla sin posibilidad de cerrar deslizando:
+
+```swift
+.fullScreenCover(isPresented: $mostrar) {
+    VistaCompleta()
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## presentationDetents
+
+Controla la altura del sheet:
+
+```swift
+.sheet(isPresented: $mostrar) {
+    ContenidoSheet()
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Pasar datos al sheet
+
+```swift
+struct Producto: Identifiable {
+    let id = UUID()
+    let nombre: String
+}
+
+struct TiendaView: View {
+    @State private var productoSeleccionado: Producto?
+
+    var body: some View {
+        Button("Ver producto") {
+            productoSeleccionado = Producto(nombre: "iPhone")
+        }
+        .sheet(item: $productoSeleccionado) { producto in
+            Text("Detalle de \(producto.nombre)")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Usa `.presentationDetents([.medium, .large])` para que el usuario pueda ajustar la altura del sheet arrastrándolo.
+:::
+
+## Ejemplo completo
+
+```swift
+struct NuevaNotaView: View {
+    @State private var mostrarFormulario = false
+    @State private var notas = ["Primera nota", "Segunda nota"]
+
+    var body: some View {
+        NavigationStack {
+            List(notas, id: \.self) { nota in
+                Text(nota)
+            }
+            .navigationTitle("Notas")
+            .toolbar {
+                Button {
+                    mostrarFormulario = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+            .sheet(isPresented: $mostrarFormulario) {
+                FormularioNota(notas: $notas)
+                    .presentationDetents([.medium])
+            }
+        }
+    }
+}
+
+struct FormularioNota: View {
+    @Binding var notas: [String]
+    @State private var texto = ""
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Escribe tu nota...", text: $texto, axis: .vertical)
+                    .lineLimit(3...6)
+            }
+            .navigationTitle("Nueva Nota")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancelar") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Guardar") {
+                        notas.append(texto)
+                        dismiss()
+                    }
+                    .disabled(texto.isEmpty)
+                }
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

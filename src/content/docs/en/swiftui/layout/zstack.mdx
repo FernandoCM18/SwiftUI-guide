@@ -1,0 +1,87 @@
+---
+title: ZStack
+description: How to use ZStack in SwiftUI to overlay views in layers.
+---
+
+`ZStack` (Z-axis Stack) overlays its child views on top of each other. The first view is at the back, the last is at the front.
+
+## Preview
+
+![ZStack in SwiftUI](../../../../../assets/swiftui/zstack.svg)
+
+## Basic Usage
+
+```swift
+ZStack {
+    Color.blue
+    Text("Hello World")
+        .foregroundColor(.white)
+        .font(.largeTitle)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Alignment
+
+```swift
+ZStack(alignment: .bottomTrailing) {
+    Image(systemName: "photo")
+        .resizable()
+        .frame(width: 200, height: 200)
+
+    Text("New")
+        .padding(6)
+        .background(Color.red)
+        .foregroundColor(.white)
+        .cornerRadius(8)
+        .padding(8)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+Options: `.center` (default), `.topLeading`, `.top`, `.topTrailing`, `.leading`, `.trailing`, `.bottomLeading`, `.bottom`, `.bottomTrailing`
+
+:::tip
+Use `.zIndex()` to change stacking order without moving views in code.
+:::
+
+## Full Example
+
+```swift
+struct BadgeCardView: View {
+    let notifications = 5
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            VStack(alignment: .leading, spacing: 12) {
+                Image(systemName: "envelope.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.blue)
+                Text("Messages").font(.headline)
+                Text("You have unread messages")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .frame(width: 180, height: 150)
+            .background(Color(.systemBackground))
+            .cornerRadius(16)
+            .shadow(radius: 4)
+
+            if notifications > 0 {
+                Text("\(notifications)")
+                    .font(.caption2).bold()
+                    .foregroundColor(.white)
+                    .frame(width: 24, height: 24)
+                    .background(Color.red)
+                    .clipShape(Circle())
+                    .offset(x: 8, y: -8)
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

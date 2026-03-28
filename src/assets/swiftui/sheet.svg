@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Background content (dimmed) -->
+  <rect x="30" y="15" width="315" height="190" rx="10" fill="#FFFFFF" opacity="0.4"/>
+  <rect x="50" y="35" width="200" height="12" rx="3" fill="#E5E5EA"/>
+  <rect x="50" y="55" width="260" height="12" rx="3" fill="#E5E5EA"/>
+  <rect x="50" y="75" width="180" height="12" rx="3" fill="#E5E5EA"/>
+  <!-- Dimming overlay -->
+  <rect x="0" y="0" width="375" height="220" rx="12" fill="#000000" opacity="0.25"/>
+  <!-- Sheet -->
+  <rect x="15" y="75" width="345" height="145" rx="14" fill="#FFFFFF"/>
+  <!-- Drag indicator -->
+  <rect x="162.5" y="83" width="50" height="5" rx="2.5" fill="#D1D1D6"/>
+  <!-- Sheet content -->
+  <text x="187.5" y="118" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" font-weight="600" fill="currentColor">Nueva Vista</text>
+  <text x="187.5" y="143" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="14" fill="#8E8E93">Contenido del sheet</text>
+  <!-- Dismiss button -->
+  <rect x="127.5" y="160" width="120" height="36" rx="10" fill="#007AFF"/>
+  <text x="187.5" y="183" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="15" font-weight="500" fill="#FFFFFF">Cerrar</text>
+</svg>

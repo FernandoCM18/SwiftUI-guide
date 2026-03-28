@@ -1,0 +1,122 @@
+---
+title: HStack
+description: Cómo usar HStack en SwiftUI para organizar vistas horizontalmente.
+---
+
+`HStack` (Horizontal Stack) organiza sus vistas hijas en una fila horizontal, de izquierda a derecha.
+
+## Vista previa
+
+![HStack en SwiftUI](../../../../assets/swiftui/hstack.svg)
+
+## Uso básico
+
+```swift
+HStack {
+    Image(systemName: "star.fill")
+    Text("Favorito")
+    Spacer()
+    Text("5.0")
+}
+.padding()
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Espaciado y alineación
+
+```swift
+// Espaciado personalizado
+HStack(spacing: 30) {
+    Color.red.frame(width: 50, height: 50)
+    Color.green.frame(width: 50, height: 50)
+    Color.blue.frame(width: 50, height: 50)
+}
+
+// Alineación vertical
+HStack(alignment: .top) {
+    Text("Corto")
+    Text("Texto\nmás\nlargo")
+    Text("Medio\nalto")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+Opciones de alineación vertical:
+- `.top` — Alinea arriba
+- `.center` — Centro (por defecto)
+- `.bottom` — Alinea abajo
+- `.firstTextBaseline` — Primera línea de texto
+- `.lastTextBaseline` — Última línea de texto
+
+## Spacer en HStack
+
+```swift
+HStack {
+    Text("Izquierda")
+    Spacer()
+    Text("Derecha")
+}
+.padding()
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Usa `Spacer()` entre elementos para distribuir el espacio disponible. Varios `Spacer` dividen el espacio equitativamente.
+:::
+
+## Ejemplo completo
+
+```swift
+struct TarjetaProductoView: View {
+    var body: some View {
+        HStack(spacing: 16) {
+            // Imagen del producto
+            Image(systemName: "cup.and.saucer.fill")
+                .resizable()
+                .frame(width: 60, height: 60)
+                .foregroundColor(.brown)
+                .padding()
+                .background(Color.brown.opacity(0.1))
+                .cornerRadius(12)
+
+            // Información
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Café Latte")
+                    .font(.headline)
+                Text("Con leche de avena")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                HStack {
+                    ForEach(0..<5) { i in
+                        Image(systemName: i < 4 ? "star.fill" : "star")
+                            .foregroundColor(.yellow)
+                            .font(.caption)
+                    }
+                }
+            }
+
+            Spacer()
+
+            // Precio
+            VStack {
+                Text("$65")
+                    .font(.title2)
+                    .bold()
+                Text("MXN")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(radius: 2)
+        .padding(.horizontal)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

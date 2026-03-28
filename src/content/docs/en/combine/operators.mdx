@@ -1,0 +1,130 @@
+---
+title: Operators
+description: Key Combine operators - map, filter, combineLatest, merge, debounce, and more.
+---
+
+**Operators** transform, filter, and combine values between a Publisher and a Subscriber.
+
+## Transformation
+
+### map
+
+```swift
+[1, 2, 3].publisher
+    .map { $0 * 2 }
+    .sink { print($0) }
+// 2, 4, 6
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### compactMap
+
+Transforms and discards nil values:
+
+```swift
+["1", "two", "3"].publisher
+    .compactMap { Int($0) }
+    .sink { print($0) }
+// 1, 3
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Filtering
+
+### filter
+
+```swift
+(1...20).publisher
+    .filter { $0 % 3 == 0 }
+    .sink { print($0) }
+// 3, 6, 9, 12, 15, 18
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### removeDuplicates
+
+```swift
+[1, 1, 2, 2, 3, 1].publisher
+    .removeDuplicates()
+    .sink { print($0) }
+// 1, 2, 3, 1
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### debounce
+
+Waits for a pause before emitting:
+
+```swift
+$searchText
+    .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+    .sink { print("Search: \($0)") }
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Combining
+
+### combineLatest
+
+Combines the latest value from multiple publishers:
+
+```swift
+let name = CurrentValueSubject<String, Never>("Maria")
+let age = CurrentValueSubject<Int, Never>(25)
+
+name.combineLatest(age)
+    .sink { print("\($0) is \($1)") }
+
+name.send("Carlos") // Carlos is 25
+age.send(30)         // Carlos is 30
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### merge
+
+Merges publishers of the same type:
+
+```swift
+publisher1.merge(with: publisher2)
+    .sink { print($0) }
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### zip
+
+Pairs values from publishers (waits for both):
+
+```swift
+[1, 2, 3].publisher
+    .zip(["A", "B", "C"].publisher)
+    .sink { print("\($0)\($1)") }
+// 1A, 2B, 3C
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Summary
+
+| Operator | Type | Description |
+|---|---|---|
+| `map` | Transform | Transform each value |
+| `compactMap` | Transform | Transform, discard nil |
+| `filter` | Filter | Filter by condition |
+| `removeDuplicates` | Filter | Remove consecutive duplicates |
+| `debounce` | Timing | Wait for silence |
+| `throttle` | Timing | Limit frequency |
+| `combineLatest` | Combine | Combine latest values |
+| `merge` | Combine | Merge publishers |
+| `zip` | Combine | Pair values |
+| `receive(on:)` | Control | Change scheduler |
+
+:::tip
+`debounce` is perfect for search fields: it waits for the user to stop typing before executing the search.
+:::

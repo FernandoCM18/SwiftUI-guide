@@ -1,0 +1,216 @@
+---
+title: Label
+description: Aprende a usar el componente Label de SwiftUI para mostrar texto con iconos del sistema.
+---
+
+## El componente Label
+
+`Label` combina un texto con un icono, creando un elemento visual consistente ideal para menús, listas y botones. Utiliza SF Symbols para los iconos del sistema.
+
+![Label](../../../../assets/swiftui/label.svg)
+
+## Uso básico
+
+```swift
+import SwiftUI
+
+struct LabelBasico: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Label("Favoritos", systemImage: "star.fill")
+            Label("Compartir", systemImage: "square.and.arrow.up")
+            Label("Ajustes", systemImage: "gearshape")
+            Label("Perfil", systemImage: "person.circle")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Label con estilos
+
+SwiftUI proporciona varios estilos predefinidos para Labels.
+
+```swift
+import SwiftUI
+
+struct LabelEstilos: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            // Estilo por defecto: icono + texto
+            Label("Automático", systemImage: "wand.and.stars")
+                .labelStyle(.automatic)
+
+            // Solo icono
+            Label("Solo icono", systemImage: "heart.fill")
+                .labelStyle(.iconOnly)
+
+            // Solo título
+            Label("Solo título", systemImage: "heart.fill")
+                .labelStyle(.titleOnly)
+
+            // Título y icono (explícito)
+            Label("Ambos", systemImage: "bolt.fill")
+                .labelStyle(.titleAndIcon)
+        }
+        .font(.title3)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Personalizar colores y tamaños
+
+```swift
+import SwiftUI
+
+struct LabelPersonalizado: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Label("Importante", systemImage: "exclamationmark.triangle.fill")
+                .font(.headline)
+                .foregroundColor(.orange)
+
+            Label("Correcto", systemImage: "checkmark.circle.fill")
+                .font(.title2)
+                .foregroundColor(.green)
+
+            Label("Error", systemImage: "xmark.octagon.fill")
+                .font(.title3)
+                .foregroundColor(.red)
+
+            Label("Información", systemImage: "info.circle.fill")
+                .font(.body)
+                .foregroundColor(.blue)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Label con contenido personalizado
+
+Puedes crear un Label con vistas personalizadas para el título y el icono.
+
+```swift
+import SwiftUI
+
+struct LabelCustom: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            // Label con vistas personalizadas
+            Label {
+                Text("Descarga completada")
+                    .font(.headline)
+            } icon: {
+                Image(systemName: "arrow.down.circle.fill")
+                    .foregroundColor(.green)
+                    .font(.title)
+            }
+
+            // Label con múltiples líneas de texto
+            Label {
+                VStack(alignment: .leading) {
+                    Text("María García")
+                        .font(.headline)
+                    Text("Desarrolladora iOS")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            } icon: {
+                Image(systemName: "person.crop.circle.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.blue)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Label en listas
+
+Los Labels son especialmente útiles dentro de listas y menús.
+
+```swift
+import SwiftUI
+
+struct LabelEnLista: View {
+    var body: some View {
+        List {
+            Section("General") {
+                Label("Notificaciones", systemImage: "bell.badge")
+                Label("Sonidos", systemImage: "speaker.wave.2")
+                Label("Enfoque", systemImage: "moon.fill")
+            }
+
+            Section("Privacidad") {
+                Label("Localización", systemImage: "location")
+                Label("Cámara", systemImage: "camera")
+                Label("Micrófono", systemImage: "mic")
+            }
+
+            Section("Cuenta") {
+                Label("iCloud", systemImage: "icloud")
+                Label("Suscripciones", systemImage: "creditcard")
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Label como botón
+
+```swift
+import SwiftUI
+
+struct LabelBoton: View {
+    @State private var esFavorito = false
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Button {
+                esFavorito.toggle()
+            } label: {
+                Label(
+                    esFavorito ? "Quitar de favoritos" : "Añadir a favoritos",
+                    systemImage: esFavorito ? "star.fill" : "star"
+                )
+                .foregroundColor(esFavorito ? .yellow : .gray)
+            }
+
+            Button {
+                // Acción de compartir
+            } label: {
+                Label("Compartir", systemImage: "square.and.arrow.up")
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+SF Symbols ofrece miles de iconos gratuitos. Descarga la app SF Symbols de Apple para explorar todos los iconos disponibles y sus variantes.
+:::
+
+## Resumen
+
+| Propiedad | Descripción |
+|-----------|-------------|
+| `Label("texto", systemImage:)` | Crea un label con icono del sistema |
+| `.labelStyle(.iconOnly)` | Muestra solo el icono |
+| `.labelStyle(.titleOnly)` | Muestra solo el texto |
+| `.labelStyle(.titleAndIcon)` | Muestra ambos explícitamente |
+| `Label { } icon: { }` | Label con contenido personalizado |

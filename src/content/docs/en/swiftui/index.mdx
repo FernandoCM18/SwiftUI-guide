@@ -1,0 +1,63 @@
+---
+title: Introduction to SwiftUI
+description: Introduction to Apple's declarative UI framework SwiftUI.
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+**SwiftUI** is Apple's modern declarative framework for building user interfaces across all Apple platforms. Instead of step-by-step instructions, you describe what the UI should look like and SwiftUI handles the rest.
+
+## Basic Structure
+
+```swift
+import SwiftUI
+
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, World!")
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Key Concepts
+
+- **Declarative syntax**: Describe what you want, not how to build it
+- **State-driven**: The UI automatically updates when state changes
+- **Composable**: Build complex UIs by combining small, reusable views
+- **Cross-platform**: Same code works on iOS, macOS, watchOS, and tvOS
+
+## Sections
+
+<CardGrid>
+  <Card title="Text & Images" icon="document">
+    Text, Label, and Image components.
+    [View Text & Images →](/en/swiftui/text-and-images/text/)
+  </Card>
+  <Card title="Controls" icon="setting">
+    Button, Toggle, Slider, Picker, and TextField.
+    [View Controls →](/en/swiftui/controls/button/)
+  </Card>
+  <Card title="Layout" icon="puzzle">
+    VStack, HStack, and ZStack for arranging views.
+    [View Layout →](/en/swiftui/layout/vstack/)
+  </Card>
+  <Card title="Lists & Navigation" icon="list-format">
+    List, ScrollView, and NavigationStack.
+    [View Lists →](/en/swiftui/lists-and-navigation/list/)
+  </Card>
+  <Card title="Presentation" icon="rocket">
+    Sheet, Alert, and TabView.
+    [View Presentation →](/en/swiftui/presentation/sheet/)
+  </Card>
+</CardGrid>

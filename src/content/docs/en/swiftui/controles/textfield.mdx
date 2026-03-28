@@ -1,0 +1,110 @@
+---
+title: TextField
+description: How to use TextField and SecureField in SwiftUI for text input.
+---
+
+`TextField` lets the user enter text. `SecureField` hides the input, ideal for passwords.
+
+## Preview
+
+![TextField in SwiftUI](../../../../../assets/swiftui/textfield.svg)
+
+## Basic Usage
+
+```swift
+struct TextFieldExample: View {
+    @State private var name = ""
+
+    var body: some View {
+        TextField("Enter your name", text: $name)
+            .textFieldStyle(.roundedBorder)
+            .padding()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## SecureField
+
+```swift
+@State private var password = ""
+
+SecureField("Password", text: $password)
+    .textFieldStyle(.roundedBorder)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Keyboard Types
+
+```swift
+TextField("Email", text: $email)
+    .keyboardType(.emailAddress)
+    .autocapitalization(.none)
+
+TextField("Phone", text: $phone)
+    .keyboardType(.phonePad)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Common Modifiers
+
+| Modifier | Description |
+|---|---|
+| `.textFieldStyle(.roundedBorder)` | Rounded border |
+| `.keyboardType(.emailAddress)` | Keyboard type |
+| `.autocapitalization(.none)` | No auto-capitalization |
+| `.textContentType(.password)` | Autofill hint |
+| `.submitLabel(.done)` | Submit button text |
+| `.focused($isFocused)` | Focus control |
+
+:::tip
+Use `@FocusState` to programmatically control which field has keyboard focus.
+:::
+
+## Full Example
+
+```swift
+struct RegistrationFormView: View {
+    @State private var name = ""
+    @State private var email = ""
+    @State private var password = ""
+    @FocusState private var focusedField: Field?
+
+    enum Field { case name, email, password }
+
+    var isValid: Bool {
+        !name.isEmpty && email.contains("@") && password.count >= 8
+    }
+
+    var body: some View {
+        Form {
+            Section("Personal Info") {
+                TextField("Full name", text: $name)
+                    .focused($focusedField, equals: .name)
+                    .submitLabel(.next)
+                    .onSubmit { focusedField = .email }
+
+                TextField("Email", text: $email)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
+                    .focused($focusedField, equals: .email)
+                    .submitLabel(.next)
+                    .onSubmit { focusedField = .password }
+
+                SecureField("Password (min. 8 chars)", text: $password)
+                    .focused($focusedField, equals: .password)
+                    .submitLabel(.done)
+            }
+
+            Button("Register") { focusedField = nil }
+                .disabled(!isValid)
+                .frame(maxWidth: .infinity)
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

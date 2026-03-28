@@ -1,0 +1,167 @@
+---
+title: TabView
+description: Cómo usar TabView en SwiftUI para crear navegación con pestañas.
+---
+
+`TabView` organiza el contenido en pestañas, mostrando una barra de pestañas en la parte inferior de la pantalla. Es el patrón de navegación principal en muchas apps de iOS.
+
+## Vista previa
+
+![TabView en SwiftUI](../../../../assets/swiftui/tabview.svg)
+
+## Uso básico
+
+```swift
+TabView {
+    Text("Inicio")
+        .tabItem {
+            Label("Inicio", systemImage: "house")
+        }
+
+    Text("Buscar")
+        .tabItem {
+            Label("Buscar", systemImage: "magnifyingglass")
+        }
+
+    Text("Perfil")
+        .tabItem {
+            Label("Perfil", systemImage: "person")
+        }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Selección programática
+
+```swift
+struct AppPrincipal: View {
+    @State private var tabSeleccionada = 0
+
+    var body: some View {
+        TabView(selection: $tabSeleccionada) {
+            InicioView()
+                .tabItem {
+                    Label("Inicio", systemImage: "house")
+                }
+                .tag(0)
+
+            BuscarView()
+                .tabItem {
+                    Label("Buscar", systemImage: "magnifyingglass")
+                }
+                .tag(1)
+
+            PerfilView()
+                .tabItem {
+                    Label("Perfil", systemImage: "person")
+                }
+                .tag(2)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Badges (insignias)
+
+```swift
+Text("Mensajes")
+    .tabItem {
+        Label("Mensajes", systemImage: "message")
+    }
+    .badge(5)
+
+Text("Correo")
+    .tabItem {
+        Label("Correo", systemImage: "envelope")
+    }
+    .badge("Nuevo")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## TabView como paginador
+
+```swift
+TabView {
+    Color.red
+    Color.green
+    Color.blue
+}
+.tabViewStyle(.page)
+.indexViewStyle(.page(backgroundDisplayMode: .always))
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Usa `TabView` como contenedor raíz de tu app. Cada pestaña puede contener su propio `NavigationStack` independiente.
+:::
+
+## Ejemplo completo
+
+```swift
+struct MiAppView: View {
+    @State private var tab = 0
+    @State private var mensajesSinLeer = 3
+
+    var body: some View {
+        TabView(selection: $tab) {
+            NavigationStack {
+                List(0..<10) { i in
+                    NavigationLink("Publicación \(i + 1)") {
+                        Text("Detalle de la publicación \(i + 1)")
+                    }
+                }
+                .navigationTitle("Inicio")
+            }
+            .tabItem {
+                Label("Inicio", systemImage: "house.fill")
+            }
+            .tag(0)
+
+            NavigationStack {
+                Text("Buscar contenido")
+                    .navigationTitle("Buscar")
+            }
+            .tabItem {
+                Label("Buscar", systemImage: "magnifyingglass")
+            }
+            .tag(1)
+
+            NavigationStack {
+                List {
+                    ForEach(0..<mensajesSinLeer, id: \.self) { i in
+                        Text("Mensaje \(i + 1)")
+                    }
+                }
+                .navigationTitle("Mensajes")
+            }
+            .tabItem {
+                Label("Mensajes", systemImage: "message.fill")
+            }
+            .badge(mensajesSinLeer)
+            .tag(2)
+
+            NavigationStack {
+                VStack {
+                    Image(systemName: "person.circle.fill")
+                        .font(.system(size: 80))
+                        .foregroundColor(.blue)
+                    Text("Mi Perfil")
+                        .font(.title)
+                }
+                .navigationTitle("Perfil")
+            }
+            .tabItem {
+                Label("Perfil", systemImage: "person.fill")
+            }
+            .tag(3)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

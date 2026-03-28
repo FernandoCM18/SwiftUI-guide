@@ -1,0 +1,153 @@
+---
+title: Picker
+description: Cómo usar el componente Picker en SwiftUI para seleccionar entre opciones.
+---
+
+El componente `Picker` permite al usuario seleccionar un valor de una lista de opciones. Ofrece múltiples estilos de presentación.
+
+## Vista previa
+
+![Picker en SwiftUI](../../../../assets/swiftui/picker.svg)
+
+## Uso básico
+
+```swift
+struct PickerEjemplo: View {
+    @State private var seleccion = "Manzana"
+    let frutas = ["Manzana", "Plátano", "Naranja", "Uva"]
+
+    var body: some View {
+        Picker("Fruta favorita", selection: $seleccion) {
+            ForEach(frutas, id: \.self) { fruta in
+                Text(fruta)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Estilos de Picker
+
+### Segmentado
+
+```swift
+Picker("Período", selection: $periodo) {
+    Text("Diario").tag("diario")
+    Text("Semanal").tag("semanal")
+    Text("Mensual").tag("mensual")
+}
+.pickerStyle(.segmented)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Menú (por defecto en iOS)
+
+```swift
+Picker("Color", selection: $color) {
+    ForEach(colores, id: \.self) { color in
+        Text(color)
+    }
+}
+.pickerStyle(.menu)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Rueda
+
+```swift
+Picker("Edad", selection: $edad) {
+    ForEach(18...99, id: \.self) { num in
+        Text("\(num) años")
+    }
+}
+.pickerStyle(.wheel)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Picker con enum
+
+```swift
+enum Tamano: String, CaseIterable {
+    case pequeno = "Pequeño"
+    case mediano = "Mediano"
+    case grande = "Grande"
+}
+
+struct TamanoPickerView: View {
+    @State private var tamano: Tamano = .mediano
+
+    var body: some View {
+        Picker("Tamaño", selection: $tamano) {
+            ForEach(Tamano.allCases, id: \.self) { t in
+                Text(t.rawValue).tag(t)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Modificadores comunes
+
+| Modificador | Descripción |
+|---|---|
+| `.pickerStyle(.segmented)` | Estilo segmentado |
+| `.pickerStyle(.wheel)` | Estilo rueda |
+| `.pickerStyle(.menu)` | Estilo menú desplegable |
+| `.pickerStyle(.inline)` | Estilo en línea |
+
+:::tip
+Usa `.pickerStyle(.segmented)` cuando tengas 2-5 opciones cortas. Para más opciones, usa `.menu` o `.wheel`.
+:::
+
+## Ejemplo completo
+
+```swift
+struct PedidoView: View {
+    @State private var tamano = "Mediano"
+    @State private var bebida = "Café"
+    @State private var cantidad = 1
+
+    let tamanos = ["Pequeño", "Mediano", "Grande"]
+    let bebidas = ["Café", "Té", "Chocolate", "Jugo"]
+
+    var body: some View {
+        Form {
+            Section("Tu pedido") {
+                Picker("Bebida", selection: $bebida) {
+                    ForEach(bebidas, id: \.self) { b in
+                        Text(b)
+                    }
+                }
+
+                Picker("Tamaño", selection: $tamano) {
+                    ForEach(tamanos, id: \.self) { t in
+                        Text(t)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                Picker("Cantidad", selection: $cantidad) {
+                    ForEach(1...10, id: \.self) { n in
+                        Text("\(n)")
+                    }
+                }
+            }
+
+            Section("Resumen") {
+                Text("\(cantidad)x \(bebida) (\(tamano))")
+                    .font(.headline)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

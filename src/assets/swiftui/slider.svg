@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Container -->
+  <rect x="40" y="65" width="295" height="70" rx="10" fill="#FFFFFF"/>
+  <!-- Label -->
+  <text x="60" y="90" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="15" fill="currentColor">Volumen</text>
+  <!-- Value -->
+  <text x="315" y="90" text-anchor="end" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="15" fill="#8E8E93">60%</text>
+  <!-- Slider track background -->
+  <rect x="60" y="108" width="255" height="4" rx="2" fill="#D1D1D6"/>
+  <!-- Slider track filled -->
+  <rect x="60" y="108" width="153" height="4" rx="2" fill="#007AFF"/>
+  <!-- Slider thumb -->
+  <circle cx="213" cy="110" r="14" fill="#FFFFFF" stroke="#E5E5EA" stroke-width="0.5"/>
+  <circle cx="213" cy="110" r="13.5" fill="#FFFFFF" filter="url(#thumbShadow)"/>
+  <defs>
+    <filter id="thumbShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <!-- Code label -->
+  <text x="187.5" y="195" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">Slider(value: $volume, in: 0...100)</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- HStack container (dashed) -->
+  <rect x="32" y="35" width="311" height="130" rx="8" fill="none" stroke="#8E8E93" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- Rectangle 1 -->
+  <rect x="47" y="50" width="87" height="100" rx="8" fill="#007AFF" opacity="0.9"/>
+  <text x="90.5" y="105" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" fill="#FFFFFF">View 1</text>
+  <!-- Rectangle 2 -->
+  <rect x="144" y="50" width="87" height="100" rx="8" fill="#34C759" opacity="0.9"/>
+  <text x="187.5" y="105" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" fill="#FFFFFF">View 2</text>
+  <!-- Rectangle 3 -->
+  <rect x="241" y="50" width="87" height="100" rx="8" fill="#FF9500" opacity="0.9"/>
+  <text x="284.5" y="105" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" fill="#FFFFFF">View 3</text>
+  <!-- Label -->
+  <text x="187.5" y="195" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">HStack(spacing: 10) { ... }</text>
+</svg>

@@ -1,0 +1,118 @@
+---
+title: Slider
+description: Cómo usar el componente Slider en SwiftUI para seleccionar valores en un rango.
+---
+
+El componente `Slider` permite al usuario seleccionar un valor dentro de un rango definido arrastrando un indicador.
+
+## Vista previa
+
+![Slider en SwiftUI](../../../../assets/swiftui/slider.svg)
+
+## Uso básico
+
+```swift
+struct SliderEjemplo: View {
+    @State private var valor = 50.0
+
+    var body: some View {
+        VStack {
+            Slider(value: $valor, in: 0...100)
+            Text("Valor: \(valor, specifier: "%.0f")")
+        }
+        .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Slider con paso definido
+
+```swift
+Slider(value: $temperatura, in: 16...30, step: 0.5) {
+    Text("Temperatura")
+} minimumValueLabel: {
+    Text("16°")
+} maximumValueLabel: {
+    Text("30°")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Detectar cambios
+
+```swift
+Slider(value: $brillo, in: 0...1) {
+    Text("Brillo")
+} onEditingChanged: { editando in
+    if !editando {
+        // El usuario soltó el slider
+        guardarBrillo(brillo)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Modificadores comunes
+
+| Modificador | Descripción |
+|---|---|
+| `.tint(.blue)` | Color de la pista del slider |
+| `.disabled(true)` | Deshabilita el slider |
+| `step:` | Define el incremento entre valores |
+
+:::tip
+Combina `Slider` con `Text` para mostrar el valor actual al usuario.
+:::
+
+## Ejemplo completo
+
+```swift
+struct ControlVolumenView: View {
+    @State private var volumen = 0.5
+    @State private var brillo = 0.8
+    @State private var velocidad = 1.0
+
+    var body: some View {
+        Form {
+            Section("Audio") {
+                HStack {
+                    Image(systemName: "speaker.fill")
+                    Slider(value: $volumen, in: 0...1)
+                    Image(systemName: "speaker.wave.3.fill")
+                }
+
+                Text("Volumen: \(Int(volumen * 100))%")
+                    .foregroundColor(.secondary)
+            }
+
+            Section("Pantalla") {
+                HStack {
+                    Image(systemName: "sun.min")
+                    Slider(value: $brillo, in: 0...1)
+                    Image(systemName: "sun.max")
+                }
+                .tint(.yellow)
+            }
+
+            Section("Reproducción") {
+                Slider(value: $velocidad, in: 0.5...2.0, step: 0.25) {
+                    Text("Velocidad")
+                } minimumValueLabel: {
+                    Text("0.5x")
+                } maximumValueLabel: {
+                    Text("2x")
+                }
+
+                Text("Velocidad: \(velocidad, specifier: "%.2f")x")
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

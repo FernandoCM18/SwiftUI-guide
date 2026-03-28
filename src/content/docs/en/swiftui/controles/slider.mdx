@@ -1,0 +1,93 @@
+---
+title: Slider
+description: How to use Slider in SwiftUI to select values from a range.
+---
+
+`Slider` lets the user select a value from a bounded range by dragging a thumb.
+
+## Preview
+
+![Slider in SwiftUI](../../../../../assets/swiftui/slider.svg)
+
+## Basic Usage
+
+```swift
+struct SliderExample: View {
+    @State private var value = 50.0
+
+    var body: some View {
+        VStack {
+            Slider(value: $value, in: 0...100)
+            Text("Value: \(value, specifier: "%.0f")")
+        }
+        .padding()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Slider with Step
+
+```swift
+Slider(value: $temperature, in: 60...85, step: 1) {
+    Text("Temperature")
+} minimumValueLabel: {
+    Text("60°")
+} maximumValueLabel: {
+    Text("85°")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Detecting Changes
+
+```swift
+Slider(value: $brightness, in: 0...1) {
+    Text("Brightness")
+} onEditingChanged: { editing in
+    if !editing {
+        saveBrightness(brightness)
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Combine `Slider` with `Text` to display the current value to the user.
+:::
+
+## Full Example
+
+```swift
+struct VolumeControlView: View {
+    @State private var volume = 0.5
+    @State private var brightness = 0.8
+
+    var body: some View {
+        Form {
+            Section("Audio") {
+                HStack {
+                    Image(systemName: "speaker.fill")
+                    Slider(value: $volume, in: 0...1)
+                    Image(systemName: "speaker.wave.3.fill")
+                }
+                Text("Volume: \(Int(volume * 100))%")
+                    .foregroundColor(.secondary)
+            }
+            Section("Display") {
+                HStack {
+                    Image(systemName: "sun.min")
+                    Slider(value: $brightness, in: 0...1)
+                        .tint(.yellow)
+                    Image(systemName: "sun.max")
+                }
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

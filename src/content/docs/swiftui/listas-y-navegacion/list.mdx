@@ -1,0 +1,161 @@
+---
+title: List
+description: Cómo usar List en SwiftUI para mostrar colecciones de datos en filas.
+---
+
+`List` muestra una colección de datos en filas desplazables, similar a `UITableView` en UIKit.
+
+## Vista previa
+
+![List en SwiftUI](../../../../assets/swiftui/list.svg)
+
+## Uso básico
+
+```swift
+struct ListaEjemplo: View {
+    let frutas = ["Manzana", "Plátano", "Naranja", "Uva", "Fresa"]
+
+    var body: some View {
+        List(frutas, id: \.self) { fruta in
+            Text(fruta)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## List con ForEach
+
+```swift
+struct Tarea: Identifiable {
+    let id = UUID()
+    var titulo: String
+    var completada: Bool
+}
+
+struct TareasView: View {
+    @State private var tareas = [
+        Tarea(titulo: "Comprar leche", completada: true),
+        Tarea(titulo: "Llamar al doctor", completada: false),
+        Tarea(titulo: "Estudiar Swift", completada: false),
+    ]
+
+    var body: some View {
+        List {
+            ForEach(tareas) { tarea in
+                HStack {
+                    Image(systemName: tarea.completada ? "checkmark.circle.fill" : "circle")
+                        .foregroundColor(tarea.completada ? .green : .gray)
+                    Text(tarea.titulo)
+                }
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Secciones
+
+```swift
+List {
+    Section("Frutas") {
+        Text("Manzana")
+        Text("Plátano")
+    }
+
+    Section("Verduras") {
+        Text("Zanahoria")
+        Text("Brócoli")
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Acciones de deslizamiento
+
+```swift
+List {
+    ForEach(tareas) { tarea in
+        Text(tarea.titulo)
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) {
+                    // Eliminar
+                } label: {
+                    Label("Eliminar", systemImage: "trash")
+                }
+            }
+            .swipeActions(edge: .leading) {
+                Button {
+                    // Marcar como favorito
+                } label: {
+                    Label("Favorito", systemImage: "star")
+                }
+                .tint(.yellow)
+            }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Estilos de lista
+
+| Estilo | Descripción |
+|---|---|
+| `.listStyle(.automatic)` | Estilo por defecto |
+| `.listStyle(.plain)` | Sin separadores de grupo |
+| `.listStyle(.grouped)` | Agrupado con fondo |
+| `.listStyle(.insetGrouped)` | Agrupado con márgenes |
+| `.listStyle(.sidebar)` | Estilo barra lateral |
+
+:::tip
+Usa `List` con `@State` y `.onDelete` para crear listas editables donde el usuario puede eliminar filas deslizando.
+:::
+
+## Ejemplo completo
+
+```swift
+struct ContactosView: View {
+    @State private var contactos = [
+        "Ana López", "Carlos Ruiz", "Diana Flores",
+        "Eduardo Paz", "Fernanda Gil", "Gustavo Mora"
+    ]
+    @State private var busqueda = ""
+
+    var contactosFiltrados: [String] {
+        if busqueda.isEmpty {
+            return contactos
+        }
+        return contactos.filter { $0.localizedCaseInsensitiveContains(busqueda) }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(contactosFiltrados, id: \.self) { contacto in
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .foregroundColor(.blue)
+                            .font(.title2)
+                        Text(contacto)
+                    }
+                }
+                .onDelete { indices in
+                    contactos.remove(atOffsets: indices)
+                }
+            }
+            .navigationTitle("Contactos")
+            .searchable(text: $busqueda, prompt: "Buscar contacto")
+            .toolbar {
+                EditButton()
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

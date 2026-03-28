@@ -1,0 +1,295 @@
+---
+title: Flujo de Control
+description: Aprende las estructuras de control en Swift, incluyendo if/else, switch, for-in, while y guard.
+---
+
+## Estructuras de control
+
+Las estructuras de control permiten dirigir el flujo de ejecución de tu programa. Swift ofrece todas las estructuras clásicas con mejoras modernas como el pattern matching.
+
+## Condicional if/else
+
+La estructura más básica para tomar decisiones.
+
+```swift
+let temperatura = 32
+
+if temperatura > 30 {
+    print("Hace mucho calor")
+} else if temperatura > 20 {
+    print("El clima es agradable")
+} else if temperatura > 10 {
+    print("Hace fresco")
+} else {
+    print("Hace frío")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Condiciones múltiples
+
+Puedes combinar condiciones con operadores lógicos.
+
+```swift
+let edad = 25
+let tieneEntrada = true
+
+// AND (&&): ambas deben ser verdaderas
+if edad >= 18 && tieneEntrada {
+    print("Puedes entrar al concierto")
+}
+
+// OR (||): al menos una debe ser verdadera
+let esEstudiante = false
+let esMayorDe65 = false
+if esEstudiante || esMayorDe65 {
+    print("Tienes descuento")
+} else {
+    print("Precio normal")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Sentencia switch
+
+El `switch` de Swift es muy potente. Debe ser exhaustivo y no necesita `break` (no hay fall-through implícito).
+
+```swift
+let dia = "lunes"
+
+switch dia {
+case "lunes":
+    print("Inicio de semana")
+case "martes", "miércoles", "jueves":
+    print("Entre semana")
+case "viernes":
+    print("¡Por fin viernes!")
+case "sábado", "domingo":
+    print("Fin de semana")
+default:
+    print("Día no reconocido")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Pattern matching con rangos
+
+```swift
+let nota = 85
+
+switch nota {
+case 0..<50:
+    print("Suspenso")
+case 50..<60:
+    print("Aprobado")
+case 60..<70:
+    print("Bien")
+case 70..<90:
+    print("Notable")
+case 90...100:
+    print("Sobresaliente")
+default:
+    print("Nota fuera de rango")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Pattern matching con tuplas
+
+```swift
+let punto = (2, 0)
+
+switch punto {
+case (0, 0):
+    print("En el origen")
+case (_, 0):
+    print("En el eje X")
+case (0, _):
+    print("En el eje Y")
+case (-2...2, -2...2):
+    print("Dentro del cuadrado central")
+default:
+    print("Fuera del cuadrado central")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Value binding en switch
+
+```swift
+let otroPunto = (3, -5)
+
+switch otroPunto {
+case (let x, 0):
+    print("En el eje X con valor \(x)")
+case (0, let y):
+    print("En el eje Y con valor \(y)")
+case let (x, y) where x == y:
+    print("En la diagonal donde x == y == \(x)")
+case let (x, y):
+    print("En algún lugar: (\(x), \(y))")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Bucle for-in
+
+El bucle `for-in` itera sobre secuencias como rangos, arrays y diccionarios.
+
+```swift
+// Iterar sobre un rango
+for i in 1...5 {
+    print("Número: \(i)")
+}
+
+// Rango que excluye el límite superior
+for i in 0..<3 {
+    print("Índice: \(i)")
+}
+
+// Iterar sobre un array
+let frutas = ["Manzana", "Banana", "Cereza"]
+for fruta in frutas {
+    print("Fruta: \(fruta)")
+}
+
+// Iterar con índice usando enumerated()
+for (indice, fruta) in frutas.enumerated() {
+    print("\(indice): \(fruta)")
+}
+
+// Iterar sobre un diccionario
+let edades = ["Ana": 25, "Luis": 30, "María": 28]
+for (nombre, edad) in edades {
+    print("\(nombre) tiene \(edad) años")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Usar stride para pasos personalizados
+
+```swift
+// Contar de 2 en 2
+for numero in stride(from: 0, to: 10, by: 2) {
+    print(numero)  // 0, 2, 4, 6, 8
+}
+
+// Cuenta regresiva
+for numero in stride(from: 10, through: 0, by: -2) {
+    print(numero)  // 10, 8, 6, 4, 2, 0
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Ignorar el valor del iterador
+
+```swift
+// Usar _ cuando no necesitas el valor
+var potencia = 1
+for _ in 1...10 {
+    potencia *= 2
+}
+print("2^10 = \(potencia)")  // 1024
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Bucle while
+
+Ejecuta un bloque de código mientras una condición sea verdadera.
+
+```swift
+var contador = 5
+while contador > 0 {
+    print("Cuenta regresiva: \(contador)")
+    contador -= 1
+}
+print("¡Despegue!")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Bucle repeat-while
+
+Similar a `do-while` en otros lenguajes. Ejecuta el bloque al menos una vez.
+
+```swift
+var intentos = 0
+repeat {
+    intentos += 1
+    print("Intento número \(intentos)")
+} while intentos < 3
+
+print("Total de intentos: \(intentos)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Guard
+
+`guard` es una salida anticipada. Si la condición no se cumple, debe salir del ámbito actual.
+
+```swift
+func verificarEdad(_ edad: Int) {
+    guard edad >= 18 else {
+        print("Debes ser mayor de edad")
+        return
+    }
+    guard edad <= 120 else {
+        print("Edad no válida")
+        return
+    }
+    print("Edad válida: \(edad) años. Bienvenido.")
+}
+
+verificarEdad(15)   // "Debes ser mayor de edad"
+verificarEdad(25)   // "Edad válida: 25 años. Bienvenido."
+verificarEdad(150)  // "Edad no válida"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Usa `guard` para validar condiciones al inicio de una función. Esto reduce la anidación y hace el código más legible, mostrando claramente el "camino feliz".
+:::
+
+## Control de flujo en bucles
+
+```swift
+// break: sale del bucle completamente
+for i in 1...10 {
+    if i == 5 {
+        break
+    }
+    print(i)  // 1, 2, 3, 4
+}
+
+// continue: salta a la siguiente iteración
+for i in 1...10 {
+    if i % 2 == 0 {
+        continue  // Salta los números pares
+    }
+    print(i)  // 1, 3, 5, 7, 9
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Resumen
+
+| Estructura | Uso |
+|-----------|-----|
+| `if/else` | Decisiones condicionales |
+| `switch` | Múltiples caminos con pattern matching |
+| `for-in` | Iterar sobre secuencias |
+| `while` | Repetir mientras se cumpla condición |
+| `repeat-while` | Ejecutar al menos una vez |
+| `guard` | Salida anticipada si no se cumple condición |

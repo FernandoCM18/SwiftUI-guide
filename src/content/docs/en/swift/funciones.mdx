@@ -1,0 +1,282 @@
+---
+title: Functions
+description: Learn how to declare and use functions in Swift, including parameters, return types, argument labels, and closures.
+---
+
+## Reusable Blocks of Code
+
+Functions are self-contained blocks of code that perform a specific task. They are one of the most fundamental building blocks in Swift.
+
+## Basic Function Declaration
+
+```swift
+func sayHello() {
+    print("Hello, World!")
+}
+
+sayHello()  // "Hello, World!"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Functions with Parameters
+
+```swift
+func greet(person: String) {
+    print("Hello, \(person)!")
+}
+
+greet(person: "Alice")  // "Hello, Alice!"
+
+// Multiple parameters
+func greet(person: String, from city: String) {
+    print("Hello, \(person) from \(city)!")
+}
+
+greet(person: "Bob", from: "London")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Return Values
+
+```swift
+func add(a: Int, b: Int) -> Int {
+    return a + b
+}
+
+let result = add(a: 5, b: 3)
+print(result)  // 8
+
+// Single-expression functions can omit return
+func multiply(a: Int, b: Int) -> Int {
+    a * b
+}
+
+print(multiply(a: 4, b: 7))  // 28
+
+// Returning multiple values with tuples
+func minMax(array: [Int]) -> (min: Int, max: Int)? {
+    guard let first = array.first else { return nil }
+    var min = first
+    var max = first
+    for value in array {
+        if value < min { min = value }
+        if value > max { max = value }
+    }
+    return (min, max)
+}
+
+if let bounds = minMax(array: [3, 1, 7, 2, 9]) {
+    print("Min: \(bounds.min), Max: \(bounds.max)")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Argument Labels and Parameter Names
+
+Swift functions can have both an **argument label** (used when calling) and a **parameter name** (used inside the function).
+
+```swift
+// 'for' is the argument label, 'person' is the parameter name
+func greet(for person: String) -> String {
+    "Hello, \(person)!"
+}
+print(greet(for: "Charlie"))
+
+// Omit the argument label with underscore
+func square(_ number: Int) -> Int {
+    number * number
+}
+print(square(5))  // 25
+
+// Custom labels for readability
+func move(from origin: String, to destination: String) {
+    print("Traveling from \(origin) to \(destination)")
+}
+move(from: "Paris", to: "Tokyo")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Default Parameter Values
+
+```swift
+func greet(name: String, greeting: String = "Hello") {
+    print("\(greeting), \(name)!")
+}
+
+greet(name: "Alice")                    // "Hello, Alice!"
+greet(name: "Alice", greeting: "Hi")    // "Hi, Alice!"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Variadic Parameters
+
+A variadic parameter accepts zero or more values of a specified type.
+
+```swift
+func average(_ numbers: Double...) -> Double {
+    guard !numbers.isEmpty else { return 0 }
+    let total = numbers.reduce(0, +)
+    return total / Double(numbers.count)
+}
+
+print(average(10, 20, 30))     // 20.0
+print(average(5, 15))          // 10.0
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## inout Parameters
+
+By default, function parameters are constants. Use `inout` to allow modification.
+
+```swift
+func doubleInPlace(_ number: inout Int) {
+    number *= 2
+}
+
+var myNumber = 10
+doubleInPlace(&myNumber)
+print(myNumber)  // 20
+
+func swapValues(_ a: inout Int, _ b: inout Int) {
+    let temp = a
+    a = b
+    b = temp
+}
+
+var x = 5, y = 10
+swapValues(&x, &y)
+print("x: \(x), y: \(y)")  // "x: 10, y: 5"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Functions as Types
+
+Functions in Swift are first-class types. You can assign them to variables and pass them as arguments.
+
+```swift
+func add(_ a: Int, _ b: Int) -> Int { a + b }
+func subtract(_ a: Int, _ b: Int) -> Int { a - b }
+
+// Function type: (Int, Int) -> Int
+var operation: (Int, Int) -> Int = add
+print(operation(10, 5))  // 15
+
+operation = subtract
+print(operation(10, 5))  // 5
+
+// Functions as parameters
+func apply(_ a: Int, _ b: Int, operation: (Int, Int) -> Int) -> Int {
+    operation(a, b)
+}
+
+print(apply(10, 5, operation: add))       // 15
+print(apply(10, 5, operation: subtract))  // 5
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Closures
+
+Closures are self-contained blocks of functionality that can be passed around. They are essentially unnamed functions.
+
+```swift
+// Full closure syntax
+let greet = { (name: String) -> String in
+    return "Hello, \(name)!"
+}
+print(greet("Alice"))  // "Hello, Alice!"
+
+// Using closures with sorted
+let names = ["Charlie", "Alice", "Bob"]
+
+// Full syntax
+let sorted1 = names.sorted(by: { (a: String, b: String) -> Bool in
+    return a < b
+})
+
+// Shorthand: type inference + implicit return
+let sorted2 = names.sorted(by: { a, b in a < b })
+
+// Even shorter: shorthand argument names
+let sorted3 = names.sorted(by: { $0 < $1 })
+
+// Shortest: operator function
+let sorted4 = names.sorted(by: <)
+
+print(sorted4)  // ["Alice", "Bob", "Charlie"]
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Trailing Closure Syntax
+
+When the last parameter of a function is a closure, you can use trailing closure syntax.
+
+```swift
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+// Standard call
+let evens = numbers.filter({ $0 % 2 == 0 })
+
+// Trailing closure
+let odds = numbers.filter { $0 % 2 != 0 }
+
+// Chaining with trailing closures
+let result = numbers
+    .filter { $0 % 2 == 0 }
+    .map { $0 * $0 }
+    .sorted { $0 > $1 }
+
+print(result)  // [100, 64, 36, 16, 4]
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Capturing Values
+
+Closures capture and store references to variables and constants from their surrounding context.
+
+```swift
+func makeCounter() -> () -> Int {
+    var count = 0
+    return {
+        count += 1
+        return count
+    }
+}
+
+let counter = makeCounter()
+print(counter())  // 1
+print(counter())  // 2
+print(counter())  // 3
+
+// Each counter has its own captured state
+let anotherCounter = makeCounter()
+print(anotherCounter())  // 1
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::note
+Closures are reference types. When you assign a closure to multiple variables, they all share the same captured state.
+:::
+
+## Summary
+
+| Concept | Syntax |
+|---------|--------|
+| Basic function | `func name() { }` |
+| With parameters | `func name(label param: Type) { }` |
+| With return | `func name() -> Type { }` |
+| Default value | `func name(param: Type = default) { }` |
+| Variadic | `func name(_ items: Type...) { }` |
+| inout | `func name(_ param: inout Type) { }` |
+| Closure | `{ (params) -> Type in body }` |
+| Trailing closure | `function { body }` |

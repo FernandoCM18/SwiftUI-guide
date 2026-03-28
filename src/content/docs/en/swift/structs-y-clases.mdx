@@ -1,0 +1,300 @@
+---
+title: Structs and Classes
+description: Understand the differences between structs and classes in Swift, including value vs reference semantics, properties, methods, and inheritance.
+---
+
+## Custom Data Types
+
+Structs and classes are the building blocks for your app's data models. They share many features but have important differences.
+
+## Defining a Struct
+
+Structs are **value types** -- when you copy them, you get an independent copy.
+
+```swift
+struct Point {
+    var x: Double
+    var y: Double
+}
+
+// Structs get an automatic memberwise initializer
+var origin = Point(x: 0, y: 0)
+var target = Point(x: 10, y: 20)
+
+// Value semantics: copies are independent
+var copy = origin
+copy.x = 99
+print(origin.x)  // 0 (unchanged)
+print(copy.x)    // 99
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Defining a Class
+
+Classes are **reference types** -- when you copy them, both variables point to the same instance.
+
+```swift
+class Animal {
+    var name: String
+    var sound: String
+
+    init(name: String, sound: String) {
+        self.name = name
+        self.sound = sound
+    }
+
+    func speak() {
+        print("\(name) says \(sound)")
+    }
+}
+
+let dog = Animal(name: "Rex", sound: "Woof")
+dog.speak()  // "Rex says Woof"
+
+// Reference semantics: both point to the same object
+let sameDog = dog
+sameDog.name = "Buddy"
+print(dog.name)  // "Buddy" (changed!)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+With classes, assigning to a new variable does not create a copy. Both variables refer to the same object. Be mindful of unintended shared state.
+:::
+
+## Stored and Computed Properties
+
+```swift
+struct Rectangle {
+    // Stored properties
+    var width: Double
+    var height: Double
+
+    // Computed property
+    var area: Double {
+        width * height
+    }
+
+    // Computed property with getter and setter
+    var perimeter: Double {
+        get {
+            2 * (width + height)
+        }
+        set {
+            // Assume square for simplicity
+            let side = newValue / 4
+            width = side
+            height = side
+        }
+    }
+}
+
+var rect = Rectangle(width: 10, height: 5)
+print(rect.area)       // 50.0
+print(rect.perimeter)  // 30.0
+
+rect.perimeter = 40
+print(rect.width)   // 10.0
+print(rect.height)  // 10.0
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Property Observers
+
+Property observers let you run code when a property value changes.
+
+```swift
+struct StepCounter {
+    var totalSteps: Int = 0 {
+        willSet {
+            print("About to set totalSteps to \(newValue)")
+        }
+        didSet {
+            if totalSteps > oldValue {
+                print("Added \(totalSteps - oldValue) steps")
+            }
+        }
+    }
+}
+
+var counter = StepCounter()
+counter.totalSteps = 100
+// "About to set totalSteps to 100"
+// "Added 100 steps"
+
+counter.totalSteps = 250
+// "About to set totalSteps to 250"
+// "Added 150 steps"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Methods
+
+Both structs and classes can have methods.
+
+```swift
+struct Calculator {
+    var result: Double = 0
+
+    // Structs need 'mutating' to modify properties
+    mutating func add(_ value: Double) {
+        result += value
+    }
+
+    mutating func multiply(by value: Double) {
+        result *= value
+    }
+
+    func display() {
+        print("Result: \(result)")
+    }
+}
+
+var calc = Calculator()
+calc.add(10)
+calc.multiply(by: 3)
+calc.display()  // "Result: 30.0"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::note
+Struct methods that modify properties must be marked with `mutating`. Classes do not need this because they are reference types.
+:::
+
+## Static Properties and Methods
+
+```swift
+struct MathConstants {
+    static let pi = 3.14159265358979
+    static let e = 2.71828182845905
+
+    static func circleArea(radius: Double) -> Double {
+        pi * radius * radius
+    }
+}
+
+print(MathConstants.pi)                       // 3.14159...
+print(MathConstants.circleArea(radius: 5))    // 78.539...
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Initializers
+
+```swift
+struct Color {
+    var red: Double
+    var green: Double
+    var blue: Double
+
+    // Custom initializer
+    init(red: Double, green: Double, blue: Double) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+    }
+
+    // Convenience initializer
+    init(gray: Double) {
+        self.red = gray
+        self.green = gray
+        self.blue = gray
+    }
+
+    // Static factory method
+    static var white: Color {
+        Color(gray: 1.0)
+    }
+}
+
+let red = Color(red: 1, green: 0, blue: 0)
+let gray = Color(gray: 0.5)
+let white = Color.white
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Inheritance (Classes Only)
+
+Only classes support inheritance. A class can inherit properties and methods from another class.
+
+```swift
+class Vehicle {
+    var speed: Double = 0
+
+    func describe() -> String {
+        "Traveling at \(speed) km/h"
+    }
+}
+
+class Car: Vehicle {
+    var gear: Int = 1
+
+    override func describe() -> String {
+        "\(super.describe()) in gear \(gear)"
+    }
+}
+
+class ElectricCar: Car {
+    var batteryLevel: Double = 100
+
+    override func describe() -> String {
+        "\(super.describe()), battery at \(batteryLevel)%"
+    }
+}
+
+let tesla = ElectricCar()
+tesla.speed = 120
+tesla.gear = 4
+tesla.batteryLevel = 85
+print(tesla.describe())
+// "Traveling at 120.0 km/h in gear 4, battery at 85.0%"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## When to Use Struct vs Class
+
+| Feature | Struct | Class |
+|---------|--------|-------|
+| Type | Value | Reference |
+| Copying | Independent copy | Shared reference |
+| Inheritance | No | Yes |
+| Deinitializers | No | Yes |
+| Memberwise init | Automatic | Must write manually |
+| Mutating methods | Needs `mutating` | Not needed |
+
+:::tip
+Apple recommends using structs by default. Use classes when you need inheritance, reference semantics, or interoperability with Objective-C.
+:::
+
+## Identity Checking (Classes)
+
+```swift
+class Person {
+    var name: String
+    init(name: String) { self.name = name }
+}
+
+let person1 = Person(name: "Alice")
+let person2 = person1
+let person3 = Person(name: "Alice")
+
+print(person1 === person2)  // true (same instance)
+print(person1 === person3)  // false (different instances)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Summary
+
+- **Structs** are value types with automatic memberwise initializers. Prefer them for most data models.
+- **Classes** are reference types that support inheritance and deinitializers.
+- Use `mutating` for struct methods that modify properties.
+- Use `static` for type-level properties and methods.
+- Use `===` to check if two class references point to the same instance.

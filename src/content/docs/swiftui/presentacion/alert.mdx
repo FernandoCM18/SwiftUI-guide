@@ -1,0 +1,138 @@
+---
+title: Alert
+description: Cómo usar el modificador .alert en SwiftUI para mostrar diálogos de alerta.
+---
+
+El modificador `.alert` muestra un diálogo de alerta sobre el contenido actual. Es útil para confirmar acciones importantes o notificar al usuario.
+
+## Vista previa
+
+![Alert en SwiftUI](../../../../assets/swiftui/alert.svg)
+
+## Uso básico
+
+```swift
+struct AlertEjemplo: View {
+    @State private var mostrarAlerta = false
+
+    var body: some View {
+        Button("Eliminar") {
+            mostrarAlerta = true
+        }
+        .alert("¿Eliminar elemento?", isPresented: $mostrarAlerta) {
+            Button("Cancelar", role: .cancel) { }
+            Button("Eliminar", role: .destructive) {
+                // Realizar eliminación
+            }
+        } message: {
+            Text("Esta acción no se puede deshacer.")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Alerta simple
+
+```swift
+.alert("Guardado exitosamente", isPresented: $mostrar) {
+    Button("OK") { }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Alerta con TextField
+
+```swift
+@State private var nombre = ""
+@State private var mostrar = false
+
+Button("Cambiar nombre") { mostrar = true }
+.alert("Nuevo nombre", isPresented: $mostrar) {
+    TextField("Nombre", text: $nombre)
+    Button("Cancelar", role: .cancel) { }
+    Button("Guardar") {
+        // Guardar nombre
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Alerta con datos
+
+```swift
+struct Error: Identifiable {
+    let id = UUID()
+    let mensaje: String
+}
+
+@State private var error: Error?
+
+// Se muestra automáticamente cuando error != nil
+.alert(item: $error) { err in
+    Alert(
+        title: Text("Error"),
+        message: Text(err.mensaje),
+        dismissButton: .default(Text("OK"))
+    )
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Las alertas interrumpen el flujo del usuario. Úsalas solo para acciones importantes o irreversibles. Para notificaciones informativas, considera usar un banner o toast.
+:::
+
+## Ejemplo completo
+
+```swift
+struct ListaTareasView: View {
+    @State private var tareas = ["Comprar leche", "Estudiar Swift", "Hacer ejercicio"]
+    @State private var mostrarEliminar = false
+    @State private var indiceEliminar: IndexSet?
+    @State private var mostrarExito = false
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(tareas, id: \.self) { tarea in
+                    Text(tarea)
+                }
+                .onDelete { indices in
+                    indiceEliminar = indices
+                    mostrarEliminar = true
+                }
+            }
+            .navigationTitle("Tareas")
+            .toolbar {
+                Button("Completar todas") {
+                    mostrarExito = true
+                }
+            }
+            .alert("¿Eliminar tarea?", isPresented: $mostrarEliminar) {
+                Button("Cancelar", role: .cancel) {
+                    indiceEliminar = nil
+                }
+                Button("Eliminar", role: .destructive) {
+                    if let indices = indiceEliminar {
+                        tareas.remove(atOffsets: indices)
+                    }
+                }
+            } message: {
+                Text("No podrás recuperar esta tarea.")
+            }
+            .alert("¡Felicidades!", isPresented: $mostrarExito) {
+                Button("OK") { }
+            } message: {
+                Text("Has completado todas tus tareas del día.")
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

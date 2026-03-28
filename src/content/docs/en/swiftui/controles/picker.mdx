@@ -1,0 +1,114 @@
+---
+title: Picker
+description: How to use Picker in SwiftUI to select from multiple options.
+---
+
+`Picker` lets the user select a value from a list of options, with multiple presentation styles.
+
+## Preview
+
+![Picker in SwiftUI](../../../../../assets/swiftui/picker.svg)
+
+## Basic Usage
+
+```swift
+struct PickerExample: View {
+    @State private var selection = "Apple"
+    let fruits = ["Apple", "Banana", "Orange", "Grape"]
+
+    var body: some View {
+        Picker("Favorite Fruit", selection: $selection) {
+            ForEach(fruits, id: \.self) { fruit in
+                Text(fruit)
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Picker Styles
+
+```swift
+// Segmented
+Picker("Period", selection: $period) {
+    Text("Daily").tag("daily")
+    Text("Weekly").tag("weekly")
+    Text("Monthly").tag("monthly")
+}
+.pickerStyle(.segmented)
+
+// Wheel
+Picker("Age", selection: $age) {
+    ForEach(18...99, id: \.self) { Text("\($0)") }
+}
+.pickerStyle(.wheel)
+
+// Menu (default on iOS)
+Picker("Color", selection: $color) {
+    ForEach(colors, id: \.self) { Text($0) }
+}
+.pickerStyle(.menu)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Picker with Enum
+
+```swift
+enum Size: String, CaseIterable {
+    case small = "Small"
+    case medium = "Medium"
+    case large = "Large"
+}
+
+struct SizePickerView: View {
+    @State private var size: Size = .medium
+
+    var body: some View {
+        Picker("Size", selection: $size) {
+            ForEach(Size.allCases, id: \.self) { s in
+                Text(s.rawValue).tag(s)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use `.pickerStyle(.segmented)` for 2-5 short options. For more options, use `.menu` or `.wheel`.
+:::
+
+## Full Example
+
+```swift
+struct OrderView: View {
+    @State private var size = "Medium"
+    @State private var drink = "Coffee"
+    let sizes = ["Small", "Medium", "Large"]
+    let drinks = ["Coffee", "Tea", "Chocolate", "Juice"]
+
+    var body: some View {
+        Form {
+            Picker("Drink", selection: $drink) {
+                ForEach(drinks, id: \.self) { Text($0) }
+            }
+            Picker("Size", selection: $size) {
+                ForEach(sizes, id: \.self) { Text($0) }
+            }
+            .pickerStyle(.segmented)
+
+            Section("Summary") {
+                Text("\(drink) (\(size))")
+                    .font(.headline)
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

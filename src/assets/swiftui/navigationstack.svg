@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Navigation bar background -->
+  <rect x="20" y="15" width="335" height="185" rx="10" fill="#FFFFFF"/>
+  <!-- Nav bar area -->
+  <rect x="20" y="15" width="335" height="56" rx="10" fill="#F9F9F9"/>
+  <rect x="20" y="50" width="335" height="21" fill="#F9F9F9"/>
+  <!-- Back button -->
+  <text x="40" y="49" font-family="-apple-system, sans-serif" font-size="15" fill="#007AFF">&#x276E; Atr&#xe1;s</text>
+  <!-- Title -->
+  <text x="187.5" y="49" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" font-weight="600" fill="currentColor">Detalles</text>
+  <!-- Separator -->
+  <line x1="20" y1="71" x2="355" y2="71" stroke="#E5E5EA" stroke-width="0.5"/>
+  <!-- Content -->
+  <rect x="40" y="85" width="295" height="40" rx="8" fill="#F2F2F7"/>
+  <text x="55" y="110" font-family="-apple-system, sans-serif" font-size="14" fill="currentColor">Contenido de la vista</text>
+  <rect x="40" y="135" width="295" height="40" rx="8" fill="#F2F2F7"/>
+  <text x="55" y="160" font-family="-apple-system, sans-serif" font-size="14" fill="currentColor">M&#xe1;s contenido</text>
+  <!-- Label -->
+  <text x="187.5" y="215" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">NavigationStack { ... }</text>
+</svg>

@@ -1,0 +1,137 @@
+---
+title: Button
+description: Cómo usar el componente Button en SwiftUI para crear botones interactivos.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+El componente `Button` es uno de los controles más utilizados en SwiftUI. Permite crear elementos interactivos que ejecutan una acción cuando el usuario los presiona.
+
+## Vista previa
+
+![Button en SwiftUI](../../../../assets/swiftui/button.svg)
+
+## Uso básico
+
+```swift
+Button("Presionar") {
+    print("¡Botón presionado!")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Button con label personalizado
+
+Puedes crear botones con contenido visual más complejo usando el parámetro `label`:
+
+```swift
+Button {
+    print("Guardar")
+} label: {
+    HStack {
+        Image(systemName: "square.and.arrow.down")
+        Text("Guardar")
+    }
+    .padding()
+    .background(Color.blue)
+    .foregroundColor(.white)
+    .cornerRadius(10)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Estilos de botón
+
+SwiftUI ofrece varios estilos predefinidos:
+
+```swift
+VStack(spacing: 20) {
+    Button("Automático") { }
+        .buttonStyle(.automatic)
+
+    Button("Con borde") { }
+        .buttonStyle(.bordered)
+
+    Button("Prominente") { }
+        .buttonStyle(.borderedProminent)
+
+    Button("Sin borde") { }
+        .buttonStyle(.borderless)
+
+    Button("Simple") { }
+        .buttonStyle(.plain)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Roles de botón
+
+Los roles indican la intención semántica del botón:
+
+```swift
+VStack(spacing: 20) {
+    Button("Eliminar", role: .destructive) {
+        // Acción destructiva
+    }
+
+    Button("Cancelar", role: .cancel) {
+        // Acción de cancelación
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Modificadores comunes
+
+| Modificador | Descripción |
+|---|---|
+| `.buttonStyle(.bordered)` | Aplica estilo con borde |
+| `.tint(.blue)` | Cambia el color de acento |
+| `.disabled(true)` | Deshabilita el botón |
+| `.controlSize(.large)` | Cambia el tamaño del control |
+| `.buttonBorderShape(.capsule)` | Forma de cápsula |
+
+:::tip
+Usa `role: .destructive` para acciones que eliminan datos. SwiftUI automáticamente mostrará el botón en rojo.
+:::
+
+## Ejemplo completo
+
+```swift
+struct BotonEjemploView: View {
+    @State private var contador = 0
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Contador: \(contador)")
+                .font(.largeTitle)
+
+            HStack(spacing: 16) {
+                Button("Restar") {
+                    contador -= 1
+                }
+                .buttonStyle(.bordered)
+                .tint(.red)
+
+                Button("Sumar") {
+                    contador += 1
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.green)
+            }
+
+            Button("Reiniciar", role: .destructive) {
+                contador = 0
+            }
+            .disabled(contador == 0)
+        }
+        .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

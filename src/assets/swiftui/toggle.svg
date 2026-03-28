@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Toggle ON row -->
+  <rect x="40" y="50" width="295" height="50" rx="10" fill="#FFFFFF"/>
+  <text x="60" y="82" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="currentColor">Wi-Fi</text>
+  <!-- Toggle ON track -->
+  <rect x="264" y="63" width="51" height="31" rx="15.5" fill="#34C759"/>
+  <!-- Toggle ON thumb -->
+  <circle cx="288" cy="78.5" r="13.5" fill="#FFFFFF"/>
+  <!-- Toggle OFF row -->
+  <rect x="40" y="115" width="295" height="50" rx="10" fill="#FFFFFF"/>
+  <text x="60" y="147" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="currentColor">Bluetooth</text>
+  <!-- Toggle OFF track -->
+  <rect x="264" y="128" width="51" height="31" rx="15.5" fill="#D1D1D6"/>
+  <!-- Toggle OFF thumb -->
+  <circle cx="280" cy="143.5" r="13.5" fill="#FFFFFF"/>
+  <!-- Label -->
+  <text x="187.5" y="198" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">Toggle("Wi-Fi", isOn: $isEnabled)</text>
+</svg>

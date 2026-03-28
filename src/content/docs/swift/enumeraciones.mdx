@@ -1,0 +1,288 @@
+---
+title: Enumeraciones
+description: Aprende sobre enumeraciones en Swift, incluyendo raw values, associated values, CaseIterable y enums recursivos.
+---
+
+## ¿Qué son las enumeraciones?
+
+Las enumeraciones (enums) definen un tipo con un conjunto finito de valores posibles. En Swift, los enums son tipos de primera clase con capacidades avanzadas como métodos, propiedades computadas y valores asociados.
+
+## Enumeración básica
+
+```swift
+enum Direccion {
+    case norte
+    case sur
+    case este
+    case oeste
+}
+
+// También en una sola línea
+enum Estacion {
+    case primavera, verano, otoño, invierno
+}
+
+var rumbo = Direccion.norte
+rumbo = .este  // Swift infiere el tipo
+
+// Uso con switch
+switch rumbo {
+case .norte:
+    print("Hacia el norte")
+case .sur:
+    print("Hacia el sur")
+case .este:
+    print("Hacia el este")
+case .oeste:
+    print("Hacia el oeste")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Raw values (valores crudos)
+
+Los enums pueden tener un valor asociado fijo de tipo String, Int, Double, etc.
+
+```swift
+// Raw values de tipo Int (auto-incremento)
+enum Planeta: Int {
+    case mercurio = 1
+    case venus      // 2 (automático)
+    case tierra     // 3
+    case marte      // 4
+}
+
+print(Planeta.tierra.rawValue)  // 3
+
+// Crear desde raw value (retorna opcional)
+if let planeta = Planeta(rawValue: 3) {
+    print("Planeta: \(planeta)")  // tierra
+}
+
+// Raw values de tipo String
+enum Moneda: String {
+    case euro = "EUR"
+    case dolar = "USD"
+    case libra = "GBP"
+    case yen = "JPY"
+}
+
+print(Moneda.euro.rawValue)  // "EUR"
+
+// Si no se especifica, el raw value es el nombre del caso
+enum Color: String {
+    case rojo, verde, azul
+}
+print(Color.rojo.rawValue)  // "rojo"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Associated values (valores asociados)
+
+Permiten adjuntar datos diferentes a cada caso del enum.
+
+```swift
+enum CodigoDeBarras {
+    case upc(Int, Int, Int, Int)
+    case qr(String)
+}
+
+var producto = CodigoDeBarras.upc(8, 85909, 51226, 3)
+producto = .qr("ABCDEFGHIJ")
+
+// Extraer valores asociados con switch
+switch producto {
+case .upc(let sistema, let fabricante, let producto, let control):
+    print("UPC: \(sistema)-\(fabricante)-\(producto)-\(control)")
+case .qr(let codigo):
+    print("QR: \(codigo)")
+}
+
+// Forma abreviada cuando todos usan let
+switch producto {
+case let .upc(s, f, p, c):
+    print("UPC: \(s)-\(f)-\(p)-\(c)")
+case let .qr(codigo):
+    print("QR: \(codigo)")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Ejemplo práctico con valores asociados
+
+```swift
+enum ResultadoRed {
+    case exito(datos: String, codigo: Int)
+    case error(mensaje: String, codigo: Int)
+    case sinConexion
+}
+
+func manejarResultado(_ resultado: ResultadoRed) {
+    switch resultado {
+    case .exito(let datos, let codigo):
+        print("Éxito (\(codigo)): \(datos)")
+    case .error(let mensaje, let codigo):
+        print("Error (\(codigo)): \(mensaje)")
+    case .sinConexion:
+        print("Sin conexión a internet")
+    }
+}
+
+manejarResultado(.exito(datos: "{\"usuario\": \"Ana\"}", codigo: 200))
+manejarResultado(.error(mensaje: "No encontrado", codigo: 404))
+manejarResultado(.sinConexion)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Métodos y propiedades computadas
+
+```swift
+enum Semaforo {
+    case rojo, amarillo, verde
+
+    var descripcion: String {
+        switch self {
+        case .rojo:
+            return "Detenerse"
+        case .amarillo:
+            return "Precaución"
+        case .verde:
+            return "Avanzar"
+        }
+    }
+
+    mutating func siguiente() {
+        switch self {
+        case .rojo:
+            self = .verde
+        case .verde:
+            self = .amarillo
+        case .amarillo:
+            self = .rojo
+        }
+    }
+}
+
+var semaforo = Semaforo.rojo
+print(semaforo.descripcion)  // "Detenerse"
+semaforo.siguiente()
+print(semaforo.descripcion)  // "Avanzar"
+semaforo.siguiente()
+print(semaforo.descripcion)  // "Precaución"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## CaseIterable
+
+El protocolo `CaseIterable` proporciona una colección de todos los casos del enum.
+
+```swift
+enum Bebida: String, CaseIterable {
+    case cafe = "Café"
+    case te = "Té"
+    case agua = "Agua"
+    case zumo = "Zumo"
+}
+
+// Acceder a todos los casos
+print("Tenemos \(Bebida.allCases.count) bebidas:")
+
+for bebida in Bebida.allCases {
+    print("- \(bebida.rawValue)")
+}
+
+// Útil para crear menús o pickers
+let opciones = Bebida.allCases.map { $0.rawValue }
+print("Opciones: \(opciones)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`CaseIterable` es especialmente útil en SwiftUI para crear `Picker` o `ForEach` con todos los casos de un enum.
+:::
+
+## Enumeraciones recursivas
+
+Usa `indirect` para enums que se referencian a sí mismos.
+
+```swift
+indirect enum ExpresionAritmetica {
+    case numero(Int)
+    case suma(ExpresionAritmetica, ExpresionAritmetica)
+    case multiplicacion(ExpresionAritmetica, ExpresionAritmetica)
+}
+
+func evaluar(_ expresion: ExpresionAritmetica) -> Int {
+    switch expresion {
+    case .numero(let valor):
+        return valor
+    case .suma(let izq, let der):
+        return evaluar(izq) + evaluar(der)
+    case .multiplicacion(let izq, let der):
+        return evaluar(izq) * evaluar(der)
+    }
+}
+
+// (5 + 3) * 2
+let cinco = ExpresionAritmetica.numero(5)
+let tres = ExpresionAritmetica.numero(3)
+let dos = ExpresionAritmetica.numero(2)
+let suma = ExpresionAritmetica.suma(cinco, tres)
+let resultado = ExpresionAritmetica.multiplicacion(suma, dos)
+
+print("Resultado: \(evaluar(resultado))")  // 16
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Enum con inicializador personalizado
+
+```swift
+enum Temperatura {
+    case fria, templada, caliente, extrema
+
+    init(grados: Double) {
+        switch grados {
+        case ..<10:
+            self = .fria
+        case 10..<25:
+            self = .templada
+        case 25..<40:
+            self = .caliente
+        default:
+            self = .extrema
+        }
+    }
+
+    var emoji: String {
+        switch self {
+        case .fria: return "🥶"
+        case .templada: return "😊"
+        case .caliente: return "🥵"
+        case .extrema: return "🔥"
+        }
+    }
+}
+
+let hoy = Temperatura(grados: 32)
+print("Temperatura: \(hoy) \(hoy.emoji)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Resumen
+
+| Concepto | Descripción |
+|----------|-------------|
+| Enum básico | `enum Tipo { case a, b, c }` |
+| Raw values | `enum Tipo: String { case a = "valor" }` |
+| Associated values | `case nombre(Tipo1, Tipo2)` |
+| CaseIterable | `Tipo.allCases` para iterar todos los casos |
+| Métodos | Los enums pueden tener métodos y propiedades computadas |
+| Recursive | `indirect enum` para auto-referencia |

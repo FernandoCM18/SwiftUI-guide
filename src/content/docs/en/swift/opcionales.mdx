@@ -1,0 +1,260 @@
+---
+title: Optionals
+description: Master optionals in Swift including optional binding, nil coalescing, force unwrapping, and optional chaining.
+---
+
+## Handling the Absence of a Value
+
+Optionals are one of Swift's most important features. An optional represents a value that might be absent -- it either contains a value or contains `nil`.
+
+## What is an Optional?
+
+```swift
+var name: String = "Alice"    // Must always have a value
+var nickname: String? = nil    // Can be nil
+
+nickname = "Ali"               // Now it has a value
+nickname = nil                 // Back to nil
+
+// Any type can be made optional
+var age: Int? = nil
+var score: Double? = 95.5
+var isActive: Bool? = nil
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::note
+You cannot use `nil` with non-optional types. `var name: String = nil` will produce a compile error.
+:::
+
+## Optional Binding with if let
+
+The safest way to unwrap an optional is with `if let`. The unwrapped value is only available inside the `if` block.
+
+```swift
+let input: String? = "42"
+
+if let value = input {
+    print("The value is \(value)")     // "The value is 42"
+} else {
+    print("No value provided")
+}
+
+// Shorthand syntax (Swift 5.7+): same name
+let username: String? = "alice"
+if let username {
+    print("Welcome, \(username)")       // "Welcome, alice"
+}
+
+// Multiple optional bindings
+let firstName: String? = "John"
+let lastName: String? = "Doe"
+
+if let first = firstName, let last = lastName {
+    print("Full name: \(first) \(last)")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Optional Binding with guard let
+
+Use `guard let` for early exits. The unwrapped value remains available after the guard statement.
+
+```swift
+func processInput(_ input: String?) {
+    guard let input = input else {
+        print("Input is nil")
+        return
+    }
+    // 'input' is now a non-optional String
+    print("Processing: \(input)")
+}
+
+processInput("Hello")  // "Processing: Hello"
+processInput(nil)       // "Input is nil"
+
+// guard with multiple conditions
+func validateUser(name: String?, age: Int?) {
+    guard let name = name, let age = age, age >= 18 else {
+        print("Invalid user data")
+        return
+    }
+    print("\(name) is \(age) years old")
+}
+
+validateUser(name: "Alice", age: 25)  // "Alice is 25 years old"
+validateUser(name: nil, age: 25)       // "Invalid user data"
+validateUser(name: "Bob", age: 15)     // "Invalid user data"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Nil Coalescing Operator (??)
+
+The nil coalescing operator provides a default value when the optional is nil.
+
+```swift
+let savedUsername: String? = nil
+let displayName = savedUsername ?? "Guest"
+print(displayName)  // "Guest"
+
+let userScore: Int? = 85
+let finalScore = userScore ?? 0
+print(finalScore)  // 85
+
+// Chaining nil coalescing
+let primary: String? = nil
+let secondary: String? = nil
+let fallback = "Default"
+let result = primary ?? secondary ?? fallback
+print(result)  // "Default"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Force Unwrapping (!)
+
+Force unwrapping extracts the value from an optional. If the optional is nil, your app will crash.
+
+```swift
+let number: Int? = 42
+let unwrapped = number!   // 42
+
+// DANGER: This will crash!
+// let empty: Int? = nil
+// let crash = empty!     // Fatal error: unexpectedly found nil
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Avoid force unwrapping unless you are absolutely certain the value is not nil. Prefer `if let`, `guard let`, or nil coalescing instead.
+:::
+
+## Optional Chaining
+
+Optional chaining lets you call properties, methods, and subscripts on an optional that might be nil. If any part of the chain is nil, the entire expression returns nil.
+
+```swift
+struct Address {
+    var street: String
+    var city: String
+}
+
+struct Person {
+    var name: String
+    var address: Address?
+}
+
+let alice = Person(name: "Alice", address: Address(street: "123 Main St", city: "London"))
+let bob = Person(name: "Bob", address: nil)
+
+// Optional chaining
+print(alice.address?.city)        // Optional("London")
+print(bob.address?.city)          // nil
+print(alice.address?.city.count)  // Optional(6)
+
+// With nil coalescing
+let aliceCity = alice.address?.city ?? "Unknown"
+let bobCity = bob.address?.city ?? "Unknown"
+print(aliceCity)  // "London"
+print(bobCity)    // "Unknown"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Optional Chaining with Methods
+
+```swift
+struct Email {
+    var address: String
+
+    func send(message: String) -> Bool {
+        print("Sending '\(message)' to \(address)")
+        return true
+    }
+}
+
+struct User {
+    var name: String
+    var email: Email?
+}
+
+let user = User(name: "Alice", email: Email(address: "alice@example.com"))
+let noEmail = User(name: "Bob", email: nil)
+
+// Method call through optional chain
+let sent = user.email?.send(message: "Hello")     // Optional(true)
+let notSent = noEmail.email?.send(message: "Hi")   // nil (method not called)
+
+if let result = user.email?.send(message: "Test") {
+    print("Message sent: \(result)")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Implicitly Unwrapped Optionals
+
+Implicitly unwrapped optionals are optionals that are automatically unwrapped when accessed. Useful when a value is nil initially but will definitely have a value before use.
+
+```swift
+// Declared with ! instead of ?
+var apiKey: String! = nil
+
+// Later, after setup...
+apiKey = "abc123"
+
+// Can be used as a regular String (no unwrapping needed)
+let key: String = apiKey
+print(key)  // "abc123"
+
+// Still crashes if nil when accessed:
+// apiKey = nil
+// let crash: String = apiKey  // Fatal error
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Implicitly unwrapped optionals are mainly used with `@IBOutlet` in UIKit. In modern SwiftUI code, you rarely need them.
+:::
+
+## Optional map and flatMap
+
+```swift
+let number: Int? = 5
+
+// map: transform the value if it exists
+let doubled = number.map { $0 * 2 }
+print(doubled)  // Optional(10)
+
+let none: Int? = nil
+let result = none.map { $0 * 2 }
+print(result)  // nil
+
+// flatMap: useful when the transform itself returns an optional
+let text: String? = "42"
+let parsed = text.flatMap { Int($0) }
+print(parsed)  // Optional(42)
+
+let invalid: String? = "hello"
+let failed = invalid.flatMap { Int($0) }
+print(failed)  // nil
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Summary
+
+| Technique | Syntax | When to use |
+|-----------|--------|-------------|
+| Optional binding | `if let value = optional` | Safely unwrap with scoped access |
+| Guard | `guard let value = optional else { return }` | Early exit, value available after |
+| Nil coalescing | `optional ?? default` | Provide a fallback value |
+| Force unwrap | `optional!` | Only when certain it is not nil |
+| Optional chaining | `optional?.property` | Access nested optionals safely |
+| map | `optional.map { }` | Transform optional values |
+| flatMap | `optional.flatMap { }` | Transform when result is also optional |

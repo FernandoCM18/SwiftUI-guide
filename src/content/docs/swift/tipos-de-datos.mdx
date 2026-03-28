@@ -1,0 +1,272 @@
+---
+title: Tipos de Datos
+description: Conoce los tipos de datos fundamentales de Swift, incluyendo Int, Double, String, Bool, Array, Dictionary, Set y Tuple.
+---
+
+## Tipos fundamentales
+
+Swift proporciona un conjunto rico de tipos de datos integrados. Todos los tipos en Swift son tipos de valor o tipos de referencia.
+
+## Enteros: Int
+
+Los enteros son números sin parte decimal. Swift ofrece `Int` (con signo) y `UInt` (sin signo).
+
+```swift
+let edad: Int = 25
+let poblacion = 7_900_000_000  // Guiones bajos para legibilidad
+let negativo = -42
+
+// Límites del tipo
+print("Int mínimo: \(Int.min)")
+print("Int máximo: \(Int.max)")
+
+// Otros tamaños: Int8, Int16, Int32, Int64
+let pequeño: Int8 = 127  // máximo de Int8
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Decimales: Double y Float
+
+`Double` tiene precisión de 64 bits (15 dígitos). `Float` tiene precisión de 32 bits (6 dígitos). Swift infiere `Double` por defecto.
+
+```swift
+let pi: Double = 3.14159265358979
+let gravedad: Float = 9.81
+
+// Swift infiere Double automáticamente
+let temperatura = 36.6  // es Double, no Float
+
+// Operaciones con decimales
+let radio = 5.0
+let area = pi * radio * radio
+print("Área del círculo: \(area)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Booleanos: Bool
+
+Los booleanos solo tienen dos valores: `true` o `false`.
+
+```swift
+let esMayorDeEdad = true
+let tienePermiso = false
+
+// Operadores lógicos
+let puedeEntrar = esMayorDeEdad && tienePermiso  // AND: false
+let tieneAcceso = esMayorDeEdad || tienePermiso   // OR: true
+let noEsMenor = !esMayorDeEdad                    // NOT: false
+
+print("¿Puede entrar? \(puedeEntrar)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Cadenas: String
+
+Las cadenas de texto son colecciones de caracteres Unicode.
+
+```swift
+let saludo = "¡Hola, mundo!"
+let multilínea = """
+    Esta es una cadena
+    que ocupa varias
+    líneas de texto.
+    """
+
+// Operaciones comunes
+let nombre = "Swift"
+print(nombre.count)           // 5 - longitud
+print(nombre.uppercased())    // SWIFT
+print(nombre.lowercased())    // swift
+print(nombre.isEmpty)         // false
+print(nombre.contains("wi"))  // true
+
+// Concatenación
+let lenguaje = "Swift"
+let version = "6"
+let completo = lenguaje + " " + version  // "Swift 6"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Caracteres: Character
+
+Un `Character` representa un solo carácter Unicode.
+
+```swift
+let letra: Character = "A"
+let emoji: Character = "🇪🇸"
+let acento: Character = "ñ"
+
+// Iterar caracteres de un String
+let palabra = "Hola"
+for caracter in palabra {
+    print(caracter)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Arrays
+
+Los arrays son colecciones ordenadas de valores del mismo tipo.
+
+```swift
+// Crear arrays
+var frutas: [String] = ["Manzana", "Banana", "Cereza"]
+var numeros = [1, 2, 3, 4, 5]  // inferencia de tipo
+var vacio: [Int] = []
+
+// Acceder y modificar
+print(frutas[0])          // "Manzana"
+frutas.append("Durazno")  // Agregar al final
+frutas.insert("Fresa", at: 1)  // Insertar en posición
+frutas.remove(at: 0)      // Eliminar elemento
+
+// Propiedades útiles
+print(frutas.count)        // Número de elementos
+print(frutas.isEmpty)      // ¿Está vacío?
+print(frutas.first ?? "")  // Primer elemento (opcional)
+print(frutas.last ?? "")   // Último elemento (opcional)
+
+// Iterar
+for fruta in frutas {
+    print(fruta)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Diccionarios: Dictionary
+
+Los diccionarios almacenan pares clave-valor sin orden definido.
+
+```swift
+// Crear diccionarios
+var capitales: [String: String] = [
+    "España": "Madrid",
+    "Francia": "París",
+    "Italia": "Roma"
+]
+
+// Acceder a valores (devuelve opcional)
+if let capital = capitales["España"] {
+    print("La capital de España es \(capital)")
+}
+
+// Modificar
+capitales["Alemania"] = "Berlín"       // Agregar
+capitales["Francia"] = "Lyon"          // Actualizar (ejemplo)
+capitales.removeValue(forKey: "Italia") // Eliminar
+
+// Iterar
+for (pais, capital) in capitales {
+    print("\(pais): \(capital)")
+}
+
+// Propiedades
+print(capitales.keys)    // Todas las claves
+print(capitales.values)  // Todos los valores
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Conjuntos: Set
+
+Los conjuntos almacenan valores únicos sin orden definido.
+
+```swift
+// Crear conjuntos
+var colores: Set<String> = ["Rojo", "Verde", "Azul"]
+var numeros: Set = [1, 2, 3, 4, 5]
+
+// No permite duplicados
+colores.insert("Rojo")  // No se agrega, ya existe
+colores.insert("Amarillo")  // Se agrega
+
+// Operaciones de conjuntos
+let pares: Set = [2, 4, 6, 8]
+let primos: Set = [2, 3, 5, 7]
+
+let union = pares.union(primos)                // Todos los elementos
+let interseccion = pares.intersection(primos)  // Elementos comunes: {2}
+let diferencia = pares.subtracting(primos)     // En pares pero no en primos
+
+print("Unión: \(union)")
+print("Intersección: \(interseccion)")
+print("Diferencia: \(diferencia)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Tuplas
+
+Las tuplas agrupan varios valores en un solo valor compuesto.
+
+```swift
+// Tupla simple
+let coordenada = (x: 10.0, y: 20.0)
+print(coordenada.x)  // 10.0
+print(coordenada.y)  // 20.0
+
+// Tupla sin nombres
+let httpError = (404, "No encontrado")
+print(httpError.0)  // 404
+print(httpError.1)  // "No encontrado"
+
+// Descomponer tuplas
+let (codigo, mensaje) = httpError
+print("Error \(codigo): \(mensaje)")
+
+// Ignorar valores con _
+let (soloCodigo, _) = httpError
+print("Código: \(soloCodigo)")
+
+// Tupla como retorno de función
+func dividir(_ a: Int, entre b: Int) -> (cociente: Int, resto: Int) {
+    return (a / b, a % b)
+}
+let resultado = dividir(17, entre: 5)
+print("Cociente: \(resultado.cociente), Resto: \(resultado.resto)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Las tuplas son ideales para retornar múltiples valores de una función. Para estructuras de datos más complejas, usa `struct`.
+:::
+
+## Conversión de tipos
+
+Swift no convierte tipos automáticamente. Debes hacerlo de forma explícita.
+
+```swift
+let entero = 42
+let decimal = Double(entero)    // Int → Double
+let texto = String(entero)      // Int → String
+let numero = Int("123") ?? 0    // String → Int (opcional)
+
+let a: Int = 10
+let b: Double = 3.5
+let suma = Double(a) + b       // Convertir antes de operar
+print("Suma: \(suma)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Resumen
+
+| Tipo | Ejemplo | Descripción |
+|------|---------|-------------|
+| `Int` | `42` | Número entero |
+| `Double` | `3.14` | Decimal de 64 bits |
+| `Float` | `9.81` | Decimal de 32 bits |
+| `Bool` | `true` | Verdadero o falso |
+| `String` | `"Hola"` | Cadena de texto |
+| `Character` | `"A"` | Un carácter |
+| `[Tipo]` | `[1, 2, 3]` | Array |
+| `[K: V]` | `["a": 1]` | Diccionario |
+| `Set<Tipo>` | `Set([1, 2])` | Conjunto |
+| `(T1, T2)` | `(1, "a")` | Tupla |

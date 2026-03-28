@@ -1,0 +1,271 @@
+---
+title: Funciones
+description: Aprende a declarar funciones en Swift, con parámetros, valores de retorno, valores por defecto y closures.
+---
+
+## Funciones en Swift
+
+Las funciones son bloques de código reutilizables que realizan una tarea específica. En Swift, las funciones son ciudadanos de primera clase, lo que significa que pueden asignarse a variables, pasarse como argumentos y retornarse desde otras funciones.
+
+## Declaración básica
+
+```swift
+// Función sin parámetros ni retorno
+func saludar() {
+    print("¡Hola, mundo!")
+}
+saludar()
+
+// Función con parámetros
+func saludarA(nombre: String) {
+    print("¡Hola, \(nombre)!")
+}
+saludarA(nombre: "Carlos")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Valores de retorno
+
+Usa `->` para especificar el tipo de retorno.
+
+```swift
+func sumar(a: Int, b: Int) -> Int {
+    return a + b
+}
+let resultado = sumar(a: 5, b: 3)
+print("5 + 3 = \(resultado)")
+
+// Retorno implícito (funciones de una sola expresión)
+func multiplicar(a: Int, b: Int) -> Int {
+    a * b  // No necesita 'return' explícito
+}
+print("4 × 7 = \(multiplicar(a: 4, b: 7))")
+
+// Retornar múltiples valores con tuplas
+func dividir(_ a: Int, entre b: Int) -> (cociente: Int, resto: Int) {
+    return (a / b, a % b)
+}
+let division = dividir(17, entre: 5)
+print("Cociente: \(division.cociente), Resto: \(division.resto)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Etiquetas de argumentos
+
+Swift permite tener una etiqueta externa y un nombre interno para cada parámetro.
+
+```swift
+// Etiqueta externa diferente al nombre interno
+func enviarMensaje(de remitente: String, para destinatario: String) {
+    print("\(remitente) → \(destinatario)")
+}
+enviarMensaje(de: "Ana", para: "Luis")
+
+// Omitir etiqueta externa con _
+func potencia(_ base: Int, elevadoA exponente: Int) -> Int {
+    var resultado = 1
+    for _ in 1...exponente {
+        resultado *= base
+    }
+    return resultado
+}
+print(potencia(2, elevadoA: 10))  // 1024
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Valores por defecto
+
+```swift
+func crearUsuario(nombre: String, edad: Int = 18, pais: String = "España") -> String {
+    return "\(nombre), \(edad) años, \(pais)"
+}
+
+print(crearUsuario(nombre: "Ana"))                    // Usa valores por defecto
+print(crearUsuario(nombre: "Luis", edad: 25))         // Solo cambia edad
+print(crearUsuario(nombre: "María", pais: "México"))  // Solo cambia país
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Parámetros variádicos
+
+Aceptan cero o más valores del mismo tipo.
+
+```swift
+func promedio(_ numeros: Double...) -> Double {
+    guard !numeros.isEmpty else { return 0 }
+    let suma = numeros.reduce(0, +)
+    return suma / Double(numeros.count)
+}
+
+print(promedio(10, 20, 30))       // 20.0
+print(promedio(5, 8, 12, 3, 7))   // 7.0
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Parámetros inout
+
+Por defecto, los parámetros son constantes. Usa `inout` para modificar el valor original.
+
+```swift
+func intercambiar(_ a: inout Int, _ b: inout Int) {
+    let temporal = a
+    a = b
+    b = temporal
+}
+
+var x = 10
+var y = 20
+intercambiar(&x, &y)
+print("x = \(x), y = \(y)")  // x = 20, y = 10
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Usa `inout` con moderación. En la mayoría de casos es mejor retornar un nuevo valor en lugar de modificar el existente.
+:::
+
+## Funciones como tipos
+
+Las funciones tienen un tipo definido por sus parámetros y retorno.
+
+```swift
+// El tipo de esta función es (Int, Int) -> Int
+func sumar(_ a: Int, _ b: Int) -> Int { a + b }
+func restar(_ a: Int, _ b: Int) -> Int { a - b }
+
+// Asignar función a una variable
+var operacion: (Int, Int) -> Int = sumar
+print(operacion(10, 5))  // 15
+
+operacion = restar
+print(operacion(10, 5))  // 5
+
+// Función como parámetro
+func aplicar(_ funcion: (Int, Int) -> Int, a: Int, b: Int) -> Int {
+    return funcion(a, b)
+}
+print(aplicar(sumar, a: 3, b: 4))   // 7
+print(aplicar(restar, a: 3, b: 4))  // -1
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Closures
+
+Los closures son bloques de código autocontenidos que capturan valores de su contexto. Son el equivalente a las lambdas o funciones anónimas en otros lenguajes.
+
+```swift
+// Sintaxis completa de un closure
+let saludoClosure = { (nombre: String) -> String in
+    return "¡Hola, \(nombre)!"
+}
+print(saludoClosure("Swift"))
+
+// Closure como argumento
+let numeros = [5, 2, 8, 1, 9, 3]
+let ordenados = numeros.sorted(by: { (a: Int, b: Int) -> Bool in
+    return a < b
+})
+print(ordenados)  // [1, 2, 3, 5, 8, 9]
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Sintaxis abreviada de closures
+
+Swift permite simplificar los closures de varias formas.
+
+```swift
+let numeros = [5, 2, 8, 1, 9, 3]
+
+// 1. Inferencia de tipos
+let v1 = numeros.sorted(by: { a, b in return a < b })
+
+// 2. Retorno implícito
+let v2 = numeros.sorted(by: { a, b in a < b })
+
+// 3. Nombres abreviados ($0, $1, ...)
+let v3 = numeros.sorted(by: { $0 < $1 })
+
+// 4. Operador como closure
+let v4 = numeros.sorted(by: <)
+
+// 5. Trailing closure
+let v5 = numeros.sorted { $0 < $1 }
+
+print(v5)  // [1, 2, 3, 5, 8, 9]
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Closures con map, filter y reduce
+
+```swift
+let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+// map: transforma cada elemento
+let dobles = numeros.map { $0 * 2 }
+print("Dobles: \(dobles)")  // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
+// filter: filtra elementos que cumplan una condición
+let pares = numeros.filter { $0 % 2 == 0 }
+print("Pares: \(pares)")  // [2, 4, 6, 8, 10]
+
+// reduce: combina todos los elementos en un solo valor
+let suma = numeros.reduce(0) { $0 + $1 }
+print("Suma: \(suma)")  // 55
+
+// Encadenar operaciones
+let resultado = numeros
+    .filter { $0 % 2 == 0 }   // Solo pares
+    .map { $0 * $0 }           // Elevar al cuadrado
+    .reduce(0, +)              // Sumar todo
+print("Suma de cuadrados de pares: \(resultado)")  // 220
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Captura de valores
+
+Los closures capturan referencias a variables de su contexto.
+
+```swift
+func crearContador() -> () -> Int {
+    var cuenta = 0
+    let incrementar = {
+        cuenta += 1
+        return cuenta
+    }
+    return incrementar
+}
+
+let contador = crearContador()
+print(contador())  // 1
+print(contador())  // 2
+print(contador())  // 3
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Los trailing closures hacen el código más legible, especialmente cuando el closure es el último argumento de una función. Úsalos siempre que puedas.
+:::
+
+## Resumen
+
+| Concepto | Sintaxis |
+|----------|----------|
+| Función básica | `func nombre() { }` |
+| Con retorno | `func nombre() -> Tipo { }` |
+| Etiquetas | `func f(externo interno: Tipo)` |
+| Omitir etiqueta | `func f(_ param: Tipo)` |
+| Valor por defecto | `func f(param: Tipo = valor)` |
+| Variádico | `func f(_ params: Tipo...)` |
+| inout | `func f(_ param: inout Tipo)` |
+| Closure | `{ (params) -> Tipo in cuerpo }` |

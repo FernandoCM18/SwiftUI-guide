@@ -1,0 +1,133 @@
+---
+title: Variables and Constants
+description: Learn how to declare variables with var and constants with let in Swift, including type inference and annotations.
+---
+
+## Declaring Values in Swift
+
+In Swift there are two ways to store values: **constants** (`let`) and **variables** (`var`). The fundamental difference is that a constant cannot change its value after being assigned, while a variable can.
+
+## Constants with `let`
+
+Use `let` when the value will not change. Swift encourages the use of constants whenever possible, since they make code safer and easier to reason about.
+
+```swift
+let name = "Carlos"
+let age = 30
+let pi = 3.14159
+
+// This would produce a compile error:
+// name = "Ana"  // Error: cannot assign to a constant
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Variables with `var`
+
+Use `var` when you need the value to change over time.
+
+```swift
+var score = 0
+score = 10        // Correct: we can change the value
+score += 5        // score is now 15
+
+var greeting = "Hello"
+greeting = "Good morning"  // Correct: we can reassign
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Type Inference
+
+Swift is smart enough to deduce the type of a variable or constant from the value you assign. This is called **type inference**.
+
+```swift
+let city = "London"         // Swift infers String
+let temperature = 22.5      // Swift infers Double
+let isSummer = true         // Swift infers Bool
+let quantity = 100          // Swift infers Int
+
+// You can verify the type with type(of:)
+print(type(of: city))        // String
+print(type(of: temperature)) // Double
+print(type(of: isSummer))    // Bool
+print(type(of: quantity))    // Int
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Type Annotations
+
+Although inference works in most cases, you can specify the type explicitly with a **type annotation**.
+
+```swift
+let distance: Double = 100  // Without annotation it would be Int
+let letter: Character = "A" // Without annotation it would be String
+let price: Float = 9.99     // Without annotation it would be Double
+
+var message: String          // Declare without initializing
+message = "Hello world"     // Assign later
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use type annotations when you need a different type from what Swift would infer, or when declaring a variable without an initial value.
+:::
+
+## Variable Names
+
+Swift allows very expressive variable names, including Unicode characters.
+
+```swift
+let fullName = "Ana Garcia"          // camelCase is the convention
+let birthYear = 1995                 // Descriptive names are preferred
+let π = 3.14159                      // Unicode characters allowed
+let 🎉 = "Party"                    // Even emojis (not recommended)
+
+// Naming conventions:
+let maxAttempts = 3                  // camelCase for variables
+let serverURL = "https://..."        // Acronyms in uppercase
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Multiple Declarations
+
+You can declare several constants or variables on a single line.
+
+```swift
+let x = 0, y = 0, z = 0
+var red = 0.0, green = 0.0, blue = 0.0
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Printing Values
+
+Use `print()` to display values in the console. String interpolation with `\()` lets you insert values inside a String.
+
+```swift
+let name = "Swift"
+let version = 6
+
+print("Hello, world")
+print("Language: \(name)")
+print("\(name) version \(version)")
+print("2 + 3 = \(2 + 3)")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Always prefer `let` over `var` unless you truly need to modify the value. Xcode will warn you if you use `var` when you could use `let`.
+:::
+
+## Summary
+
+| Concept | Syntax | Usage |
+|---------|--------|-------|
+| Constant | `let name = value` | Value that does not change |
+| Variable | `var name = value` | Value that can change |
+| Type annotation | `let name: Type = value` | Specify type explicitly |
+| Interpolation | `"\(expression)"` | Insert values into strings |

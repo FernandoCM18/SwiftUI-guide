@@ -1,0 +1,105 @@
+---
+title: Introducción a Swift
+description: Visión general del lenguaje Swift, su historia, características de seguridad y lo que aprenderás.
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## ¿Qué es Swift?
+
+Swift es un lenguaje de programación moderno, seguro y de alto rendimiento desarrollado por Apple. Fue presentado en la WWDC de 2014 como el sucesor de Objective-C para el desarrollo de aplicaciones en las plataformas Apple: iOS, macOS, watchOS, tvOS y visionOS.
+
+## Historia breve
+
+Swift nació de la necesidad de un lenguaje más moderno y accesible. Chris Lattner comenzó su diseño en 2010 y, desde su lanzamiento público, ha evolucionado rápidamente:
+
+- **Swift 1.0 (2014)**: Lanzamiento inicial.
+- **Swift 2.0 (2015)**: Se convierte en código abierto.
+- **Swift 3.0 (2016)**: Gran rediseño de la API.
+- **Swift 4.0 (2017)**: Codable, Strings mejorados.
+- **Swift 5.0 (2019)**: Estabilidad de ABI.
+- **Swift 5.5+ (2021)**: Concurrencia moderna con async/await.
+- **Swift 6.0 (2024)**: Seguridad de concurrencia estricta.
+
+## Características principales
+
+### Seguridad de tipos
+Swift es un lenguaje fuertemente tipado. El compilador detecta errores de tipos en tiempo de compilación, lo que previene muchos bugs comunes.
+
+```swift
+// Esto genera un error de compilación
+// let numero: Int = "hola"
+
+// Esto es correcto
+let numero: Int = 42
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Manejo de nulos seguro
+El sistema de opcionales de Swift obliga a manejar explícitamente los valores que pueden ser `nil`, eliminando los errores de referencia nula.
+
+```swift
+// Un valor que puede ser nil
+var nombre: String? = "María"
+
+// Acceso seguro al valor
+if let nombreSeguro = nombre {
+    print("Hola, \(nombreSeguro)")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Inferencia de tipos
+Swift puede inferir automáticamente el tipo de una variable a partir de su valor inicial.
+
+```swift
+let mensaje = "Hola mundo"  // Swift infiere que es String
+let pi = 3.14159            // Swift infiere que es Double
+let activo = true           // Swift infiere que es Bool
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Rendimiento
+Swift está compilado con LLVM y ofrece un rendimiento comparable a C/C++ en muchas tareas.
+
+## ¿Qué aprenderás?
+
+En esta sección cubriremos los fundamentos del lenguaje Swift:
+
+<CardGrid>
+  <Card title="Variables y Constantes" icon="pencil">
+    Declaración con `let` y `var`, inferencia de tipos y anotaciones.
+    [Leer →](/swift/variables-y-constantes/)
+  </Card>
+  <Card title="Tipos de Datos" icon="list-format">
+    Int, Double, String, Bool, Array, Dictionary, Set y Tuple.
+    [Leer →](/swift/tipos-de-datos/)
+  </Card>
+  <Card title="Flujo de Control" icon="right-arrow">
+    if/else, switch, for-in, while, guard.
+    [Leer →](/swift/flujo-de-control/)
+  </Card>
+  <Card title="Funciones" icon="setting">
+    Declaración, parámetros, retornos y closures.
+    [Leer →](/swift/funciones/)
+  </Card>
+  <Card title="Structs y Clases" icon="document">
+    Tipos de valor vs referencia, propiedades y métodos.
+    [Leer →](/swift/structs-y-clases/)
+  </Card>
+  <Card title="Opcionales" icon="warning">
+    Optional binding, nil coalescing y optional chaining.
+    [Leer →](/swift/opcionales/)
+  </Card>
+  <Card title="Protocolos" icon="puzzle">
+    Declaración, conformidad y programación orientada a protocolos.
+    [Leer →](/swift/protocolos/)
+  </Card>
+  <Card title="Enumeraciones" icon="list-format">
+    Valores crudos, valores asociados y CaseIterable.
+    [Leer →](/swift/enumeraciones/)
+  </Card>
+</CardGrid>

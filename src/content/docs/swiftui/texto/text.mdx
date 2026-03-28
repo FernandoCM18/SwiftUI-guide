@@ -1,0 +1,285 @@
+---
+title: Text
+description: Aprende a usar el componente Text de SwiftUI para mostrar texto con estilos y modificadores.
+---
+
+## El componente Text
+
+`Text` es la vista fundamental para mostrar texto en SwiftUI. Soporta una amplia variedad de modificadores para personalizar la apariencia del texto.
+
+![Text](../../../../assets/swiftui/text.svg)
+
+## Uso básico
+
+```swift
+import SwiftUI
+
+struct TextoBasico: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Hola, mundo")
+            Text("Un número: \(42)")
+            Text("Fecha: \(Date(), style: .date)")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Modificadores de fuente
+
+```swift
+import SwiftUI
+
+struct TextoFuentes: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Large Title").font(.largeTitle)
+            Text("Title").font(.title)
+            Text("Title 2").font(.title2)
+            Text("Title 3").font(.title3)
+            Text("Headline").font(.headline)
+            Text("Subheadline").font(.subheadline)
+            Text("Body").font(.body)
+            Text("Callout").font(.callout)
+            Text("Caption").font(.caption)
+            Text("Footnote").font(.footnote)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Fuente personalizada
+
+```swift
+import SwiftUI
+
+struct TextoPersonalizado: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            // Sistema con tamaño específico
+            Text("Tamaño personalizado")
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+
+            // Fuente monoespaciada
+            Text("Código fuente")
+                .font(.system(.body, design: .monospaced))
+
+            // Fuente serif
+            Text("Texto elegante")
+                .font(.system(.title, design: .serif))
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Estilo de texto
+
+```swift
+import SwiftUI
+
+struct TextoEstilo: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Negrita")
+                .bold()
+
+            Text("Cursiva")
+                .italic()
+
+            Text("Subrayado")
+                .underline()
+
+            Text("Tachado")
+                .strikethrough()
+
+            Text("Negrita y cursiva")
+                .bold()
+                .italic()
+
+            Text("Subrayado con color")
+                .underline(true, color: .red)
+
+            Text("Tachado con estilo")
+                .strikethrough(true, color: .blue)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Color del texto
+
+```swift
+import SwiftUI
+
+struct TextoColor: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("Color primario")
+                .foregroundColor(.primary)
+
+            Text("Color secundario")
+                .foregroundColor(.secondary)
+
+            Text("Rojo")
+                .foregroundColor(.red)
+
+            Text("Azul")
+                .foregroundColor(.blue)
+
+            // Gradiente como color (iOS 16+)
+            Text("Texto con gradiente")
+                .font(.title)
+                .foregroundStyle(
+                    .linearGradient(
+                        colors: [.blue, .purple],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Alineación de texto multilínea
+
+```swift
+import SwiftUI
+
+struct TextoMultilinea: View {
+    let parrafo = "SwiftUI es un framework declarativo que permite construir interfaces de usuario de manera intuitiva y eficiente para todas las plataformas de Apple."
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text(parrafo)
+                .multilineTextAlignment(.leading)
+                .frame(width: 200)
+
+            Text(parrafo)
+                .multilineTextAlignment(.center)
+                .frame(width: 200)
+
+            Text(parrafo)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 200)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Limitar líneas y truncamiento
+
+```swift
+import SwiftUI
+
+struct TextoLimites: View {
+    let textoLargo = "Este es un texto muy largo que probablemente no cabrá en una sola línea y necesitará ser truncado de alguna manera."
+
+    var body: some View {
+        VStack(spacing: 16) {
+            // Limitar a 1 línea
+            Text(textoLargo)
+                .lineLimit(1)
+
+            // Limitar a 2 líneas
+            Text(textoLargo)
+                .lineLimit(2)
+
+            // Truncar al inicio
+            Text(textoLargo)
+                .lineLimit(1)
+                .truncationMode(.head)
+
+            // Truncar en el medio
+            Text(textoLargo)
+                .lineLimit(1)
+                .truncationMode(.middle)
+        }
+        .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Combinar textos
+
+```swift
+import SwiftUI
+
+struct TextoCombinado: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            // Concatenar con +
+            Text("Hola, ")
+                .font(.title) +
+            Text("mundo")
+                .font(.title)
+                .foregroundColor(.blue)
+                .bold() +
+            Text("!")
+                .font(.title)
+                .foregroundColor(.red)
+
+            // Markdown integrado (iOS 15+)
+            Text("Texto con **negrita**, *cursiva* y [enlace](https://swift.org)")
+        }
+        .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Desde iOS 15, `Text` soporta Markdown básico de forma nativa. Puedes usar **negrita**, *cursiva*, `código`, ~~tachado~~ y [enlaces](url) directamente en el string.
+:::
+
+## Espaciado entre líneas y letras
+
+```swift
+import SwiftUI
+
+struct TextoEspaciado: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Espaciado entre líneas amplio")
+                .lineSpacing(10)
+                .frame(width: 200)
+
+            Text("ESPACIADO ENTRE LETRAS")
+                .tracking(5)
+
+            Text("Kerning personalizado")
+                .kerning(3)
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Resumen
+
+| Modificador | Uso |
+|-------------|-----|
+| `.font()` | Tamaño y estilo de fuente |
+| `.bold()` | Texto en negrita |
+| `.italic()` | Texto en cursiva |
+| `.foregroundColor()` | Color del texto |
+| `.multilineTextAlignment()` | Alineación multilínea |
+| `.lineLimit()` | Máximo de líneas |
+| `.lineSpacing()` | Espacio entre líneas |
+| `.tracking()` | Espacio entre caracteres |

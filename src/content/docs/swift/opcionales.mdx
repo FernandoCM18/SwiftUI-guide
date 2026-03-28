@@ -1,0 +1,264 @@
+---
+title: Opcionales
+description: Domina el sistema de opcionales de Swift, incluyendo optional binding, nil coalescing, force unwrap y optional chaining.
+---
+
+## ¿Qué son los opcionales?
+
+Un opcional en Swift representa un valor que puede existir o ser `nil` (ausente). Es una de las características más importantes del lenguaje para garantizar la seguridad del código.
+
+```swift
+// Un String normal siempre tiene un valor
+let nombre: String = "Ana"
+
+// Un String opcional puede tener un valor o ser nil
+var apodo: String? = "Anita"
+apodo = nil  // Esto es válido
+
+// Sin opcionales, esto sería un error:
+// let otro: String = nil  // Error de compilación
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Crear opcionales
+
+```swift
+// Declaración explícita
+var edad: Int? = 25
+var ciudad: String? = nil
+
+// Funciones que retornan opcionales
+let numero = Int("42")    // Int? — puede fallar la conversión
+let invalido = Int("abc") // nil — la conversión falla
+
+print(numero as Any)    // Optional(42)
+print(invalido as Any)  // nil
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Optional binding con if let
+
+La forma más común y segura de extraer el valor de un opcional.
+
+```swift
+let posibleNumero = Int("123")
+
+if let numero = posibleNumero {
+    print("El número es \(numero)")  // Se ejecuta si no es nil
+} else {
+    print("No se pudo convertir")
+}
+
+// Múltiples bindings en una sola condición
+let nombre: String? = "Ana"
+let edad: Int? = 25
+
+if let nombre = nombre, let edad = edad {
+    print("\(nombre) tiene \(edad) años")
+}
+
+// En Swift 5.7+ puedes usar la forma abreviada
+if let nombre, let edad {
+    print("\(nombre) tiene \(edad) años")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Optional binding con guard let
+
+`guard let` es ideal para salir de una función si el valor es nil.
+
+```swift
+func procesarUsuario(nombre: String?, edad: Int?) {
+    guard let nombre = nombre else {
+        print("Error: nombre es requerido")
+        return
+    }
+
+    guard let edad = edad else {
+        print("Error: edad es requerida")
+        return
+    }
+
+    // Aquí nombre y edad están disponibles como no opcionales
+    print("Usuario: \(nombre), \(edad) años")
+}
+
+procesarUsuario(nombre: "Ana", edad: 25)   // "Usuario: Ana, 25 años"
+procesarUsuario(nombre: nil, edad: 25)      // "Error: nombre es requerido"
+procesarUsuario(nombre: "Luis", edad: nil)  // "Error: edad es requerida"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Prefiere `guard let` sobre `if let` cuando quieras usar el valor desenvuelto en el resto de la función. Esto reduce la anidación y hace el código más legible.
+:::
+
+## Nil coalescing operator (??)
+
+Proporciona un valor por defecto cuando el opcional es nil.
+
+```swift
+let nombreUsuario: String? = nil
+let nombreMostrado = nombreUsuario ?? "Invitado"
+print("Bienvenido, \(nombreMostrado)")  // "Bienvenido, Invitado"
+
+// Encadenar con múltiples opcionales
+let apodo: String? = nil
+let nombreCompleto: String? = "Ana García"
+let nombreFinal = apodo ?? nombreCompleto ?? "Desconocido"
+print(nombreFinal)  // "Ana García"
+
+// Útil con diccionarios
+let configuracion: [String: Int] = ["maxIntentos": 3]
+let maxIntentos = configuracion["maxIntentos"] ?? 5
+let timeout = configuracion["timeout"] ?? 30
+print("Max intentos: \(maxIntentos), Timeout: \(timeout)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Force unwrap (!)
+
+Fuerza la extracción del valor. Si es nil, la aplicación se detiene con un error fatal.
+
+```swift
+let texto = "42"
+let numero = Int(texto)!  // Sabemos que "42" es convertible
+print(numero)  // 42
+
+// ¡PELIGRO! Esto causaría un crash:
+// let invalido = Int("abc")!  // Fatal error: nil encontrado
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Evita el force unwrap (`!`) siempre que sea posible. Usa `if let`, `guard let` o `??` en su lugar. Solo usa `!` cuando estés absolutamente seguro de que el valor no es nil.
+:::
+
+## Optional chaining
+
+Permite acceder a propiedades, métodos y subíndices de un opcional de forma segura. Si cualquier eslabón de la cadena es nil, toda la expresión retorna nil.
+
+```swift
+struct Direccion {
+    var calle: String
+    var ciudad: String
+    var codigoPostal: String
+}
+
+struct Contacto {
+    var nombre: String
+    var direccion: Direccion?
+    var telefonos: [String]?
+}
+
+var contacto = Contacto(
+    nombre: "Ana",
+    direccion: Direccion(calle: "Gran Vía 1", ciudad: "Madrid", codigoPostal: "28001"),
+    telefonos: ["612345678", "698765432"]
+)
+
+// Optional chaining para acceder a propiedades
+let ciudad = contacto.direccion?.ciudad
+print(ciudad ?? "Sin ciudad")  // "Madrid"
+
+// Encadenar múltiples niveles
+let longitudCalle = contacto.direccion?.calle.count
+print(longitudCalle ?? 0)  // 10
+
+// Acceder a elementos de un array opcional
+let primerTelefono = contacto.telefonos?.first
+print(primerTelefono ?? "Sin teléfono")
+
+// Llamar métodos a través de la cadena
+let calleMayusculas = contacto.direccion?.calle.uppercased()
+print(calleMayusculas ?? "N/A")  // "GRAN VÍA 1"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Comparar opcionales
+
+```swift
+let a: Int? = 5
+let b: Int? = 5
+let c: Int? = nil
+
+print(a == b)    // true
+print(a == c)    // false
+print(c == nil)  // true
+
+// Comparar con un valor no opcional
+print(a == 5)    // true
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## map y flatMap en opcionales
+
+```swift
+let posibleNumero: Int? = 42
+
+// map: transforma el valor si existe
+let texto = posibleNumero.map { "El número es \($0)" }
+print(texto ?? "No hay número")  // "El número es 42"
+
+// flatMap: útil cuando la transformación también retorna un opcional
+let cadena: String? = "123"
+let numero = cadena.flatMap { Int($0) }
+print(numero ?? 0)  // 123
+
+// Comparar map vs flatMap
+let resultado1 = cadena.map { Int($0) }     // Int?? (opcional doble)
+let resultado2 = cadena.flatMap { Int($0) }  // Int? (aplanado)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Opcionales implícitamente desenvueltos
+
+Se declaran con `!` en lugar de `?`. Se comportan como no opcionales pero pueden ser nil.
+
+```swift
+// Útil cuando sabes que tendrá valor después de la inicialización
+class MiVista {
+    var etiqueta: String!  // Se asignará antes de usarse
+
+    func configurar() {
+        etiqueta = "Título"
+    }
+
+    func mostrar() {
+        // No necesita desenvolver explícitamente
+        print(etiqueta)
+    }
+}
+
+let vista = MiVista()
+vista.configurar()
+vista.mostrar()  // "Título"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Los opcionales implícitamente desenvueltos son tan peligrosos como el force unwrap si accedes a ellos cuando son nil. Úsalos solo en casos como @IBOutlet o cuando la inicialización en dos fases lo requiera.
+:::
+
+## Resumen
+
+| Técnica | Sintaxis | Cuándo usar |
+|---------|----------|-------------|
+| if let | `if let x = opt { }` | Uso condicional del valor |
+| guard let | `guard let x = opt else { return }` | Salida anticipada |
+| ?? | `opt ?? valorDefecto` | Valor por defecto |
+| ! | `opt!` | Solo si estás 100% seguro |
+| ?. | `opt?.propiedad` | Acceso seguro a cadenas |
+| map | `opt.map { f($0) }` | Transformar si existe |
+| flatMap | `opt.flatMap { f($0) }` | Transformar y aplanar |

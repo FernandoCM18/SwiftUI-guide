@@ -1,0 +1,320 @@
+---
+title: Protocols
+description: Learn about protocols in Swift including declaration, conformance, extensions, and protocol-oriented programming.
+---
+
+## Defining Interfaces and Contracts
+
+Protocols define a blueprint of methods, properties, and other requirements that a type must implement. They are central to Swift's design philosophy of protocol-oriented programming.
+
+## Declaring a Protocol
+
+```swift
+protocol Describable {
+    var description: String { get }
+    func describe()
+}
+
+// Conforming to a protocol
+struct Dog: Describable {
+    var name: String
+
+    var description: String {
+        "Dog named \(name)"
+    }
+
+    func describe() {
+        print(description)
+    }
+}
+
+let dog = Dog(name: "Rex")
+dog.describe()  // "Dog named Rex"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Property Requirements
+
+Protocols can require properties to be gettable or gettable and settable.
+
+```swift
+protocol Identifiable {
+    var id: String { get }          // Read-only required
+    var name: String { get set }    // Read-write required
+}
+
+struct User: Identifiable {
+    let id: String         // let satisfies { get }
+    var name: String       // var satisfies { get set }
+}
+
+var user = User(id: "001", name: "Alice")
+print(user.id)      // "001"
+user.name = "Bob"   // Allowed because name is { get set }
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Method Requirements
+
+```swift
+protocol Togglable {
+    mutating func toggle()
+}
+
+enum Switch: Togglable {
+    case on, off
+
+    mutating func toggle() {
+        self = (self == .on) ? .off : .on
+    }
+}
+
+var lightSwitch = Switch.off
+lightSwitch.toggle()
+print(lightSwitch)  // on
+lightSwitch.toggle()
+print(lightSwitch)  // off
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Protocol Conformance with Multiple Protocols
+
+```swift
+protocol Printable {
+    func printDetails()
+}
+
+protocol Storable {
+    func save()
+}
+
+struct Document: Printable, Storable {
+    var title: String
+    var content: String
+
+    func printDetails() {
+        print("Document: \(title)")
+        print("Content: \(content)")
+    }
+
+    func save() {
+        print("Saving '\(title)' to disk...")
+    }
+}
+
+let doc = Document(title: "Notes", content: "Hello World")
+doc.printDetails()
+doc.save()
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Protocol Inheritance
+
+Protocols can inherit from other protocols.
+
+```swift
+protocol Named {
+    var name: String { get }
+}
+
+protocol Aged {
+    var age: Int { get }
+}
+
+// PeopleProtocol inherits both
+protocol PersonProtocol: Named, Aged {
+    func greet() -> String
+}
+
+struct Person: PersonProtocol {
+    var name: String
+    var age: Int
+
+    func greet() -> String {
+        "Hi, I'm \(name), \(age) years old."
+    }
+}
+
+let person = Person(name: "Alice", age: 30)
+print(person.greet())
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Default Implementations with Extensions
+
+Protocol extensions let you provide default implementations for any method or property.
+
+```swift
+protocol Greetable {
+    var name: String { get }
+    func greet() -> String
+}
+
+// Default implementation
+extension Greetable {
+    func greet() -> String {
+        "Hello, my name is \(name)."
+    }
+}
+
+struct Student: Greetable {
+    var name: String
+    // Uses the default greet() implementation
+}
+
+struct Teacher: Greetable {
+    var name: String
+
+    // Provides a custom implementation
+    func greet() -> String {
+        "I'm Professor \(name)."
+    }
+}
+
+let student = Student(name: "Alice")
+let teacher = Teacher(name: "Smith")
+
+print(student.greet())  // "Hello, my name is Alice."
+print(teacher.greet())  // "I'm Professor Smith."
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Protocols as Types
+
+You can use a protocol as a type for variables, parameters, and return values.
+
+```swift
+protocol Shape {
+    var area: Double { get }
+    func describe() -> String
+}
+
+struct Circle: Shape {
+    var radius: Double
+    var area: Double { .pi * radius * radius }
+    func describe() -> String { "Circle with radius \(radius)" }
+}
+
+struct Square: Shape {
+    var side: Double
+    var area: Double { side * side }
+    func describe() -> String { "Square with side \(side)" }
+}
+
+// Using protocol as a type
+let shapes: [Shape] = [
+    Circle(radius: 5),
+    Square(side: 4),
+    Circle(radius: 3)
+]
+
+for shape in shapes {
+    print("\(shape.describe()) - Area: \(shape.area)")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Protocol-Oriented Programming
+
+Swift encourages building functionality through protocol composition rather than class inheritance.
+
+```swift
+protocol Flying {
+    var maxAltitude: Double { get }
+    func fly()
+}
+
+protocol Swimming {
+    var maxDepth: Double { get }
+    func swim()
+}
+
+extension Flying {
+    func fly() {
+        print("Flying up to \(maxAltitude) meters")
+    }
+}
+
+extension Swimming {
+    func swim() {
+        print("Swimming down to \(maxDepth) meters")
+    }
+}
+
+// A duck can both fly and swim
+struct Duck: Flying, Swimming {
+    var maxAltitude: Double = 500
+    var maxDepth: Double = 2
+
+    var name: String
+}
+
+let duck = Duck(name: "Donald")
+duck.fly()   // "Flying up to 500.0 meters"
+duck.swim()  // "Swimming down to 2.0 meters"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Prefer protocol composition over deep class hierarchies. It gives you more flexibility and avoids the problems of multiple inheritance.
+:::
+
+## Common Standard Library Protocols
+
+```swift
+// Equatable: allows == comparison
+struct Point: Equatable {
+    var x: Double
+    var y: Double
+}
+
+let p1 = Point(x: 1, y: 2)
+let p2 = Point(x: 1, y: 2)
+print(p1 == p2)  // true
+
+// Comparable: allows < > comparisons and sorting
+struct Score: Comparable {
+    var value: Int
+
+    static func < (lhs: Score, rhs: Score) -> Bool {
+        lhs.value < rhs.value
+    }
+}
+
+let scores = [Score(value: 85), Score(value: 92), Score(value: 78)]
+let sorted = scores.sorted()
+print(sorted.map { $0.value })  // [78, 85, 92]
+
+// CustomStringConvertible
+struct Temperature: CustomStringConvertible {
+    var celsius: Double
+
+    var description: String {
+        "\(celsius)°C"
+    }
+}
+
+let temp = Temperature(celsius: 22.5)
+print(temp)  // "22.5°C"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Summary
+
+| Concept | Description |
+|---------|-------------|
+| Protocol | Blueprint of methods and properties |
+| Conformance | A type implements a protocol's requirements |
+| Extension | Add default implementations to protocols |
+| Protocol as type | Use protocols for polymorphism |
+| Protocol inheritance | A protocol can inherit from others |
+| Composition | Combine multiple protocols for flexibility |

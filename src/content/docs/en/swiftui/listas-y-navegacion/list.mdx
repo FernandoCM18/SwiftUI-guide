@@ -1,0 +1,108 @@
+---
+title: List
+description: How to use List in SwiftUI to display collections of data in rows.
+---
+
+`List` displays a scrollable collection of data in rows, similar to `UITableView`.
+
+## Preview
+
+![List in SwiftUI](../../../../../assets/swiftui/list.svg)
+
+## Basic Usage
+
+```swift
+let fruits = ["Apple", "Banana", "Orange", "Grape"]
+
+List(fruits, id: \.self) { fruit in
+    Text(fruit)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Sections
+
+```swift
+List {
+    Section("Fruits") {
+        Text("Apple")
+        Text("Banana")
+    }
+    Section("Vegetables") {
+        Text("Carrot")
+        Text("Broccoli")
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Swipe Actions
+
+```swift
+List {
+    ForEach(items) { item in
+        Text(item.title)
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) { } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
+            .swipeActions(edge: .leading) {
+                Button { } label: {
+                    Label("Favorite", systemImage: "star")
+                }
+                .tint(.yellow)
+            }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## List Styles
+
+| Style | Description |
+|---|---|
+| `.listStyle(.automatic)` | Default |
+| `.listStyle(.plain)` | No group separators |
+| `.listStyle(.grouped)` | Grouped with background |
+| `.listStyle(.insetGrouped)` | Grouped with insets |
+
+:::tip
+Use `List` with `.onDelete` and `EditButton()` to create editable lists.
+:::
+
+## Full Example
+
+```swift
+struct ContactsView: View {
+    @State private var contacts = ["Ana", "Carlos", "Diana", "Eduardo"]
+    @State private var search = ""
+
+    var filtered: [String] {
+        search.isEmpty ? contacts : contacts.filter { $0.localizedCaseInsensitiveContains(search) }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(filtered, id: \.self) { contact in
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .foregroundColor(.blue)
+                        Text(contact)
+                    }
+                }
+                .onDelete { contacts.remove(atOffsets: $0) }
+            }
+            .navigationTitle("Contacts")
+            .searchable(text: $search)
+            .toolbar { EditButton() }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

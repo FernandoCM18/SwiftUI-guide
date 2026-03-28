@@ -1,0 +1,91 @@
+---
+title: Introduction to Swift
+description: Overview of the Swift programming language, its features, and why it is the foundation for Apple development.
+---
+
+## What is Swift?
+
+Swift is a powerful, intuitive programming language created by Apple for building apps on iOS, macOS, watchOS, and tvOS. It was introduced in 2014 and has since become the standard language for Apple platform development.
+
+Swift combines the performance of compiled languages with the expressiveness of modern scripting languages. It is designed to be safe, fast, and expressive.
+
+## Key Features
+
+- **Type Safety**: Swift catches type errors at compile time, preventing many common bugs.
+- **Optionals**: A built-in system for handling the absence of a value safely.
+- **Closures**: First-class functions and closures with clean syntax.
+- **Protocol-Oriented**: Encourages composition over inheritance through protocols.
+- **Memory Management**: Automatic Reference Counting (ARC) handles memory without a garbage collector.
+- **Modern Syntax**: Clean, readable code with minimal boilerplate.
+
+## Your First Swift Program
+
+```swift
+// The classic "Hello, World!" in Swift
+print("Hello, World!")
+
+// Swift supports string interpolation
+let language = "Swift"
+let version = 5
+print("Welcome to \(language) \(version)!")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Swift is Compiled and Type-Safe
+
+Swift compiles directly to native machine code, making it extremely fast. The compiler checks types at compile time, catching errors before your code runs.
+
+```swift
+let greeting = "Hello"    // Type inferred as String
+let year = 2025           // Type inferred as Int
+let pi = 3.14159          // Type inferred as Double
+let isActive = true       // Type inferred as Bool
+
+// The compiler prevents type mismatches:
+// let result = greeting + year  // Error: cannot add String and Int
+let result = greeting + " " + String(year)  // Correct
+print(result)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Swift REPL and Playgrounds
+
+You can experiment with Swift using:
+
+- **Swift Playgrounds**: An interactive environment on iPad and Mac.
+- **Xcode Playgrounds**: A scratchpad inside Xcode for quick prototyping.
+- **Swift REPL**: A command-line Read-Eval-Print Loop for quick tests.
+- **SwiftFiddle**: An online playground accessible from any browser.
+
+```swift
+// Quick experimentation is easy in Swift
+let numbers = [1, 2, 3, 4, 5]
+let doubled = numbers.map { $0 * 2 }
+print(doubled)  // [2, 4, 6, 8, 10]
+
+let sum = numbers.reduce(0, +)
+print(sum)  // 15
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use Swift Playgrounds or SwiftFiddle to practice the examples throughout this guide. Experimentation is the best way to learn!
+:::
+
+## What You Will Learn
+
+This Swift section covers the core language features:
+
+1. **Variables and Constants** - Storing and managing values
+2. **Data Types** - The building blocks of Swift
+3. **Control Flow** - Making decisions and repeating code
+4. **Functions** - Reusable blocks of code
+5. **Structs and Classes** - Custom data types
+6. **Optionals** - Handling the absence of values
+7. **Protocols** - Defining interfaces and contracts
+8. **Enumerations** - Modeling a group of related values
+
+Each topic builds on the previous ones, so we recommend following them in order.

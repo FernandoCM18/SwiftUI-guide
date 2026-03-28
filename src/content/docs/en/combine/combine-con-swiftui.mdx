@@ -1,0 +1,131 @@
+---
+title: Combine with SwiftUI
+description: How to integrate Combine with SwiftUI using @Published, ObservableObject, and onReceive.
+---
+
+Combine and SwiftUI are designed to work together. SwiftUI uses Combine internally to observe state changes and update the UI.
+
+## @Published and ObservableObject
+
+The most common way to use Combine with SwiftUI:
+
+```swift
+class CounterViewModel: ObservableObject {
+    @Published var value = 0
+
+    func increment() { value += 1 }
+}
+
+struct CounterView: View {
+    @StateObject private var vm = CounterViewModel()
+
+    var body: some View {
+        VStack {
+            Text("\(vm.value)").font(.largeTitle)
+            Button("Add") { vm.increment() }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## @StateObject vs @ObservedObject
+
+```swift
+// @StateObject: Creates and owns the instance
+// Use in the view that CREATES the ViewModel
+struct ParentView: View {
+    @StateObject private var vm = MyViewModel()
+    var body: some View { ChildView(vm: vm) }
+}
+
+// @ObservedObject: Receives an existing instance
+// Use in child views that RECEIVE the ViewModel
+struct ChildView: View {
+    @ObservedObject var vm: MyViewModel
+    var body: some View { Text(vm.text) }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## onReceive
+
+Subscribe a view directly to a publisher:
+
+```swift
+struct TimerView: View {
+    @State private var time = Date()
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        Text(time, style: .time)
+            .font(.largeTitle)
+            .onReceive(timer) { time = $0 }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## ViewModel with Combine Pipeline
+
+```swift
+class SearchViewModel: ObservableObject {
+    @Published var query = ""
+    @Published var results: [String] = []
+    @Published var isLoading = false
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        $query
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .removeDuplicates()
+            .filter { !$0.isEmpty }
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.isLoading = true
+            })
+            .flatMap { text in
+                Just(["Result 1 for \(text)", "Result 2 for \(text)"])
+                    .delay(for: .seconds(0.5), scheduler: RunLoop.main)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] results in
+                self?.results = results
+                self?.isLoading = false
+            }
+            .store(in: &cancellables)
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Form Validation
+
+```swift
+class RegistrationViewModel: ObservableObject {
+    @Published var email = ""
+    @Published var password = ""
+    @Published var confirmPassword = ""
+    @Published var canRegister = false
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        Publishers.CombineLatest3($email, $password, $confirmPassword)
+            .map { email, pass, confirm in
+                email.contains("@") && pass.count >= 8 && pass == confirm
+            }
+            .assign(to: &$canRegister)
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+With the `@Observable` macro in iOS 17, many Combine + ObservableObject use cases are simplified. However, Combine remains essential for complex async operations like debounce, merge, and error handling.
+:::

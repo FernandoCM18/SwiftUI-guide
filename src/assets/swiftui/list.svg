@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Row 1 -->
+  <rect x="20" y="18" width="335" height="44" rx="0" fill="#FFFFFF"/>
+  <text x="40" y="46" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="currentColor">General</text>
+  <text x="335" y="46" text-anchor="end" font-family="-apple-system, sans-serif" font-size="15" fill="#C7C7CC">&#x276F;</text>
+  <line x1="40" y1="62" x2="355" y2="62" stroke="#E5E5EA" stroke-width="0.5"/>
+  <!-- Row 2 -->
+  <rect x="20" y="62" width="335" height="44" fill="#FFFFFF"/>
+  <text x="40" y="90" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="currentColor">Privacidad</text>
+  <text x="335" y="90" text-anchor="end" font-family="-apple-system, sans-serif" font-size="15" fill="#C7C7CC">&#x276F;</text>
+  <line x1="40" y1="106" x2="355" y2="106" stroke="#E5E5EA" stroke-width="0.5"/>
+  <!-- Row 3 -->
+  <rect x="20" y="106" width="335" height="44" fill="#FFFFFF"/>
+  <text x="40" y="134" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="currentColor">Notificaciones</text>
+  <text x="335" y="134" text-anchor="end" font-family="-apple-system, sans-serif" font-size="15" fill="#C7C7CC">&#x276F;</text>
+  <line x1="40" y1="150" x2="355" y2="150" stroke="#E5E5EA" stroke-width="0.5"/>
+  <!-- Row 4 -->
+  <rect x="20" y="150" width="335" height="44" rx="0" fill="#FFFFFF"/>
+  <text x="40" y="178" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="currentColor">Sonidos</text>
+  <text x="335" y="178" text-anchor="end" font-family="-apple-system, sans-serif" font-size="15" fill="#C7C7CC">&#x276F;</text>
+  <!-- Rounded corners for list group -->
+  <rect x="20" y="18" width="335" height="176" rx="10" fill="none" stroke="#E5E5EA" stroke-width="0.5"/>
+  <!-- Label -->
+  <text x="187.5" y="212" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">List { ForEach(items) { ... } }</text>
+</svg>

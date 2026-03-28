@@ -1,0 +1,80 @@
+---
+title: Label
+description: How to use Label in SwiftUI to combine text and icons.
+---
+
+`Label` combines an icon and text in a single view, automatically adapting its layout to the context.
+
+## Preview
+
+![Label in SwiftUI](../../../../../assets/swiftui/label.svg)
+
+## Basic Usage
+
+```swift
+Label("Favorites", systemImage: "star.fill")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Label Styles
+
+```swift
+VStack(spacing: 20) {
+    Label("Automatic", systemImage: "star")
+        .labelStyle(.automatic)
+
+    Label("Title Only", systemImage: "star")
+        .labelStyle(.titleOnly)
+
+    Label("Icon Only", systemImage: "star")
+        .labelStyle(.iconOnly)
+
+    Label("Title and Icon", systemImage: "star")
+        .labelStyle(.titleAndIcon)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Custom Label
+
+```swift
+Label {
+    Text("Custom Label")
+        .font(.headline)
+        .foregroundColor(.primary)
+} icon: {
+    Circle()
+        .fill(Color.blue)
+        .frame(width: 30, height: 30)
+        .overlay(
+            Image(systemName: "person")
+                .foregroundColor(.white)
+        )
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`Label` automatically adjusts its layout based on the context — in a toolbar it might show only the icon, while in a list it shows both.
+:::
+
+## Full Example
+
+```swift
+struct SettingsListView: View {
+    var body: some View {
+        List {
+            Label("Profile", systemImage: "person.fill")
+            Label("Notifications", systemImage: "bell.fill")
+            Label("Privacy", systemImage: "lock.fill")
+            Label("Storage", systemImage: "internaldrive")
+            Label("Help", systemImage: "questionmark.circle")
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

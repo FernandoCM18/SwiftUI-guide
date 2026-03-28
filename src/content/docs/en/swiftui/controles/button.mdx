@@ -1,0 +1,117 @@
+---
+title: Button
+description: How to use the Button component in SwiftUI to create interactive buttons.
+---
+
+`Button` is one of the most used controls in SwiftUI. It triggers an action when the user taps it.
+
+## Preview
+
+![Button in SwiftUI](../../../../../assets/swiftui/button.svg)
+
+## Basic Usage
+
+```swift
+Button("Press Me") {
+    print("Button pressed!")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Custom Label
+
+```swift
+Button {
+    print("Save")
+} label: {
+    HStack {
+        Image(systemName: "square.and.arrow.down")
+        Text("Save")
+    }
+    .padding()
+    .background(Color.blue)
+    .foregroundColor(.white)
+    .cornerRadius(10)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Button Styles
+
+```swift
+VStack(spacing: 20) {
+    Button("Bordered") { }
+        .buttonStyle(.bordered)
+
+    Button("Prominent") { }
+        .buttonStyle(.borderedProminent)
+
+    Button("Borderless") { }
+        .buttonStyle(.borderless)
+
+    Button("Plain") { }
+        .buttonStyle(.plain)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Button Roles
+
+```swift
+Button("Delete", role: .destructive) {
+    // Destructive action
+}
+
+Button("Cancel", role: .cancel) {
+    // Cancel action
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Common Modifiers
+
+| Modifier | Description |
+|---|---|
+| `.buttonStyle(.bordered)` | Bordered style |
+| `.tint(.blue)` | Accent color |
+| `.disabled(true)` | Disable button |
+| `.controlSize(.large)` | Control size |
+| `.buttonBorderShape(.capsule)` | Capsule shape |
+
+:::tip
+Use `role: .destructive` for actions that delete data. SwiftUI will automatically display the button in red.
+:::
+
+## Full Example
+
+```swift
+struct CounterView: View {
+    @State private var count = 0
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Count: \(count)")
+                .font(.largeTitle)
+
+            HStack(spacing: 16) {
+                Button("Subtract") { count -= 1 }
+                    .buttonStyle(.bordered)
+                    .tint(.red)
+
+                Button("Add") { count += 1 }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+            }
+
+            Button("Reset", role: .destructive) { count = 0 }
+                .disabled(count == 0)
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

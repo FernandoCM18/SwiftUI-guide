@@ -1,0 +1,77 @@
+---
+title: Toggle
+description: How to use Toggle in SwiftUI to create on/off switches.
+---
+
+`Toggle` lets the user switch between an on and off state.
+
+## Preview
+
+![Toggle in SwiftUI](../../../../../assets/swiftui/toggle.svg)
+
+## Basic Usage
+
+```swift
+struct ToggleExample: View {
+    @State private var wifiEnabled = true
+
+    var body: some View {
+        Toggle("Wi-Fi", isOn: $wifiEnabled)
+            .padding()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Toggle Styles
+
+```swift
+VStack(spacing: 20) {
+    Toggle("Switch", isOn: $option1)
+        .toggleStyle(.switch)
+
+    Toggle("Button", isOn: $option2)
+        .toggleStyle(.button)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Common Modifiers
+
+| Modifier | Description |
+|---|---|
+| `.toggleStyle(.switch)` | Switch style (default) |
+| `.toggleStyle(.button)` | Button style |
+| `.tint(.green)` | Toggle color when on |
+| `.disabled(true)` | Disable toggle |
+
+:::tip
+Place `Toggle` inside a `Form` or `List` for native iOS settings appearance.
+:::
+
+## Full Example
+
+```swift
+struct SettingsView: View {
+    @State private var notifications = true
+    @State private var sound = true
+    @State private var darkMode = false
+
+    var body: some View {
+        Form {
+            Section("General") {
+                Toggle("Notifications", isOn: $notifications)
+                Toggle("Sound", isOn: $sound)
+            }
+            Section("Appearance") {
+                Toggle("Dark Mode", isOn: $darkMode)
+                    .tint(.indigo)
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

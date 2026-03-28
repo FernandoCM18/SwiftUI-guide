@@ -1,0 +1,133 @@
+---
+title: Variables y Constantes
+description: Aprende a declarar variables con var y constantes con let en Swift, incluyendo inferencia de tipos y anotaciones.
+---
+
+## Declarar valores en Swift
+
+En Swift existen dos formas de almacenar valores: **constantes** (`let`) y **variables** (`var`). La diferencia fundamental es que una constante no puede cambiar su valor después de ser asignada, mientras que una variable sí.
+
+## Constantes con `let`
+
+Usa `let` cuando el valor no cambiará. Swift fomenta el uso de constantes siempre que sea posible, ya que hacen el código más seguro y fácil de razonar.
+
+```swift
+let nombre = "Carlos"
+let edad = 30
+let pi = 3.14159
+
+// Esto generaría un error de compilación:
+// nombre = "Ana"  // Error: no se puede asignar a una constante
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Variables con `var`
+
+Usa `var` cuando necesites que el valor cambie a lo largo del tiempo.
+
+```swift
+var puntuacion = 0
+puntuacion = 10        // Correcto: podemos cambiar el valor
+puntuacion += 5        // puntuacion ahora vale 15
+
+var saludo = "Hola"
+saludo = "Buenos días" // Correcto: podemos reasignar
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Inferencia de tipos
+
+Swift es lo suficientemente inteligente para deducir el tipo de una variable o constante a partir del valor que le asignas. Esto se llama **inferencia de tipos**.
+
+```swift
+let ciudad = "Madrid"       // Swift infiere String
+let temperatura = 22.5      // Swift infiere Double
+let esVerano = true         // Swift infiere Bool
+let cantidad = 100          // Swift infiere Int
+
+// Puedes verificar el tipo con type(of:)
+print(type(of: ciudad))      // String
+print(type(of: temperatura)) // Double
+print(type(of: esVerano))    // Bool
+print(type(of: cantidad))    // Int
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Anotaciones de tipo
+
+Aunque la inferencia funciona en la mayoría de casos, puedes especificar el tipo explícitamente con una **anotación de tipo**.
+
+```swift
+let distancia: Double = 100  // Sin anotación sería Int
+let letra: Character = "A"   // Sin anotación sería String
+let precio: Float = 9.99     // Sin anotación sería Double
+
+var mensaje: String           // Declarar sin inicializar
+mensaje = "Hola mundo"       // Asignar después
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Usa anotaciones de tipo cuando necesites un tipo diferente al que Swift inferiría, o cuando declares una variable sin valor inicial.
+:::
+
+## Nombres de variables
+
+Swift permite nombres de variables muy expresivos, incluyendo caracteres Unicode.
+
+```swift
+let nombreCompleto = "Ana García"     // camelCase es la convención
+let añoNacimiento = 1995              // Se aceptan caracteres especiales
+let π = 3.14159                       // Caracteres Unicode permitidos
+let 🎉 = "Fiesta"                    // Incluso emojis (no recomendado)
+
+// Convenciones de nomenclatura:
+let maximoIntentos = 3                // camelCase para variables
+let URLDelServidor = "https://..."    // Acrónimos en mayúsculas
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Múltiples declaraciones
+
+Puedes declarar varias constantes o variables en una sola línea.
+
+```swift
+let x = 0, y = 0, z = 0
+var rojo = 0.0, verde = 0.0, azul = 0.0
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Imprimir valores
+
+Usa `print()` para mostrar valores en la consola. La interpolación de cadenas con `\()` permite insertar valores dentro de un String.
+
+```swift
+let nombre = "Swift"
+let version = 6
+
+print("Hola, mundo")
+print("Lenguaje: \(nombre)")
+print("\(nombre) versión \(version)")
+print("2 + 3 = \(2 + 3)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Siempre prefiere `let` sobre `var` a menos que realmente necesites modificar el valor. Xcode te advertirá si usas `var` cuando podrías usar `let`.
+:::
+
+## Resumen
+
+| Concepto | Sintaxis | Uso |
+|----------|----------|-----|
+| Constante | `let nombre = valor` | Valor que no cambia |
+| Variable | `var nombre = valor` | Valor que puede cambiar |
+| Anotación de tipo | `let nombre: Tipo = valor` | Especificar tipo explícitamente |
+| Interpolación | `"\(expresion)"` | Insertar valores en cadenas |

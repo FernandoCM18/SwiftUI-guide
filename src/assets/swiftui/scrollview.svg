@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Scroll container -->
+  <rect x="40" y="15" width="295" height="175" rx="10" fill="#FFFFFF"/>
+  <clipPath id="scrollClip">
+    <rect x="40" y="15" width="295" height="175" rx="10"/>
+  </clipPath>
+  <g clip-path="url(#scrollClip)">
+    <!-- Content cards (partially scrolled up) -->
+    <rect x="55" y="-5" width="265" height="50" rx="8" fill="#007AFF" opacity="0.15"/>
+    <text x="187.5" y="26" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" fill="#007AFF">Elemento 1</text>
+    <rect x="55" y="53" width="265" height="50" rx="8" fill="#007AFF" opacity="0.15"/>
+    <text x="187.5" y="84" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" fill="#007AFF">Elemento 2</text>
+    <rect x="55" y="111" width="265" height="50" rx="8" fill="#007AFF" opacity="0.15"/>
+    <text x="187.5" y="142" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" fill="#007AFF">Elemento 3</text>
+    <rect x="55" y="169" width="265" height="50" rx="8" fill="#007AFF" opacity="0.1"/>
+    <text x="187.5" y="200" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" fill="#007AFF" opacity="0.5">Elemento 4</text>
+  </g>
+  <!-- Scroll indicator -->
+  <rect x="329" y="30" width="3" height="50" rx="1.5" fill="#C7C7CC" opacity="0.7"/>
+  <!-- Label -->
+  <text x="187.5" y="210" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">ScrollView { VStack { ... } }</text>
+</svg>

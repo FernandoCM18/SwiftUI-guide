@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Segmented control background -->
+  <rect x="47.5" y="75" width="280" height="36" rx="8" fill="#E5E5EA"/>
+  <!-- Segment 1 -->
+  <text x="94" y="98" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="13" font-weight="500" fill="#8E8E93">Diario</text>
+  <!-- Segment 2 (selected) -->
+  <rect x="141" y="79" width="93" height="28" rx="6" fill="#FFFFFF"/>
+  <text x="187.5" y="98" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="13" font-weight="600" fill="currentColor">Semanal</text>
+  <!-- Segment 3 -->
+  <text x="281" y="98" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="13" font-weight="500" fill="#8E8E93">Mensual</text>
+  <!-- Title -->
+  <text x="187.5" y="55" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="15" fill="currentColor">Vista</text>
+  <!-- Code label -->
+  <text x="187.5" y="155" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">Picker("Vista", selection: $selected) {</text>
+  <text x="187.5" y="172" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">}.pickerStyle(.segmented)</text>
+</svg>

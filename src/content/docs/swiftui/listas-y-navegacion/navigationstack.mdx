@@ -1,0 +1,164 @@
+---
+title: NavigationStack
+description: Cómo usar NavigationStack en SwiftUI para crear jerarquías de navegación.
+---
+
+`NavigationStack` proporciona una pila de navegación que permite al usuario ir de una vista a otra con transiciones animadas y un botón de retroceso automático.
+
+## Vista previa
+
+![NavigationStack en SwiftUI](../../../../assets/swiftui/navigationstack.svg)
+
+## Uso básico
+
+```swift
+NavigationStack {
+    List {
+        NavigationLink("Perfil") {
+            Text("Vista de Perfil")
+        }
+        NavigationLink("Configuración") {
+            Text("Vista de Configuración")
+        }
+    }
+    .navigationTitle("Inicio")
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## NavigationLink con datos
+
+```swift
+struct Fruta: Identifiable, Hashable {
+    let id = UUID()
+    let nombre: String
+    let emoji: String
+}
+
+struct FrutasView: View {
+    let frutas = [
+        Fruta(nombre: "Manzana", emoji: "🍎"),
+        Fruta(nombre: "Plátano", emoji: "🍌"),
+        Fruta(nombre: "Naranja", emoji: "🍊"),
+    ]
+
+    var body: some View {
+        NavigationStack {
+            List(frutas) { fruta in
+                NavigationLink(value: fruta) {
+                    Text("\(fruta.emoji) \(fruta.nombre)")
+                }
+            }
+            .navigationTitle("Frutas")
+            .navigationDestination(for: Fruta.self) { fruta in
+                Text("Detalle de \(fruta.nombre)")
+                    .font(.largeTitle)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Barra de herramientas
+
+```swift
+NavigationStack {
+    Text("Contenido")
+        .navigationTitle("Mi App")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    // Acción
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Editar") {
+                    // Acción
+                }
+            }
+        }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Estilos de título
+
+```swift
+// Título grande (por defecto)
+.navigationTitle("Título")
+.navigationBarTitleDisplayMode(.large)
+
+// Título en línea (compacto)
+.navigationTitle("Título")
+.navigationBarTitleDisplayMode(.inline)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`NavigationStack` reemplaza a `NavigationView` desde iOS 16. Usa siempre `NavigationStack` en proyectos nuevos.
+:::
+
+## Ejemplo completo
+
+```swift
+struct AppConfiguracionView: View {
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Cuenta") {
+                    NavigationLink {
+                        Text("Editar Perfil")
+                    } label: {
+                        Label("Perfil", systemImage: "person")
+                    }
+
+                    NavigationLink {
+                        Text("Notificaciones")
+                    } label: {
+                        Label("Notificaciones", systemImage: "bell")
+                    }
+                }
+
+                Section("General") {
+                    NavigationLink {
+                        Text("Apariencia")
+                    } label: {
+                        Label("Apariencia", systemImage: "paintbrush")
+                    }
+
+                    NavigationLink {
+                        Text("Privacidad")
+                    } label: {
+                        Label("Privacidad", systemImage: "lock")
+                    }
+
+                    NavigationLink {
+                        Text("Almacenamiento")
+                    } label: {
+                        Label("Almacenamiento", systemImage: "internaldrive")
+                    }
+                }
+
+                Section("Acerca de") {
+                    NavigationLink {
+                        Text("Versión 1.0.0")
+                    } label: {
+                        Label("Versión", systemImage: "info.circle")
+                    }
+                }
+            }
+            .navigationTitle("Configuración")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

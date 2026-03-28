@@ -1,0 +1,205 @@
+---
+title: Introducción a SwiftUI
+description: Visión general del framework SwiftUI para construir interfaces de usuario declarativas en las plataformas Apple.
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## ¿Qué es SwiftUI?
+
+SwiftUI es el framework declarativo de Apple para construir interfaces de usuario en todas sus plataformas: iOS, macOS, watchOS, tvOS y visionOS. Fue presentado en la WWDC 2019 y representa un cambio fundamental respecto al enfoque imperativo de UIKit y AppKit.
+
+## Paradigma declarativo
+
+En lugar de describir **cómo** construir la interfaz paso a paso, con SwiftUI describes **qué** quieres mostrar y el framework se encarga del resto.
+
+```swift
+import SwiftUI
+
+// Enfoque declarativo: describes la interfaz
+struct SaludoView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("¡Hola, SwiftUI!")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+
+            Text("Bienvenido al desarrollo declarativo")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Estructura de una App
+
+```swift
+import SwiftUI
+
+// Punto de entrada de la aplicación
+@main
+struct MiApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
+// Vista principal
+struct ContentView: View {
+    var body: some View {
+        Text("¡Mi primera app!")
+            .font(.title)
+            .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## La propiedad body
+
+Cada vista en SwiftUI debe conformar el protocolo `View` e implementar la propiedad `body`, que retorna el contenido de la vista.
+
+```swift
+import SwiftUI
+
+struct TarjetaPerfil: View {
+    let nombre: String
+    let rol: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(nombre)
+                .font(.headline)
+            Text(rol)
+                .font(.subheadline)
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(radius: 4)
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Modificadores
+
+Los modificadores transforman las vistas y se encadenan de forma fluida.
+
+```swift
+import SwiftUI
+
+struct EjemploModificadores: View {
+    var body: some View {
+        Text("SwiftUI es increíble")
+            .font(.title2)               // Tamaño de fuente
+            .fontWeight(.semibold)        // Peso de fuente
+            .foregroundColor(.blue)       // Color del texto
+            .padding()                    // Espaciado interno
+            .background(Color.blue.opacity(0.1))  // Fondo
+            .cornerRadius(10)            // Esquinas redondeadas
+            .shadow(color: .gray, radius: 3)  // Sombra
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+El orden de los modificadores importa. Cada modificador crea una nueva vista envolviendo la anterior, así que `.padding().background()` es diferente de `.background().padding()`.
+:::
+
+## Estado y datos
+
+SwiftUI actualiza la interfaz automáticamente cuando cambian los datos.
+
+```swift
+import SwiftUI
+
+struct ContadorView: View {
+    @State private var cuenta = 0
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Cuenta: \(cuenta)")
+                .font(.largeTitle)
+
+            HStack(spacing: 16) {
+                Button("- Restar") {
+                    cuenta -= 1
+                }
+                Button("+ Sumar") {
+                    cuenta += 1
+                }
+            }
+        }
+        .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Previews
+
+Las previews permiten ver los cambios en tiempo real mientras escribes código.
+
+```swift
+import SwiftUI
+
+struct MiVista: View {
+    var body: some View {
+        Text("Hola")
+            .font(.title)
+    }
+}
+
+// Preview para Xcode
+#Preview {
+    MiVista()
+}
+
+// Preview con nombre personalizado
+#Preview("Modo oscuro") {
+    MiVista()
+        .preferredColorScheme(.dark)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Secciones de SwiftUI
+
+Explora todos los componentes y patrones de SwiftUI:
+
+<CardGrid>
+  <Card title="Texto e Imágenes" icon="pencil">
+    Text, Label e Image para mostrar contenido estático.
+    [Explorar →](/swiftui/texto/text/)
+  </Card>
+  <Card title="Controles" icon="setting">
+    Button, Toggle, Slider, Picker y TextField para interacción.
+    [Explorar →](/swiftui/controles/button/)
+  </Card>
+  <Card title="Layout" icon="list-format">
+    VStack, HStack y ZStack para organizar vistas.
+    [Explorar →](/swiftui/layout/vstack/)
+  </Card>
+  <Card title="Listas y Navegación" icon="document">
+    List, ScrollView y NavigationStack para contenido dinámico.
+    [Explorar →](/swiftui/listas-y-navegacion/list/)
+  </Card>
+  <Card title="Presentación" icon="laptop">
+    Sheet, Alert y TabView para flujos de presentación.
+    [Explorar →](/swiftui/presentacion/sheet/)
+  </Card>
+</CardGrid>

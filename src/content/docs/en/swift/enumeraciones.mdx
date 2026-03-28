@@ -1,0 +1,283 @@
+---
+title: Enumerations
+description: Learn about enumerations in Swift including raw values, associated values, CaseIterable, and pattern matching.
+---
+
+## Modeling a Group of Related Values
+
+Enumerations (enums) define a common type for a group of related values, enabling you to work with those values in a type-safe way.
+
+## Basic Enumerations
+
+```swift
+enum Direction {
+    case north
+    case south
+    case east
+    case west
+}
+
+// Or on a single line
+enum Season {
+    case spring, summer, autumn, winter
+}
+
+var heading = Direction.north
+heading = .east  // Type already known, can use shorthand
+
+print(heading)  // east
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Enums with switch
+
+Enums and switch statements are a natural pairing. The switch must be exhaustive.
+
+```swift
+enum Planet {
+    case mercury, venus, earth, mars, jupiter, saturn, uranus, neptune
+}
+
+let planet = Planet.earth
+
+switch planet {
+case .mercury, .venus:
+    print("Too hot!")
+case .earth:
+    print("Just right!")
+case .mars:
+    print("A bit cold, but possible.")
+default:
+    print("Too far from the Sun.")
+}
+// Prints: "Just right!"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Raw Values
+
+Each enum case can have a pre-populated value (raw value) of the same type.
+
+```swift
+// String raw values
+enum Coin: String {
+    case penny = "1 cent"
+    case nickel = "5 cents"
+    case dime = "10 cents"
+    case quarter = "25 cents"
+}
+
+print(Coin.dime.rawValue)  // "10 cents"
+
+// Integer raw values (auto-increment)
+enum HTTPStatus: Int {
+    case ok = 200
+    case created = 201
+    case notFound = 404
+    case serverError = 500
+}
+
+print(HTTPStatus.ok.rawValue)       // 200
+print(HTTPStatus.notFound.rawValue) // 404
+
+// Initialize from raw value (returns Optional)
+if let status = HTTPStatus(rawValue: 404) {
+    print("Status: \(status)")  // "Status: notFound"
+}
+
+let unknown = HTTPStatus(rawValue: 999)
+print(unknown)  // nil
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Auto-Generated Raw Values
+
+```swift
+// String: uses case name as raw value
+enum CompassPoint: String {
+    case north    // rawValue = "north"
+    case south    // rawValue = "south"
+    case east     // rawValue = "east"
+    case west     // rawValue = "west"
+}
+print(CompassPoint.north.rawValue)  // "north"
+
+// Int: auto-increments from 0 (or from last specified value)
+enum Weekday: Int {
+    case monday = 1
+    case tuesday     // 2
+    case wednesday   // 3
+    case thursday    // 4
+    case friday      // 5
+}
+print(Weekday.wednesday.rawValue)  // 3
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Associated Values
+
+Unlike raw values, associated values let each case carry different types of data.
+
+```swift
+enum Barcode {
+    case upc(Int, Int, Int, Int)
+    case qrCode(String)
+}
+
+var product = Barcode.upc(8, 85909, 51226, 3)
+product = .qrCode("ABCDEFGHIJKLMNOP")
+
+// Pattern matching with associated values
+switch product {
+case .upc(let numberSystem, let manufacturer, let product, let check):
+    print("UPC: \(numberSystem), \(manufacturer), \(product), \(check)")
+case .qrCode(let code):
+    print("QR code: \(code)")
+}
+// Prints: "QR code: ABCDEFGHIJKLMNOP"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Practical Example: Network Result
+
+```swift
+enum NetworkResult {
+    case success(data: String, statusCode: Int)
+    case failure(error: String)
+    case loading(progress: Double)
+}
+
+func handleResult(_ result: NetworkResult) {
+    switch result {
+    case .success(let data, let code):
+        print("Success (\(code)): \(data)")
+    case .failure(let error):
+        print("Error: \(error)")
+    case .loading(let progress):
+        print("Loading: \(Int(progress * 100))%")
+    }
+}
+
+handleResult(.success(data: "{\"name\": \"Alice\"}", statusCode: 200))
+handleResult(.failure(error: "Connection timeout"))
+handleResult(.loading(progress: 0.75))
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## CaseIterable
+
+Conforming to `CaseIterable` gives you a collection of all cases.
+
+```swift
+enum Beverage: String, CaseIterable {
+    case coffee = "Coffee"
+    case tea = "Tea"
+    case juice = "Juice"
+    case water = "Water"
+}
+
+// Access all cases
+print(Beverage.allCases.count)  // 4
+
+for drink in Beverage.allCases {
+    print(drink.rawValue)
+}
+// Coffee, Tea, Juice, Water
+
+// Useful for creating menus or lists
+let options = Beverage.allCases.map { $0.rawValue }
+print(options)  // ["Coffee", "Tea", "Juice", "Water"]
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Enum Methods and Properties
+
+Enums can have computed properties, methods, and initializers.
+
+```swift
+enum Temperature {
+    case celsius(Double)
+    case fahrenheit(Double)
+    case kelvin(Double)
+
+    var inCelsius: Double {
+        switch self {
+        case .celsius(let value):
+            return value
+        case .fahrenheit(let value):
+            return (value - 32) * 5 / 9
+        case .kelvin(let value):
+            return value - 273.15
+        }
+    }
+
+    func description() -> String {
+        switch self {
+        case .celsius(let v): return "\(v)°C"
+        case .fahrenheit(let v): return "\(v)°F"
+        case .kelvin(let v): return "\(v)K"
+        }
+    }
+}
+
+let boiling = Temperature.fahrenheit(212)
+print(boiling.description())  // "212.0°F"
+print(boiling.inCelsius)      // 100.0
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Recursive Enumerations
+
+Use `indirect` for enums that reference themselves.
+
+```swift
+indirect enum ArithmeticExpression {
+    case number(Int)
+    case addition(ArithmeticExpression, ArithmeticExpression)
+    case multiplication(ArithmeticExpression, ArithmeticExpression)
+}
+
+func evaluate(_ expression: ArithmeticExpression) -> Int {
+    switch expression {
+    case .number(let value):
+        return value
+    case .addition(let left, let right):
+        return evaluate(left) + evaluate(right)
+    case .multiplication(let left, let right):
+        return evaluate(left) * evaluate(right)
+    }
+}
+
+// (5 + 4) * 2
+let five = ArithmeticExpression.number(5)
+let four = ArithmeticExpression.number(4)
+let sum = ArithmeticExpression.addition(five, four)
+let product = ArithmeticExpression.multiplication(sum, .number(2))
+
+print(evaluate(product))  // 18
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Enums with associated values are very powerful for modeling state machines, results, and any scenario where different cases carry different data.
+:::
+
+## Summary
+
+| Feature | Syntax |
+|---------|--------|
+| Basic enum | `enum Name { case a, b, c }` |
+| Raw values | `enum Name: Type { case a = value }` |
+| Associated values | `case name(Type, Type)` |
+| CaseIterable | `enum Name: CaseIterable { ... }` |
+| Methods | Define inside the enum body |
+| Recursive | Use `indirect` keyword |

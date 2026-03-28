@@ -1,0 +1,94 @@
+---
+title: VStack
+description: How to use VStack in SwiftUI to arrange views vertically.
+---
+
+`VStack` (Vertical Stack) arranges its child views in a vertical column, from top to bottom.
+
+## Preview
+
+![VStack in SwiftUI](../../../../../assets/swiftui/vstack.svg)
+
+## Basic Usage
+
+```swift
+VStack {
+    Text("First")
+    Text("Second")
+    Text("Third")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Spacing and Alignment
+
+```swift
+VStack(alignment: .leading, spacing: 20) {
+    Text("Long Title Text")
+        .font(.title)
+    Text("Subtitle")
+        .font(.subheadline)
+    Text("Caption text")
+        .font(.caption)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+Alignment options: `.leading`, `.center` (default), `.trailing`
+
+## Spacer
+
+```swift
+VStack {
+    Text("Top")
+    Spacer()
+    Text("Bottom")
+}
+.frame(height: 300)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Combine `VStack`, `HStack`, and `ZStack` to create complex layouts. This is the fundamental composition pattern in SwiftUI.
+:::
+
+## Full Example
+
+```swift
+struct ProfileView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "person.circle.fill")
+                .resizable()
+                .frame(width: 100, height: 100)
+                .foregroundColor(.blue)
+
+            VStack(spacing: 4) {
+                Text("Maria Garcia")
+                    .font(.title2).bold()
+                Text("iOS Developer")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+
+            HStack(spacing: 40) {
+                VStack {
+                    Text("128").font(.headline)
+                    Text("Posts").font(.caption).foregroundColor(.secondary)
+                }
+                VStack {
+                    Text("1.2K").font(.headline)
+                    Text("Followers").font(.caption).foregroundColor(.secondary)
+                }
+            }
+            Spacer()
+        }
+        .padding()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

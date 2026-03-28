@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Text field container -->
+  <rect x="40" y="55" width="295" height="50" rx="10" fill="#FFFFFF"/>
+  <!-- Placeholder text -->
+  <text x="60" y="86" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="#C7C7CC">Ingrese su nombre...</text>
+  <!-- Filled text field -->
+  <rect x="40" y="120" width="295" height="50" rx="10" fill="#FFFFFF"/>
+  <text x="60" y="151" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" fill="currentColor">Juan Perez</text>
+  <!-- Cursor line -->
+  <rect x="155" y="133" width="1.5" height="22" rx="0.75" fill="#007AFF"/>
+  <!-- Clear button -->
+  <circle cx="315" cy="145" r="10" fill="#C7C7CC"/>
+  <line x1="311" y1="141" x2="319" y2="149" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="319" y1="141" x2="311" y2="149" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Code label -->
+  <text x="187.5" y="200" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">TextField("Ingrese su nombre...", text: $name)</text>
+</svg>

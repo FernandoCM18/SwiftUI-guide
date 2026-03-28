@@ -1,0 +1,99 @@
+---
+title: Toggle
+description: Cómo usar el componente Toggle en SwiftUI para crear interruptores on/off.
+---
+
+El componente `Toggle` permite al usuario alternar entre dos estados: activado y desactivado.
+
+## Vista previa
+
+![Toggle en SwiftUI](../../../../assets/swiftui/toggle.svg)
+
+## Uso básico
+
+```swift
+struct ToggleEjemplo: View {
+    @State private var wifiActivo = true
+
+    var body: some View {
+        Toggle("Wi-Fi", isOn: $wifiActivo)
+            .padding()
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Toggle con label personalizado
+
+```swift
+Toggle(isOn: $modoOscuro) {
+    HStack {
+        Image(systemName: "moon.fill")
+        Text("Modo oscuro")
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Estilos de Toggle
+
+```swift
+VStack(spacing: 20) {
+    // Estilo interruptor (por defecto)
+    Toggle("Automático", isOn: $opcion1)
+        .toggleStyle(.switch)
+
+    // Estilo botón
+    Toggle("Favorito", isOn: $opcion2)
+        .toggleStyle(.button)
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Modificadores comunes
+
+| Modificador | Descripción |
+|---|---|
+| `.toggleStyle(.switch)` | Estilo interruptor (por defecto) |
+| `.toggleStyle(.button)` | Estilo botón |
+| `.tint(.green)` | Color del toggle activado |
+| `.disabled(true)` | Deshabilita el toggle |
+
+:::tip
+Usa `Toggle` dentro de un `Form` o `List` para obtener el estilo nativo de configuración de iOS.
+:::
+
+## Ejemplo completo
+
+```swift
+struct ConfiguracionView: View {
+    @State private var notificaciones = true
+    @State private var sonido = true
+    @State private var modoOscuro = false
+    @State private var ubicacion = false
+
+    var body: some View {
+        Form {
+            Section("General") {
+                Toggle("Notificaciones", isOn: $notificaciones)
+                Toggle("Sonido", isOn: $sonido)
+            }
+
+            Section("Apariencia") {
+                Toggle("Modo oscuro", isOn: $modoOscuro)
+                    .tint(.indigo)
+            }
+
+            Section("Privacidad") {
+                Toggle("Compartir ubicación", isOn: $ubicacion)
+                    .tint(.orange)
+            }
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

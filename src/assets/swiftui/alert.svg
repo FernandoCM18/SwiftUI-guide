@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Dimming overlay -->
+  <rect x="0" y="0" width="375" height="220" rx="12" fill="#000000" opacity="0.3"/>
+  <!-- Alert dialog -->
+  <rect x="62.5" y="35" width="250" height="150" rx="14" fill="#F2F2F7"/>
+  <!-- Title -->
+  <text x="187.5" y="68" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif" font-size="17" font-weight="600" fill="currentColor">Eliminar elemento</text>
+  <!-- Message -->
+  <text x="187.5" y="93" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="13" fill="#8E8E93">&#xbf;Est&#xe1;s seguro de que deseas</text>
+  <text x="187.5" y="110" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="13" fill="#8E8E93">eliminar este elemento?</text>
+  <!-- Separator -->
+  <line x1="62.5" y1="125" x2="312.5" y2="125" stroke="#D1D1D6" stroke-width="0.5"/>
+  <!-- Buttons row -->
+  <line x1="187.5" y1="125" x2="187.5" y2="185" stroke="#D1D1D6" stroke-width="0.5"/>
+  <!-- Cancel button -->
+  <text x="125" y="161" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" font-weight="600" fill="#007AFF">Cancelar</text>
+  <!-- Delete button -->
+  <text x="250" y="161" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="17" font-weight="400" fill="#FF3B30">Eliminar</text>
+</svg>

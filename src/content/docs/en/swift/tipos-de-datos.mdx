@@ -1,0 +1,267 @@
+---
+title: Data Types
+description: Explore the fundamental data types in Swift including Int, Double, Float, String, Bool, Array, Dictionary, Set, and Tuple.
+---
+
+## Fundamental Types
+
+Swift provides a rich set of built-in data types. Understanding these types is essential for writing effective Swift code.
+
+## Integers
+
+Integers are whole numbers with no fractional component. Swift provides signed and unsigned integers in 8, 16, 32, and 64-bit forms.
+
+```swift
+let age: Int = 30           // Platform-native size (64-bit on modern systems)
+let small: Int8 = 127       // -128 to 127
+let medium: Int16 = 32_767  // Underscores for readability
+let big: Int64 = 9_223_372_036_854_775_807
+
+let positive: UInt = 42     // Unsigned (0 and above only)
+
+// Useful properties
+print(Int.min)   // -9223372036854775808
+print(Int.max)   // 9223372036854775807
+print(UInt.min)  // 0
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Floating-Point Numbers
+
+For numbers with decimal places, Swift offers `Double` (64-bit) and `Float` (32-bit).
+
+```swift
+let pi: Double = 3.14159265358979    // 15+ decimal digits of precision
+let e: Float = 2.71828               // 6 decimal digits of precision
+
+// Double is the default for decimal literals
+let gravity = 9.81                    // Inferred as Double
+
+// Scientific notation
+let speed = 3.0e8                     // 3.0 × 10^8
+let tiny = 1.5e-4                     // 0.00015
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Always prefer `Double` over `Float` unless you have a specific reason to use less precision. Swift defaults to `Double` for decimal literals.
+:::
+
+## Strings
+
+Strings are collections of characters. Swift strings are Unicode-compliant and very powerful.
+
+```swift
+let greeting = "Hello, World!"
+let multiline = """
+    This is a
+    multiline string
+    in Swift.
+    """
+
+// String operations
+let firstName = "John"
+let lastName = "Doe"
+let fullName = firstName + " " + lastName     // Concatenation
+let message = "Name: \(fullName)"             // Interpolation
+
+print(greeting.count)         // 13
+print(greeting.isEmpty)       // false
+print(greeting.uppercased())  // HELLO, WORLD!
+print(greeting.contains("World"))  // true
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Booleans
+
+Booleans represent `true` or `false` and are used extensively in control flow.
+
+```swift
+let isVisible = true
+let isHidden = false
+
+// Boolean logic
+let a = true
+let b = false
+
+print(a && b)   // false (AND)
+print(a || b)   // true (OR)
+print(!a)       // false (NOT)
+
+// Comparison operators produce Bools
+let x = 10
+print(x > 5)    // true
+print(x == 10)  // true
+print(x != 3)   // true
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Arrays
+
+Arrays are ordered collections of values of the same type.
+
+```swift
+// Creating arrays
+var numbers: [Int] = [1, 2, 3, 4, 5]
+var fruits = ["Apple", "Banana", "Cherry"]  // Type inferred as [String]
+var empty: [Double] = []
+
+// Accessing and modifying
+print(fruits[0])            // "Apple"
+fruits.append("Date")       // Add to end
+fruits.insert("Avocado", at: 1)  // Insert at index
+fruits.remove(at: 0)        // Remove "Apple"
+
+// Useful properties and methods
+print(numbers.count)        // 5
+print(numbers.first ?? 0)   // 1
+print(numbers.last ?? 0)    // 5
+print(numbers.contains(3))  // true
+let sorted = numbers.sorted()
+print(sorted)               // [1, 2, 3, 4, 5]
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Dictionaries
+
+Dictionaries store key-value pairs with no defined ordering.
+
+```swift
+// Creating dictionaries
+var capitals: [String: String] = [
+    "France": "Paris",
+    "Japan": "Tokyo",
+    "Brazil": "Brasilia"
+]
+
+// Accessing values (returns Optional)
+if let capital = capitals["France"] {
+    print(capital)  // "Paris"
+}
+
+// Modifying
+capitals["Germany"] = "Berlin"       // Add new pair
+capitals["Brazil"] = "Brasília"      // Update existing
+capitals.removeValue(forKey: "Japan") // Remove
+
+// Iterating
+for (country, capital) in capitals {
+    print("\(country): \(capital)")
+}
+
+print(capitals.count)       // Number of pairs
+print(capitals.keys)        // All keys
+print(capitals.values)      // All values
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Sets
+
+Sets are unordered collections of unique values.
+
+```swift
+// Creating sets
+var colors: Set<String> = ["Red", "Green", "Blue"]
+var numbers: Set = [1, 2, 3, 4, 5]  // Type inferred
+
+// Duplicates are automatically removed
+var letters: Set = ["A", "B", "A", "C", "B"]
+print(letters)  // {"A", "B", "C"} (order may vary)
+
+// Set operations
+let setA: Set = [1, 2, 3, 4]
+let setB: Set = [3, 4, 5, 6]
+
+print(setA.union(setB))          // {1, 2, 3, 4, 5, 6}
+print(setA.intersection(setB))   // {3, 4}
+print(setA.subtracting(setB))    // {1, 2}
+print(setA.symmetricDifference(setB))  // {1, 2, 5, 6}
+
+// Membership
+print(colors.contains("Red"))   // true
+colors.insert("Yellow")
+colors.remove("Red")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Tuples
+
+Tuples group multiple values into a single compound value. The values can be of different types.
+
+```swift
+// Creating tuples
+let point = (x: 10.0, y: 20.0)
+let httpStatus = (statusCode: 200, description: "OK")
+
+// Accessing elements
+print(point.x)                    // 10.0
+print(httpStatus.statusCode)      // 200
+print(httpStatus.description)     // "OK"
+
+// Decomposing tuples
+let (code, message) = httpStatus
+print("Code: \(code), Message: \(message)")
+
+// Ignoring parts with underscore
+let (justCode, _) = httpStatus
+print(justCode)  // 200
+
+// Tuples without labels
+let coordinates = (3, 5)
+print(coordinates.0)  // 3
+print(coordinates.1)  // 5
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::note
+Tuples are best for simple, temporary groupings. For more complex data, prefer structs or classes.
+:::
+
+## Type Conversion
+
+Swift does not automatically convert between types. You must convert explicitly.
+
+```swift
+let integer = 42
+let decimal = 3.14
+
+// Convert Int to Double
+let sum = Double(integer) + decimal
+print(sum)  // 45.14
+
+// Convert Double to Int (truncates)
+let truncated = Int(decimal)
+print(truncated)  // 3
+
+// Convert numbers to String
+let text = String(integer)
+let formatted = "Value: \(integer)"
+
+// Convert String to number (returns Optional)
+let parsed = Int("123")       // Optional(123)
+let invalid = Int("hello")    // nil
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Summary
+
+| Type | Example | Description |
+|------|---------|-------------|
+| `Int` | `42` | Whole numbers |
+| `Double` | `3.14` | 64-bit floating point |
+| `Float` | `2.71` | 32-bit floating point |
+| `String` | `"Hello"` | Text |
+| `Bool` | `true` | Boolean value |
+| `[Type]` | `[1, 2, 3]` | Ordered collection |
+| `[K: V]` | `["a": 1]` | Key-value pairs |
+| `Set<Type>` | `Set([1, 2])` | Unique unordered values |
+| `(T, T)` | `(1, "a")` | Grouped values |

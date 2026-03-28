@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="220" viewBox="0 0 375 220">
+  <rect width="375" height="220" rx="12" fill="#F2F2F7"/>
+  <!-- Image placeholder -->
+  <rect x="107.5" y="30" width="160" height="140" rx="10" fill="#D1D1D6"/>
+  <!-- Mountain landscape icon -->
+  <polygon points="147,140 187.5,80 228,140" fill="#8E8E93"/>
+  <polygon points="190,140 217,100 244,140" fill="#AEAEB2"/>
+  <!-- Sun -->
+  <circle cx="230" cy="65" r="14" fill="#AEAEB2"/>
+  <!-- Label -->
+  <text x="187.5" y="198" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif" font-size="12" fill="#8E8E93">Image("landscape")</text>
+</svg>

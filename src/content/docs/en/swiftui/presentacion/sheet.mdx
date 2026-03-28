@@ -1,0 +1,126 @@
+---
+title: Sheet
+description: How to use sheet and fullScreenCover in SwiftUI to present modal views.
+---
+
+The `.sheet` modifier presents a modal view that slides up from the bottom.
+
+## Preview
+
+![Sheet in SwiftUI](../../../../../assets/swiftui/sheet.svg)
+
+## Basic Usage
+
+```swift
+struct SheetExample: View {
+    @State private var showSheet = false
+
+    var body: some View {
+        Button("Open Sheet") { showSheet = true }
+        .sheet(isPresented: $showSheet) {
+            Text("Hello from the Sheet!")
+                .font(.title)
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Dismissing a Sheet
+
+```swift
+struct DetailSheet: View {
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Text("Sheet Content")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Close") { dismiss() }
+                    }
+                }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## fullScreenCover
+
+```swift
+.fullScreenCover(isPresented: $show) {
+    FullScreenView()
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## presentationDetents
+
+```swift
+.sheet(isPresented: $show) {
+    SheetContent()
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use `.presentationDetents([.medium, .large])` to let users resize the sheet by dragging.
+:::
+
+## Full Example
+
+```swift
+struct NotesView: View {
+    @State private var showForm = false
+    @State private var notes = ["First note", "Second note"]
+
+    var body: some View {
+        NavigationStack {
+            List(notes, id: \.self) { Text($0) }
+            .navigationTitle("Notes")
+            .toolbar {
+                Button { showForm = true } label: { Image(systemName: "plus") }
+            }
+            .sheet(isPresented: $showForm) {
+                NoteForm(notes: $notes)
+                    .presentationDetents([.medium])
+            }
+        }
+    }
+}
+
+struct NoteForm: View {
+    @Binding var notes: [String]
+    @State private var text = ""
+    @Environment(\.dismiss) var dismiss
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Write your note...", text: $text, axis: .vertical)
+                    .lineLimit(3...6)
+            }
+            .navigationTitle("New Note")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") { notes.append(text); dismiss() }
+                        .disabled(text.isEmpty)
+                }
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

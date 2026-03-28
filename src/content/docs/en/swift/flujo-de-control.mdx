@@ -1,0 +1,305 @@
+---
+title: Control Flow
+description: Learn about control flow in Swift including if/else, switch, for-in loops, while loops, repeat-while, and guard statements.
+---
+
+## Making Decisions and Repeating Code
+
+Control flow statements determine the order in which your code executes. Swift provides a rich set of control flow tools that are both powerful and easy to read.
+
+## if / else
+
+The most basic conditional statement. The condition must be a `Bool` -- Swift does not implicitly convert other types.
+
+```swift
+let temperature = 25
+
+if temperature > 30 {
+    print("It's hot!")
+} else if temperature > 20 {
+    print("It's warm.")
+} else if temperature > 10 {
+    print("It's cool.")
+} else {
+    print("It's cold!")
+}
+// Prints: "It's warm."
+
+// if as an expression (Swift 5.9+)
+let description = if temperature > 20 { "warm" } else { "cool" }
+print(description)  // "warm"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## switch
+
+Switch statements in Swift are extremely powerful. They must be exhaustive and do not fall through by default.
+
+```swift
+let fruit = "apple"
+
+switch fruit {
+case "apple":
+    print("An apple a day keeps the doctor away.")
+case "banana":
+    print("Bananas are rich in potassium.")
+case "cherry", "strawberry":
+    print("Berries are delicious!")
+default:
+    print("Unknown fruit.")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Switch with Ranges and Patterns
+
+```swift
+let score = 85
+
+switch score {
+case 0..<60:
+    print("Fail")
+case 60..<70:
+    print("D")
+case 70..<80:
+    print("C")
+case 80..<90:
+    print("B")
+case 90...100:
+    print("A")
+default:
+    print("Invalid score")
+}
+// Prints: "B"
+
+// Switch with tuples
+let point = (2, 0)
+
+switch point {
+case (0, 0):
+    print("Origin")
+case (_, 0):
+    print("On the x-axis")
+case (0, _):
+    print("On the y-axis")
+case (-3...3, -3...3):
+    print("Near the origin")
+default:
+    print("Somewhere else")
+}
+// Prints: "On the x-axis"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Switch with where Clause
+
+```swift
+let number = 15
+
+switch number {
+case let x where x % 2 == 0:
+    print("\(x) is even")
+case let x where x % 3 == 0:
+    print("\(x) is divisible by 3")
+case let x:
+    print("\(x) is something else")
+}
+// Prints: "15 is divisible by 3"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## for-in Loops
+
+The for-in loop iterates over sequences such as arrays, ranges, strings, and dictionaries.
+
+```swift
+// Iterating over an array
+let names = ["Alice", "Bob", "Charlie"]
+for name in names {
+    print("Hello, \(name)!")
+}
+
+// Iterating over a range
+for i in 1...5 {
+    print(i)  // 1, 2, 3, 4, 5
+}
+
+// Half-open range (excludes upper bound)
+for i in 0..<3 {
+    print(i)  // 0, 1, 2
+}
+
+// Iterating over a dictionary
+let ages = ["Alice": 30, "Bob": 25]
+for (name, age) in ages {
+    print("\(name) is \(age)")
+}
+
+// Iterating over a string
+for char in "Swift" {
+    print(char)  // S, w, i, f, t
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### for-in with stride
+
+```swift
+// Count by 2s
+for i in stride(from: 0, to: 10, by: 2) {
+    print(i)  // 0, 2, 4, 6, 8
+}
+
+// Count backwards
+for i in stride(from: 10, through: 0, by: -3) {
+    print(i)  // 10, 7, 4, 1
+}
+
+// Using where clause with for-in
+for i in 1...20 where i % 3 == 0 {
+    print(i)  // 3, 6, 9, 12, 15, 18
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## while Loops
+
+A while loop repeats a block of code while a condition is true.
+
+```swift
+var countdown = 5
+while countdown > 0 {
+    print("\(countdown)...")
+    countdown -= 1
+}
+print("Liftoff!")
+
+// Practical example: finding first power of 2 greater than 1000
+var power = 1
+while power <= 1000 {
+    power *= 2
+}
+print(power)  // 1024
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## repeat-while
+
+Similar to `do-while` in other languages, the body executes at least once before the condition is checked.
+
+```swift
+var attempts = 0
+repeat {
+    attempts += 1
+    print("Attempt \(attempts)")
+} while attempts < 3
+// Prints: Attempt 1, Attempt 2, Attempt 3
+
+// Useful for input validation scenarios
+var result = 0
+repeat {
+    result += Int.random(in: 1...6)
+} while result < 10
+print("Total: \(result)")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## guard
+
+The `guard` statement requires a condition to be true in order for execution to continue. It is designed for early exits.
+
+```swift
+func greet(name: String?) {
+    guard let unwrappedName = name else {
+        print("No name provided!")
+        return
+    }
+    // unwrappedName is available here
+    print("Hello, \(unwrappedName)!")
+}
+
+greet(name: "Alice")  // "Hello, Alice!"
+greet(name: nil)       // "No name provided!"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### guard with Multiple Conditions
+
+```swift
+func processAge(_ age: Int?) {
+    guard let age = age, age >= 0, age <= 150 else {
+        print("Invalid age")
+        return
+    }
+    print("Age is \(age)")
+}
+
+processAge(25)    // "Age is 25"
+processAge(-5)    // "Invalid age"
+processAge(nil)   // "Invalid age"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use `guard` to handle error cases early and keep the "happy path" code un-indented. It makes functions easier to read.
+:::
+
+## Control Transfer Statements
+
+Swift provides `break`, `continue`, `return`, `throw`, and `fallthrough` to change the flow of execution.
+
+```swift
+// continue: skip the current iteration
+for i in 1...10 {
+    if i % 2 == 0 { continue }
+    print(i)  // 1, 3, 5, 7, 9
+}
+
+// break: exit the loop entirely
+for i in 1...100 {
+    if i > 5 { break }
+    print(i)  // 1, 2, 3, 4, 5
+}
+
+// fallthrough in switch (rare)
+let value = 3
+switch value {
+case 3:
+    print("Three")
+    fallthrough
+case 4:
+    print("Three or Four")
+default:
+    break
+}
+// Prints: "Three" then "Three or Four"
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+`fallthrough` does not check the condition of the next case -- it unconditionally transfers control. Use it sparingly.
+:::
+
+## Summary
+
+| Statement | Purpose |
+|-----------|---------|
+| `if / else` | Conditional branching |
+| `switch` | Pattern matching with exhaustive cases |
+| `for-in` | Iterate over sequences and ranges |
+| `while` | Loop while a condition is true |
+| `repeat-while` | Loop at least once, then check condition |
+| `guard` | Early exit when conditions are not met |
+| `break` | Exit a loop or switch case |
+| `continue` | Skip to the next loop iteration |

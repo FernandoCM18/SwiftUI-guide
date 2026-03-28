@@ -1,0 +1,106 @@
+---
+title: ScrollView
+description: How to use ScrollView in SwiftUI to create scrollable content.
+---
+
+`ScrollView` creates scrollable areas when content exceeds the available space.
+
+## Preview
+
+![ScrollView in SwiftUI](../../../../../assets/swiftui/scrollview.svg)
+
+## Vertical (Default)
+
+```swift
+ScrollView {
+    VStack(spacing: 20) {
+        ForEach(0..<20) { i in
+            Text("Item \(i)")
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue.opacity(0.1))
+                .cornerRadius(10)
+        }
+    }
+    .padding()
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Horizontal
+
+```swift
+ScrollView(.horizontal, showsIndicators: false) {
+    HStack(spacing: 16) {
+        ForEach(0..<10) { i in
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.purple.opacity(0.3))
+                .frame(width: 150, height: 200)
+                .overlay(Text("Card \(i)").font(.headline))
+        }
+    }
+    .padding()
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## ScrollViewReader
+
+Scroll programmatically to specific views:
+
+```swift
+ScrollViewReader { proxy in
+    VStack {
+        Button("Go to bottom") {
+            withAnimation { proxy.scrollTo("last", anchor: .bottom) }
+        }
+        ScrollView {
+            ForEach(0..<50) { i in
+                Text("Row \(i)").id(i).padding()
+            }
+            Text("End").id("last")
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use `LazyVStack` or `LazyHStack` inside `ScrollView` for better performance with many elements.
+:::
+
+## Full Example
+
+```swift
+struct GalleryView: View {
+    let categories = ["Recent", "Favorites", "Shared"]
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                ForEach(categories, id: \.self) { category in
+                    VStack(alignment: .leading) {
+                        Text(category).font(.title2).bold().padding(.horizontal)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(0..<8) { i in
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color.accentColor.opacity(0.2))
+                                        .frame(width: 120, height: 120)
+                                        .overlay(Image(systemName: "photo").font(.largeTitle))
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

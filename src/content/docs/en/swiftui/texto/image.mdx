@@ -1,0 +1,90 @@
+---
+title: Image
+description: How to use Image in SwiftUI to display images and SF Symbols.
+---
+
+The `Image` view displays images from assets, SF Symbols, or other sources.
+
+## Preview
+
+![Image in SwiftUI](../../../../../assets/swiftui/image-component.svg)
+
+## SF Symbols
+
+```swift
+Image(systemName: "heart.fill")
+    .font(.largeTitle)
+    .foregroundColor(.red)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Image from Assets
+
+```swift
+Image("photo")
+    .resizable()
+    .aspectRatio(contentMode: .fit)
+    .frame(width: 200, height: 200)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Resizing and Scaling
+
+```swift
+VStack {
+    // Fit: maintains aspect ratio inside frame
+    Image(systemName: "photo")
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 150, height: 150)
+
+    // Fill: fills the frame, may clip
+    Image(systemName: "photo")
+        .resizable()
+        .aspectRatio(contentMode: .fill)
+        .frame(width: 150, height: 100)
+        .clipped()
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Common Modifiers
+
+| Modifier | Description |
+|---|---|
+| `.resizable()` | Makes the image resizable |
+| `.aspectRatio(contentMode:)` | .fit or .fill |
+| `.frame(width:height:)` | Set dimensions |
+| `.clipShape(Circle())` | Clip to shape |
+| `.overlay()` | Add overlay |
+| `.shadow(radius:)` | Add shadow |
+
+:::tip
+Always call `.resizable()` before `.frame()`. Without it, the image renders at its native size.
+:::
+
+## Full Example
+
+```swift
+struct AvatarView: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "person.circle.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 120, height: 120)
+                .foregroundColor(.blue)
+                .shadow(radius: 5)
+
+            Text("John Doe")
+                .font(.title2)
+                .bold()
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

@@ -1,0 +1,108 @@
+---
+title: Text
+description: How to use the Text view in SwiftUI to display static and dynamic text.
+---
+
+The `Text` view displays one or more lines of read-only text.
+
+## Preview
+
+![Text in SwiftUI](../../../../../assets/swiftui/text.svg)
+
+## Basic Usage
+
+```swift
+Text("Hello, World!")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Text Modifiers
+
+```swift
+VStack(alignment: .leading, spacing: 12) {
+    Text("Large Title")
+        .font(.largeTitle)
+
+    Text("Bold and Blue")
+        .bold()
+        .foregroundColor(.blue)
+
+    Text("Italic Caption")
+        .font(.caption)
+        .italic()
+
+    Text("Custom Font")
+        .font(.system(size: 24, weight: .heavy, design: .rounded))
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Multiline Text
+
+```swift
+Text("This is a long paragraph that will wrap across multiple lines automatically when it exceeds the available width.")
+    .multilineTextAlignment(.center)
+    .lineLimit(3)
+    .lineSpacing(4)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## String Interpolation
+
+```swift
+let name = "Maria"
+let age = 28
+
+Text("Hello, \(name)! You are \(age) years old.")
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Common Modifiers
+
+| Modifier | Description |
+|---|---|
+| `.font(.title)` | Set font style |
+| `.bold()` | Bold text |
+| `.italic()` | Italic text |
+| `.foregroundColor(.red)` | Text color |
+| `.multilineTextAlignment(.center)` | Multi-line alignment |
+| `.lineLimit(2)` | Maximum number of lines |
+| `.strikethrough()` | Strikethrough |
+| `.underline()` | Underline |
+
+:::tip
+Combine multiple `Text` views with `+` to create attributed strings: `Text("Hello ").bold() + Text("World").foregroundColor(.blue)`
+:::
+
+## Full Example
+
+```swift
+struct WelcomeView: View {
+    let username = "Developer"
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Welcome!")
+                .font(.largeTitle)
+                .bold()
+
+            Text("Hello, \(username)")
+                .font(.title2)
+                .foregroundColor(.secondary)
+
+            Text("Start building amazing apps with SwiftUI. This framework makes it easy to create beautiful interfaces.")
+                .font(.body)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.secondary)
+                .padding()
+        }
+        .padding()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)

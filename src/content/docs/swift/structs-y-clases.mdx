@@ -1,0 +1,330 @@
+---
+title: Structs y Clases
+description: Aprende las diferencias entre structs y clases en Swift, incluyendo tipos de valor vs referencia, propiedades, métodos e inicializadores.
+---
+
+## Tipos personalizados en Swift
+
+Los structs y las clases son los pilares fundamentales para modelar datos en Swift. Aunque comparten muchas características, tienen diferencias cruciales.
+
+## Structs (tipos de valor)
+
+Un struct es un tipo de valor. Cuando se asigna o pasa como parámetro, se crea una copia.
+
+```swift
+struct Punto {
+    var x: Double
+    var y: Double
+}
+
+// Swift genera un inicializador memberwise automáticamente
+var punto1 = Punto(x: 3.0, y: 4.0)
+var punto2 = punto1  // Se crea una COPIA
+
+punto2.x = 10.0
+print("punto1.x = \(punto1.x)")  // 3.0 (no cambia)
+print("punto2.x = \(punto2.x)")  // 10.0
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Clases (tipos de referencia)
+
+Una clase es un tipo de referencia. Cuando se asigna o pasa, se comparte la misma instancia.
+
+```swift
+class Persona {
+    var nombre: String
+    var edad: Int
+
+    init(nombre: String, edad: Int) {
+        self.nombre = nombre
+        self.edad = edad
+    }
+}
+
+let persona1 = Persona(nombre: "Ana", edad: 25)
+let persona2 = persona1  // Ambas apuntan a la MISMA instancia
+
+persona2.nombre = "Luis"
+print("persona1.nombre = \(persona1.nombre)")  // "Luis" (¡cambió!)
+print("persona2.nombre = \(persona2.nombre)")  // "Luis"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+La diferencia entre valor y referencia es fundamental. Los structs son más predecibles porque las copias son independientes. Usa structs como opción por defecto y clases solo cuando necesites compartir estado o herencia.
+:::
+
+## Propiedades
+
+### Propiedades almacenadas
+
+```swift
+struct Rectangulo {
+    var ancho: Double
+    var alto: Double
+}
+
+var rect = Rectangulo(ancho: 10, alto: 5)
+rect.ancho = 20
+print("Ancho: \(rect.ancho)")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Propiedades computadas
+
+No almacenan un valor; lo calculan cada vez que se accede.
+
+```swift
+struct Circulo {
+    var radio: Double
+
+    // Propiedad computada de solo lectura
+    var area: Double {
+        return .pi * radio * radio
+    }
+
+    // Propiedad computada con getter y setter
+    var diametro: Double {
+        get {
+            return radio * 2
+        }
+        set {
+            radio = newValue / 2
+        }
+    }
+}
+
+var circulo = Circulo(radio: 5)
+print("Área: \(circulo.area)")          // 78.54...
+print("Diámetro: \(circulo.diametro)")  // 10.0
+
+circulo.diametro = 20
+print("Nuevo radio: \(circulo.radio)")  // 10.0
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Observadores de propiedades
+
+```swift
+struct Temperatura {
+    var celsius: Double {
+        willSet {
+            print("Va a cambiar de \(celsius) a \(newValue)")
+        }
+        didSet {
+            print("Cambió de \(oldValue) a \(celsius)")
+            if celsius > 100 {
+                print("¡Advertencia: temperatura muy alta!")
+            }
+        }
+    }
+}
+
+var temp = Temperatura(celsius: 20)
+temp.celsius = 35   // Dispara willSet y didSet
+temp.celsius = 105  // Dispara advertencia
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Propiedades estáticas
+
+Pertenecen al tipo, no a las instancias.
+
+```swift
+struct Configuracion {
+    static let version = "1.0.0"
+    static var modoOscuro = false
+
+    static func descripcion() -> String {
+        return "App v\(version), modo oscuro: \(modoOscuro)"
+    }
+}
+
+print(Configuracion.version)
+print(Configuracion.descripcion())
+Configuracion.modoOscuro = true
+print(Configuracion.descripcion())
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Métodos
+
+```swift
+struct Contador {
+    var cuenta: Int = 0
+
+    // Los structs necesitan 'mutating' para modificar propiedades
+    mutating func incrementar() {
+        cuenta += 1
+    }
+
+    mutating func incrementar(en cantidad: Int) {
+        cuenta += cantidad
+    }
+
+    func mostrar() {
+        print("Cuenta actual: \(cuenta)")
+    }
+}
+
+var contador = Contador()
+contador.incrementar()
+contador.incrementar(en: 5)
+contador.mostrar()  // "Cuenta actual: 6"
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+En los structs, los métodos que modifican propiedades deben marcarse con `mutating`. Las clases no necesitan esto porque son tipos de referencia.
+:::
+
+## Inicializadores
+
+### Inicializador personalizado en structs
+
+```swift
+struct Color {
+    var rojo: Double
+    var verde: Double
+    var azul: Double
+
+    // Inicializador personalizado
+    init(gris: Double) {
+        self.rojo = gris
+        self.verde = gris
+        self.azul = gris
+    }
+
+    // Otro inicializador
+    init(rojo: Double, verde: Double, azul: Double) {
+        self.rojo = rojo
+        self.verde = verde
+        self.azul = azul
+    }
+}
+
+let gris = Color(gris: 0.5)
+let rojo = Color(rojo: 1.0, verde: 0.0, azul: 0.0)
+print("Gris: (\(gris.rojo), \(gris.verde), \(gris.azul))")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Inicializadores en clases
+
+```swift
+class Vehiculo {
+    var marca: String
+    var modelo: String
+    var año: Int
+
+    // Inicializador designado
+    init(marca: String, modelo: String, año: Int) {
+        self.marca = marca
+        self.modelo = modelo
+        self.año = año
+    }
+
+    // Inicializador de conveniencia
+    convenience init(marca: String) {
+        self.init(marca: marca, modelo: "Desconocido", año: 2024)
+    }
+
+    func descripcion() -> String {
+        return "\(marca) \(modelo) (\(año))"
+    }
+}
+
+let coche = Vehiculo(marca: "Toyota", modelo: "Corolla", año: 2023)
+let otro = Vehiculo(marca: "Honda")
+print(coche.descripcion())
+print(otro.descripcion())
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Herencia (solo clases)
+
+```swift
+class Animal {
+    var nombre: String
+
+    init(nombre: String) {
+        self.nombre = nombre
+    }
+
+    func hacerSonido() -> String {
+        return "..."
+    }
+}
+
+class Perro: Animal {
+    var raza: String
+
+    init(nombre: String, raza: String) {
+        self.raza = raza
+        super.init(nombre: nombre)
+    }
+
+    override func hacerSonido() -> String {
+        return "¡Guau!"
+    }
+}
+
+class Gato: Animal {
+    override func hacerSonido() -> String {
+        return "¡Miau!"
+    }
+}
+
+let perro = Perro(nombre: "Rex", raza: "Pastor Alemán")
+let gato = Gato(nombre: "Michi")
+
+print("\(perro.nombre) dice \(perro.hacerSonido())")  // Rex dice ¡Guau!
+print("\(gato.nombre) dice \(gato.hacerSonido())")    // Michi dice ¡Miau!
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Prevenir herencia con final
+
+```swift
+final class Singleton {
+    static let compartido = Singleton()
+    private init() {}  // Previene crear instancias externas
+
+    func ejecutar() {
+        print("Ejecutando singleton")
+    }
+}
+
+// No se puede heredar de una clase final
+// class Hijo: Singleton { }  // Error de compilación
+
+Singleton.compartido.ejecutar()
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Comparación: Struct vs Clase
+
+| Característica | Struct | Clase |
+|---------------|--------|-------|
+| Tipo | Valor | Referencia |
+| Herencia | No | Sí |
+| Inicializador memberwise | Automático | Manual |
+| `mutating` necesario | Sí | No |
+| Deinicializador (`deinit`) | No | Sí |
+| Conteo de referencias (ARC) | No | Sí |
+
+:::tip
+Apple recomienda usar structs por defecto. Usa clases cuando necesites herencia, identidad de referencia, o interoperar con Objective-C.
+:::

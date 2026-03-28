@@ -1,0 +1,109 @@
+---
+title: NavigationStack
+description: How to use NavigationStack in SwiftUI for hierarchical navigation.
+---
+
+`NavigationStack` provides a navigation stack with animated transitions and automatic back buttons.
+
+## Preview
+
+![NavigationStack in SwiftUI](../../../../../assets/swiftui/navigationstack.svg)
+
+## Basic Usage
+
+```swift
+NavigationStack {
+    List {
+        NavigationLink("Profile") {
+            Text("Profile View")
+        }
+        NavigationLink("Settings") {
+            Text("Settings View")
+        }
+    }
+    .navigationTitle("Home")
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## NavigationLink with Data
+
+```swift
+struct Fruit: Identifiable, Hashable {
+    let id = UUID()
+    let name: String
+}
+
+struct FruitsView: View {
+    let fruits = [Fruit(name: "Apple"), Fruit(name: "Banana")]
+
+    var body: some View {
+        NavigationStack {
+            List(fruits) { fruit in
+                NavigationLink(value: fruit) {
+                    Text(fruit.name)
+                }
+            }
+            .navigationTitle("Fruits")
+            .navigationDestination(for: Fruit.self) { fruit in
+                Text("Detail: \(fruit.name)").font(.largeTitle)
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Toolbar
+
+```swift
+NavigationStack {
+    Text("Content")
+        .navigationTitle("My App")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button { } label: { Image(systemName: "plus") }
+            }
+        }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`NavigationStack` replaces `NavigationView` since iOS 16. Always use `NavigationStack` in new projects.
+:::
+
+## Full Example
+
+```swift
+struct SettingsAppView: View {
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Account") {
+                    NavigationLink { Text("Profile") } label: {
+                        Label("Profile", systemImage: "person")
+                    }
+                    NavigationLink { Text("Notifications") } label: {
+                        Label("Notifications", systemImage: "bell")
+                    }
+                }
+                Section("General") {
+                    NavigationLink { Text("Appearance") } label: {
+                        Label("Appearance", systemImage: "paintbrush")
+                    }
+                    NavigationLink { Text("Privacy") } label: {
+                        Label("Privacy", systemImage: "lock")
+                    }
+                }
+            }
+            .navigationTitle("Settings")
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
