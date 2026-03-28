@@ -1,6 +1,6 @@
 ---
 title: ViewModels and MVVM
-description: How to implement the MVVM pattern in SwiftUI with ViewModels, @StateObject, @Observable, and state management.
+description: How to implement the MVVM pattern in SwiftUI with ViewModels, @Observable and modern state management.
 ---
 
 The **MVVM** (Model-View-ViewModel) pattern is the most widely used architecture in SwiftUI apps. It separates business logic (ViewModel) from the interface (View) and data (Model).
@@ -68,107 +68,31 @@ struct CounterView: View {
 With `@Observable`, use `@State` in the view that creates the ViewModel. It's simpler than the previous approach with `@StateObject`.
 :::
 
-## ViewModel with ObservableObject (iOS 14-16)
+## Legacy compatibility (iOS 14-16)
 
-For backward compatibility:
-
-```swift
-class TasksViewModel: ObservableObject {
-    @Published var tasks: [Task] = []
-    @Published var isLoading = false
-    @Published var error: String?
-
-    func loadTasks() {
-        isLoading = true
-        // Simulate loading
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.tasks = [
-                Task(title: "Study Swift", completed: false),
-                Task(title: "Create app", completed: false),
-            ]
-            self.isLoading = false
-        }
-    }
-
-    func toggleTask(_ task: Task) {
-        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[index].completed.toggle()
-        }
-    }
-}
-```
-
-> [Try in Swift Playground →](https://swiftfiddle.com/)
-
-### Connect with the View
-
-```swift
-struct TasksView: View {
-    // @StateObject: creates and owns the ViewModel
-    @StateObject private var vm = TasksViewModel()
-
-    var body: some View {
-        NavigationStack {
-            Group {
-                if vm.isLoading {
-                    ProgressView("Loading...")
-                } else {
-                    List(vm.tasks) { task in
-                        HStack {
-                            Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
-                                .foregroundColor(task.completed ? .green : .gray)
-                            Text(task.title)
-                                .strikethrough(task.completed)
-                        }
-                        .onTapGesture { vm.toggleTask(task) }
-                    }
-                }
-            }
-            .navigationTitle("Tasks")
-            .onAppear { vm.loadTasks() }
-        }
-    }
-}
-```
-
-> [Try in Swift Playground →](https://swiftfiddle.com/)
-
-## @StateObject vs @ObservedObject vs @EnvironmentObject
-
-| Property Wrapper | Usage | Lifecycle |
-|---|---|---|
-| `@StateObject` | View that **creates** the ViewModel | Survives re-renders |
-| `@ObservedObject` | Child view that **receives** the ViewModel | Recreated with the view |
-| `@EnvironmentObject` | Share ViewModel across the entire hierarchy | Global per environment |
-
-```swift
-// Parent view: CREATES the ViewModel
-struct AppView: View {
-    @StateObject private var authVM = AuthViewModel()
-
-    var body: some View {
-        ContentView()
-            .environmentObject(authVM) // Share globally
-    }
-}
-
-// Child view: RECEIVES the ViewModel
-struct ProfileView: View {
-    @EnvironmentObject var authVM: AuthViewModel
-
-    var body: some View {
-        Text("Hello, \(authVM.user?.name ?? "guest")")
-    }
-}
-```
-
-> [Try in Swift Playground →](https://swiftfiddle.com/)
-
-:::caution
-Never use `@ObservedObject` to create a ViewModel. Every time the parent view re-renders, the ViewModel would be destroyed and recreated. Always use `@StateObject` for creation.
+:::note
+If you need to support iOS 14-16, use `ObservableObject` with `@Published` and `@StateObject`. On iOS 17+ always use `@Observable`.
 :::
 
-## @Observable vs ObservableObject
+```swift
+// Only for projects supporting iOS 14-16
+class TasksViewModel: ObservableObject {
+    @Published var tasks: [String] = []
+}
+
+struct TasksView: View {
+    @StateObject private var vm = TasksViewModel()
+    var body: some View { Text("\(vm.tasks.count) tasks") }
+}
+```
+
+:::note[Legacy property wrappers]
+- `@StateObject` — view that **creates** the ViewModel
+- `@ObservedObject` — child view that **receives** the ViewModel
+- `@EnvironmentObject` — share ViewModel across the entire hierarchy
+:::
+
+## @Observable vs ObservableObject (reference)
 
 | Feature | `@Observable` (iOS 17+) | `ObservableObject` (iOS 14+) |
 |---|---|---|
