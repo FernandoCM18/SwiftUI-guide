@@ -1,0 +1,326 @@
+---
+title: Connect an API
+description: How to consume REST APIs in SwiftUI with URLSession, async/await, Codable, and error handling.
+---
+
+Connecting a SwiftUI app to a REST API is one of the most common tasks. Swift provides powerful native tools: `URLSession`, `async/await`, and `Codable`.
+
+## Complete Flow
+
+```
+REST API → URLSession → JSON → Codable (decode) → Model → ViewModel → View
+```
+
+## 1. Define the Model
+
+Use `Codable` to automatically map JSON to Swift structs:
+
+```swift
+// JSON from the API:
+// { "id": 1, "name": "iPhone 16", "price": 999.99, "in_stock": true }
+
+struct Product: Codable, Identifiable {
+    let id: Int
+    let name: String
+    let price: Double
+    let inStock: Bool
+
+    // Map snake_case from JSON to Swift's camelCase
+    enum CodingKeys: String, CodingKey {
+        case id, name, price
+        case inStock = "in_stock"
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+If the API uses `snake_case`, you can avoid manual `CodingKeys` by configuring the decoder: `decoder.keyDecodingStrategy = .convertFromSnakeCase`
+:::
+
+## 2. Create the Network Service
+
+```swift
+enum NetworkError: Error, LocalizedError {
+    case invalidURL
+    case noResponse
+    case decodingFailed
+    case serverError(Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL: return "Invalid URL"
+        case .noResponse: return "No response received from server"
+        case .decodingFailed: return "Error processing data"
+        case .serverError(let code): return "Server error: \(code)"
+        }
+    }
+}
+
+class APIService {
+    static let shared = APIService()
+    private let baseURL = "https://api.example.com"
+
+    func fetch<T: Decodable>(_ endpoint: String) async throws -> T {
+        guard let url = URL(string: "\(baseURL)\(endpoint)") else {
+            throw NetworkError.invalidURL
+        }
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.noResponse
+        }
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.serverError(httpResponse.statusCode)
+        }
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            throw NetworkError.decodingFailed
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## 3. ViewModel with async/await
+
+```swift
+import SwiftUI
+
+@Observable
+class ProductsViewModel {
+    var products: [Product] = []
+    var isLoading = false
+    var errorMessage: String?
+
+    func loadProducts() async {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            products = try await APIService.shared.fetch("/products")
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+
+        isLoading = false
+    }
+
+    func refresh() async {
+        await loadProducts()
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## 4. Connected View
+
+```swift
+struct ProductsView: View {
+    @State private var vm = ProductsViewModel()
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if vm.isLoading {
+                    ProgressView("Loading products...")
+                } else if let error = vm.errorMessage {
+                    ContentUnavailableView {
+                        Label("Error", systemImage: "exclamationmark.triangle")
+                    } description: {
+                        Text(error)
+                    } actions: {
+                        Button("Retry") {
+                            Task { await vm.loadProducts() }
+                        }
+                    }
+                } else {
+                    List(vm.products) { product in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(product.name)
+                                    .font(.headline)
+                                Text(product.inStock ? "In stock" : "Out of stock")
+                                    .font(.caption)
+                                    .foregroundColor(product.inStock ? .green : .red)
+                            }
+                            Spacer()
+                            Text("$\(product.price, specifier: "%.2f")")
+                                .font(.title3)
+                                .bold()
+                        }
+                    }
+                    .refreshable {
+                        await vm.refresh()
+                    }
+                }
+            }
+            .navigationTitle("Products")
+            .task {
+                await vm.loadProducts()
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+Use `.task { }` instead of `.onAppear` for async calls. It automatically cancels when the view disappears.
+:::
+
+## Send Data (POST)
+
+```swift
+extension APIService {
+    func post<T: Codable, R: Decodable>(
+        _ endpoint: String,
+        body: T
+    ) async throws -> R {
+        guard let url = URL(string: "\(baseURL)\(endpoint)") else {
+            throw NetworkError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        request.httpBody = try encoder.encode(body)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.noResponse
+        }
+
+        return try JSONDecoder().decode(R.self, from: data)
+    }
+}
+
+// Usage:
+struct NewProduct: Codable {
+    let name: String
+    let price: Double
+}
+
+let new = NewProduct(name: "iPad", price: 799)
+let created: Product = try await APIService.shared.post("/products", body: new)
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Authentication with Bearer Token
+
+```swift
+extension APIService {
+    func fetchAuthenticated<T: Decodable>(
+        _ endpoint: String,
+        token: String
+    ) async throws -> T {
+        guard let url = URL(string: "\(baseURL)\(endpoint)") else {
+            throw NetworkError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## Real-world example: Weather App
+
+```swift
+// Model
+struct Weather: Codable {
+    let temperature: Double
+    let description: String
+    let icon: String
+
+    enum CodingKeys: String, CodingKey {
+        case temperature = "temp"
+        case description
+        case icon
+    }
+}
+
+// ViewModel
+@Observable
+class WeatherViewModel {
+    var weather: Weather?
+    var isLoading = false
+    var error: String?
+
+    func getWeather(city: String) async {
+        isLoading = true
+        error = nil
+
+        do {
+            let endpoint = "/weather?city=\(city.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? city)"
+            weather = try await APIService.shared.fetch(endpoint)
+        } catch {
+            self.error = error.localizedDescription
+        }
+
+        isLoading = false
+    }
+}
+
+// View
+struct WeatherView: View {
+    @State private var vm = WeatherViewModel()
+    @State private var city = "Madrid"
+
+    var body: some View {
+        VStack(spacing: 20) {
+            TextField("City", text: $city)
+                .textFieldStyle(.roundedBorder)
+                .submitLabel(.search)
+                .onSubmit {
+                    Task { await vm.getWeather(city: city) }
+                }
+
+            if vm.isLoading {
+                ProgressView()
+            } else if let weather = vm.weather {
+                VStack {
+                    Text("\(weather.temperature, specifier: "%.1f")°C")
+                        .font(.system(size: 64, weight: .thin))
+                    Text(weather.description)
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                }
+            } else if let error = vm.error {
+                Text(error)
+                    .foregroundColor(.red)
+            }
+        }
+        .padding()
+        .task { await vm.getWeather(city: city) }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Never include API keys directly in your code. Use environment variables, configuration files excluded from the repository, or services like CloudKit to store secrets.
+:::

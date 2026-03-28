@@ -1,0 +1,245 @@
+---
+title: Assets, Imágenes y Colores
+description: Cómo agregar y gestionar assets, imágenes, colores, SF Symbols e iconos en un proyecto SwiftUI.
+---
+
+Los **assets** (recursos) son los archivos visuales de tu app: imágenes, colores, iconos y más. Xcode organiza estos recursos en un **Asset Catalog** (`.xcassets`).
+
+## Asset Catalog
+
+Cada proyecto Xcode incluye un `Assets.xcassets` donde puedes agregar:
+
+- **Imágenes** (PNG, JPEG, PDF, SVG)
+- **Colores** personalizados
+- **App Icons** (icono de la app)
+- **Símbolos** personalizados
+
+### Agregar una imagen
+
+1. Abre `Assets.xcassets` en Xcode
+2. Arrastra la imagen o haz clic en `+` → `Image Set`
+3. Proporciona versiones para diferentes escalas:
+
+```
+MiImagen/
+├── @1x  → 100x100px  (iPhone antiguo)
+├── @2x  → 200x200px  (Retina)
+└── @3x  → 300x300px  (Super Retina)
+```
+
+### Usar la imagen en SwiftUI
+
+```swift
+// Imagen del Asset Catalog
+Image("MiImagen")
+    .resizable()
+    .aspectRatio(contentMode: .fit)
+    .frame(width: 200, height: 200)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## SF Symbols (iconos del sistema)
+
+Apple proporciona más de 5,000 iconos gratuitos con **SF Symbols**. Son vectoriales, se adaptan al tamaño del texto y soportan colores múltiples.
+
+```swift
+// Icono básico
+Image(systemName: "heart.fill")
+
+// Con tamaño
+Image(systemName: "star.fill")
+    .font(.largeTitle)
+
+// Con color
+Image(systemName: "bell.badge.fill")
+    .foregroundStyle(.blue, .red)
+    .font(.title)
+
+// Multi-color
+Image(systemName: "externaldrive.badge.checkmark")
+    .symbolRenderingMode(.multicolor)
+    .font(.largeTitle)
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Buscar SF Symbols
+
+Descarga la app gratuita **SF Symbols** de Apple para explorar todos los iconos disponibles. Algunos nombres comunes:
+
+| Icono | Nombre |
+|---|---|
+| Casa | `house.fill` |
+| Persona | `person.fill` |
+| Engranaje | `gearshape.fill` |
+| Corazón | `heart.fill` |
+| Estrella | `star.fill` |
+| Campana | `bell.fill` |
+| Buscar | `magnifyingglass` |
+| Más | `plus` |
+| Basura | `trash` |
+| Compartir | `square.and.arrow.up` |
+
+:::tip
+Usa `Label("Texto", systemImage: "nombre.icono")` para combinar texto e icono de forma semántica. SwiftUI adapta automáticamente la presentación según el contexto.
+:::
+
+## Colores personalizados
+
+### Definir en Asset Catalog
+
+1. En `Assets.xcassets`, haz clic en `+` → `Color Set`
+2. Define colores para modo claro y oscuro:
+
+```
+MiColor/
+├── Any Appearance  → #007AFF (azul)
+├── Dark Appearance → #0A84FF (azul claro)
+└── High Contrast   → (opcional)
+```
+
+### Usar en SwiftUI
+
+```swift
+// Color del Asset Catalog
+Text("Hola")
+    .foregroundColor(Color("MiColor"))
+
+// Colores del sistema (se adaptan automáticamente a modo oscuro)
+Text("Sistema")
+    .foregroundColor(.primary)    // Negro/Blanco según modo
+    .background(Color(.systemBackground)) // Fondo del sistema
+
+// Color personalizado en código
+let miAzul = Color(red: 0.0, green: 0.48, blue: 1.0)
+let miColor = Color(hex: "#FF5733") // Necesita extensión
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+### Extensión para colores hexadecimales
+
+```swift
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: .init(charactersIn: "#"))
+        let scanner = Scanner(string: hex)
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+
+        self.init(
+            red: Double((rgb >> 16) & 0xFF) / 255,
+            green: Double((rgb >> 8) & 0xFF) / 255,
+            blue: Double(rgb & 0xFF) / 255
+        )
+    }
+}
+
+// Uso
+let rojo = Color(hex: "#FF3B30")
+let verde = Color(hex: "#34C759")
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Colores semánticos de Apple
+
+SwiftUI incluye colores que se adaptan automáticamente al modo oscuro:
+
+| Color | Modo claro | Modo oscuro |
+|---|---|---|
+| `.primary` | Negro | Blanco |
+| `.secondary` | Gris oscuro | Gris claro |
+| `Color(.systemBackground)` | Blanco | Negro |
+| `Color(.secondarySystemBackground)` | Gris claro | Gris oscuro |
+| `.accentColor` | Azul (configurable) | Azul (configurable) |
+
+:::tip
+Prefiere colores semánticos (`primary`, `secondary`, `systemBackground`) sobre colores fijos. Se adaptan automáticamente al modo oscuro sin código adicional.
+:::
+
+## App Icon
+
+El icono de la app se configura en `Assets.xcassets` → `AppIcon`:
+
+1. Crea una imagen de **1024x1024px** (PNG, sin transparencia)
+2. Xcode genera automáticamente todos los tamaños necesarios
+3. En iOS 18+, puedes ofrecer iconos alternativos con tinte automático
+
+```swift
+// Cambiar icono programáticamente (si hay alternativas)
+UIApplication.shared.setAlternateIconName("IconoAlternativo") { error in
+    if let error {
+        print("Error: \(error)")
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Imágenes desde URL
+
+```swift
+// AsyncImage carga imágenes de internet
+AsyncImage(url: URL(string: "https://ejemplo.com/foto.jpg")) { phase in
+    switch phase {
+    case .empty:
+        ProgressView()
+    case .success(let image):
+        image
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+    case .failure:
+        Image(systemName: "photo")
+            .foregroundColor(.gray)
+    @unknown default:
+        EmptyView()
+    }
+}
+.frame(width: 200, height: 200)
+.clipShape(RoundedRectangle(cornerRadius: 12))
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Ejemplo completo: Galería con assets
+
+```swift
+struct GaleriaView: View {
+    let fotos = ["paisaje", "ciudad", "playa", "montaña"]
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                LazyVGrid(columns: [
+                    GridItem(.flexible()),
+                    GridItem(.flexible())
+                ], spacing: 12) {
+                    ForEach(fotos, id: \.self) { foto in
+                        Image(foto) // Del Asset Catalog
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 150)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(alignment: .bottomLeading) {
+                                Text(foto.capitalized)
+                                    .font(.caption)
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .padding(8)
+                                    .background(.ultraThinMaterial)
+                                    .cornerRadius(6)
+                                    .padding(8)
+                            }
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("Galería")
+        }
+    }
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)

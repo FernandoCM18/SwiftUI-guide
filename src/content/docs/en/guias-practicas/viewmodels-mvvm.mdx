@@ -1,0 +1,281 @@
+---
+title: ViewModels and MVVM
+description: How to implement the MVVM pattern in SwiftUI with ViewModels, @StateObject, @Observable, and state management.
+---
+
+The **MVVM** (Model-View-ViewModel) pattern is the most widely used architecture in SwiftUI apps. It separates business logic (ViewModel) from the interface (View) and data (Model).
+
+## MVVM Structure
+
+```
+View       → What the user sees (SwiftUI Views)
+ViewModel  → Business logic and state
+Model      → Data and structures
+```
+
+## ViewModel with @Observable (iOS 17+, recommended)
+
+Since iOS 17, Apple recommends using the `@Observable` macro instead of `ObservableObject`:
+
+```swift
+import SwiftUI
+
+@Observable
+class CounterViewModel {
+    var value = 0
+    var history: [Int] = []
+
+    func increment() {
+        value += 1
+        history.append(value)
+    }
+
+    func reset() {
+        value = 0
+        history.removeAll()
+    }
+}
+
+struct CounterView: View {
+    @State private var vm = CounterViewModel()
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("\(vm.value)")
+                .font(.system(size: 72, weight: .bold))
+
+            HStack(spacing: 16) {
+                Button("Reset") { vm.reset() }
+                    .buttonStyle(.bordered)
+
+                Button("Add") { vm.increment() }
+                    .buttonStyle(.borderedProminent)
+            }
+
+            if !vm.history.isEmpty {
+                Text("History: \(vm.history.map(String.init).joined(separator: ", "))")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+With `@Observable`, use `@State` in the view that creates the ViewModel. It's simpler than the previous approach with `@StateObject`.
+:::
+
+## ViewModel with ObservableObject (iOS 14-16)
+
+For backward compatibility:
+
+```swift
+class TasksViewModel: ObservableObject {
+    @Published var tasks: [Task] = []
+    @Published var isLoading = false
+    @Published var error: String?
+
+    func loadTasks() {
+        isLoading = true
+        // Simulate loading
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.tasks = [
+                Task(title: "Study Swift", completed: false),
+                Task(title: "Create app", completed: false),
+            ]
+            self.isLoading = false
+        }
+    }
+
+    func toggleTask(_ task: Task) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index].completed.toggle()
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+### Connect with the View
+
+```swift
+struct TasksView: View {
+    // @StateObject: creates and owns the ViewModel
+    @StateObject private var vm = TasksViewModel()
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if vm.isLoading {
+                    ProgressView("Loading...")
+                } else {
+                    List(vm.tasks) { task in
+                        HStack {
+                            Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
+                                .foregroundColor(task.completed ? .green : .gray)
+                            Text(task.title)
+                                .strikethrough(task.completed)
+                        }
+                        .onTapGesture { vm.toggleTask(task) }
+                    }
+                }
+            }
+            .navigationTitle("Tasks")
+            .onAppear { vm.loadTasks() }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## @StateObject vs @ObservedObject vs @EnvironmentObject
+
+| Property Wrapper | Usage | Lifecycle |
+|---|---|---|
+| `@StateObject` | View that **creates** the ViewModel | Survives re-renders |
+| `@ObservedObject` | Child view that **receives** the ViewModel | Recreated with the view |
+| `@EnvironmentObject` | Share ViewModel across the entire hierarchy | Global per environment |
+
+```swift
+// Parent view: CREATES the ViewModel
+struct AppView: View {
+    @StateObject private var authVM = AuthViewModel()
+
+    var body: some View {
+        ContentView()
+            .environmentObject(authVM) // Share globally
+    }
+}
+
+// Child view: RECEIVES the ViewModel
+struct ProfileView: View {
+    @EnvironmentObject var authVM: AuthViewModel
+
+    var body: some View {
+        Text("Hello, \(authVM.user?.name ?? "guest")")
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::caution
+Never use `@ObservedObject` to create a ViewModel. Every time the parent view re-renders, the ViewModel would be destroyed and recreated. Always use `@StateObject` for creation.
+:::
+
+## @Observable vs ObservableObject
+
+| Feature | `@Observable` (iOS 17+) | `ObservableObject` (iOS 14+) |
+|---|---|---|
+| Declaration | `@Observable class VM` | `class VM: ObservableObject` |
+| Properties | Automatic | Need `@Published` |
+| In the view | `@State` | `@StateObject` |
+| Performance | Granular per-property tracking | Re-render on any change |
+| Complexity | Lower | Higher |
+
+:::tip
+If your app supports iOS 17+, use `@Observable`. It's simpler, more efficient, and requires less boilerplate code.
+:::
+
+## Complete example: Notes app with MVVM
+
+### Model
+
+```swift
+struct Note: Identifiable, Codable {
+    let id: UUID
+    var title: String
+    var content: String
+    var date: Date
+
+    init(title: String, content: String) {
+        self.id = UUID()
+        self.title = title
+        self.content = content
+        self.date = Date()
+    }
+}
+```
+
+### ViewModel
+
+```swift
+@Observable
+class NotesViewModel {
+    var notes: [Note] = []
+    var selectedNote: Note?
+    var searchText = ""
+
+    var filteredNotes: [Note] {
+        if searchText.isEmpty { return notes }
+        return notes.filter {
+            $0.title.localizedCaseInsensitiveContains(searchText) ||
+            $0.content.localizedCaseInsensitiveContains(searchText)
+        }
+    }
+
+    func add(title: String, content: String) {
+        let note = Note(title: title, content: content)
+        notes.insert(note, at: 0)
+    }
+
+    func delete(at offsets: IndexSet) {
+        notes.remove(atOffsets: offsets)
+    }
+
+    func update(_ note: Note, title: String, content: String) {
+        if let index = notes.firstIndex(where: { $0.id == note.id }) {
+            notes[index].title = title
+            notes[index].content = content
+        }
+    }
+}
+```
+
+### View
+
+```swift
+struct NotesAppView: View {
+    @State private var vm = NotesViewModel()
+    @State private var showForm = false
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(vm.filteredNotes) { note in
+                    NavigationLink {
+                        NoteDetailView(vm: vm, note: note)
+                    } label: {
+                        VStack(alignment: .leading) {
+                            Text(note.title)
+                                .font(.headline)
+                            Text(note.content)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                        }
+                    }
+                }
+                .onDelete { vm.delete(at: $0) }
+            }
+            .navigationTitle("Notes")
+            .searchable(text: $vm.searchText)
+            .toolbar {
+                Button { showForm = true } label: {
+                    Image(systemName: "plus")
+                }
+            }
+            .sheet(isPresented: $showForm) {
+                NewNoteView(vm: vm)
+            }
+        }
+    }
+}
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
