@@ -1,0 +1,140 @@
+---
+title: PhaseAnimator
+description: Create animation sequences in SwiftUI with PhaseAnimator — automatically cycle through discrete states with smooth animations.
+---
+
+`PhaseAnimator` (iOS 17+) animates a view through a sequence of phases defined by an enum. Ideal for looping animations or sequences with discrete steps.
+
+## Basic structure
+
+```swift
+import SwiftUI
+
+enum BouncePhase: CaseIterable {
+    case normal, up, down
+}
+
+struct PhaseExample: View {
+    var body: some View {
+        PhaseAnimator(BouncePhase.allCases) { phase in
+            Image(systemName: "basketball.fill")
+                .font(.system(size: 60))
+                .foregroundStyle(.orange)
+                .offset(y: offsetFor(phase))
+                .scaleEffect(scaleFor(phase))
+        } animation: { phase in
+            switch phase {
+            case .normal: .spring(duration: 0.3)
+            case .up: .easeOut(duration: 0.4)
+            case .down: .easeIn(duration: 0.3)
+            }
+        }
+    }
+
+    func offsetFor(_ phase: BouncePhase) -> CGFloat {
+        switch phase {
+        case .normal: 0
+        case .up: -80
+        case .down: 20
+        }
+    }
+
+    func scaleFor(_ phase: BouncePhase) -> CGFloat {
+        switch phase {
+        case .normal: 1.0
+        case .up: 0.9
+        case .down: 1.1
+        }
+    }
+}
+
+#Preview { PhaseExample() }
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+:::tip
+`PhaseAnimator` automatically cycles through all phases in a loop. Each phase can have its own animation curve.
+:::
+
+## Manual trigger
+
+To control when the sequence starts, use the `trigger` parameter:
+
+```swift
+import SwiftUI
+
+enum LoadPhase: CaseIterable {
+    case idle, loading, completed
+}
+
+struct LoadButton: View {
+    @State private var trigger = false
+
+    var body: some View {
+        PhaseAnimator(
+            LoadPhase.allCases,
+            trigger: trigger  // Only animates when trigger changes
+        ) { phase in
+            Button {
+                trigger.toggle()
+            } label: {
+                HStack {
+                    iconFor(phase)
+                    Text(labelFor(phase))
+                        .fontWeight(.semibold)
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(.blue)
+                .foregroundStyle(.white)
+                .clipShape(.capsule)
+            }
+            .buttonStyle(.plain)
+            .scaleEffect(phase == .loading ? 0.95 : 1.0)
+        } animation: { phase in
+            switch phase {
+            case .idle: .smooth(duration: 0.3)
+            case .loading: .linear(duration: 0.5).repeatCount(3)
+            case .completed: .spring(duration: 0.4)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func iconFor(_ phase: LoadPhase) -> some View {
+        switch phase {
+        case .idle:
+            Image(systemName: "arrow.up.circle")
+        case .loading:
+            ProgressView().tint(.white).scaleEffect(0.8)
+        case .completed:
+            Image(systemName: "checkmark.circle.fill")
+        }
+    }
+
+    func labelFor(_ phase: LoadPhase) -> String {
+        switch phase {
+        case .idle: "Upload file"
+        case .loading: "Uploading..."
+        case .completed: "Done!"
+        }
+    }
+}
+
+#Preview { LoadButton() }
+```
+
+> [Try in Swift Playground →](https://swiftfiddle.com/)
+
+## PhaseAnimator vs keyframeAnimator
+
+| | `PhaseAnimator` | `keyframeAnimator` |
+|---|---|---|
+| Phases | Discrete states (enum) | Keyframes by time |
+| Control | Per phase | Per individual property |
+| Loop | Automatic | Only with trigger |
+| Best for | State sequences | Precise property animations |
+| Complexity | Lower | Higher |
+
+Use `PhaseAnimator` when your animation has distinct logical steps. Use `keyframeAnimator` when you need to control multiple properties with precise timing.

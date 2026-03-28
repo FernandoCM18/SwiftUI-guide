@@ -96,6 +96,14 @@ export default defineConfig({
                 { slug: 'swiftui/efectos/liquid-glass' },
               ],
             },
+            {
+              label: 'Animaciones',
+              translations: { en: 'Animations' },
+              items: [
+                { slug: 'swiftui/animaciones/keyframe' },
+                { slug: 'swiftui/animaciones/phase-animator' },
+              ],
+            },
           ],
         },
 {

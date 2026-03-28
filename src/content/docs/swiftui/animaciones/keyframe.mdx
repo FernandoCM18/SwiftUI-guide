@@ -1,0 +1,131 @@
+---
+title: keyframeAnimator
+description: Crea animaciones complejas en SwiftUI con keyframeAnimator — controla offset, escala, opacidad y rotación de forma independiente.
+---
+
+`keyframeAnimator` (iOS 17+) permite definir animaciones con fotogramas clave donde cada propiedad tiene su propia curva de animación independiente.
+
+## Estructura básica
+
+```swift
+import SwiftUI
+
+struct EjemploKeyframe: View {
+    @State private var animar = false
+
+    var body: some View {
+        Image(systemName: "star.fill")
+            .font(.system(size: 60))
+            .foregroundStyle(.yellow)
+            .keyframeAnimator(
+                initialValue: PropiedadesAnimacion(),
+                trigger: animar
+            ) { contenido, valor in
+                contenido
+                    .scaleEffect(valor.escala)
+                    .offset(y: valor.offsetY)
+                    .opacity(valor.opacidad)
+            } keyframes: { _ in
+                KeyframeTrack(\.escala) {
+                    LinearKeyframe(1.0, duration: 0.1)
+                    SpringKeyframe(1.5, duration: 0.3)
+                    SpringKeyframe(1.0, duration: 0.3)
+                }
+                KeyframeTrack(\.offsetY) {
+                    LinearKeyframe(0, duration: 0.1)
+                    SpringKeyframe(-30, duration: 0.3)
+                    SpringKeyframe(0, duration: 0.3)
+                }
+                KeyframeTrack(\.opacidad) {
+                    LinearKeyframe(1.0, duration: 0.5)
+                    LinearKeyframe(0.7, duration: 0.2)
+                    LinearKeyframe(1.0, duration: 0.1)
+                }
+            }
+            .onTapGesture { animar.toggle() }
+    }
+}
+
+struct PropiedadesAnimacion {
+    var escala: CGFloat = 1.0
+    var offsetY: CGFloat = 0
+    var opacidad: Double = 1.0
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## KeyframeTrack
+
+Cada `KeyframeTrack` controla una propiedad usando su keyPath. Dentro del track defines los fotogramas clave:
+
+| Tipo de keyframe | Comportamiento |
+|---|---|
+| `LinearKeyframe` | Interpolación lineal hasta el valor |
+| `SpringKeyframe` | Animación con resorte (rebote natural) |
+| `CubicKeyframe` | Curva cúbica suave (Bézier) |
+| `MoveKeyframe` | Salta al valor sin animación |
+
+```swift
+KeyframeTrack(\.escala) {
+    LinearKeyframe(1.0, duration: 0.05)   // Sin animación inicial
+    SpringKeyframe(2.0, duration: 0.4)    // Escala con resorte
+    CubicKeyframe(1.2, duration: 0.3)     // Baja suavemente
+    SpringKeyframe(1.0, duration: 0.2)    // Vuelve al normal
+}
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
+
+## Ejemplo completo: botón de like animado
+
+```swift
+import SwiftUI
+
+struct LikeButton: View {
+    @State private var estaDandoLike = false
+    @State private var disparar = false
+
+    var body: some View {
+        Button {
+            estaDandoLike.toggle()
+            disparar.toggle()
+        } label: {
+            Image(systemName: estaDandoLike ? "heart.fill" : "heart")
+                .font(.system(size: 44))
+                .foregroundStyle(estaDandoLike ? .red : .gray)
+                .keyframeAnimator(
+                    initialValue: ValoresLike(),
+                    trigger: disparar
+                ) { vista, valor in
+                    vista
+                        .scaleEffect(valor.escala)
+                        .rotationEffect(.degrees(valor.rotacion))
+                } keyframes: { _ in
+                    KeyframeTrack(\.escala) {
+                        MoveKeyframe(1.0)
+                        SpringKeyframe(1.4, duration: 0.2, spring: .bouncy)
+                        SpringKeyframe(1.0, duration: 0.3, spring: .smooth)
+                    }
+                    KeyframeTrack(\.rotacion) {
+                        MoveKeyframe(0)
+                        LinearKeyframe(-8, duration: 0.1)
+                        LinearKeyframe(8, duration: 0.1)
+                        LinearKeyframe(-4, duration: 0.1)
+                        SpringKeyframe(0, duration: 0.2)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct ValoresLike {
+    var escala: CGFloat = 1.0
+    var rotacion: Double = 0
+}
+
+#Preview { LikeButton() }
+```
+
+> [Probar en Swift Playground →](https://swiftfiddle.com/)
