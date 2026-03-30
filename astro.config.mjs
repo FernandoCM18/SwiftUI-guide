@@ -15,6 +15,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Guía Swift & SwiftUI',
+      customCss: ['./src/styles/code-appearance.css'],
       lastUpdated: true,
       head: [
         { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
