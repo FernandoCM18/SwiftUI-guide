@@ -3,6 +3,9 @@ title: Introduction to Swift
 description: Overview of the Swift programming language, its features, and why it is the foundation for Apple development.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
 ## What is Swift?
 
 Swift is a powerful, intuitive programming language created by Apple for building apps on iOS, macOS, watchOS, and tvOS. It was introduced in 2014 and has since become the standard language for Apple platform development.
@@ -30,7 +33,7 @@ let version = 5
 print("Welcome to \(language) \(version)!")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Swift is Compiled and Type-Safe
 
@@ -48,7 +51,7 @@ let result = greeting + " " + String(year)  // Correct
 print(result)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Swift REPL and Playgrounds
 
@@ -69,7 +72,7 @@ let sum = numbers.reduce(0, +)
 print(sum)  // 15
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use Swift Playgrounds or SwiftFiddle to practice the examples throughout this guide. Experimentation is the best way to learn!
@@ -79,13 +82,15 @@ Use Swift Playgrounds or SwiftFiddle to practice the examples throughout this gu
 
 This Swift section covers the core language features:
 
-1. **Variables and Constants** - Storing and managing values
-2. **Data Types** - The building blocks of Swift
-3. **Control Flow** - Making decisions and repeating code
-4. **Functions** - Reusable blocks of code
-5. **Structs and Classes** - Custom data types
-6. **Optionals** - Handling the absence of values
-7. **Protocols** - Defining interfaces and contracts
-8. **Enumerations** - Modeling a group of related values
+<CardGrid>
+  <LinkCard title="Variables and Constants" href="./variables-y-constantes/" description="Declaration with `let` and `var`, type inference and annotations." />
+  <LinkCard title="Data Types" href="./tipos-de-datos/" description="Int, Double, String, Bool, Array, Dictionary, Set and Tuple." />
+  <LinkCard title="Control Flow" href="./flujo-de-control/" description="if/else, switch, for-in, while, guard." />
+  <LinkCard title="Functions" href="./funciones/" description="Declaration, parameters, return values and closures." />
+  <LinkCard title="Structs and Classes" href="./structs-y-clases/" description="Value vs reference types, properties and methods." />
+  <LinkCard title="Optionals" href="./opcionales/" description="Optional binding, nil coalescing and optional chaining." />
+  <LinkCard title="Protocols" href="./protocolos/" description="Declaration, conformance and protocol-oriented programming." />
+  <LinkCard title="Enumerations" href="./enumeraciones/" description="Raw values, associated values and CaseIterable." />
+</CardGrid>
 
 Each topic builds on the previous ones, so we recommend following them in order.

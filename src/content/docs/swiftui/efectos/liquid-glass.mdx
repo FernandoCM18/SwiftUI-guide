@@ -3,6 +3,8 @@ title: Liquid Glass
 description: El nuevo lenguaje visual de Apple en iOS 26 y macOS 26 — materiales translúcidos, efectos de cristal y blur nativo en SwiftUI.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 **Liquid Glass** es el nuevo lenguaje visual de Apple presentado en WWDC 2025 con iOS 26 y macOS 26. Los elementos de la interfaz adoptan un aspecto de cristal translúcido que refleja y refracta el contenido detrás de ellos.
 
 ## Materiales
@@ -40,7 +42,7 @@ struct TarjetaGlass: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Jerarquía de materiales
 
@@ -88,7 +90,7 @@ struct BotonGlass: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `.glassBackgroundEffect()` está disponible desde iOS 26 / macOS 26. Para versiones anteriores, usa `.background(.regularMaterial)` como fallback.
@@ -131,7 +133,7 @@ struct PanelGlass: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Ejemplo completo: Dashboard con Liquid Glass
 
@@ -202,4 +204,4 @@ struct EstadisticaCard: View {
 #Preview { DashboardView() }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

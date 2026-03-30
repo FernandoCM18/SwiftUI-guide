@@ -3,6 +3,8 @@ title: Flujo de Control
 description: Aprende las estructuras de control en Swift, incluyendo if/else, switch, for-in, while y guard.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Estructuras de control
 
 Las estructuras de control permiten dirigir el flujo de ejecución de tu programa. Swift ofrece todas las estructuras clásicas con mejoras modernas como el pattern matching.
@@ -25,7 +27,7 @@ if temperatura > 30 {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Condiciones múltiples
 
@@ -50,7 +52,7 @@ if esEstudiante || esMayorDe65 {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Sentencia switch
 
@@ -73,7 +75,7 @@ default:
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Pattern matching con rangos
 
@@ -96,7 +98,7 @@ default:
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Pattern matching con tuplas
 
@@ -117,7 +119,7 @@ default:
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Value binding en switch
 
@@ -136,7 +138,7 @@ case let (x, y):
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Bucle for-in
 
@@ -171,7 +173,7 @@ for (nombre, edad) in edades {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Usar stride para pasos personalizados
 
@@ -187,7 +189,7 @@ for numero in stride(from: 10, through: 0, by: -2) {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Ignorar el valor del iterador
 
@@ -200,7 +202,7 @@ for _ in 1...10 {
 print("2^10 = \(potencia)")  // 1024
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Bucle while
 
@@ -215,7 +217,7 @@ while contador > 0 {
 print("¡Despegue!")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Bucle repeat-while
 
@@ -231,7 +233,7 @@ repeat {
 print("Total de intentos: \(intentos)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Guard
 
@@ -255,7 +257,7 @@ verificarEdad(25)   // "Edad válida: 25 años. Bienvenido."
 verificarEdad(150)  // "Edad no válida"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa `guard` para validar condiciones al inicio de una función. Esto reduce la anidación y hace el código más legible, mostrando claramente el "camino feliz".
@@ -281,7 +283,7 @@ for i in 1...10 {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Resumen
 

@@ -3,6 +3,8 @@ title: Structs and Classes
 description: Understand the differences between structs and classes in Swift, including value vs reference semantics, properties, methods, and inheritance.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Custom Data Types
 
 Structs and classes are the building blocks for your app's data models. They share many features but have important differences.
@@ -28,7 +30,7 @@ print(origin.x)  // 0 (unchanged)
 print(copy.x)    // 99
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Defining a Class
 
@@ -58,7 +60,7 @@ sameDog.name = "Buddy"
 print(dog.name)  // "Buddy" (changed!)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 With classes, assigning to a new variable does not create a copy. Both variables refer to the same object. Be mindful of unintended shared state.
@@ -100,7 +102,7 @@ print(rect.width)   // 10.0
 print(rect.height)  // 10.0
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Property Observers
 
@@ -130,7 +132,7 @@ counter.totalSteps = 250
 // "Added 150 steps"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Methods
 
@@ -160,7 +162,7 @@ calc.multiply(by: 3)
 calc.display()  // "Result: 30.0"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::note
 Struct methods that modify properties must be marked with `mutating`. Classes do not need this because they are reference types.
@@ -182,7 +184,7 @@ print(MathConstants.pi)                       // 3.14159...
 print(MathConstants.circleArea(radius: 5))    // 78.539...
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Initializers
 
@@ -217,7 +219,7 @@ let gray = Color(gray: 0.5)
 let white = Color.white
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Inheritance (Classes Only)
 
@@ -256,7 +258,7 @@ print(tesla.describe())
 // "Traveling at 120.0 km/h in gear 4, battery at 85.0%"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## When to Use Struct vs Class
 
@@ -289,7 +291,7 @@ print(person1 === person2)  // true (same instance)
 print(person1 === person3)  // false (different instances)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Summary
 

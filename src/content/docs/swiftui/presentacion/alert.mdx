@@ -3,6 +3,8 @@ title: Alert
 description: Cómo usar el modificador .alert en SwiftUI para mostrar diálogos de alerta.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 El modificador `.alert` muestra un diálogo de alerta sobre el contenido actual. Es útil para confirmar acciones importantes o notificar al usuario.
 
 ## Vista previa
@@ -31,7 +33,7 @@ struct AlertEjemplo: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Alerta simple
 
@@ -41,7 +43,7 @@ struct AlertEjemplo: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Alerta con TextField
 
@@ -59,7 +61,7 @@ Button("Cambiar nombre") { mostrar = true }
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Alerta con datos
 
@@ -81,7 +83,7 @@ struct Error: Identifiable {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Las alertas interrumpen el flujo del usuario. Úsalas solo para acciones importantes o irreversibles. Para notificaciones informativas, considera usar un banner o toast.
@@ -135,4 +137,4 @@ struct ListaTareasView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

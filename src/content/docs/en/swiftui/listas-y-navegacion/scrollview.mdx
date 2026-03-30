@@ -3,6 +3,8 @@ title: ScrollView
 description: How to use ScrollView in SwiftUI to create scrollable content.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `ScrollView` creates scrollable areas when content exceeds the available space.
 
 ## Preview
@@ -26,7 +28,7 @@ ScrollView {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Horizontal
 
@@ -44,7 +46,7 @@ ScrollView(.horizontal, showsIndicators: false) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## ScrollViewReader
 
@@ -66,7 +68,7 @@ ScrollViewReader { proxy in
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use `LazyVStack` or `LazyHStack` inside `ScrollView` for better performance with many elements.
@@ -103,4 +105,4 @@ struct GalleryView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

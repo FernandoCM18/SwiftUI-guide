@@ -6,28 +6,22 @@ hero:
   tagline: Aprende Swift y SwiftUI desde cero con ejemplos prácticos y visuales.
   actions:
     - text: Empezar con Swift
-      link: /swift/
+      link: ./swift/
       icon: right-arrow
     - text: Explorar SwiftUI
-      link: /swiftui/
+      link: ./swiftui/
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 ## Bienvenido a la Guía Swift y SwiftUI
 
 Esta documentación cubre todo lo que necesitas para construir aplicaciones modernas con el ecosistema Apple. Desde los fundamentos del lenguaje Swift hasta interfaces de usuario declarativas con SwiftUI.
 
 <CardGrid>
-  <Card title="Swift" icon="seti:swift">
-    Aprende los fundamentos del lenguaje Swift: variables, tipos de datos, funciones, structs, clases, protocolos y más.
-    [Comenzar →](/swift/)
-  </Card>
-  <Card title="SwiftUI" icon="laptop">
-    Construye interfaces de usuario declarativas con vistas, controles, layouts, listas, navegación y presentación.
-    [Explorar →](/swiftui/)
-  </Card>
+  <LinkCard title="Swift" href="./swift/" description="Aprende los fundamentos del lenguaje Swift: variables, tipos de datos, funciones, structs, clases, protocolos y más." />
+  <LinkCard title="SwiftUI" href="./swiftui/" description="Construye interfaces de usuario declarativas con vistas, controles, layouts, listas, navegación y presentación." />
 </CardGrid>
 
 ## ¿Por qué esta guía?

@@ -3,6 +3,8 @@ title: HStack
 description: Cómo usar HStack en SwiftUI para organizar vistas horizontalmente.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `HStack` (Horizontal Stack) organiza sus vistas hijas en una fila horizontal, de izquierda a derecha.
 
 ## Vista previa
@@ -21,7 +23,7 @@ HStack {
 .padding()
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Espaciado y alineación
 
@@ -41,7 +43,7 @@ HStack(alignment: .top) {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 Opciones de alineación vertical:
 - `.top` — Alinea arriba
@@ -61,7 +63,7 @@ HStack {
 .padding()
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa `Spacer()` entre elementos para distribuir el espacio disponible. Varios `Spacer` dividen el espacio equitativamente.
@@ -119,4 +121,4 @@ struct TarjetaProductoView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

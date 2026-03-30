@@ -3,6 +3,8 @@ title: "@Observable"
 description: El framework Observation de Swift — gestión de estado moderna en SwiftUI con @Observable, @State y @Environment.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 El framework **Observation** (iOS 17+) reemplaza `ObservableObject` con el macro `@Observable`. Es más simple, más eficiente y requiere menos código.
 
 ## @Observable
@@ -30,7 +32,7 @@ class ContadorViewModel {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 A diferencia de `ObservableObject`, no necesitas marcar cada propiedad con `@Published`. El macro instrumenta todas las propiedades almacenadas automáticamente.
 
@@ -68,7 +70,7 @@ struct ContadorView: View {
 #Preview { ContadorView() }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Con `@Observable`, usa `@State` (no `@StateObject`) para crear el ViewModel. SwiftUI recrea la vista si es necesario, pero el `@State` preserva el ViewModel.
@@ -101,7 +103,7 @@ struct HistorialView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## @Environment con @Observable
 
@@ -149,7 +151,7 @@ struct PerfilView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Propiedades ignoradas
 
@@ -166,7 +168,7 @@ class ConfiguracionViewModel {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## @Observable vs ObservableObject
 

@@ -3,6 +3,8 @@ title: TabView
 description: Cómo usar TabView en SwiftUI para crear navegación con pestañas.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `TabView` organiza el contenido en pestañas, mostrando una barra de pestañas en la parte inferior de la pantalla. Es el patrón de navegación principal en muchas apps de iOS.
 
 ## Vista previa
@@ -30,7 +32,7 @@ TabView {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Selección programática
 
@@ -62,7 +64,7 @@ struct AppPrincipal: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Badges (insignias)
 
@@ -80,7 +82,7 @@ Text("Correo")
     .badge("Nuevo")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## TabView como paginador
 
@@ -94,7 +96,7 @@ TabView {
 .indexViewStyle(.page(backgroundDisplayMode: .always))
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa `TabView` como contenedor raíz de tu app. Cada pestaña puede contener su propio `NavigationStack` independiente.
@@ -164,4 +166,4 @@ struct MiAppView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

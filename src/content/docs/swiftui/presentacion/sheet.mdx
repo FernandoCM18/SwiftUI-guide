@@ -3,6 +3,8 @@ title: Sheet
 description: Cómo usar sheet y fullScreenCover en SwiftUI para presentar vistas modales.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 El modificador `.sheet` presenta una vista modal que se desliza desde la parte inferior de la pantalla. Es ideal para formularios, configuraciones o contenido secundario.
 
 ## Vista previa
@@ -27,7 +29,7 @@ struct SheetEjemplo: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Sheet con contenido completo
 
@@ -54,7 +56,7 @@ struct DetalleSheet: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## fullScreenCover
 
@@ -66,7 +68,7 @@ Cubre toda la pantalla sin posibilidad de cerrar deslizando:
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## presentationDetents
 
@@ -80,7 +82,7 @@ Controla la altura del sheet:
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Pasar datos al sheet
 
@@ -104,7 +106,7 @@ struct TiendaView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa `.presentationDetents([.medium, .large])` para que el usuario pueda ajustar la altura del sheet arrastrándolo.
@@ -168,4 +170,4 @@ struct FormularioNota: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

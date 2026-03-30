@@ -3,6 +3,8 @@ title: SwiftData
 description: Data persistence in SwiftUI with SwiftData — @Model, @Query, ModelContainer and model relationships.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 **SwiftData** (iOS 17+) is Apple's modern persistence framework. It replaces Core Data with a declarative syntax based on Swift macros.
 
 ## @Model
@@ -26,7 +28,7 @@ class Task {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## ModelContainer
 
@@ -53,7 +55,7 @@ For multiple models:
 .modelContainer(for: [Task.self, Project.self, Tag.self])
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## @Query
 
@@ -91,7 +93,7 @@ struct TaskListView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Sort and filter with @Query
 
@@ -110,7 +112,7 @@ struct TaskListView: View {
 ) var sortedPending: [Task]
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## ModelContext — create, modify and delete
 
@@ -146,7 +148,7 @@ struct NewTaskView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Model relationships
 
@@ -178,7 +180,7 @@ class Task {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `deleteRule: .cascade` automatically deletes all tasks when the project is deleted. Other values: `.nullify` (sets the relationship to nil), `.deny` (prevents deletion if relationships exist).
@@ -225,4 +227,4 @@ enum MigrationPlan: SchemaMigrationPlan {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

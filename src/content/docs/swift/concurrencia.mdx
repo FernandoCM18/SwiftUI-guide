@@ -3,6 +3,8 @@ title: Concurrencia
 description: Domina la concurrencia moderna de Swift 6 con async/await, Task, actors y structured concurrency.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 La concurrencia en Swift permite ejecutar múltiples operaciones en paralelo sin bloquear la interfaz. Swift 6 introduce concurrencia estricta por defecto, eliminando data races en tiempo de compilación.
 
 ## async/await
@@ -30,7 +32,7 @@ func cargarPerfil() async {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Task y TaskGroup
 
@@ -59,7 +61,7 @@ struct PerfilView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 `TaskGroup` ejecuta múltiples tareas en paralelo y espera a que todas terminen:
 
@@ -87,7 +89,7 @@ func descargarImagen(id: Int) async -> String {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Actors
 
@@ -116,7 +118,7 @@ Task {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa `@MainActor` para garantizar que el código se ejecute en el hilo principal — necesario para actualizar la UI.
@@ -142,7 +144,7 @@ class MiViewModel {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Sendable
 
@@ -169,7 +171,7 @@ actor GestorProductos {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Swift 6 — Concurrencia estricta
 

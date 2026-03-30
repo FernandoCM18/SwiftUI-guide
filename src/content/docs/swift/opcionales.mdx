@@ -3,6 +3,8 @@ title: Opcionales
 description: Domina el sistema de opcionales de Swift, incluyendo optional binding, nil coalescing, force unwrap y optional chaining.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## ¿Qué son los opcionales?
 
 Un opcional en Swift representa un valor que puede existir o ser `nil` (ausente). Es una de las características más importantes del lenguaje para garantizar la seguridad del código.
@@ -19,7 +21,7 @@ apodo = nil  // Esto es válido
 // let otro: String = nil  // Error de compilación
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Crear opcionales
 
@@ -36,7 +38,7 @@ print(numero as Any)    // Optional(42)
 print(invalido as Any)  // nil
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Optional binding con if let
 
@@ -65,7 +67,7 @@ if let nombre, let edad {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Optional binding con guard let
 
@@ -92,7 +94,7 @@ procesarUsuario(nombre: nil, edad: 25)      // "Error: nombre es requerido"
 procesarUsuario(nombre: "Luis", edad: nil)  // "Error: edad es requerida"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Prefiere `guard let` sobre `if let` cuando quieras usar el valor desenvuelto en el resto de la función. Esto reduce la anidación y hace el código más legible.
@@ -120,7 +122,7 @@ let timeout = configuracion["timeout"] ?? 30
 print("Max intentos: \(maxIntentos), Timeout: \(timeout)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Force unwrap (!)
 
@@ -135,7 +137,7 @@ print(numero)  // 42
 // let invalido = Int("abc")!  // Fatal error: nil encontrado
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Evita el force unwrap (`!`) siempre que sea posible. Usa `if let`, `guard let` o `??` en su lugar. Solo usa `!` cuando estés absolutamente seguro de que el valor no es nil.
@@ -181,7 +183,7 @@ let calleMayusculas = contacto.direccion?.calle.uppercased()
 print(calleMayusculas ?? "N/A")  // "GRAN VÍA 1"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Comparar opcionales
 
@@ -198,7 +200,7 @@ print(c == nil)  // true
 print(a == 5)    // true
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## map y flatMap en opcionales
 
@@ -219,7 +221,7 @@ let resultado1 = cadena.map { Int($0) }     // Int?? (opcional doble)
 let resultado2 = cadena.flatMap { Int($0) }  // Int? (aplanado)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Opcionales implícitamente desenvueltos
 
@@ -245,7 +247,7 @@ vista.configurar()
 vista.mostrar()  // "Título"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Los opcionales implícitamente desenvueltos son tan peligrosos como el force unwrap si accedes a ellos cuando son nil. Úsalos solo en casos como @IBOutlet o cuando la inicialización en dos fases lo requiera.

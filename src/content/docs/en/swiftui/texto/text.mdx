@@ -3,6 +3,8 @@ title: Text
 description: How to use the Text view in SwiftUI to display static and dynamic text.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 The `Text` view displays one or more lines of read-only text.
 
 ## Preview
@@ -15,7 +17,7 @@ The `Text` view displays one or more lines of read-only text.
 Text("Hello, World!")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Text Modifiers
 
@@ -37,7 +39,7 @@ VStack(alignment: .leading, spacing: 12) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Multiline Text
 
@@ -48,7 +50,7 @@ Text("This is a long paragraph that will wrap across multiple lines automaticall
     .lineSpacing(4)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## String Interpolation
 
@@ -59,7 +61,7 @@ let age = 28
 Text("Hello, \(name)! You are \(age) years old.")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Common Modifiers
 
@@ -105,4 +107,4 @@ struct WelcomeView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

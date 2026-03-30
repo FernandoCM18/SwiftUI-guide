@@ -3,6 +3,8 @@ title: ZStack
 description: Cómo usar ZStack en SwiftUI para superponer vistas en capas.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `ZStack` (Z-axis Stack) superpone sus vistas hijas una encima de otra, creando capas. La primera vista está al fondo y la última al frente.
 
 ## Vista previa
@@ -20,7 +22,7 @@ ZStack {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Alineación
 
@@ -40,7 +42,7 @@ ZStack(alignment: .bottomTrailing) {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 Opciones de alineación:
 - `.center` — Centro (por defecto)
@@ -71,7 +73,7 @@ ZStack {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa `.zIndex()` para cambiar el orden de apilamiento sin mover las vistas en el código.
@@ -120,4 +122,4 @@ struct TarjetaConBadgeView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

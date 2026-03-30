@@ -3,6 +3,8 @@ title: Variables y Constantes
 description: Aprende a declarar variables con var y constantes con let en Swift, incluyendo inferencia de tipos y anotaciones.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Declarar valores en Swift
 
 En Swift existen dos formas de almacenar valores: **constantes** (`let`) y **variables** (`var`). La diferencia fundamental es que una constante no puede cambiar su valor después de ser asignada, mientras que una variable sí.
@@ -20,7 +22,7 @@ let pi = 3.14159
 // nombre = "Ana"  // Error: no se puede asignar a una constante
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Variables con `var`
 
@@ -35,7 +37,7 @@ var saludo = "Hola"
 saludo = "Buenos días" // Correcto: podemos reasignar
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Inferencia de tipos
 
@@ -54,7 +56,7 @@ print(type(of: esVerano))    // Bool
 print(type(of: cantidad))    // Int
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Anotaciones de tipo
 
@@ -69,7 +71,7 @@ var mensaje: String           // Declarar sin inicializar
 mensaje = "Hola mundo"       // Asignar después
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa anotaciones de tipo cuando necesites un tipo diferente al que Swift inferiría, o cuando declares una variable sin valor inicial.
@@ -90,7 +92,7 @@ let maximoIntentos = 3                // camelCase para variables
 let URLDelServidor = "https://..."    // Acrónimos en mayúsculas
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Múltiples declaraciones
 
@@ -101,7 +103,7 @@ let x = 0, y = 0, z = 0
 var rojo = 0.0, verde = 0.0, azul = 0.0
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Imprimir valores
 
@@ -117,7 +119,7 @@ print("\(nombre) versión \(version)")
 print("2 + 3 = \(2 + 3)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Siempre prefiere `let` sobre `var` a menos que realmente necesites modificar el valor. Xcode te advertirá si usas `var` cuando podrías usar `let`.

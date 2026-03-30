@@ -3,6 +3,8 @@ title: TextField
 description: Cómo usar TextField y SecureField en SwiftUI para entrada de texto.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `TextField` permite al usuario ingresar texto. `SecureField` oculta el texto ingresado, ideal para contraseñas.
 
 ## Vista previa
@@ -23,7 +25,7 @@ struct TextFieldEjemplo: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## SecureField para contraseñas
 
@@ -34,7 +36,7 @@ SecureField("Contraseña", text: $contrasena)
     .textFieldStyle(.roundedBorder)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Tipos de teclado
 
@@ -52,7 +54,7 @@ TextField("Sitio web", text: $url)
     .autocapitalization(.none)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## TextField con formato
 
@@ -66,7 +68,7 @@ TextField("Precio", value: $precio, format: .currency(code: "MXN"))
     .keyboardType(.decimalPad)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Modificadores comunes
 
@@ -136,4 +138,4 @@ struct FormularioRegistroView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

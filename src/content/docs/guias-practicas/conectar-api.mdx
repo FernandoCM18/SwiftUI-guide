@@ -3,6 +3,8 @@ title: Conectar una API
 description: Cómo consumir APIs REST en SwiftUI con URLSession, async/await, Codable y manejo de errores.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 Conectar una app SwiftUI a una API REST es una de las tareas más comunes. Swift ofrece herramientas nativas potentes: `URLSession`, `async/await` y `Codable`.
 
 ## Flujo completo
@@ -33,7 +35,7 @@ struct Producto: Codable, Identifiable {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Si la API usa `snake_case`, puedes evitar `CodingKeys` manual configurando el decoder: `decoder.keyDecodingStrategy = .convertFromSnakeCase`
@@ -89,7 +91,7 @@ class APIService {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## 3. ViewModel con async/await
 
@@ -121,7 +123,7 @@ class ProductosViewModel {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## 4. Vista conectada
 
@@ -174,7 +176,7 @@ struct ProductosView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Usa `.task { }` en lugar de `.onAppear` para llamadas async. Se cancela automáticamente cuando la vista desaparece.
@@ -221,7 +223,7 @@ let nuevo = NuevoProducto(name: "iPad", price: 799)
 let creado: Producto = try await APIService.shared.post("/productos", body: nuevo)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Autenticación con Bearer Token
 
@@ -244,7 +246,7 @@ extension APIService {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Ejemplo real: App del clima
 
@@ -319,7 +321,7 @@ struct ClimaView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Nunca incluyas API keys directamente en el código. Usa variables de entorno, archivos de configuración excluidos del repositorio, o servicios como CloudKit para almacenar secretos.

@@ -3,6 +3,8 @@ title: Enumerations
 description: Learn about enumerations in Swift including raw values, associated values, CaseIterable, and pattern matching.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Modeling a Group of Related Values
 
 Enumerations (enums) define a common type for a group of related values, enabling you to work with those values in a type-safe way.
@@ -28,7 +30,7 @@ heading = .east  // Type already known, can use shorthand
 print(heading)  // east
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Enums with switch
 
@@ -54,7 +56,7 @@ default:
 // Prints: "Just right!"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Raw Values
 
@@ -91,7 +93,7 @@ let unknown = HTTPStatus(rawValue: 999)
 print(unknown)  // nil
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Auto-Generated Raw Values
 
@@ -116,7 +118,7 @@ enum Weekday: Int {
 print(Weekday.wednesday.rawValue)  // 3
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Associated Values
 
@@ -141,7 +143,7 @@ case .qrCode(let code):
 // Prints: "QR code: ABCDEFGHIJKLMNOP"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Practical Example: Network Result
 
@@ -168,7 +170,7 @@ handleResult(.failure(error: "Connection timeout"))
 handleResult(.loading(progress: 0.75))
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## CaseIterable
 
@@ -195,7 +197,7 @@ let options = Beverage.allCases.map { $0.rawValue }
 print(options)  // ["Coffee", "Tea", "Juice", "Water"]
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Enum Methods and Properties
 
@@ -232,7 +234,7 @@ print(boiling.description())  // "212.0°F"
 print(boiling.inCelsius)      // 100.0
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Recursive Enumerations
 
@@ -265,7 +267,7 @@ let product = ArithmeticExpression.multiplication(sum, .number(2))
 print(evaluate(product))  // 18
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Enums with associated values are very powerful for modeling state machines, results, and any scenario where different cases carry different data.

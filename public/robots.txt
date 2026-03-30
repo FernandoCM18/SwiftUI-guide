@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fernandocm18.github.io/SwiftUI-guide/sitemap-index.xml

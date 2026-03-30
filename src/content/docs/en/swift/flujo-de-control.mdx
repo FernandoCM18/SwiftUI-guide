@@ -3,6 +3,8 @@ title: Control Flow
 description: Learn about control flow in Swift including if/else, switch, for-in loops, while loops, repeat-while, and guard statements.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Making Decisions and Repeating Code
 
 Control flow statements determine the order in which your code executes. Swift provides a rich set of control flow tools that are both powerful and easy to read.
@@ -30,7 +32,7 @@ let description = if temperature > 20 { "warm" } else { "cool" }
 print(description)  // "warm"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## switch
 
@@ -51,7 +53,7 @@ default:
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Switch with Ranges and Patterns
 
@@ -92,7 +94,7 @@ default:
 // Prints: "On the x-axis"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Switch with where Clause
 
@@ -110,7 +112,7 @@ case let x:
 // Prints: "15 is divisible by 3"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## for-in Loops
 
@@ -145,7 +147,7 @@ for char in "Swift" {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### for-in with stride
 
@@ -166,7 +168,7 @@ for i in 1...20 where i % 3 == 0 {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## while Loops
 
@@ -188,7 +190,7 @@ while power <= 1000 {
 print(power)  // 1024
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## repeat-while
 
@@ -210,7 +212,7 @@ repeat {
 print("Total: \(result)")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## guard
 
@@ -230,7 +232,7 @@ greet(name: "Alice")  // "Hello, Alice!"
 greet(name: nil)       // "No name provided!"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### guard with Multiple Conditions
 
@@ -248,7 +250,7 @@ processAge(-5)    // "Invalid age"
 processAge(nil)   // "Invalid age"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use `guard` to handle error cases early and keep the "happy path" code un-indented. It makes functions easier to read.
@@ -285,7 +287,7 @@ default:
 // Prints: "Three" then "Three or Four"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 `fallthrough` does not check the condition of the next case -- it unconditionally transfers control. Use it sparingly.

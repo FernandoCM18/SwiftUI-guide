@@ -3,6 +3,8 @@ title: Image
 description: How to use Image in SwiftUI to display images and SF Symbols.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 The `Image` view displays images from assets, SF Symbols, or other sources.
 
 ## Preview
@@ -17,7 +19,7 @@ Image(systemName: "heart.fill")
     .foregroundStyle(.red)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Image from Assets
 
@@ -28,7 +30,7 @@ Image("photo")
     .frame(width: 200, height: 200)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Resizing and Scaling
 
@@ -49,7 +51,7 @@ VStack {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Common Modifiers
 
@@ -87,4 +89,4 @@ struct AvatarView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

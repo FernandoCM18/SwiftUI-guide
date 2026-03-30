@@ -3,6 +3,8 @@ title: Slider
 description: Cómo usar el componente Slider en SwiftUI para seleccionar valores en un rango.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 El componente `Slider` permite al usuario seleccionar un valor dentro de un rango definido arrastrando un indicador.
 
 ## Vista previa
@@ -25,7 +27,7 @@ struct SliderEjemplo: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Slider con paso definido
 
@@ -39,7 +41,7 @@ Slider(value: $temperatura, in: 16...30, step: 0.5) {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Detectar cambios
 
@@ -54,7 +56,7 @@ Slider(value: $brillo, in: 0...1) {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Modificadores comunes
 
@@ -115,4 +117,4 @@ struct ControlVolumenView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

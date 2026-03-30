@@ -3,6 +3,8 @@ title: Tipos de Datos
 description: Conoce los tipos de datos fundamentales de Swift, incluyendo Int, Double, String, Bool, Array, Dictionary, Set y Tuple.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Tipos fundamentales
 
 Swift proporciona un conjunto rico de tipos de datos integrados. Todos los tipos en Swift son tipos de valor o tipos de referencia.
@@ -24,7 +26,7 @@ print("Int máximo: \(Int.max)")
 let pequeño: Int8 = 127  // máximo de Int8
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Decimales: Double y Float
 
@@ -43,7 +45,7 @@ let area = pi * radio * radio
 print("Área del círculo: \(area)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Booleanos: Bool
 
@@ -61,7 +63,7 @@ let noEsMenor = !esMayorDeEdad                    // NOT: false
 print("¿Puede entrar? \(puedeEntrar)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Cadenas: String
 
@@ -89,7 +91,7 @@ let version = "6"
 let completo = lenguaje + " " + version  // "Swift 6"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Caracteres: Character
 
@@ -107,7 +109,7 @@ for caracter in palabra {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Arrays
 
@@ -137,7 +139,7 @@ for fruta in frutas {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Diccionarios: Dictionary
 
@@ -171,7 +173,7 @@ print(capitales.keys)    // Todas las claves
 print(capitales.values)  // Todos los valores
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Conjuntos: Set
 
@@ -199,7 +201,7 @@ print("Intersección: \(interseccion)")
 print("Diferencia: \(diferencia)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Tuplas
 
@@ -232,7 +234,7 @@ let resultado = dividir(17, entre: 5)
 print("Cociente: \(resultado.cociente), Resto: \(resultado.resto)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Las tuplas son ideales para retornar múltiples valores de una función. Para estructuras de datos más complejas, usa `struct`.
@@ -254,7 +256,7 @@ let suma = Double(a) + b       // Convertir antes de operar
 print("Suma: \(suma)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Resumen
 

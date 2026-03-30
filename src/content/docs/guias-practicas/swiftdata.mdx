@@ -3,6 +3,8 @@ title: SwiftData
 description: Persistencia de datos en SwiftUI con SwiftData — @Model, @Query, ModelContainer y relaciones entre modelos.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 **SwiftData** (iOS 17+) es el framework de persistencia moderno de Apple. Reemplaza Core Data con una sintaxis declarativa basada en macros Swift.
 
 ## @Model
@@ -26,7 +28,7 @@ class Tarea {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## ModelContainer
 
@@ -53,7 +55,7 @@ Para múltiples modelos:
 .modelContainer(for: [Tarea.self, Proyecto.self, Etiqueta.self])
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## @Query
 
@@ -91,7 +93,7 @@ struct ListaTareasView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Ordenar y filtrar con @Query
 
@@ -110,7 +112,7 @@ struct ListaTareasView: View {
 ) var pendientesOrdenadas: [Tarea]
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## ModelContext — crear, modificar y eliminar
 
@@ -146,7 +148,7 @@ struct NuevaTareaView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Relaciones entre modelos
 
@@ -178,7 +180,7 @@ class Tarea {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `deleteRule: .cascade` elimina automáticamente todas las tareas cuando se elimina el proyecto. Otros valores: `.nullify` (pone la relación en nil), `.deny` (impide eliminar si hay relaciones).
@@ -225,4 +227,4 @@ enum PlanMigracion: SchemaMigrationPlan {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

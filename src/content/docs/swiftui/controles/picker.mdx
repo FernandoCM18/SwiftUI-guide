@@ -3,6 +3,8 @@ title: Picker
 description: Cómo usar el componente Picker en SwiftUI para seleccionar entre opciones.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 El componente `Picker` permite al usuario seleccionar un valor de una lista de opciones. Ofrece múltiples estilos de presentación.
 
 ## Vista previa
@@ -26,7 +28,7 @@ struct PickerEjemplo: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Estilos de Picker
 
@@ -41,7 +43,7 @@ Picker("Período", selection: $periodo) {
 .pickerStyle(.segmented)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Menú (por defecto en iOS)
 
@@ -54,7 +56,7 @@ Picker("Color", selection: $color) {
 .pickerStyle(.menu)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Rueda
 
@@ -67,7 +69,7 @@ Picker("Edad", selection: $edad) {
 .pickerStyle(.wheel)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Picker con enum
 
@@ -92,7 +94,7 @@ struct TamanoPickerView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Modificadores comunes
 
@@ -150,4 +152,4 @@ struct PedidoView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

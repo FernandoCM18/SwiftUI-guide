@@ -3,6 +3,8 @@ title: Slider
 description: How to use Slider in SwiftUI to select values from a range.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `Slider` lets the user select a value from a bounded range by dragging a thumb.
 
 ## Preview
@@ -25,7 +27,7 @@ struct SliderExample: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Slider with Step
 
@@ -39,7 +41,7 @@ Slider(value: $temperature, in: 60...85, step: 1) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Detecting Changes
 
@@ -53,7 +55,7 @@ Slider(value: $brightness, in: 0...1) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Combine `Slider` with `Text` to display the current value to the user.
@@ -90,4 +92,4 @@ struct VolumeControlView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

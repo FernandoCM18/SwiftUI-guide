@@ -3,6 +3,8 @@ title: PhaseAnimator
 description: Crea secuencias de animación en SwiftUI con PhaseAnimator — cicla automáticamente por estados discretos con animaciones suaves.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `PhaseAnimator` (iOS 17+) anima una vista a través de una secuencia de fases definidas por un enum. Ideal para animaciones en bucle o secuencias con pasos discretos.
 
 ## Estructura básica
@@ -51,7 +53,7 @@ struct EjemploPhase: View {
 #Preview { EjemploPhase() }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `PhaseAnimator` cicla automáticamente por todas las fases en bucle. Cada fase puede tener su propia curva de animación.
@@ -125,7 +127,7 @@ struct BotonCarga: View {
 #Preview { BotonCarga() }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## PhaseAnimator vs keyframeAnimator
 

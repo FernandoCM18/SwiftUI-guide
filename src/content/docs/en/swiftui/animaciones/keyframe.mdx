@@ -3,6 +3,8 @@ title: keyframeAnimator
 description: Create complex animations in SwiftUI with keyframeAnimator — control offset, scale, opacity and rotation independently.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `keyframeAnimator` (iOS 17+) lets you define animations with keyframes where each property has its own independent animation curve.
 
 ## Basic structure
@@ -53,7 +55,7 @@ struct AnimationValues {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## KeyframeTrack
 
@@ -75,7 +77,7 @@ KeyframeTrack(\.scale) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Full example: animated like button
 
@@ -128,4 +130,4 @@ struct LikeValues {
 #Preview { LikeButton() }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

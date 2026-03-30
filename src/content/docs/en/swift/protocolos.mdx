@@ -3,6 +3,8 @@ title: Protocols
 description: Learn about protocols in Swift including declaration, conformance, extensions, and protocol-oriented programming.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Defining Interfaces and Contracts
 
 Protocols define a blueprint of methods, properties, and other requirements that a type must implement. They are central to Swift's design philosophy of protocol-oriented programming.
@@ -32,7 +34,7 @@ let dog = Dog(name: "Rex")
 dog.describe()  // "Dog named Rex"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Property Requirements
 
@@ -54,7 +56,7 @@ print(user.id)      // "001"
 user.name = "Bob"   // Allowed because name is { get set }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Method Requirements
 
@@ -78,7 +80,7 @@ lightSwitch.toggle()
 print(lightSwitch)  // off
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Protocol Conformance with Multiple Protocols
 
@@ -110,7 +112,7 @@ doc.printDetails()
 doc.save()
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Protocol Inheritance
 
@@ -143,7 +145,7 @@ let person = Person(name: "Alice", age: 30)
 print(person.greet())
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Default Implementations with Extensions
 
@@ -183,7 +185,7 @@ print(student.greet())  // "Hello, my name is Alice."
 print(teacher.greet())  // "I'm Professor Smith."
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Protocols as Types
 
@@ -219,7 +221,7 @@ for shape in shapes {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Protocol-Oriented Programming
 
@@ -261,7 +263,7 @@ duck.fly()   // "Flying up to 500.0 meters"
 duck.swim()  // "Swimming down to 2.0 meters"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Prefer protocol composition over deep class hierarchies. It gives you more flexibility and avoids the problems of multiple inheritance.
@@ -306,7 +308,7 @@ let temp = Temperature(celsius: 22.5)
 print(temp)  // "22.5°C"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Summary
 

@@ -3,6 +3,8 @@ title: Project Architecture and Organization
 description: Best practices for organizing folders, code, and architecture in SwiftUI projects.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 Good project organization facilitates maintenance, collaboration, and scalability of your app.
 
 ## Recommended folder structure
@@ -49,7 +51,7 @@ MyApp/
 └── Info.plist
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Large app (Feature-based)
 
@@ -187,7 +189,7 @@ struct TasksView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Repository Pattern
 
@@ -235,7 +237,7 @@ class MockProductRepository: ProductRepository {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Best practices
 
@@ -287,7 +289,7 @@ Text("Content")
     .cardStyle()
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### 3. Useful Previews
 
@@ -314,7 +316,7 @@ extension Product {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### 4. Centralized constants
 
@@ -342,7 +344,7 @@ Text(AppConstants.appName)
     .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### 5. Dependency injection
 
@@ -373,7 +375,7 @@ let vm = ProductsViewModel()
 let vmTest = ProductsViewModel(repository: MockProductRepository())
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Avoid using singletons (`shared`) for everything. Dependency injection makes your code more testable and flexible. Only use singletons for truly global services (like the networking layer).

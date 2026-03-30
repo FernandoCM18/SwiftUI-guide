@@ -3,6 +3,8 @@ title: Protocolos
 description: Aprende sobre protocolos en Swift, incluyendo declaración, conformidad, extensiones y programación orientada a protocolos.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## ¿Qué son los protocolos?
 
 Un protocolo define un contrato de métodos, propiedades y otros requisitos que un tipo debe implementar. Es similar a las interfaces en otros lenguajes, pero más potente gracias a las extensiones de protocolo.
@@ -20,7 +22,7 @@ protocol Identificable {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Conformidad a un protocolo
 
@@ -48,7 +50,7 @@ let producto = Producto(nombre: "Teclado", precio: 49.99)
 producto.describir()  // "Teclado - 49.99€"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Protocolos con métodos
 
@@ -93,7 +95,7 @@ for forma in formas {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Protocolos con métodos mutating
 
@@ -118,7 +120,7 @@ luz.conmutar()
 print("Encendido: \(luz.encendido)")  // true
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Herencia de protocolos
 
@@ -143,7 +145,7 @@ let usuario = Usuario(nombre: "Ana")
 print(usuario.saludar())
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Composición de protocolos
 
@@ -172,7 +174,7 @@ let empleado = Empleado(nombre: "Carlos", edad: 30)
 presentar(empleado)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Extensiones de protocolo
 
@@ -217,7 +219,7 @@ print(humano.saludar())   // "¡Buenos días! Me llamo María"
 print(robot.despedir())   // "¡Adiós de parte de R2D2!"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Las extensiones de protocolo son el corazón de la programación orientada a protocolos (POP) en Swift. Te permiten agregar comportamiento compartido sin herencia.
@@ -277,7 +279,7 @@ print(pinguino.nadar())   // "Estoy nadando"
 // pinguino.volar()  // Error: Pinguino no conforma Volador
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Protocolos estándar de Swift
 
@@ -328,7 +330,7 @@ let libro = Libro(titulo: "Don Quijote", autor: "Cervantes")
 print(libro)  // "Don Quijote" por Cervantes
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Resumen
 

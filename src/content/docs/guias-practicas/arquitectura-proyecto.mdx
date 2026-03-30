@@ -3,6 +3,8 @@ title: Arquitectura y Organización del Proyecto
 description: Mejores prácticas para organizar carpetas, código y arquitectura en proyectos SwiftUI.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 Una buena organización del proyecto facilita el mantenimiento, la colaboración y la escalabilidad de tu app.
 
 ## Estructura de carpetas recomendada
@@ -49,7 +51,7 @@ MiApp/
 └── Info.plist
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### App grande (Feature-based)
 
@@ -187,7 +189,7 @@ struct TareasView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Repository Pattern
 
@@ -235,7 +237,7 @@ class MockProductoRepository: ProductoRepository {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Mejores prácticas
 
@@ -287,7 +289,7 @@ Text("Contenido")
     .estiloTarjeta()
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### 3. Previews útiles
 
@@ -314,7 +316,7 @@ extension Producto {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### 4. Constantes centralizadas
 
@@ -342,7 +344,7 @@ Text(AppConstants.appName)
     .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### 5. Inyección de dependencias
 
@@ -373,7 +375,7 @@ let vm = ProductosViewModel()
 let vmTest = ProductosViewModel(repository: MockProductoRepository())
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Evita usar singletons (`shared`) para todo. La inyección de dependencias hace tu código más testeable y flexible. Usa singletons solo para servicios verdaderamente globales (como la capa de red).

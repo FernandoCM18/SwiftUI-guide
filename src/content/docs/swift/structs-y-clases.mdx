@@ -3,6 +3,8 @@ title: Structs y Clases
 description: Aprende las diferencias entre structs y clases en Swift, incluyendo tipos de valor vs referencia, propiedades, métodos e inicializadores.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Tipos personalizados en Swift
 
 Los structs y las clases son los pilares fundamentales para modelar datos en Swift. Aunque comparten muchas características, tienen diferencias cruciales.
@@ -26,7 +28,7 @@ print("punto1.x = \(punto1.x)")  // 3.0 (no cambia)
 print("punto2.x = \(punto2.x)")  // 10.0
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Clases (tipos de referencia)
 
@@ -51,7 +53,7 @@ print("persona1.nombre = \(persona1.nombre)")  // "Luis" (¡cambió!)
 print("persona2.nombre = \(persona2.nombre)")  // "Luis"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 La diferencia entre valor y referencia es fundamental. Los structs son más predecibles porque las copias son independientes. Usa structs como opción por defecto y clases solo cuando necesites compartir estado o herencia.
@@ -72,7 +74,7 @@ rect.ancho = 20
 print("Ancho: \(rect.ancho)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Propiedades computadas
 
@@ -106,7 +108,7 @@ circulo.diametro = 20
 print("Nuevo radio: \(circulo.radio)")  // 10.0
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Observadores de propiedades
 
@@ -130,7 +132,7 @@ temp.celsius = 35   // Dispara willSet y didSet
 temp.celsius = 105  // Dispara advertencia
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Propiedades estáticas
 
@@ -152,7 +154,7 @@ Configuracion.modoOscuro = true
 print(Configuracion.descripcion())
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Métodos
 
@@ -180,7 +182,7 @@ contador.incrementar(en: 5)
 contador.mostrar()  // "Cuenta actual: 6"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 En los structs, los métodos que modifican propiedades deben marcarse con `mutating`. Las clases no necesitan esto porque son tipos de referencia.
@@ -216,7 +218,7 @@ let rojo = Color(rojo: 1.0, verde: 0.0, azul: 0.0)
 print("Gris: (\(gris.rojo), \(gris.verde), \(gris.azul))")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Inicializadores en clases
 
@@ -249,7 +251,7 @@ print(coche.descripcion())
 print(otro.descripcion())
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Herencia (solo clases)
 
@@ -292,7 +294,7 @@ print("\(perro.nombre) dice \(perro.hacerSonido())")  // Rex dice ¡Guau!
 print("\(gato.nombre) dice \(gato.hacerSonido())")    // Michi dice ¡Miau!
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Prevenir herencia con final
 
@@ -312,7 +314,7 @@ final class Singleton {
 Singleton.compartido.ejecutar()
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Comparación: Struct vs Clase
 

@@ -3,6 +3,8 @@ title: Connect an API
 description: How to consume REST APIs in SwiftUI with URLSession, async/await, Codable, and error handling.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 Connecting a SwiftUI app to a REST API is one of the most common tasks. Swift provides powerful native tools: `URLSession`, `async/await`, and `Codable`.
 
 ## Complete Flow
@@ -33,7 +35,7 @@ struct Product: Codable, Identifiable {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 If the API uses `snake_case`, you can avoid manual `CodingKeys` by configuring the decoder: `decoder.keyDecodingStrategy = .convertFromSnakeCase`
@@ -89,7 +91,7 @@ class APIService {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## 3. ViewModel with async/await
 
@@ -121,7 +123,7 @@ class ProductsViewModel {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## 4. Connected View
 
@@ -174,7 +176,7 @@ struct ProductsView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use `.task { }` instead of `.onAppear` for async calls. It automatically cancels when the view disappears.
@@ -221,7 +223,7 @@ let new = NewProduct(name: "iPad", price: 799)
 let created: Product = try await APIService.shared.post("/products", body: new)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Authentication with Bearer Token
 
@@ -244,7 +246,7 @@ extension APIService {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Real-world example: Weather App
 
@@ -319,7 +321,7 @@ struct WeatherView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Never include API keys directly in your code. Use environment variables, configuration files excluded from the repository, or services like CloudKit to store secrets.

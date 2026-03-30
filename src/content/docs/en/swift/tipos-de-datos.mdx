@@ -3,6 +3,8 @@ title: Data Types
 description: Explore the fundamental data types in Swift including Int, Double, Float, String, Bool, Array, Dictionary, Set, and Tuple.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Fundamental Types
 
 Swift provides a rich set of built-in data types. Understanding these types is essential for writing effective Swift code.
@@ -25,7 +27,7 @@ print(Int.max)   // 9223372036854775807
 print(UInt.min)  // 0
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Floating-Point Numbers
 
@@ -43,7 +45,7 @@ let speed = 3.0e8                     // 3.0 × 10^8
 let tiny = 1.5e-4                     // 0.00015
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Always prefer `Double` over `Float` unless you have a specific reason to use less precision. Swift defaults to `Double` for decimal literals.
@@ -73,7 +75,7 @@ print(greeting.uppercased())  // HELLO, WORLD!
 print(greeting.contains("World"))  // true
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Booleans
 
@@ -98,7 +100,7 @@ print(x == 10)  // true
 print(x != 3)   // true
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Arrays
 
@@ -125,7 +127,7 @@ let sorted = numbers.sorted()
 print(sorted)               // [1, 2, 3, 4, 5]
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Dictionaries
 
@@ -159,7 +161,7 @@ print(capitals.keys)        // All keys
 print(capitals.values)      // All values
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Sets
 
@@ -189,7 +191,7 @@ colors.insert("Yellow")
 colors.remove("Red")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Tuples
 
@@ -219,7 +221,7 @@ print(coordinates.0)  // 3
 print(coordinates.1)  // 5
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::note
 Tuples are best for simple, temporary groupings. For more complex data, prefer structs or classes.
@@ -250,7 +252,7 @@ let parsed = Int("123")       // Optional(123)
 let invalid = Int("hello")    // nil
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Summary
 

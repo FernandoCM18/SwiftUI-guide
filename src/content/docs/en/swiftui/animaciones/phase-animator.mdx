@@ -3,6 +3,8 @@ title: PhaseAnimator
 description: Create animation sequences in SwiftUI with PhaseAnimator — automatically cycle through discrete states with smooth animations.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `PhaseAnimator` (iOS 17+) animates a view through a sequence of phases defined by an enum. Ideal for looping animations or sequences with discrete steps.
 
 ## Basic structure
@@ -51,7 +53,7 @@ struct PhaseExample: View {
 #Preview { PhaseExample() }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `PhaseAnimator` automatically cycles through all phases in a loop. Each phase can have its own animation curve.
@@ -125,7 +127,7 @@ struct LoadButton: View {
 #Preview { LoadButton() }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## PhaseAnimator vs keyframeAnimator
 

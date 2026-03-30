@@ -3,7 +3,9 @@ title: Introducción a SwiftUI
 description: Visión general del framework SwiftUI para construir interfaces de usuario declarativas en las plataformas Apple.
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 ## ¿Qué es SwiftUI?
 
@@ -33,7 +35,7 @@ struct SaludoView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Estructura de una App
 
@@ -60,7 +62,7 @@ struct ContentView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## La propiedad body
 
@@ -89,7 +91,7 @@ struct TarjetaPerfil: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Modificadores
 
@@ -112,7 +114,7 @@ struct EjemploModificadores: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 El orden de los modificadores importa. Cada modificador crea una nueva vista envolviendo la anterior, así que `.padding().background()` es diferente de `.background().padding()`.
@@ -147,7 +149,7 @@ struct ContadorView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Previews
 
@@ -175,31 +177,16 @@ struct MiVista: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Secciones de SwiftUI
 
 Explora todos los componentes y patrones de SwiftUI:
 
 <CardGrid>
-  <Card title="Texto e Imágenes" icon="pencil">
-    Text, Label e Image para mostrar contenido estático.
-    [Explorar →](/swiftui/texto/text/)
-  </Card>
-  <Card title="Controles" icon="setting">
-    Button, Toggle, Slider, Picker y TextField para interacción.
-    [Explorar →](/swiftui/controles/button/)
-  </Card>
-  <Card title="Layout" icon="list-format">
-    VStack, HStack y ZStack para organizar vistas.
-    [Explorar →](/swiftui/layout/vstack/)
-  </Card>
-  <Card title="Listas y Navegación" icon="document">
-    List, ScrollView y NavigationStack para contenido dinámico.
-    [Explorar →](/swiftui/listas-y-navegacion/list/)
-  </Card>
-  <Card title="Presentación" icon="laptop">
-    Sheet, Alert y TabView para flujos de presentación.
-    [Explorar →](/swiftui/presentacion/sheet/)
-  </Card>
+  <LinkCard title="Texto e Imágenes" href="./texto/text/" description="Text, Label e Image para mostrar contenido estático." />
+  <LinkCard title="Controles" href="./controles/button/" description="Button, Toggle, Slider, Picker y TextField para interacción." />
+  <LinkCard title="Layout" href="./layout/vstack/" description="VStack, HStack y ZStack para organizar vistas." />
+  <LinkCard title="Listas y Navegación" href="./listas-y-navegacion/list/" description="List, ScrollView y NavigationStack para contenido dinámico." />
+  <LinkCard title="Presentación" href="./presentacion/sheet/" description="Sheet, Alert y TabView para flujos de presentación." />
 </CardGrid>

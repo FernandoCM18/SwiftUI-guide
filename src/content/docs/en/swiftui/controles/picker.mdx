@@ -3,6 +3,8 @@ title: Picker
 description: How to use Picker in SwiftUI to select from multiple options.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `Picker` lets the user select a value from a list of options, with multiple presentation styles.
 
 ## Preview
@@ -26,7 +28,7 @@ struct PickerExample: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Picker Styles
 
@@ -52,7 +54,7 @@ Picker("Color", selection: $color) {
 .pickerStyle(.menu)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Picker with Enum
 
@@ -77,7 +79,7 @@ struct SizePickerView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use `.pickerStyle(.segmented)` for 2-5 short options. For more options, use `.menu` or `.wheel`.
@@ -111,4 +113,4 @@ struct OrderView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

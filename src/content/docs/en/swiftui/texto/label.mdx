@@ -3,6 +3,8 @@ title: Label
 description: How to use Label in SwiftUI to combine text and icons.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `Label` combines an icon and text in a single view, automatically adapting its layout to the context.
 
 ## Preview
@@ -15,7 +17,7 @@ description: How to use Label in SwiftUI to combine text and icons.
 Label("Favorites", systemImage: "star.fill")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Label Styles
 
@@ -35,7 +37,7 @@ VStack(spacing: 20) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Custom Label
 
@@ -55,7 +57,7 @@ Label {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `Label` automatically adjusts its layout based on the context — in a toolbar it might show only the icon, while in a list it shows both.
@@ -77,4 +79,4 @@ struct SettingsListView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

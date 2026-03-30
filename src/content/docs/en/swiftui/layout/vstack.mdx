@@ -3,6 +3,8 @@ title: VStack
 description: How to use VStack in SwiftUI to arrange views vertically.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `VStack` (Vertical Stack) arranges its child views in a vertical column, from top to bottom.
 
 ## Preview
@@ -19,7 +21,7 @@ VStack {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Spacing and Alignment
 
@@ -34,7 +36,7 @@ VStack(alignment: .leading, spacing: 20) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 Alignment options: `.leading`, `.center` (default), `.trailing`
 
@@ -49,7 +51,7 @@ VStack {
 .frame(height: 300)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Combine `VStack`, `HStack`, and `ZStack` to create complex layouts. This is the fundamental composition pattern in SwiftUI.
@@ -91,4 +93,4 @@ struct ProfileView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

@@ -3,6 +3,8 @@ title: "@Observable"
 description: Swift's Observation framework — modern state management in SwiftUI with @Observable, @State and @Environment.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 The **Observation** framework (iOS 17+) replaces `ObservableObject` with the `@Observable` macro. It's simpler, more efficient and requires less code.
 
 ## @Observable
@@ -30,7 +32,7 @@ class CounterViewModel {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 Unlike `ObservableObject`, you don't need to mark each property with `@Published`. The macro instruments all stored properties automatically.
 
@@ -68,7 +70,7 @@ struct CounterView: View {
 #Preview { CounterView() }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 With `@Observable`, use `@State` (not `@StateObject`) to create the ViewModel. SwiftUI recreates the view if needed, but `@State` preserves the ViewModel.
@@ -101,7 +103,7 @@ struct HistoryView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## @Environment with @Observable
 
@@ -149,7 +151,7 @@ struct ProfileView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Ignored properties
 
@@ -166,7 +168,7 @@ class SettingsViewModel {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## @Observable vs ObservableObject
 

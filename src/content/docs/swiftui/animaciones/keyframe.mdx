@@ -3,6 +3,8 @@ title: keyframeAnimator
 description: Crea animaciones complejas en SwiftUI con keyframeAnimator — controla offset, escala, opacidad y rotación de forma independiente.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `keyframeAnimator` (iOS 17+) permite definir animaciones con fotogramas clave donde cada propiedad tiene su propia curva de animación independiente.
 
 ## Estructura básica
@@ -53,7 +55,7 @@ struct PropiedadesAnimacion {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## KeyframeTrack
 
@@ -75,7 +77,7 @@ KeyframeTrack(\.escala) {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Ejemplo completo: botón de like animado
 
@@ -128,4 +130,4 @@ struct ValoresLike {
 #Preview { LikeButton() }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

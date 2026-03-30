@@ -3,6 +3,8 @@ title: Funciones
 description: Aprende a declarar funciones en Swift, con parámetros, valores de retorno, valores por defecto y closures.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Funciones en Swift
 
 Las funciones son bloques de código reutilizables que realizan una tarea específica. En Swift, las funciones son ciudadanos de primera clase, lo que significa que pueden asignarse a variables, pasarse como argumentos y retornarse desde otras funciones.
@@ -23,7 +25,7 @@ func saludarA(nombre: String) {
 saludarA(nombre: "Carlos")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Valores de retorno
 
@@ -50,7 +52,7 @@ let division = dividir(17, entre: 5)
 print("Cociente: \(division.cociente), Resto: \(division.resto)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Etiquetas de argumentos
 
@@ -74,7 +76,7 @@ func potencia(_ base: Int, elevadoA exponente: Int) -> Int {
 print(potencia(2, elevadoA: 10))  // 1024
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Valores por defecto
 
@@ -88,7 +90,7 @@ print(crearUsuario(nombre: "Luis", edad: 25))         // Solo cambia edad
 print(crearUsuario(nombre: "María", pais: "México"))  // Solo cambia país
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Parámetros variádicos
 
@@ -105,7 +107,7 @@ print(promedio(10, 20, 30))       // 20.0
 print(promedio(5, 8, 12, 3, 7))   // 7.0
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Parámetros inout
 
@@ -124,7 +126,7 @@ intercambiar(&x, &y)
 print("x = \(x), y = \(y)")  // x = 20, y = 10
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Usa `inout` con moderación. En la mayoría de casos es mejor retornar un nuevo valor en lugar de modificar el existente.
@@ -154,7 +156,7 @@ print(aplicar(sumar, a: 3, b: 4))   // 7
 print(aplicar(restar, a: 3, b: 4))  // -1
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Closures
 
@@ -175,7 +177,7 @@ let ordenados = numeros.sorted(by: { (a: Int, b: Int) -> Bool in
 print(ordenados)  // [1, 2, 3, 5, 8, 9]
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Sintaxis abreviada de closures
 
@@ -202,7 +204,7 @@ let v5 = numeros.sorted { $0 < $1 }
 print(v5)  // [1, 2, 3, 5, 8, 9]
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Closures con map, filter y reduce
 
@@ -229,7 +231,7 @@ let resultado = numeros
 print("Suma de cuadrados de pares: \(resultado)")  // 220
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Captura de valores
 
@@ -251,7 +253,7 @@ print(contador())  // 2
 print(contador())  // 3
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Los trailing closures hacen el código más legible, especialmente cuando el closure es el último argumento de una función. Úsalos siempre que puedas.

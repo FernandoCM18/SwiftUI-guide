@@ -3,6 +3,8 @@ title: ZStack
 description: How to use ZStack in SwiftUI to overlay views in layers.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `ZStack` (Z-axis Stack) overlays its child views on top of each other. The first view is at the back, the last is at the front.
 
 ## Preview
@@ -20,7 +22,7 @@ ZStack {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Alignment
 
@@ -39,7 +41,7 @@ ZStack(alignment: .bottomTrailing) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 Options: `.center` (default), `.topLeading`, `.top`, `.topTrailing`, `.leading`, `.trailing`, `.bottomLeading`, `.bottom`, `.bottomTrailing`
 
@@ -84,4 +86,4 @@ struct BadgeCardView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

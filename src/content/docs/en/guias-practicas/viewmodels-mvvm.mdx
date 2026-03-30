@@ -3,6 +3,8 @@ title: ViewModels and MVVM
 description: How to implement the MVVM pattern in SwiftUI with ViewModels, @Observable and modern state management.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 The **MVVM** (Model-View-ViewModel) pattern is the most widely used architecture in SwiftUI apps. It separates business logic (ViewModel) from the interface (View) and data (Model).
 
 ## MVVM Structure
@@ -62,7 +64,7 @@ struct CounterView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 With `@Observable`, use `@State` in the view that creates the ViewModel. It's simpler than the previous approach with `@StateObject`.
@@ -202,4 +204,4 @@ struct NotesAppView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

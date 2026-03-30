@@ -3,6 +3,8 @@ title: Concurrency
 description: Master modern Swift 6 concurrency with async/await, Task, actors and structured concurrency.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 Concurrency in Swift allows running multiple operations in parallel without blocking the interface. Swift 6 introduces strict concurrency by default, eliminating data races at compile time.
 
 ## async/await
@@ -30,7 +32,7 @@ func loadProfile() async {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Task and TaskGroup
 
@@ -59,7 +61,7 @@ struct ProfileView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 `TaskGroup` runs multiple tasks in parallel and waits for all to finish:
 
@@ -87,7 +89,7 @@ func downloadImage(id: Int) async -> String {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Actors
 
@@ -116,7 +118,7 @@ Task {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use `@MainActor` to guarantee code runs on the main thread — required for UI updates.
@@ -142,7 +144,7 @@ class MyViewModel {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Sendable
 
@@ -169,7 +171,7 @@ actor ProductManager {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Swift 6 — Strict Concurrency
 

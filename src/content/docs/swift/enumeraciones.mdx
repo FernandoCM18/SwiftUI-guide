@@ -3,6 +3,8 @@ title: Enumeraciones
 description: Aprende sobre enumeraciones en Swift, incluyendo raw values, associated values, CaseIterable y enums recursivos.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## ¿Qué son las enumeraciones?
 
 Las enumeraciones (enums) definen un tipo con un conjunto finito de valores posibles. En Swift, los enums son tipos de primera clase con capacidades avanzadas como métodos, propiedades computadas y valores asociados.
@@ -38,7 +40,7 @@ case .oeste:
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Raw values (valores crudos)
 
@@ -77,7 +79,7 @@ enum Color: String {
 print(Color.rojo.rawValue)  // "rojo"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Associated values (valores asociados)
 
@@ -109,7 +111,7 @@ case let .qr(codigo):
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Ejemplo práctico con valores asociados
 
@@ -136,7 +138,7 @@ manejarResultado(.error(mensaje: "No encontrado", codigo: 404))
 manejarResultado(.sinConexion)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Métodos y propiedades computadas
 
@@ -175,7 +177,7 @@ semaforo.siguiente()
 print(semaforo.descripcion)  // "Precaución"
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## CaseIterable
 
@@ -201,7 +203,7 @@ let opciones = Bebida.allCases.map { $0.rawValue }
 print("Opciones: \(opciones)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `CaseIterable` es especialmente útil en SwiftUI para crear `Picker` o `ForEach` con todos los casos de un enum.
@@ -239,7 +241,7 @@ let resultado = ExpresionAritmetica.multiplicacion(suma, dos)
 print("Resultado: \(evaluar(resultado))")  // 16
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Enum con inicializador personalizado
 
@@ -274,7 +276,7 @@ let hoy = Temperatura(grados: 32)
 print("Temperatura: \(hoy) \(hoy.emoji)")
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Resumen
 

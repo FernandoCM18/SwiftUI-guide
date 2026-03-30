@@ -3,6 +3,8 @@ title: Functions
 description: Learn how to declare and use functions in Swift, including parameters, return types, argument labels, and closures.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Reusable Blocks of Code
 
 Functions are self-contained blocks of code that perform a specific task. They are one of the most fundamental building blocks in Swift.
@@ -17,7 +19,7 @@ func sayHello() {
 sayHello()  // "Hello, World!"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Functions with Parameters
 
@@ -36,7 +38,7 @@ func greet(person: String, from city: String) {
 greet(person: "Bob", from: "London")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Return Values
 
@@ -72,7 +74,7 @@ if let bounds = minMax(array: [3, 1, 7, 2, 9]) {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Argument Labels and Parameter Names
 
@@ -98,7 +100,7 @@ func move(from origin: String, to destination: String) {
 move(from: "Paris", to: "Tokyo")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Default Parameter Values
 
@@ -111,7 +113,7 @@ greet(name: "Alice")                    // "Hello, Alice!"
 greet(name: "Alice", greeting: "Hi")    // "Hi, Alice!"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Variadic Parameters
 
@@ -128,7 +130,7 @@ print(average(10, 20, 30))     // 20.0
 print(average(5, 15))          // 10.0
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## inout Parameters
 
@@ -154,7 +156,7 @@ swapValues(&x, &y)
 print("x: \(x), y: \(y)")  // "x: 10, y: 5"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Functions as Types
 
@@ -180,7 +182,7 @@ print(apply(10, 5, operation: add))       // 15
 print(apply(10, 5, operation: subtract))  // 5
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Closures
 
@@ -213,7 +215,7 @@ let sorted4 = names.sorted(by: <)
 print(sorted4)  // ["Alice", "Bob", "Charlie"]
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Trailing Closure Syntax
 
@@ -237,7 +239,7 @@ let result = numbers
 print(result)  // [100, 64, 36, 16, 4]
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Capturing Values
 
@@ -262,7 +264,7 @@ let anotherCounter = makeCounter()
 print(anotherCounter())  // 1
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::note
 Closures are reference types. When you assign a closure to multiple variables, they all share the same captured state.

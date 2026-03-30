@@ -3,6 +3,8 @@ title: Sheet
 description: How to use sheet and fullScreenCover in SwiftUI to present modal views.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 The `.sheet` modifier presents a modal view that slides up from the bottom.
 
 ## Preview
@@ -25,7 +27,7 @@ struct SheetExample: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Dismissing a Sheet
 
@@ -46,7 +48,7 @@ struct DetailSheet: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## fullScreenCover
 
@@ -56,7 +58,7 @@ struct DetailSheet: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## presentationDetents
 
@@ -68,7 +70,7 @@ struct DetailSheet: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use `.presentationDetents([.medium, .large])` to let users resize the sheet by dragging.
@@ -123,4 +125,4 @@ struct NoteForm: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

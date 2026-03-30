@@ -3,6 +3,8 @@ title: NavigationStack
 description: Cómo usar NavigationStack en SwiftUI para crear jerarquías de navegación.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `NavigationStack` proporciona una pila de navegación que permite al usuario ir de una vista a otra con transiciones animadas y un botón de retroceso automático.
 
 ## Vista previa
@@ -25,7 +27,7 @@ NavigationStack {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## NavigationLink con datos
 
@@ -60,7 +62,7 @@ struct FrutasView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Barra de herramientas
 
@@ -86,7 +88,7 @@ NavigationStack {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Estilos de título
 
@@ -100,7 +102,7 @@ NavigationStack {
 .navigationBarTitleDisplayMode(.inline)
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 `NavigationStack` reemplaza a `NavigationView` desde iOS 16. Usa siempre `NavigationStack` en proyectos nuevos.
@@ -161,4 +163,4 @@ struct AppConfiguracionView: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

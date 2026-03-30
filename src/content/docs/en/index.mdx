@@ -13,21 +13,15 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 ## Welcome to the Swift & SwiftUI Guide
 
 This documentation covers everything you need to build modern apps with the Apple ecosystem. From Swift language fundamentals to declarative user interfaces with SwiftUI.
 
 <CardGrid>
-  <Card title="Swift" icon="seti:swift">
-    Learn Swift fundamentals: variables, data types, functions, structs, classes, protocols and more.
-    [Get started →](/en/swift/)
-  </Card>
-  <Card title="SwiftUI" icon="laptop">
-    Build declarative user interfaces with views, controls, layouts, lists, navigation and presentation.
-    [Explore →](/en/swiftui/)
-  </Card>
+  <LinkCard title="Swift" href="./swift/" description="Learn Swift fundamentals: variables, data types, functions, structs, classes, protocols and more." />
+  <LinkCard title="SwiftUI" href="./swiftui/" description="Build declarative user interfaces with views, controls, layouts, lists, navigation and presentation." />
 </CardGrid>
 
 ## Why this guide?

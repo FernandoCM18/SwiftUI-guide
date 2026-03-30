@@ -3,6 +3,8 @@ title: Assets, Images, and Colors
 description: How to add and manage assets, images, colors, SF Symbols, and icons in a SwiftUI project.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 **Assets** (resources) are the visual files of your app: images, colors, icons, and more. Xcode organizes these resources in an **Asset Catalog** (`.xcassets`).
 
 ## Asset Catalog
@@ -37,7 +39,7 @@ Image("MyImage")
     .frame(width: 200, height: 200)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## SF Symbols (system icons)
 
@@ -62,7 +64,7 @@ Image(systemName: "externaldrive.badge.checkmark")
     .font(.largeTitle)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Finding SF Symbols
 
@@ -116,7 +118,7 @@ let myBlue = Color(red: 0.0, green: 0.48, blue: 1.0)
 let myColor = Color(hex: "#FF5733") // Requires extension
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Extension for hexadecimal colors
 
@@ -141,7 +143,7 @@ let red = Color(hex: "#FF3B30")
 let green = Color(hex: "#34C759")
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Apple's Semantic Colors
 
@@ -176,7 +178,7 @@ UIApplication.shared.setAlternateIconName("AlternativeIcon") { error in
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Images from URL
 
@@ -201,7 +203,7 @@ AsyncImage(url: URL(string: "https://example.com/photo.jpg")) { phase in
 .clipShape(RoundedRectangle(cornerRadius: 12))
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Complete example: Gallery with assets
 
@@ -242,4 +244,4 @@ struct GalleryView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />

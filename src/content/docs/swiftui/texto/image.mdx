@@ -3,6 +3,8 @@ title: Image
 description: Aprende a usar el componente Image de SwiftUI para mostrar imágenes de assets, SF Symbols y más.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## El componente Image
 
 `Image` muestra imágenes en SwiftUI. Puede cargar imágenes desde los assets del proyecto, SF Symbols del sistema, o incluso imágenes generadas programáticamente.
@@ -27,7 +29,7 @@ struct ImagenSistema: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Personalizar iconos del sistema
 
@@ -66,7 +68,7 @@ struct ImagenSistemaEstilos: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Imágenes desde Assets
 
@@ -89,7 +91,7 @@ struct ImagenAssets: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Resizable y aspectRatio
 
@@ -127,7 +129,7 @@ struct ImagenRedimensionable: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Siempre agrega `.resizable()` antes de `.frame()` cuando quieras cambiar el tamaño de una imagen. Sin `resizable()`, el frame no afectará el tamaño de la imagen.
@@ -158,7 +160,7 @@ struct ImagenFrame: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Recortar imágenes
 
@@ -195,7 +197,7 @@ struct ImagenRecorte: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Sombra y borde
 
@@ -233,7 +235,7 @@ struct ImagenEfectos: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## AsyncImage (iOS 15+)
 
@@ -273,7 +275,7 @@ struct ImagenAsincrona: View {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Resumen
 

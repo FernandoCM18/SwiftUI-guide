@@ -1,10 +1,27 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
+  site: 'https://fernandocm18.github.io/SwiftUI-guide',
+  base: '/SwiftUI-guide',
+  vite: {
+    resolve: {
+      alias: {
+        '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
+      },
+    },
+  },
   integrations: [
     starlight({
       title: 'Guía Swift & SwiftUI',
+      lastUpdated: true,
+      head: [
+        { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
+        { tag: 'meta', attrs: { property: 'og:site_name', content: 'Guía Swift & SwiftUI' } },
+        { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary' } },
+        { tag: 'meta', attrs: { 'http-equiv': 'X-Content-Type-Options', content: 'nosniff' } },
+      ],
       defaultLocale: 'root',
       locales: {
         root: { label: 'Español', lang: 'es' },

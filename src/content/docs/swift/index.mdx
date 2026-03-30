@@ -3,7 +3,9 @@ title: Introducción a Swift
 description: Visión general del lenguaje Swift, su historia, características de seguridad y lo que aprenderás.
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 ## ¿Qué es Swift?
 
@@ -34,7 +36,7 @@ Swift es un lenguaje fuertemente tipado. El compilador detecta errores de tipos 
 let numero: Int = 42
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Manejo de nulos seguro
 El sistema de opcionales de Swift obliga a manejar explícitamente los valores que pueden ser `nil`, eliminando los errores de referencia nula.
@@ -49,7 +51,7 @@ if let nombreSeguro = nombre {
 }
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Inferencia de tipos
 Swift puede inferir automáticamente el tipo de una variable a partir de su valor inicial.
@@ -60,7 +62,7 @@ let pi = 3.14159            // Swift infiere que es Double
 let activo = true           // Swift infiere que es Bool
 ```
 
-> [Probar en Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ### Rendimiento
 Swift está compilado con LLVM y ofrece un rendimiento comparable a C/C++ en muchas tareas.
@@ -70,36 +72,12 @@ Swift está compilado con LLVM y ofrece un rendimiento comparable a C/C++ en muc
 En esta sección cubriremos los fundamentos del lenguaje Swift:
 
 <CardGrid>
-  <Card title="Variables y Constantes" icon="pencil">
-    Declaración con `let` y `var`, inferencia de tipos y anotaciones.
-    [Leer →](/swift/variables-y-constantes/)
-  </Card>
-  <Card title="Tipos de Datos" icon="list-format">
-    Int, Double, String, Bool, Array, Dictionary, Set y Tuple.
-    [Leer →](/swift/tipos-de-datos/)
-  </Card>
-  <Card title="Flujo de Control" icon="right-arrow">
-    if/else, switch, for-in, while, guard.
-    [Leer →](/swift/flujo-de-control/)
-  </Card>
-  <Card title="Funciones" icon="setting">
-    Declaración, parámetros, retornos y closures.
-    [Leer →](/swift/funciones/)
-  </Card>
-  <Card title="Structs y Clases" icon="document">
-    Tipos de valor vs referencia, propiedades y métodos.
-    [Leer →](/swift/structs-y-clases/)
-  </Card>
-  <Card title="Opcionales" icon="warning">
-    Optional binding, nil coalescing y optional chaining.
-    [Leer →](/swift/opcionales/)
-  </Card>
-  <Card title="Protocolos" icon="puzzle">
-    Declaración, conformidad y programación orientada a protocolos.
-    [Leer →](/swift/protocolos/)
-  </Card>
-  <Card title="Enumeraciones" icon="list-format">
-    Valores crudos, valores asociados y CaseIterable.
-    [Leer →](/swift/enumeraciones/)
-  </Card>
+  <LinkCard title="Variables y Constantes" href="./variables-y-constantes/" description="Declaración con `let` y `var`, inferencia de tipos y anotaciones." />
+  <LinkCard title="Tipos de Datos" href="./tipos-de-datos/" description="Int, Double, String, Bool, Array, Dictionary, Set y Tuple." />
+  <LinkCard title="Flujo de Control" href="./flujo-de-control/" description="if/else, switch, for-in, while, guard." />
+  <LinkCard title="Funciones" href="./funciones/" description="Declaración, parámetros, retornos y closures." />
+  <LinkCard title="Structs y Clases" href="./structs-y-clases/" description="Tipos de valor vs referencia, propiedades y métodos." />
+  <LinkCard title="Opcionales" href="./opcionales/" description="Optional binding, nil coalescing y optional chaining." />
+  <LinkCard title="Protocolos" href="./protocolos/" description="Declaración, conformidad y programación orientada a protocolos." />
+  <LinkCard title="Enumeraciones" href="./enumeraciones/" description="Valores crudos, valores asociados y CaseIterable." />
 </CardGrid>

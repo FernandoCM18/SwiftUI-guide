@@ -1,0 +1,11 @@
+---
+interface Props {
+  url?: string;
+}
+const { url = 'https://swiftfiddle.com/' } = Astro.props;
+const isEnglish = Astro.url.pathname.startsWith('/en/');
+const label = isEnglish ? 'Try in Swift Playground →' : 'Probar en Swift Playground →';
+---
+<blockquote>
+  <a href={url} target="_blank" rel="noopener noreferrer">{label}</a>
+</blockquote>

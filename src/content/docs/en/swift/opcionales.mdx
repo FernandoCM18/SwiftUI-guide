@@ -3,6 +3,8 @@ title: Optionals
 description: Master optionals in Swift including optional binding, nil coalescing, force unwrapping, and optional chaining.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 ## Handling the Absence of a Value
 
 Optionals are one of Swift's most important features. An optional represents a value that might be absent -- it either contains a value or contains `nil`.
@@ -22,7 +24,7 @@ var score: Double? = 95.5
 var isActive: Bool? = nil
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::note
 You cannot use `nil` with non-optional types. `var name: String = nil` will produce a compile error.
@@ -56,7 +58,7 @@ if let first = firstName, let last = lastName {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Optional Binding with guard let
 
@@ -89,7 +91,7 @@ validateUser(name: nil, age: 25)       // "Invalid user data"
 validateUser(name: "Bob", age: 15)     // "Invalid user data"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Nil Coalescing Operator (??)
 
@@ -112,7 +114,7 @@ let result = primary ?? secondary ?? fallback
 print(result)  // "Default"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Force Unwrapping (!)
 
@@ -127,7 +129,7 @@ let unwrapped = number!   // 42
 // let crash = empty!     // Fatal error: unexpectedly found nil
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::caution
 Avoid force unwrapping unless you are absolutely certain the value is not nil. Prefer `if let`, `guard let`, or nil coalescing instead.
@@ -163,7 +165,7 @@ print(aliceCity)  // "London"
 print(bobCity)    // "Unknown"
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Optional Chaining with Methods
 
@@ -194,7 +196,7 @@ if let result = user.email?.send(message: "Test") {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Implicitly Unwrapped Optionals
 
@@ -216,7 +218,7 @@ print(key)  // "abc123"
 // let crash: String = apiKey  // Fatal error
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Implicitly unwrapped optionals are mainly used with `@IBOutlet` in UIKit. In modern SwiftUI code, you rarely need them.
@@ -245,7 +247,7 @@ let failed = invalid.flatMap { Int($0) }
 print(failed)  // nil
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Summary
 

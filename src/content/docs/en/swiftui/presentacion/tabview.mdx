@@ -3,6 +3,8 @@ title: TabView
 description: How to use TabView in SwiftUI to create tab-based navigation.
 ---
 
+import PlaygroundLink from '@components/PlaygroundLink.astro';
+
 `TabView` organizes content into tabs, showing a tab bar at the bottom of the screen.
 
 ## Preview
@@ -24,7 +26,7 @@ TabView {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Programmatic Selection
 
@@ -48,7 +50,7 @@ struct MainApp: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Badges
 
@@ -58,7 +60,7 @@ Text("Messages")
     .badge(5)
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 ## Page Style
 
@@ -72,7 +74,7 @@ TabView {
 .indexViewStyle(.page(backgroundDisplayMode: .always))
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
 
 :::tip
 Use `TabView` as the root container of your app. Each tab can contain its own independent `NavigationStack`.
@@ -117,4 +119,4 @@ struct MyAppView: View {
 }
 ```
 
-> [Try in Swift Playground →](https://swiftfiddle.com/)
+<PlaygroundLink />
