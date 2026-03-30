@@ -4,6 +4,7 @@ description: Domina la concurrencia moderna de Swift 6 con async/await, Task, ac
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 La concurrencia en Swift permite ejecutar múltiples operaciones en paralelo sin bloquear la interfaz. Swift 6 introduce concurrencia estricta por defecto, eliminando data races en tiempo de compilación.
 
@@ -11,26 +12,50 @@ La concurrencia en Swift permite ejecutar múltiples operaciones en paralelo sin
 
 Marca una función con `async` para indicar que puede suspenderse. Usa `await` para llamarla.
 
-```swift
-import Foundation
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import Foundation
 
-// Función asíncrona
-func obtenerUsuario(id: Int) async throws -> String {
-    let url = URL(string: "https://api.example.com/users/\(id)")!
-    let (data, _) = try await URLSession.shared.data(from: url)
-    return String(data: data, encoding: .utf8) ?? ""
-}
-
-// Llamar desde contexto async
-func cargarPerfil() async {
-    do {
-        let usuario = try await obtenerUsuario(id: 1)
-        print("Usuario: \(usuario)")
-    } catch {
-        print("Error: \(error)")
+    // Función asíncrona
+    func obtenerUsuario(id: Int) async throws -> String {
+        let url = URL(string: "https://api.example.com/users/\(id)")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return String(data: data, encoding: .utf8) ?? ""
     }
-}
-```
+
+    // Llamar desde contexto async
+    func cargarPerfil() async {
+        do {
+            let usuario = try await obtenerUsuario(id: 1)
+            print("Usuario: \(usuario)")
+        } catch {
+            print("Error: \(error)")
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Función asíncrona
+    async function obtenerUsuario(id: number): Promise<string> {
+      const res = await fetch(`https://api.example.com/users/${id}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.text();
+    }
+
+    // Llamar desde contexto async
+    async function cargarPerfil(): Promise<void> {
+      try {
+        const usuario = await obtenerUsuario(1);
+        console.log("Usuario:", usuario);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -38,56 +63,100 @@ func cargarPerfil() async {
 
 `Task` crea una unidad de trabajo asíncrono. Úsalo para lanzar trabajo async desde contexto síncrono (como `onAppear`).
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct PerfilView: View {
-    @State private var nombre = ""
+    struct PerfilView: View {
+        @State private var nombre = ""
 
-    var body: some View {
-        Text(nombre.isEmpty ? "Cargando..." : nombre)
-            .onAppear {
-                Task {
-                    // Lanzar trabajo async desde contexto sync
-                    nombre = await cargarNombre()
+        var body: some View {
+            Text(nombre.isEmpty ? "Cargando..." : nombre)
+                .onAppear {
+                    Task {
+                        // Lanzar trabajo async desde contexto sync
+                        nombre = await cargarNombre()
+                    }
                 }
-            }
-    }
+        }
 
-    func cargarNombre() async -> String {
-        try? await Task.sleep(for: .seconds(1))
-        return "Carlos"
+        func cargarNombre() async -> String {
+            try? await Task.sleep(for: .seconds(1))
+            return "Carlos"
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    "use client";
+    import { useEffect, useState } from "react";
+
+    function PerfilView() {
+      const [nombre, setNombre] = useState("");
+
+      useEffect(() => {
+        async function cargarNombre() {
+          await new Promise((r) => setTimeout(r, 1000));
+          return "Carlos";
+        }
+
+        cargarNombre().then(setNombre);
+      }, []);
+
+      return <p>{nombre || "Cargando..."}</p>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 `TaskGroup` ejecuta múltiples tareas en paralelo y espera a que todas terminen:
 
-```swift
-func cargarImagenes(ids: [Int]) async -> [String] {
-    await withTaskGroup(of: String.self) { group in
-        for id in ids {
-            group.addTask {
-                // Cada imagen se descarga en paralelo
-                await descargarImagen(id: id)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func cargarImagenes(ids: [Int]) async -> [String] {
+        await withTaskGroup(of: String.self) { group in
+            for id in ids {
+                group.addTask {
+                    // Cada imagen se descarga en paralelo
+                    await descargarImagen(id: id)
+                }
             }
-        }
 
-        var resultados: [String] = []
-        for await imagen in group {
-            resultados.append(imagen)
+            var resultados: [String] = []
+            for await imagen in group {
+                resultados.append(imagen)
+            }
+            return resultados
         }
-        return resultados
     }
-}
 
-func descargarImagen(id: Int) async -> String {
-    try? await Task.sleep(for: .milliseconds(100))
-    return "imagen_\(id)"
-}
-```
+    func descargarImagen(id: Int) async -> String {
+        try? await Task.sleep(for: .milliseconds(100))
+        return "imagen_\(id)"
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    async function cargarImagenes(ids: number[]): Promise<string[]> {
+      const resultados = await Promise.all(
+        ids.map((id) => descargarImagen(id))
+      );
+      return resultados;
+    }
+
+    async function descargarImagen(id: number): Promise<string> {
+      await new Promise((r) => setTimeout(r, 100));
+      return `imagen_${id}`;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

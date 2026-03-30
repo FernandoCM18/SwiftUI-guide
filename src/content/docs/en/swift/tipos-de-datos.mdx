@@ -4,6 +4,7 @@ description: Explore the fundamental data types in Swift including Int, Double, 
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Fundamental Types
 
@@ -13,19 +14,37 @@ Swift provides a rich set of built-in data types. Understanding these types is e
 
 Integers are whole numbers with no fractional component. Swift provides signed and unsigned integers in 8, 16, 32, and 64-bit forms.
 
-```swift
-let age: Int = 30           // Platform-native size (64-bit on modern systems)
-let small: Int8 = 127       // -128 to 127
-let medium: Int16 = 32_767  // Underscores for readability
-let big: Int64 = 9_223_372_036_854_775_807
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let age: Int = 30           // Platform-native size (64-bit on modern systems)
+    let small: Int8 = 127       // -128 to 127
+    let medium: Int16 = 32_767  // Underscores for readability
+    let big: Int64 = 9_223_372_036_854_775_807
 
-let positive: UInt = 42     // Unsigned (0 and above only)
+    let positive: UInt = 42     // Unsigned (0 and above only)
 
-// Useful properties
-print(Int.min)   // -9223372036854775808
-print(Int.max)   // 9223372036854775807
-print(UInt.min)  // 0
-```
+    // Useful properties
+    print(Int.min)   // -9223372036854775808
+    print(Int.max)   // 9223372036854775807
+    print(UInt.min)  // 0
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const age: number = 30;
+    const population = 7_900_000_000;  // Underscores for readability
+    const negative = -42;
+
+    // Type limits (no separate Int, everything is number)
+    console.log(`Safe integer min: ${Number.MIN_SAFE_INTEGER}`);
+    console.log(`Safe integer max: ${Number.MAX_SAFE_INTEGER}`);
+
+    // For large integers, use BigInt
+    const big: bigint = 9007199254740993n;
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -33,17 +52,35 @@ print(UInt.min)  // 0
 
 For numbers with decimal places, Swift offers `Double` (64-bit) and `Float` (32-bit).
 
-```swift
-let pi: Double = 3.14159265358979    // 15+ decimal digits of precision
-let e: Float = 2.71828               // 6 decimal digits of precision
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let pi: Double = 3.14159265358979    // 15+ decimal digits of precision
+    let e: Float = 2.71828               // 6 decimal digits of precision
 
-// Double is the default for decimal literals
-let gravity = 9.81                    // Inferred as Double
+    // Double is the default for decimal literals
+    let gravity = 9.81                    // Inferred as Double
 
-// Scientific notation
-let speed = 3.0e8                     // 3.0 × 10^8
-let tiny = 1.5e-4                     // 0.00015
-```
+    // Scientific notation
+    let speed = 3.0e8                     // 3.0 × 10^8
+    let tiny = 1.5e-4                     // 0.00015
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const pi: number = 3.14159265358979;
+    const gravity: number = 9.81;
+
+    // TS only has number (64-bit float, equivalent to Double)
+    const temperature = 36.6;
+
+    // Arithmetic with decimals
+    const radius = 5.0;
+    const area = pi * radius * radius;
+    console.log(`Circle area: ${area}`);
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -55,25 +92,48 @@ Always prefer `Double` over `Float` unless you have a specific reason to use les
 
 Strings are collections of characters. Swift strings are Unicode-compliant and very powerful.
 
-```swift
-let greeting = "Hello, World!"
-let multiline = """
-    This is a
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let greeting = "Hello, World!"
+    let multiline = """
+        This is a
+        multiline string
+        in Swift.
+        """
+
+    // String operations
+    let firstName = "John"
+    let lastName = "Doe"
+    let fullName = firstName + " " + lastName     // Concatenation
+    let message = "Name: \(fullName)"             // Interpolation
+
+    print(greeting.count)         // 13
+    print(greeting.isEmpty)       // false
+    print(greeting.uppercased())  // HELLO, WORLD!
+    print(greeting.contains("World"))  // true
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const greeting = "Hello, World!";
+    const multiline = `This is a
     multiline string
-    in Swift.
-    """
+    in TypeScript.`;
 
-// String operations
-let firstName = "John"
-let lastName = "Doe"
-let fullName = firstName + " " + lastName     // Concatenation
-let message = "Name: \(fullName)"             // Interpolation
+    // String operations
+    const firstName = "John";
+    const lastName = "Doe";
+    const fullName = `${firstName} ${lastName}`;    // Template literal
+    const message = `Name: ${fullName}`;            // Interpolation
 
-print(greeting.count)         // 13
-print(greeting.isEmpty)       // false
-print(greeting.uppercased())  // HELLO, WORLD!
-print(greeting.contains("World"))  // true
-```
+    console.log(greeting.length);            // 13
+    console.log(greeting.length === 0);      // false
+    console.log(greeting.toUpperCase());     // HELLO, WORLD!
+    console.log(greeting.includes("World")); // true
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -81,24 +141,48 @@ print(greeting.contains("World"))  // true
 
 Booleans represent `true` or `false` and are used extensively in control flow.
 
-```swift
-let isVisible = true
-let isHidden = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let isVisible = true
+    let isHidden = false
 
-// Boolean logic
-let a = true
-let b = false
+    // Boolean logic
+    let a = true
+    let b = false
 
-print(a && b)   // false (AND)
-print(a || b)   // true (OR)
-print(!a)       // false (NOT)
+    print(a && b)   // false (AND)
+    print(a || b)   // true (OR)
+    print(!a)       // false (NOT)
 
-// Comparison operators produce Bools
-let x = 10
-print(x > 5)    // true
-print(x == 10)  // true
-print(x != 3)   // true
-```
+    // Comparison operators produce Bools
+    let x = 10
+    print(x > 5)    // true
+    print(x == 10)  // true
+    print(x != 3)   // true
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const isVisible = true;
+    const isHidden = false;
+
+    // Boolean logic (identical to Swift)
+    const a = true;
+    const b = false;
+
+    console.log(a && b);   // false (AND)
+    console.log(a || b);   // true (OR)
+    console.log(!a);       // false (NOT)
+
+    // Comparison operators produce booleans
+    const x = 10;
+    console.log(x > 5);    // true
+    console.log(x === 10); // true (strict equality)
+    console.log(x !== 3);  // true
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -106,26 +190,52 @@ print(x != 3)   // true
 
 Arrays are ordered collections of values of the same type.
 
-```swift
-// Creating arrays
-var numbers: [Int] = [1, 2, 3, 4, 5]
-var fruits = ["Apple", "Banana", "Cherry"]  // Type inferred as [String]
-var empty: [Double] = []
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Creating arrays
+    var numbers: [Int] = [1, 2, 3, 4, 5]
+    var fruits = ["Apple", "Banana", "Cherry"]  // Type inferred as [String]
+    var empty: [Double] = []
 
-// Accessing and modifying
-print(fruits[0])            // "Apple"
-fruits.append("Date")       // Add to end
-fruits.insert("Avocado", at: 1)  // Insert at index
-fruits.remove(at: 0)        // Remove "Apple"
+    // Accessing and modifying
+    print(fruits[0])            // "Apple"
+    fruits.append("Date")       // Add to end
+    fruits.insert("Avocado", at: 1)  // Insert at index
+    fruits.remove(at: 0)        // Remove "Apple"
 
-// Useful properties and methods
-print(numbers.count)        // 5
-print(numbers.first ?? 0)   // 1
-print(numbers.last ?? 0)    // 5
-print(numbers.contains(3))  // true
-let sorted = numbers.sorted()
-print(sorted)               // [1, 2, 3, 4, 5]
-```
+    // Useful properties and methods
+    print(numbers.count)        // 5
+    print(numbers.first ?? 0)   // 1
+    print(numbers.last ?? 0)    // 5
+    print(numbers.contains(3))  // true
+    let sorted = numbers.sorted()
+    print(sorted)               // [1, 2, 3, 4, 5]
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Creating arrays
+    let numbers: number[] = [1, 2, 3, 4, 5];
+    let fruits = ["Apple", "Banana", "Cherry"];  // Type inferred as string[]
+    let empty: number[] = [];
+
+    // Accessing and modifying
+    console.log(fruits[0]);             // "Apple"
+    fruits.push("Date");                // Add to end
+    fruits.splice(1, 0, "Avocado");     // Insert at index
+    fruits.splice(0, 1);                // Remove "Apple"
+
+    // Useful properties and methods
+    console.log(numbers.length);          // 5
+    console.log(numbers.at(0) ?? 0);      // 1
+    console.log(numbers.at(-1) ?? 0);     // 5
+    console.log(numbers.includes(3));     // true
+    const sorted = [...numbers].sort((a, b) => a - b);
+    console.log(sorted);                 // [1, 2, 3, 4, 5]
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -133,33 +243,66 @@ print(sorted)               // [1, 2, 3, 4, 5]
 
 Dictionaries store key-value pairs with no defined ordering.
 
-```swift
-// Creating dictionaries
-var capitals: [String: String] = [
-    "France": "Paris",
-    "Japan": "Tokyo",
-    "Brazil": "Brasilia"
-]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Creating dictionaries
+    var capitals: [String: String] = [
+        "France": "Paris",
+        "Japan": "Tokyo",
+        "Brazil": "Brasilia"
+    ]
 
-// Accessing values (returns Optional)
-if let capital = capitals["France"] {
-    print(capital)  // "Paris"
-}
+    // Accessing values (returns Optional)
+    if let capital = capitals["France"] {
+        print(capital)  // "Paris"
+    }
 
-// Modifying
-capitals["Germany"] = "Berlin"       // Add new pair
-capitals["Brazil"] = "Brasília"      // Update existing
-capitals.removeValue(forKey: "Japan") // Remove
+    // Modifying
+    capitals["Germany"] = "Berlin"       // Add new pair
+    capitals["Brazil"] = "Brasília"      // Update existing
+    capitals.removeValue(forKey: "Japan") // Remove
 
-// Iterating
-for (country, capital) in capitals {
-    print("\(country): \(capital)")
-}
+    // Iterating
+    for (country, capital) in capitals {
+        print("\(country): \(capital)")
+    }
 
-print(capitals.count)       // Number of pairs
-print(capitals.keys)        // All keys
-print(capitals.values)      // All values
-```
+    print(capitals.count)       // Number of pairs
+    print(capitals.keys)        // All keys
+    print(capitals.values)      // All values
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Creating objects (most common Dictionary equivalent)
+    const capitals: Record<string, string> = {
+      France: "Paris",
+      Japan: "Tokyo",
+      Brazil: "Brasilia",
+    };
+
+    // Accessing values
+    const capital = capitals["France"];
+    if (capital) {
+      console.log(capital);  // "Paris"
+    }
+
+    // Modifying
+    capitals["Germany"] = "Berlin";       // Add new pair
+    capitals["Brazil"] = "Brasília";      // Update existing
+    delete capitals["Japan"];             // Remove
+
+    // Iterating
+    for (const [country, capital] of Object.entries(capitals)) {
+      console.log(`${country}: ${capital}`);
+    }
+
+    console.log(Object.keys(capitals));    // All keys
+    console.log(Object.values(capitals));  // All values
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -167,29 +310,61 @@ print(capitals.values)      // All values
 
 Sets are unordered collections of unique values.
 
-```swift
-// Creating sets
-var colors: Set<String> = ["Red", "Green", "Blue"]
-var numbers: Set = [1, 2, 3, 4, 5]  // Type inferred
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Creating sets
+    var colors: Set<String> = ["Red", "Green", "Blue"]
+    var numbers: Set = [1, 2, 3, 4, 5]  // Type inferred
 
-// Duplicates are automatically removed
-var letters: Set = ["A", "B", "A", "C", "B"]
-print(letters)  // {"A", "B", "C"} (order may vary)
+    // Duplicates are automatically removed
+    var letters: Set = ["A", "B", "A", "C", "B"]
+    print(letters)  // {"A", "B", "C"} (order may vary)
 
-// Set operations
-let setA: Set = [1, 2, 3, 4]
-let setB: Set = [3, 4, 5, 6]
+    // Set operations
+    let setA: Set = [1, 2, 3, 4]
+    let setB: Set = [3, 4, 5, 6]
 
-print(setA.union(setB))          // {1, 2, 3, 4, 5, 6}
-print(setA.intersection(setB))   // {3, 4}
-print(setA.subtracting(setB))    // {1, 2}
-print(setA.symmetricDifference(setB))  // {1, 2, 5, 6}
+    print(setA.union(setB))          // {1, 2, 3, 4, 5, 6}
+    print(setA.intersection(setB))   // {3, 4}
+    print(setA.subtracting(setB))    // {1, 2}
+    print(setA.symmetricDifference(setB))  // {1, 2, 5, 6}
 
-// Membership
-print(colors.contains("Red"))   // true
-colors.insert("Yellow")
-colors.remove("Red")
-```
+    // Membership
+    print(colors.contains("Red"))   // true
+    colors.insert("Yellow")
+    colors.remove("Red")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Creating sets
+    const colors = new Set<string>(["Red", "Green", "Blue"]);
+    const numbers = new Set([1, 2, 3, 4, 5]);
+
+    // Duplicates are automatically removed
+    const letters = new Set(["A", "B", "A", "C", "B"]);
+    console.log(letters);  // Set {"A", "B", "C"}
+
+    // Set operations
+    const setA = new Set([1, 2, 3, 4]);
+    const setB = new Set([3, 4, 5, 6]);
+
+    const union = new Set([...setA, ...setB]);
+    const intersection = new Set([...setA].filter((x) => setB.has(x)));
+    const difference = new Set([...setA].filter((x) => !setB.has(x)));
+
+    console.log(union);         // Set {1, 2, 3, 4, 5, 6}
+    console.log(intersection);  // Set {3, 4}
+    console.log(difference);    // Set {1, 2}
+
+    // Membership
+    console.log(colors.has("Red"));   // true
+    colors.add("Yellow");
+    colors.delete("Red");
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -197,29 +372,60 @@ colors.remove("Red")
 
 Tuples group multiple values into a single compound value. The values can be of different types.
 
-```swift
-// Creating tuples
-let point = (x: 10.0, y: 20.0)
-let httpStatus = (statusCode: 200, description: "OK")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Creating tuples
+    let point = (x: 10.0, y: 20.0)
+    let httpStatus = (statusCode: 200, description: "OK")
 
-// Accessing elements
-print(point.x)                    // 10.0
-print(httpStatus.statusCode)      // 200
-print(httpStatus.description)     // "OK"
+    // Accessing elements
+    print(point.x)                    // 10.0
+    print(httpStatus.statusCode)      // 200
+    print(httpStatus.description)     // "OK"
 
-// Decomposing tuples
-let (code, message) = httpStatus
-print("Code: \(code), Message: \(message)")
+    // Decomposing tuples
+    let (code, message) = httpStatus
+    print("Code: \(code), Message: \(message)")
 
-// Ignoring parts with underscore
-let (justCode, _) = httpStatus
-print(justCode)  // 200
+    // Ignoring parts with underscore
+    let (justCode, _) = httpStatus
+    print(justCode)  // 200
 
-// Tuples without labels
-let coordinates = (3, 5)
-print(coordinates.0)  // 3
-print(coordinates.1)  // 5
-```
+    // Tuples without labels
+    let coordinates = (3, 5)
+    print(coordinates.0)  // 3
+    print(coordinates.1)  // 5
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Typed tuples
+    const point: [number, number] = [10.0, 20.0];
+    const httpStatus: [number, string] = [200, "OK"];
+
+    // Accessing elements
+    console.log(point[0]);       // 10.0
+    console.log(httpStatus[0]);  // 200
+    console.log(httpStatus[1]);  // "OK"
+
+    // Destructuring tuples
+    const [code, message] = httpStatus;
+    console.log(`Code: ${code}, Message: ${message}`);
+
+    // Ignoring parts
+    const [justCode] = httpStatus;
+    console.log(justCode);  // 200
+
+    // Tuples as function return
+    function divide(a: number, b: number): { quotient: number; remainder: number } {
+      return { quotient: Math.floor(a / b), remainder: a % b };
+    }
+    const result = divide(17, 5);
+    console.log(`Quotient: ${result.quotient}, Remainder: ${result.remainder}`);
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -231,26 +437,52 @@ Tuples are best for simple, temporary groupings. For more complex data, prefer s
 
 Swift does not automatically convert between types. You must convert explicitly.
 
-```swift
-let integer = 42
-let decimal = 3.14
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let integer = 42
+    let decimal = 3.14
 
-// Convert Int to Double
-let sum = Double(integer) + decimal
-print(sum)  // 45.14
+    // Convert Int to Double
+    let sum = Double(integer) + decimal
+    print(sum)  // 45.14
 
-// Convert Double to Int (truncates)
-let truncated = Int(decimal)
-print(truncated)  // 3
+    // Convert Double to Int (truncates)
+    let truncated = Int(decimal)
+    print(truncated)  // 3
 
-// Convert numbers to String
-let text = String(integer)
-let formatted = "Value: \(integer)"
+    // Convert numbers to String
+    let text = String(integer)
+    let formatted = "Value: \(integer)"
 
-// Convert String to number (returns Optional)
-let parsed = Int("123")       // Optional(123)
-let invalid = Int("hello")    // nil
-```
+    // Convert String to number (returns Optional)
+    let parsed = Int("123")       // Optional(123)
+    let invalid = Int("hello")    // nil
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const integer = 42;
+    const decimal = 3.14;
+
+    // No conversion needed, everything is number
+    const sum = integer + decimal;
+    console.log(sum);  // 45.14
+
+    // Truncate decimal to integer
+    const truncated = Math.trunc(decimal);
+    console.log(truncated);  // 3
+
+    // Convert number to string
+    const text = String(integer);
+    const formatted = `Value: ${integer}`;
+
+    // Convert string to number
+    const parsed = parseInt("123");       // 123
+    const invalid = parseInt("hello");    // NaN
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

@@ -3,57 +3,102 @@ title: keyframeAnimator
 description: Create complex animations in SwiftUI with keyframeAnimator — control offset, scale, opacity and rotation independently.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 `keyframeAnimator` (iOS 17+) lets you define animations with keyframes where each property has its own independent animation curve.
 
 ## Basic structure
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct KeyframeExample: View {
-    @State private var animate = false
+    struct KeyframeExample: View {
+        @State private var animate = false
 
-    var body: some View {
-        Image(systemName: "star.fill")
-            .font(.system(size: 60))
-            .foregroundStyle(.yellow)
-            .keyframeAnimator(
-                initialValue: AnimationValues(),
-                trigger: animate
-            ) { content, value in
-                content
-                    .scaleEffect(value.scale)
-                    .offset(y: value.offsetY)
-                    .opacity(value.opacity)
-            } keyframes: { _ in
-                KeyframeTrack(\.scale) {
-                    LinearKeyframe(1.0, duration: 0.1)
-                    SpringKeyframe(1.5, duration: 0.3)
-                    SpringKeyframe(1.0, duration: 0.3)
+        var body: some View {
+            Image(systemName: "star.fill")
+                .font(.system(size: 60))
+                .foregroundStyle(.yellow)
+                .keyframeAnimator(
+                    initialValue: AnimationValues(),
+                    trigger: animate
+                ) { content, value in
+                    content
+                        .scaleEffect(value.scale)
+                        .offset(y: value.offsetY)
+                        .opacity(value.opacity)
+                } keyframes: { _ in
+                    KeyframeTrack(\.scale) {
+                        LinearKeyframe(1.0, duration: 0.1)
+                        SpringKeyframe(1.5, duration: 0.3)
+                        SpringKeyframe(1.0, duration: 0.3)
+                    }
+                    KeyframeTrack(\.offsetY) {
+                        LinearKeyframe(0, duration: 0.1)
+                        SpringKeyframe(-30, duration: 0.3)
+                        SpringKeyframe(0, duration: 0.3)
+                    }
+                    KeyframeTrack(\.opacity) {
+                        LinearKeyframe(1.0, duration: 0.5)
+                        LinearKeyframe(0.7, duration: 0.2)
+                        LinearKeyframe(1.0, duration: 0.1)
+                    }
                 }
-                KeyframeTrack(\.offsetY) {
-                    LinearKeyframe(0, duration: 0.1)
-                    SpringKeyframe(-30, duration: 0.3)
-                    SpringKeyframe(0, duration: 0.3)
-                }
-                KeyframeTrack(\.opacity) {
-                    LinearKeyframe(1.0, duration: 0.5)
-                    LinearKeyframe(0.7, duration: 0.2)
-                    LinearKeyframe(1.0, duration: 0.1)
-                }
-            }
-            .onTapGesture { animate.toggle() }
+                .onTapGesture { animate.toggle() }
+        }
     }
-}
 
-struct AnimationValues {
-    var scale: CGFloat = 1.0
-    var offsetY: CGFloat = 0
-    var opacity: Double = 1.0
-}
-```
+    struct AnimationValues {
+        var scale: CGFloat = 1.0
+        var offsetY: CGFloat = 0
+        var opacity: Double = 1.0
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    // CSS @keyframes replaces SwiftUI keyframeAnimator
+    // Add to your globals.css or Tailwind config:
+    // @keyframes star-pop {
+    //   0%   { transform: scale(1) translateY(0); opacity: 1; }
+    //   15%  { transform: scale(1) translateY(0); opacity: 1; }
+    //   45%  { transform: scale(1.5) translateY(-30px); opacity: 1; }
+    //   65%  { transform: scale(1) translateY(0); opacity: 0.7; }
+    //   100% { transform: scale(1) translateY(0); opacity: 1; }
+    // }
+
+    export default function KeyframeExample() {
+      const [animate, setAnimate] = useState(false);
+      const [key, setKey] = useState(0);
+
+      const handleClick = () => {
+        setAnimate(true);
+        setKey((k) => k + 1);
+      };
+
+      return (
+        <span
+          key={key}
+          onClick={handleClick}
+          className="inline-block cursor-pointer text-6xl text-yellow-400"
+          style={{
+            animation: animate ? "star-pop 0.8s ease-out forwards" : "none",
+          }}
+          onAnimationEnd={() => setAnimate(false)}
+        >
+          ★
+        </span>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -81,53 +126,95 @@ KeyframeTrack(\.scale) {
 
 ## Full example: animated like button
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LikeButton: View {
-    @State private var isLiked = false
-    @State private var trigger = false
+    struct LikeButton: View {
+        @State private var isLiked = false
+        @State private var trigger = false
 
-    var body: some View {
-        Button {
-            isLiked.toggle()
-            trigger.toggle()
-        } label: {
-            Image(systemName: isLiked ? "heart.fill" : "heart")
-                .font(.system(size: 44))
-                .foregroundStyle(isLiked ? .red : .gray)
-                .keyframeAnimator(
-                    initialValue: LikeValues(),
-                    trigger: trigger
-                ) { view, value in
-                    view
-                        .scaleEffect(value.scale)
-                        .rotationEffect(.degrees(value.rotation))
-                } keyframes: { _ in
-                    KeyframeTrack(\.scale) {
-                        MoveKeyframe(1.0)
-                        SpringKeyframe(1.4, duration: 0.2, spring: .bouncy)
-                        SpringKeyframe(1.0, duration: 0.3, spring: .smooth)
+        var body: some View {
+            Button {
+                isLiked.toggle()
+                trigger.toggle()
+            } label: {
+                Image(systemName: isLiked ? "heart.fill" : "heart")
+                    .font(.system(size: 44))
+                    .foregroundStyle(isLiked ? .red : .gray)
+                    .keyframeAnimator(
+                        initialValue: LikeValues(),
+                        trigger: trigger
+                    ) { view, value in
+                        view
+                            .scaleEffect(value.scale)
+                            .rotationEffect(.degrees(value.rotation))
+                    } keyframes: { _ in
+                        KeyframeTrack(\.scale) {
+                            MoveKeyframe(1.0)
+                            SpringKeyframe(1.4, duration: 0.2, spring: .bouncy)
+                            SpringKeyframe(1.0, duration: 0.3, spring: .smooth)
+                        }
+                        KeyframeTrack(\.rotation) {
+                            MoveKeyframe(0)
+                            LinearKeyframe(-8, duration: 0.1)
+                            LinearKeyframe(8, duration: 0.1)
+                            LinearKeyframe(-4, duration: 0.1)
+                            SpringKeyframe(0, duration: 0.2)
+                        }
                     }
-                    KeyframeTrack(\.rotation) {
-                        MoveKeyframe(0)
-                        LinearKeyframe(-8, duration: 0.1)
-                        LinearKeyframe(8, duration: 0.1)
-                        LinearKeyframe(-4, duration: 0.1)
-                        SpringKeyframe(0, duration: 0.2)
-                    }
-                }
+            }
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
     }
-}
 
-struct LikeValues {
-    var scale: CGFloat = 1.0
-    var rotation: Double = 0
-}
+    struct LikeValues {
+        var scale: CGFloat = 1.0
+        var rotation: Double = 0
+    }
 
-#Preview { LikeButton() }
-```
+    #Preview { LikeButton() }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+    import { Heart } from "lucide-react";
+
+    // CSS @keyframes for scale + wiggle rotation
+    // @keyframes like-pop {
+    //   0%   { transform: scale(1) rotate(0deg); }
+    //   20%  { transform: scale(1.4) rotate(-8deg); }
+    //   40%  { transform: scale(1.4) rotate(8deg); }
+    //   60%  { transform: scale(1.2) rotate(-4deg); }
+    //   100% { transform: scale(1) rotate(0deg); }
+    // }
+
+    export default function LikeButton() {
+      const [isLiked, setIsLiked] = useState(false);
+      const [key, setKey] = useState(0);
+
+      const toggle = () => {
+        setIsLiked((prev) => !prev);
+        setKey((k) => k + 1);
+      };
+
+      return (
+        <button onClick={toggle} className="p-2">
+          <Heart
+            key={key}
+            className={`h-11 w-11 transition-colors ${
+              isLiked ? "fill-red-500 text-red-500" : "text-gray-400"
+            }`}
+            style={{ animation: "like-pop 0.5s ease-out" }}
+          />
+        </button>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

@@ -4,6 +4,7 @@ description: Aprende a usar el componente Label de SwiftUI para mostrar texto co
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## El componente Label
 
@@ -13,20 +14,48 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Uso básico
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LabelBasico: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Label("Favoritos", systemImage: "star.fill")
-            Label("Compartir", systemImage: "square.and.arrow.up")
-            Label("Ajustes", systemImage: "gearshape")
-            Label("Perfil", systemImage: "person.circle")
+    struct LabelBasico: View {
+        var body: some View {
+            VStack(alignment: .leading, spacing: 16) {
+                Label("Favoritos", systemImage: "star.fill")
+                Label("Compartir", systemImage: "square.and.arrow.up")
+                Label("Ajustes", systemImage: "gearshape")
+                Label("Perfil", systemImage: "person.circle")
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { Star, Share2, Settings, UserCircle } from "lucide-react";
+
+    export default function LabelBasico() {
+      return (
+        <div className="flex flex-col items-start gap-4">
+          <span className="inline-flex items-center gap-2">
+            <Star className="size-5" /> Favoritos
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Share2 className="size-5" /> Compartir
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <Settings className="size-5" /> Ajustes
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <UserCircle className="size-5" /> Perfil
+          </span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -34,62 +63,125 @@ struct LabelBasico: View {
 
 SwiftUI proporciona varios estilos predefinidos para Labels.
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LabelEstilos: View {
-    var body: some View {
-        VStack(spacing: 20) {
-            // Estilo por defecto: icono + texto
-            Label("Automático", systemImage: "wand.and.stars")
-                .labelStyle(.automatic)
+    struct LabelEstilos: View {
+        var body: some View {
+            VStack(spacing: 20) {
+                // Estilo por defecto: icono + texto
+                Label("Automático", systemImage: "wand.and.stars")
+                    .labelStyle(.automatic)
 
-            // Solo icono
-            Label("Solo icono", systemImage: "heart.fill")
-                .labelStyle(.iconOnly)
+                // Solo icono
+                Label("Solo icono", systemImage: "heart.fill")
+                    .labelStyle(.iconOnly)
 
-            // Solo título
-            Label("Solo título", systemImage: "heart.fill")
-                .labelStyle(.titleOnly)
+                // Solo título
+                Label("Solo título", systemImage: "heart.fill")
+                    .labelStyle(.titleOnly)
 
-            // Título y icono (explícito)
-            Label("Ambos", systemImage: "bolt.fill")
-                .labelStyle(.titleAndIcon)
+                // Título y icono (explícito)
+                Label("Ambos", systemImage: "bolt.fill")
+                    .labelStyle(.titleAndIcon)
+            }
+            .font(.title3)
         }
-        .font(.title3)
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { Sparkles, Heart, Zap } from "lucide-react";
+
+    export default function LabelEstilos() {
+      return (
+        <div className="flex flex-col gap-5 text-lg">
+          {/* Icono + texto (por defecto) */}
+          <span className="inline-flex items-center gap-2">
+            <Sparkles className="size-5" /> Automático
+          </span>
+          {/* Solo icono */}
+          <span>
+            <Heart className="size-5" />
+          </span>
+          {/* Solo título */}
+          <span>Solo título</span>
+          {/* Título y icono */}
+          <span className="inline-flex items-center gap-2">
+            <Zap className="size-5" /> Ambos
+          </span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Personalizar colores y tamaños
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LabelPersonalizado: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Label("Importante", systemImage: "exclamationmark.triangle.fill")
-                .font(.headline)
-                .foregroundStyle(.orange)
+    struct LabelPersonalizado: View {
+        var body: some View {
+            VStack(spacing: 16) {
+                Label("Importante", systemImage: "exclamationmark.triangle.fill")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
 
-            Label("Correcto", systemImage: "checkmark.circle.fill")
-                .font(.title2)
-                .foregroundStyle(.green)
+                Label("Correcto", systemImage: "checkmark.circle.fill")
+                    .font(.title2)
+                    .foregroundStyle(.green)
 
-            Label("Error", systemImage: "xmark.octagon.fill")
-                .font(.title3)
-                .foregroundStyle(.red)
+                Label("Error", systemImage: "xmark.octagon.fill")
+                    .font(.title3)
+                    .foregroundStyle(.red)
 
-            Label("Información", systemImage: "info.circle.fill")
-                .font(.body)
-                .foregroundStyle(.blue)
+                Label("Información", systemImage: "info.circle.fill")
+                    .font(.body)
+                    .foregroundStyle(.blue)
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import {
+      AlertTriangle,
+      CheckCircle,
+      XOctagon,
+      Info,
+    } from "lucide-react";
+
+    export default function LabelPersonalizado() {
+      return (
+        <div className="flex flex-col gap-4">
+          <span className="inline-flex items-center gap-2 text-lg font-semibold text-orange-500">
+            <AlertTriangle className="size-5" /> Importante
+          </span>
+          <span className="inline-flex items-center gap-2 text-2xl text-green-500">
+            <CheckCircle className="size-6" /> Correcto
+          </span>
+          <span className="inline-flex items-center gap-2 text-xl text-red-500">
+            <XOctagon className="size-5" /> Error
+          </span>
+          <span className="inline-flex items-center gap-2 text-base text-blue-500">
+            <Info className="size-5" /> Información
+          </span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -97,40 +189,69 @@ struct LabelPersonalizado: View {
 
 Puedes crear un Label con vistas personalizadas para el título y el icono.
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LabelCustom: View {
-    var body: some View {
-        VStack(spacing: 20) {
-            // Label con vistas personalizadas
-            Label {
-                Text("Descarga completada")
-                    .font(.headline)
-            } icon: {
-                Image(systemName: "arrow.down.circle.fill")
-                    .foregroundStyle(.green)
-                    .font(.title)
-            }
-
-            // Label con múltiples líneas de texto
-            Label {
-                VStack(alignment: .leading) {
-                    Text("María García")
+    struct LabelCustom: View {
+        var body: some View {
+            VStack(spacing: 20) {
+                // Label con vistas personalizadas
+                Label {
+                    Text("Descarga completada")
                         .font(.headline)
-                    Text("Desarrolladora iOS")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                } icon: {
+                    Image(systemName: "arrow.down.circle.fill")
+                        .foregroundStyle(.green)
+                        .font(.title)
                 }
-            } icon: {
-                Image(systemName: "person.crop.circle.fill")
-                    .font(.largeTitle)
-                    .foregroundStyle(.blue)
+
+                // Label con múltiples líneas de texto
+                Label {
+                    VStack(alignment: .leading) {
+                        Text("María García")
+                            .font(.headline)
+                        Text("Desarrolladora iOS")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                } icon: {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundStyle(.blue)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { ArrowDownCircle, UserCircle } from "lucide-react";
+
+    export default function LabelCustom() {
+      return (
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center gap-3">
+            <ArrowDownCircle className="size-8 text-green-500" />
+            <span className="font-semibold">Descarga completada</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <UserCircle className="size-10 text-blue-500" />
+            <div className="flex flex-col">
+              <span className="font-semibold">María García</span>
+              <span className="text-sm text-gray-500">
+                Desarrolladora iOS
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -138,68 +259,156 @@ struct LabelCustom: View {
 
 Los Labels son especialmente útiles dentro de listas y menús.
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LabelEnLista: View {
-    var body: some View {
-        List {
-            Section("General") {
-                Label("Notificaciones", systemImage: "bell.badge")
-                Label("Sonidos", systemImage: "speaker.wave.2")
-                Label("Enfoque", systemImage: "moon.fill")
-            }
+    struct LabelEnLista: View {
+        var body: some View {
+            List {
+                Section("General") {
+                    Label("Notificaciones", systemImage: "bell.badge")
+                    Label("Sonidos", systemImage: "speaker.wave.2")
+                    Label("Enfoque", systemImage: "moon.fill")
+                }
 
-            Section("Privacidad") {
-                Label("Localización", systemImage: "location")
-                Label("Cámara", systemImage: "camera")
-                Label("Micrófono", systemImage: "mic")
-            }
+                Section("Privacidad") {
+                    Label("Localización", systemImage: "location")
+                    Label("Cámara", systemImage: "camera")
+                    Label("Micrófono", systemImage: "mic")
+                }
 
-            Section("Cuenta") {
-                Label("iCloud", systemImage: "icloud")
-                Label("Suscripciones", systemImage: "creditcard")
+                Section("Cuenta") {
+                    Label("iCloud", systemImage: "icloud")
+                    Label("Suscripciones", systemImage: "creditcard")
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import {
+      Bell, Volume2, Moon, MapPin,
+      Camera, Mic, Cloud, CreditCard,
+    } from "lucide-react";
+
+    export default function LabelEnLista() {
+      return (
+        <div className="divide-y rounded-lg border">
+          <p className="px-4 py-2 text-sm font-semibold text-gray-500">
+            General
+          </p>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Bell className="size-5" /> Notificaciones
+          </div>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Volume2 className="size-5" /> Sonidos
+          </div>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Moon className="size-5" /> Enfoque
+          </div>
+          <p className="px-4 py-2 text-sm font-semibold text-gray-500">
+            Privacidad
+          </p>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <MapPin className="size-5" /> Localización
+          </div>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Camera className="size-5" /> Cámara
+          </div>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Mic className="size-5" /> Micrófono
+          </div>
+          <p className="px-4 py-2 text-sm font-semibold text-gray-500">
+            Cuenta
+          </p>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Cloud className="size-5" /> iCloud
+          </div>
+          <div className="flex items-center gap-3 px-4 py-3">
+            <CreditCard className="size-5" /> Suscripciones
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Label como botón
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LabelBoton: View {
-    @State private var esFavorito = false
+    struct LabelBoton: View {
+        @State private var esFavorito = false
 
-    var body: some View {
-        VStack(spacing: 20) {
-            Button {
-                esFavorito.toggle()
-            } label: {
-                Label(
-                    esFavorito ? "Quitar de favoritos" : "Añadir a favoritos",
-                    systemImage: esFavorito ? "star.fill" : "star"
-                )
-                .foregroundStyle(esFavorito ? .yellow : .gray)
-            }
+        var body: some View {
+            VStack(spacing: 20) {
+                Button {
+                    esFavorito.toggle()
+                } label: {
+                    Label(
+                        esFavorito ? "Quitar de favoritos" : "Añadir a favoritos",
+                        systemImage: esFavorito ? "star.fill" : "star"
+                    )
+                    .foregroundStyle(esFavorito ? .yellow : .gray)
+                }
 
-            Button {
-                // Acción de compartir
-            } label: {
-                Label("Compartir", systemImage: "square.and.arrow.up")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundStyle(.white)
-                    .clipShape(.rect(cornerRadius: 10))
+                Button {
+                    // Acción de compartir
+                } label: {
+                    Label("Compartir", systemImage: "square.and.arrow.up")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundStyle(.white)
+                        .clipShape(.rect(cornerRadius: 10))
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+    import { Star, Share2 } from "lucide-react";
+
+    export default function LabelBoton() {
+      const [esFavorito, setEsFavorito] = useState(false);
+
+      return (
+        <div className="flex flex-col items-center gap-5">
+          <button
+            onClick={() => setEsFavorito(!esFavorito)}
+            className={`inline-flex items-center gap-2 ${
+              esFavorito ? "text-yellow-500" : "text-gray-400"
+            }`}
+          >
+            <Star
+              className="size-5"
+              fill={esFavorito ? "currentColor" : "none"}
+            />
+            {esFavorito ? "Quitar de favoritos" : "Añadir a favoritos"}
+          </button>
+          <button className="inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-white">
+            <Share2 className="size-5" /> Compartir
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

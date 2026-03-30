@@ -4,6 +4,7 @@ description: Aprende las estructuras de control en Swift, incluyendo if/else, sw
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Estructuras de control
 
@@ -13,19 +14,38 @@ Las estructuras de control permiten dirigir el flujo de ejecución de tu program
 
 La estructura más básica para tomar decisiones.
 
-```swift
-let temperatura = 32
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let temperatura = 32
 
-if temperatura > 30 {
-    print("Hace mucho calor")
-} else if temperatura > 20 {
-    print("El clima es agradable")
-} else if temperatura > 10 {
-    print("Hace fresco")
-} else {
-    print("Hace frío")
-}
-```
+    if temperatura > 30 {
+        print("Hace mucho calor")
+    } else if temperatura > 20 {
+        print("El clima es agradable")
+    } else if temperatura > 10 {
+        print("Hace fresco")
+    } else {
+        print("Hace frío")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const temperatura = 32;
+
+    if (temperatura > 30) {
+      console.log("Hace mucho calor");
+    } else if (temperatura > 20) {
+      console.log("El clima es agradable");
+    } else if (temperatura > 10) {
+      console.log("Hace fresco");
+    } else {
+      console.log("Hace frío");
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -58,22 +78,51 @@ if esEstudiante || esMayorDe65 {
 
 El `switch` de Swift es muy potente. Debe ser exhaustivo y no necesita `break` (no hay fall-through implícito).
 
-```swift
-let dia = "lunes"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let dia = "lunes"
 
-switch dia {
-case "lunes":
-    print("Inicio de semana")
-case "martes", "miércoles", "jueves":
-    print("Entre semana")
-case "viernes":
-    print("¡Por fin viernes!")
-case "sábado", "domingo":
-    print("Fin de semana")
-default:
-    print("Día no reconocido")
-}
-```
+    switch dia {
+    case "lunes":
+        print("Inicio de semana")
+    case "martes", "miércoles", "jueves":
+        print("Entre semana")
+    case "viernes":
+        print("¡Por fin viernes!")
+    case "sábado", "domingo":
+        print("Fin de semana")
+    default:
+        print("Día no reconocido")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const dia = "lunes";
+
+    switch (dia) {
+      case "lunes":
+        console.log("Inicio de semana");
+        break;
+      case "martes":
+      case "miércoles":
+      case "jueves":
+        console.log("Entre semana");
+        break;
+      case "viernes":
+        console.log("¡Por fin viernes!");
+        break;
+      case "sábado":
+      case "domingo":
+        console.log("Fin de semana");
+        break;
+      default:
+        console.log("Día no reconocido");
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -144,34 +193,68 @@ case let (x, y):
 
 El bucle `for-in` itera sobre secuencias como rangos, arrays y diccionarios.
 
-```swift
-// Iterar sobre un rango
-for i in 1...5 {
-    print("Número: \(i)")
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Iterar sobre un rango
+    for i in 1...5 {
+        print("Número: \(i)")
+    }
 
-// Rango que excluye el límite superior
-for i in 0..<3 {
-    print("Índice: \(i)")
-}
+    // Rango que excluye el límite superior
+    for i in 0..<3 {
+        print("Índice: \(i)")
+    }
 
-// Iterar sobre un array
-let frutas = ["Manzana", "Banana", "Cereza"]
-for fruta in frutas {
-    print("Fruta: \(fruta)")
-}
+    // Iterar sobre un array
+    let frutas = ["Manzana", "Banana", "Cereza"]
+    for fruta in frutas {
+        print("Fruta: \(fruta)")
+    }
 
-// Iterar con índice usando enumerated()
-for (indice, fruta) in frutas.enumerated() {
-    print("\(indice): \(fruta)")
-}
+    // Iterar con índice usando enumerated()
+    for (indice, fruta) in frutas.enumerated() {
+        print("\(indice): \(fruta)")
+    }
 
-// Iterar sobre un diccionario
-let edades = ["Ana": 25, "Luis": 30, "María": 28]
-for (nombre, edad) in edades {
-    print("\(nombre) tiene \(edad) años")
-}
-```
+    // Iterar sobre un diccionario
+    let edades = ["Ana": 25, "Luis": 30, "María": 28]
+    for (nombre, edad) in edades {
+        print("\(nombre) tiene \(edad) años")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Iterar sobre un rango
+    for (let i = 1; i <= 5; i++) {
+      console.log(`Número: ${i}`);
+    }
+
+    // Rango que excluye el límite superior
+    for (let i = 0; i < 3; i++) {
+      console.log(`Índice: ${i}`);
+    }
+
+    // Iterar sobre un array
+    const frutas = ["Manzana", "Banana", "Cereza"];
+    for (const fruta of frutas) {
+      console.log(`Fruta: ${fruta}`);
+    }
+
+    // Iterar con índice usando .forEach() o .entries()
+    frutas.forEach((fruta, indice) => {
+      console.log(`${indice}: ${fruta}`);
+    });
+
+    // Iterar sobre un objeto
+    const edades: Record<string, number> = { Ana: 25, Luis: 30, María: 28 };
+    for (const [nombre, edad] of Object.entries(edades)) {
+      console.log(`${nombre} tiene ${edad} años`);
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -208,14 +291,28 @@ print("2^10 = \(potencia)")  // 1024
 
 Ejecuta un bloque de código mientras una condición sea verdadera.
 
-```swift
-var contador = 5
-while contador > 0 {
-    print("Cuenta regresiva: \(contador)")
-    contador -= 1
-}
-print("¡Despegue!")
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    var contador = 5
+    while contador > 0 {
+        print("Cuenta regresiva: \(contador)")
+        contador -= 1
+    }
+    print("¡Despegue!")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    let contador = 5;
+    while (contador > 0) {
+      console.log(`Cuenta regresiva: ${contador}`);
+      contador -= 1;
+    }
+    console.log("¡Despegue!");
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -239,23 +336,46 @@ print("Total de intentos: \(intentos)")
 
 `guard` es una salida anticipada. Si la condición no se cumple, debe salir del ámbito actual.
 
-```swift
-func verificarEdad(_ edad: Int) {
-    guard edad >= 18 else {
-        print("Debes ser mayor de edad")
-        return
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func verificarEdad(_ edad: Int) {
+        guard edad >= 18 else {
+            print("Debes ser mayor de edad")
+            return
+        }
+        guard edad <= 120 else {
+            print("Edad no válida")
+            return
+        }
+        print("Edad válida: \(edad) años. Bienvenido.")
     }
-    guard edad <= 120 else {
-        print("Edad no válida")
-        return
-    }
-    print("Edad válida: \(edad) años. Bienvenido.")
-}
 
-verificarEdad(15)   // "Debes ser mayor de edad"
-verificarEdad(25)   // "Edad válida: 25 años. Bienvenido."
-verificarEdad(150)  // "Edad no válida"
-```
+    verificarEdad(15)   // "Debes ser mayor de edad"
+    verificarEdad(25)   // "Edad válida: 25 años. Bienvenido."
+    verificarEdad(150)  // "Edad no válida"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function verificarEdad(edad: number): void {
+      if (edad < 18) {
+        console.log("Debes ser mayor de edad");
+        return;
+      }
+      if (edad > 120) {
+        console.log("Edad no válida");
+        return;
+      }
+      console.log(`Edad válida: ${edad} años. Bienvenido.`);
+    }
+
+    verificarEdad(15);   // "Debes ser mayor de edad"
+    verificarEdad(25);   // "Edad válida: 25 años. Bienvenido."
+    verificarEdad(150);  // "Edad no válida"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

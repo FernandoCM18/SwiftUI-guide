@@ -4,6 +4,7 @@ description: How to use the Button component in SwiftUI to create interactive bu
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `Button` is one of the most used controls in SwiftUI. It triggers an action when the user taps it.
 
@@ -13,64 +14,149 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Basic Usage
 
-```swift
-Button("Press Me") {
-    print("Button pressed!")
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Button("Press Me") {
+        print("Button pressed!")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function MyButton() {
+      return (
+        <button
+          onClick={() => console.log("Button pressed!")}
+          className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          Press Me
+        </button>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Custom Label
 
-```swift
-Button {
-    print("Save")
-} label: {
-    HStack {
-        Image(systemName: "square.and.arrow.down")
-        Text("Save")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Button {
+        print("Save")
+    } label: {
+        HStack {
+            Image(systemName: "square.and.arrow.down")
+            Text("Save")
+        }
+        .padding()
+        .background(Color.blue)
+        .foregroundStyle(.white)
+        .clipShape(.rect(cornerRadius: 10))
     }
-    .padding()
-    .background(Color.blue)
-    .foregroundStyle(.white)
-    .clipShape(.rect(cornerRadius: 10))
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
+
+    export default function SaveButton() {
+      return (
+        <button
+          onClick={() => console.log("Save")}
+          className="flex items-center gap-2 rounded-[10px] bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        >
+          <ArrowDownTrayIcon className="h-5 w-5" />
+          Save
+        </button>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Button Styles
 
-```swift
-VStack(spacing: 20) {
-    Button("Bordered") { }
-        .buttonStyle(.bordered)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    VStack(spacing: 20) {
+        Button("Bordered") { }
+            .buttonStyle(.bordered)
 
-    Button("Prominent") { }
-        .buttonStyle(.borderedProminent)
+        Button("Prominent") { }
+            .buttonStyle(.borderedProminent)
 
-    Button("Borderless") { }
-        .buttonStyle(.borderless)
+        Button("Borderless") { }
+            .buttonStyle(.borderless)
 
-    Button("Plain") { }
-        .buttonStyle(.plain)
-}
-```
+        Button("Plain") { }
+            .buttonStyle(.plain)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function ButtonStyles() {
+      return (
+        <div className="flex flex-col gap-5">
+          <button className="rounded-lg border border-blue-500 px-4 py-2 text-blue-500 hover:bg-blue-50">
+            Bordered
+          </button>
+          <button className="rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+            Prominent
+          </button>
+          <button className="px-4 py-2 text-blue-500 hover:underline">
+            Borderless
+          </button>
+          <button className="px-4 py-2 text-gray-700 hover:text-gray-900">
+            Plain
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Button Roles
 
-```swift
-Button("Delete", role: .destructive) {
-    // Destructive action
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Button("Delete", role: .destructive) {
+        // Destructive action
+    }
 
-Button("Cancel", role: .cancel) {
-    // Cancel action
-}
-```
+    Button("Cancel", role: .cancel) {
+        // Cancel action
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function RoleButtons() {
+      return (
+        <div className="flex gap-4">
+          <button className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600">
+            Delete
+          </button>
+          <button className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100">
+            Cancel
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -90,30 +176,73 @@ Use `role: .destructive` for actions that delete data. SwiftUI will automaticall
 
 ## Full Example
 
-```swift
-struct CounterView: View {
-    @State private var count = 0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct CounterView: View {
+        @State private var count = 0
 
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Count: \(count)")
-                .font(.largeTitle)
+        var body: some View {
+            VStack(spacing: 20) {
+                Text("Count: \(count)")
+                    .font(.largeTitle)
 
-            HStack(spacing: 16) {
-                Button("Subtract") { count -= 1 }
-                    .buttonStyle(.bordered)
-                    .tint(.red)
+                HStack(spacing: 16) {
+                    Button("Subtract") { count -= 1 }
+                        .buttonStyle(.bordered)
+                        .tint(.red)
 
-                Button("Add") { count += 1 }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
+                    Button("Add") { count += 1 }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.green)
+                }
+
+                Button("Reset", role: .destructive) { count = 0 }
+                    .disabled(count == 0)
             }
-
-            Button("Reset", role: .destructive) { count = 0 }
-                .disabled(count == 0)
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function Counter() {
+      const [count, setCount] = useState(0);
+
+      return (
+        <div className="flex flex-col items-center gap-5">
+          <p className="text-4xl font-bold">Count: {count}</p>
+
+          <div className="flex gap-4">
+            <button
+              onClick={() => setCount(count - 1)}
+              className="rounded-lg border border-red-500 px-4 py-2 text-red-500 hover:bg-red-50"
+            >
+              Subtract
+            </button>
+            <button
+              onClick={() => setCount(count + 1)}
+              className="rounded-lg bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+            >
+              Add
+            </button>
+          </div>
+
+          <button
+            onClick={() => setCount(0)}
+            disabled={count === 0}
+            className="text-red-500 hover:underline disabled:text-gray-400 disabled:no-underline"
+          >
+            Reset
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

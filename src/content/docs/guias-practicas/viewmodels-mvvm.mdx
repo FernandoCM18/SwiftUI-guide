@@ -4,6 +4,7 @@ description: Cómo implementar el patrón MVVM en SwiftUI con ViewModels, @Obser
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 El patrón **MVVM** (Model-View-ViewModel) es la arquitectura más utilizada en apps SwiftUI. Separa la lógica de negocio (ViewModel) de la interfaz (View) y los datos (Model).
 
@@ -19,50 +20,112 @@ Model      → Datos y estructuras
 
 Desde iOS 17, Apple recomienda usar el macro `@Observable` en lugar de `ObservableObject`:
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-@Observable
-class ContadorViewModel {
-    var valor = 0
-    var historial: [Int] = []
+    @Observable
+    class ContadorViewModel {
+        var valor = 0
+        var historial: [Int] = []
 
-    func incrementar() {
-        valor += 1
-        historial.append(valor)
+        func incrementar() {
+            valor += 1
+            historial.append(valor)
+        }
+
+        func reiniciar() {
+            valor = 0
+            historial.removeAll()
+        }
     }
 
-    func reiniciar() {
-        valor = 0
-        historial.removeAll()
-    }
-}
+    struct ContadorView: View {
+        @State private var vm = ContadorViewModel()
 
-struct ContadorView: View {
-    @State private var vm = ContadorViewModel()
+        var body: some View {
+            VStack(spacing: 20) {
+                Text("\(vm.valor)")
+                    .font(.system(size: 72, weight: .bold))
 
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("\(vm.valor)")
-                .font(.system(size: 72, weight: .bold))
+                HStack(spacing: 16) {
+                    Button("Reiniciar") { vm.reiniciar() }
+                        .buttonStyle(.bordered)
 
-            HStack(spacing: 16) {
-                Button("Reiniciar") { vm.reiniciar() }
-                    .buttonStyle(.bordered)
+                    Button("Sumar") { vm.incrementar() }
+                        .buttonStyle(.borderedProminent)
+                }
 
-                Button("Sumar") { vm.incrementar() }
-                    .buttonStyle(.borderedProminent)
-            }
-
-            if !vm.historial.isEmpty {
-                Text("Historial: \(vm.historial.map(String.init).joined(separator: ", "))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if !vm.historial.isEmpty {
+                    Text("Historial: \(vm.historial.map(String.init).joined(separator: ", "))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    function useContador() {
+      const [valor, setValor] = useState(0);
+      const [historial, setHistorial] = useState<number[]>([]);
+
+      function incrementar() {
+        setValor((prev) => {
+          const nuevo = prev + 1;
+          setHistorial((h) => [...h, nuevo]);
+          return nuevo;
+        });
+      }
+
+      function reiniciar() {
+        setValor(0);
+        setHistorial([]);
+      }
+
+      return { valor, historial, incrementar, reiniciar };
+    }
+
+    export default function Contador() {
+      const { valor, historial, incrementar, reiniciar } = useContador();
+
+      return (
+        <div className="flex flex-col items-center gap-5">
+          <span className="text-7xl font-bold">{valor}</span>
+
+          <div className="flex gap-4">
+            <button
+              onClick={reiniciar}
+              className="rounded-lg border px-4 py-2"
+            >
+              Reiniciar
+            </button>
+            <button
+              onClick={incrementar}
+              className="rounded-lg bg-blue-500 px-4 py-2 text-white"
+            >
+              Sumar
+            </button>
+          </div>
+
+          {historial.length > 0 && (
+            <p className="text-sm text-gray-500">
+              Historial: {historial.join(", ")}
+            </p>
+          )}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -112,96 +175,227 @@ Si tu app soporta iOS 17+, usa `@Observable`. Es más simple, más eficiente y r
 
 ### Model
 
-```swift
-struct Nota: Identifiable, Codable {
-    let id: UUID
-    var titulo: String
-    var contenido: String
-    var fecha: Date
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Nota: Identifiable, Codable {
+        let id: UUID
+        var titulo: String
+        var contenido: String
+        var fecha: Date
 
-    init(titulo: String, contenido: String) {
-        self.id = UUID()
-        self.titulo = titulo
-        self.contenido = contenido
-        self.fecha = Date()
+        init(titulo: String, contenido: String) {
+            self.id = UUID()
+            self.titulo = titulo
+            self.contenido = contenido
+            self.fecha = Date()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Nota {
+      id: string;
+      titulo: string;
+      contenido: string;
+      fecha: Date;
+    }
+
+    function crearNota(titulo: string, contenido: string): Nota {
+      return {
+        id: crypto.randomUUID(),
+        titulo,
+        contenido,
+        fecha: new Date(),
+      };
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 ### ViewModel
 
-```swift
-@Observable
-class NotasViewModel {
-    var notas: [Nota] = []
-    var notaSeleccionada: Nota?
-    var busqueda = ""
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    @Observable
+    class NotasViewModel {
+        var notas: [Nota] = []
+        var notaSeleccionada: Nota?
+        var busqueda = ""
 
-    var notasFiltradas: [Nota] {
-        if busqueda.isEmpty { return notas }
-        return notas.filter {
-            $0.titulo.localizedCaseInsensitiveContains(busqueda) ||
-            $0.contenido.localizedCaseInsensitiveContains(busqueda)
+        var notasFiltradas: [Nota] {
+            if busqueda.isEmpty { return notas }
+            return notas.filter {
+                $0.titulo.localizedCaseInsensitiveContains(busqueda) ||
+                $0.contenido.localizedCaseInsensitiveContains(busqueda)
+            }
+        }
+
+        func agregar(titulo: String, contenido: String) {
+            let nota = Nota(titulo: titulo, contenido: contenido)
+            notas.insert(nota, at: 0)
+        }
+
+        func eliminar(at offsets: IndexSet) {
+            notas.remove(atOffsets: offsets)
+        }
+
+        func actualizar(_ nota: Nota, titulo: String, contenido: String) {
+            if let index = notas.firstIndex(where: { $0.id == nota.id }) {
+                notas[index].titulo = titulo
+                notas[index].contenido = contenido
+            }
         }
     }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
 
-    func agregar(titulo: String, contenido: String) {
-        let nota = Nota(titulo: titulo, contenido: contenido)
-        notas.insert(nota, at: 0)
-    }
+    import { useState, useMemo } from "react";
 
-    func eliminar(at offsets: IndexSet) {
-        notas.remove(atOffsets: offsets)
-    }
+    function useNotas() {
+      const [notas, setNotas] = useState<Nota[]>([]);
+      const [busqueda, setBusqueda] = useState("");
 
-    func actualizar(_ nota: Nota, titulo: String, contenido: String) {
-        if let index = notas.firstIndex(where: { $0.id == nota.id }) {
-            notas[index].titulo = titulo
-            notas[index].contenido = contenido
-        }
+      const notasFiltradas = useMemo(() => {
+        if (!busqueda) return notas;
+        const q = busqueda.toLowerCase();
+        return notas.filter(
+          (n) =>
+            n.titulo.toLowerCase().includes(q) ||
+            n.contenido.toLowerCase().includes(q)
+        );
+      }, [notas, busqueda]);
+
+      function agregar(titulo: string, contenido: string) {
+        setNotas((prev) => [crearNota(titulo, contenido), ...prev]);
+      }
+
+      function eliminar(id: string) {
+        setNotas((prev) => prev.filter((n) => n.id !== id));
+      }
+
+      function actualizar(id: string, titulo: string, contenido: string) {
+        setNotas((prev) =>
+          prev.map((n) => (n.id === id ? { ...n, titulo, contenido } : n))
+        );
+      }
+
+      return { notas: notasFiltradas, busqueda, setBusqueda, agregar, eliminar, actualizar };
     }
-}
-```
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 ### View
 
-```swift
-struct NotasAppView: View {
-    @State private var vm = NotasViewModel()
-    @State private var mostrarFormulario = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct NotasAppView: View {
+        @State private var vm = NotasViewModel()
+        @State private var mostrarFormulario = false
 
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(vm.notasFiltradas) { nota in
-                    NavigationLink {
-                        DetalleNotaView(vm: vm, nota: nota)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(nota.titulo)
-                                .font(.headline)
-                            Text(nota.contenido)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
+        var body: some View {
+            NavigationStack {
+                List {
+                    ForEach(vm.notasFiltradas) { nota in
+                        NavigationLink {
+                            DetalleNotaView(vm: vm, nota: nota)
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text(nota.titulo)
+                                    .font(.headline)
+                                Text(nota.contenido)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
                         }
                     }
+                    .onDelete { vm.eliminar(at: $0) }
                 }
-                .onDelete { vm.eliminar(at: $0) }
-            }
-            .navigationTitle("Notas")
-            .searchable(text: $vm.busqueda)
-            .toolbar {
-                Button { mostrarFormulario = true } label: {
-                    Image(systemName: "plus")
+                .navigationTitle("Notas")
+                .searchable(text: $vm.busqueda)
+                .toolbar {
+                    Button { mostrarFormulario = true } label: {
+                        Image(systemName: "plus")
+                    }
                 }
-            }
-            .sheet(isPresented: $mostrarFormulario) {
-                NuevaNotaView(vm: vm)
+                .sheet(isPresented: $mostrarFormulario) {
+                    NuevaNotaView(vm: vm)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+    import Link from "next/link";
+
+    export default function NotasApp() {
+      const { notas, busqueda, setBusqueda, agregar, eliminar } = useNotas();
+      const [mostrarFormulario, setMostrarFormulario] = useState(false);
+
+      return (
+        <div className="mx-auto max-w-2xl p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Notas</h1>
+            <button
+              onClick={() => setMostrarFormulario(true)}
+              className="rounded-full bg-blue-500 p-2 text-white"
+            >
+              +
+            </button>
+          </div>
+
+          <input
+            type="search"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="Buscar notas..."
+            className="mb-4 w-full rounded-lg border px-4 py-2"
+          />
+
+          <ul className="space-y-2">
+            {notas.map((nota) => (
+              <li key={nota.id} className="rounded-lg border p-4">
+                <Link href={`/notas/${nota.id}`}>
+                  <h2 className="font-semibold">{nota.titulo}</h2>
+                  <p className="truncate text-sm text-gray-500">
+                    {nota.contenido}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {mostrarFormulario && (
+            <NuevaNotaDialog
+              onGuardar={(titulo, contenido) => {
+                agregar(titulo, contenido);
+                setMostrarFormulario(false);
+              }}
+              onCancelar={() => setMostrarFormulario(false)}
+            />
+          )}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

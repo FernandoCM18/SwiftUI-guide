@@ -4,6 +4,7 @@ description: Mejores prácticas para organizar carpetas, código y arquitectura 
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Una buena organización del proyecto facilita el mantenimiento, la colaboración y la escalabilidad de tu app.
 
@@ -11,45 +12,83 @@ Una buena organización del proyecto facilita el mantenimiento, la colaboración
 
 ### App pequeña-mediana (MVVM)
 
-```
-MiApp/
-├── MiApp.swift              # @main entry point
-├── ContentView.swift        # Vista principal
-├── Models/
-│   ├── Usuario.swift
-│   ├── Producto.swift
-│   └── Pedido.swift
-├── ViewModels/
-│   ├── AuthViewModel.swift
-│   ├── ProductosViewModel.swift
-│   └── PedidosViewModel.swift
-├── Views/
-│   ├── Auth/
-│   │   ├── LoginView.swift
-│   │   └── RegistroView.swift
-│   ├── Home/
-│   │   ├── HomeView.swift
-│   │   └── ProductoCardView.swift
-│   ├── Perfil/
-│   │   └── PerfilView.swift
-│   └── Components/
-│       ├── BotonPrimario.swift
-│       ├── TarjetaView.swift
-│       └── CargandoView.swift
-├── Services/
-│   ├── APIService.swift
-│   ├── AuthService.swift
-│   └── StorageService.swift
-├── Utilities/
-│   ├── Extensions/
-│   │   ├── Color+Hex.swift
-│   │   ├── Date+Format.swift
-│   │   └── View+Modifiers.swift
-│   └── Constants.swift
-├── Resources/
-│   └── Assets.xcassets
-└── Info.plist
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```
+    MiApp/
+    ├── MiApp.swift              # @main entry point
+    ├── ContentView.swift        # Vista principal
+    ├── Models/
+    │   ├── Usuario.swift
+    │   ├── Producto.swift
+    │   └── Pedido.swift
+    ├── ViewModels/
+    │   ├── AuthViewModel.swift
+    │   ├── ProductosViewModel.swift
+    │   └── PedidosViewModel.swift
+    ├── Views/
+    │   ├── Auth/
+    │   │   ├── LoginView.swift
+    │   │   └── RegistroView.swift
+    │   ├── Home/
+    │   │   ├── HomeView.swift
+    │   │   └── ProductoCardView.swift
+    │   ├── Perfil/
+    │   │   └── PerfilView.swift
+    │   └── Components/
+    │       ├── BotonPrimario.swift
+    │       ├── TarjetaView.swift
+    │       └── CargandoView.swift
+    ├── Services/
+    │   ├── APIService.swift
+    │   ├── AuthService.swift
+    │   └── StorageService.swift
+    ├── Utilities/
+    │   ├── Extensions/
+    │   │   ├── Color+Hex.swift
+    │   │   ├── Date+Format.swift
+    │   │   └── View+Modifiers.swift
+    │   └── Constants.swift
+    ├── Resources/
+    │   └── Assets.xcassets
+    └── Info.plist
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```
+    mi-app/
+    ├── app/
+    │   ├── layout.tsx             # Root layout
+    │   ├── page.tsx               # Página principal
+    │   ├── auth/
+    │   │   ├── login/page.tsx
+    │   │   └── registro/page.tsx
+    │   ├── home/page.tsx
+    │   └── perfil/page.tsx
+    ├── components/
+    │   ├── ui/
+    │   │   ├── BotonPrimario.tsx
+    │   │   ├── Tarjeta.tsx
+    │   │   └── Cargando.tsx
+    │   └── home/
+    │       └── ProductoCard.tsx
+    ├── hooks/
+    │   ├── useAuth.ts
+    │   ├── useProductos.ts
+    │   └── usePedidos.ts
+    ├── lib/
+    │   ├── api.ts
+    │   ├── auth.ts
+    │   └── storage.ts
+    ├── types/
+    │   ├── usuario.ts
+    │   ├── producto.ts
+    │   └── pedido.ts
+    └── public/
+        └── images/
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -57,45 +96,89 @@ MiApp/
 
 Para apps más grandes, organiza por **funcionalidad** en lugar de por tipo de archivo:
 
-```
-MiApp/
-├── App/
-│   ├── MiApp.swift
-│   └── AppDelegate.swift
-├── Features/
-│   ├── Auth/
-│   │   ├── Models/
-│   │   │   └── AuthResponse.swift
-│   │   ├── ViewModels/
-│   │   │   └── AuthViewModel.swift
-│   │   ├── Views/
-│   │   │   ├── LoginView.swift
-│   │   │   └── RegistroView.swift
-│   │   └── Services/
-│   │       └── AuthService.swift
-│   ├── Home/
-│   │   ├── Models/
-│   │   ├── ViewModels/
-│   │   ├── Views/
-│   │   └── Services/
-│   └── Perfil/
-│       ├── Models/
-│       ├── ViewModels/
-│       ├── Views/
-│       └── Services/
-├── Core/
-│   ├── Network/
-│   │   ├── APIClient.swift
-│   │   ├── Endpoints.swift
-│   │   └── NetworkError.swift
-│   ├── Storage/
-│   │   └── UserDefaults+Keys.swift
-│   └── UI/
-│       ├── Components/
-│       ├── Modifiers/
-│       └── Theme/
-└── Resources/
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```
+    MiApp/
+    ├── App/
+    │   ├── MiApp.swift
+    │   └── AppDelegate.swift
+    ├── Features/
+    │   ├── Auth/
+    │   │   ├── Models/
+    │   │   │   └── AuthResponse.swift
+    │   │   ├── ViewModels/
+    │   │   │   └── AuthViewModel.swift
+    │   │   ├── Views/
+    │   │   │   ├── LoginView.swift
+    │   │   │   └── RegistroView.swift
+    │   │   └── Services/
+    │   │       └── AuthService.swift
+    │   ├── Home/
+    │   │   ├── Models/
+    │   │   ├── ViewModels/
+    │   │   ├── Views/
+    │   │   └── Services/
+    │   └── Perfil/
+    │       ├── Models/
+    │       ├── ViewModels/
+    │       ├── Views/
+    │       └── Services/
+    ├── Core/
+    │   ├── Network/
+    │   │   ├── APIClient.swift
+    │   │   ├── Endpoints.swift
+    │   │   └── NetworkError.swift
+    │   ├── Storage/
+    │   │   └── UserDefaults+Keys.swift
+    │   └── UI/
+    │       ├── Components/
+    │       ├── Modifiers/
+    │       └── Theme/
+    └── Resources/
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```
+    mi-app/
+    ├── app/
+    │   ├── layout.tsx
+    │   ├── (auth)/
+    │   │   ├── login/page.tsx
+    │   │   └── registro/page.tsx
+    │   ├── (home)/
+    │   │   └── page.tsx
+    │   └── (perfil)/
+    │       └── page.tsx
+    ├── features/
+    │   ├── auth/
+    │   │   ├── types.ts
+    │   │   ├── hooks/useAuth.ts
+    │   │   ├── components/LoginForm.tsx
+    │   │   └── lib/authService.ts
+    │   ├── home/
+    │   │   ├── types.ts
+    │   │   ├── hooks/
+    │   │   ├── components/
+    │   │   └── lib/
+    │   └── perfil/
+    │       ├── types.ts
+    │       ├── hooks/
+    │       ├── components/
+    │       └── lib/
+    ├── shared/
+    │   ├── components/ui/
+    │   ├── hooks/
+    │   └── lib/
+    │       ├── apiClient.ts
+    │       ├── constants.ts
+    │       └── utils.ts
+    └── public/
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 :::tip
 Para apps pequeñas, la organización por tipo (Models/, Views/, ViewModels/) es suficiente. Para apps grandes con múltiples funcionalidades, la organización por feature escala mejor.
@@ -105,89 +188,200 @@ Para apps pequeñas, la organización por tipo (Models/, Views/, ViewModels/) es
 
 ### Archivos y tipos
 
-```swift
-// Views: sufijo "View"
-struct ProductoDetalleView: View { }
-struct LoginView: View { }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Views: sufijo "View"
+    struct ProductoDetalleView: View { }
+    struct LoginView: View { }
 
-// ViewModels: sufijo "ViewModel"
-class ProductosViewModel { }
-class AuthViewModel { }
+    // ViewModels: sufijo "ViewModel"
+    class ProductosViewModel { }
+    class AuthViewModel { }
 
-// Models: nombre del concepto
-struct Producto { }
-struct Usuario { }
+    // Models: nombre del concepto
+    struct Producto { }
+    struct Usuario { }
 
-// Services: sufijo "Service"
-class APIService { }
-class AuthService { }
+    // Services: sufijo "Service"
+    class APIService { }
+    class AuthService { }
 
-// Componentes reutilizables: descriptivos
-struct BotonPrimario: View { }
-struct TarjetaProducto: View { }
-```
+    // Componentes reutilizables: descriptivos
+    struct BotonPrimario: View { }
+    struct TarjetaProducto: View { }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Componentes: PascalCase (sin sufijo "View")
+    function ProductoDetalle() { }
+    function LoginPage() { }
+
+    // Custom Hooks: prefijo "use" (reemplazan ViewModels)
+    function useProductos() { }
+    function useAuth() { }
+
+    // Types/Interfaces: PascalCase
+    interface Producto { }
+    interface Usuario { }
+
+    // Servicios: funciones o clases
+    class ApiService { }
+    function authService() { }
+
+    // Componentes reutilizables: descriptivos
+    function BotonPrimario() { }
+    function TarjetaProducto() { }
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 ### Variables y funciones
 
-```swift
-// Propiedades: sustantivos en camelCase
-var nombreUsuario: String
-var estaCargando: Bool
-var listaProductos: [Producto]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Propiedades: sustantivos en camelCase
+    var nombreUsuario: String
+    var estaCargando: Bool
+    var listaProductos: [Producto]
 
-// Funciones: verbos en camelCase
-func cargarDatos() { }
-func guardarPerfil() { }
-func eliminarProducto(_ producto: Producto) { }
+    // Funciones: verbos en camelCase
+    func cargarDatos() { }
+    func guardarPerfil() { }
+    func eliminarProducto(_ producto: Producto) { }
 
-// Closures/callbacks: "on" + acción
-var onGuardar: () -> Void
-var onSeleccionar: (Producto) -> Void
-```
+    // Closures/callbacks: "on" + acción
+    var onGuardar: () -> Void
+    var onSeleccionar: (Producto) -> Void
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Variables: camelCase (igual que Swift)
+    const nombreUsuario: string;
+    const estaCargando: boolean;
+    const listaProductos: Producto[];
+
+    // Funciones: verbos en camelCase (igual que Swift)
+    function cargarDatos() { }
+    function guardarPerfil() { }
+    function eliminarProducto(producto: Producto) { }
+
+    // Props de callback: "on" + acción (igual que Swift)
+    interface Props {
+      onGuardar: () => void;
+      onSeleccionar: (producto: Producto) => void;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 ## Patrones de arquitectura
 
 ### MVVM (recomendado para SwiftUI)
 
-```swift
-// Model: datos puros
-struct Tarea: Identifiable {
-    let id = UUID()
-    var titulo: String
-    var completada: Bool
-}
-
-// ViewModel: lógica de negocio
-@Observable
-class TareasViewModel {
-    var tareas: [Tarea] = []
-
-    var pendientes: [Tarea] {
-        tareas.filter { !$0.completada }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Model: datos puros
+    struct Tarea: Identifiable {
+        let id = UUID()
+        var titulo: String
+        var completada: Bool
     }
 
-    func agregar(_ titulo: String) {
-        tareas.append(Tarea(titulo: titulo, completada: false))
-    }
+    // ViewModel: lógica de negocio
+    @Observable
+    class TareasViewModel {
+        var tareas: [Tarea] = []
 
-    func toggle(_ tarea: Tarea) {
-        if let i = tareas.firstIndex(where: { $0.id == tarea.id }) {
-            tareas[i].completada.toggle()
+        var pendientes: [Tarea] {
+            tareas.filter { !$0.completada }
+        }
+
+        func agregar(_ titulo: String) {
+            tareas.append(Tarea(titulo: titulo, completada: false))
+        }
+
+        func toggle(_ tarea: Tarea) {
+            if let i = tareas.firstIndex(where: { $0.id == tarea.id }) {
+                tareas[i].completada.toggle()
+            }
         }
     }
-}
 
-// View: solo UI
-struct TareasView: View {
-    @State private var vm = TareasViewModel()
+    // View: solo UI
+    struct TareasView: View {
+        @State private var vm = TareasViewModel()
 
-    var body: some View {
-        List(vm.tareas) { tarea in
-            Text(tarea.titulo)
+        var body: some View {
+            List(vm.tareas) { tarea in
+                Text(tarea.titulo)
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    // Type: datos puros
+    interface Tarea {
+      id: string;
+      titulo: string;
+      completada: boolean;
+    }
+
+    // Custom Hook: lógica de negocio (reemplaza ViewModel)
+    function useTareas() {
+      const [tareas, setTareas] = useState<Tarea[]>([]);
+
+      const pendientes = tareas.filter((t) => !t.completada);
+
+      function agregar(titulo: string) {
+        setTareas((prev) => [
+          ...prev,
+          { id: crypto.randomUUID(), titulo, completada: false },
+        ]);
+      }
+
+      function toggle(id: string) {
+        setTareas((prev) =>
+          prev.map((t) =>
+            t.id === id ? { ...t, completada: !t.completada } : t
+          )
+        );
+      }
+
+      return { tareas, pendientes, agregar, toggle };
+    }
+
+    // Componente: solo UI
+    export default function TareasPage() {
+      const { tareas, toggle } = useTareas();
+
+      return (
+        <ul>
+          {tareas.map((tarea) => (
+            <li key={tarea.id} onClick={() => toggle(tarea.id)}>
+              {tarea.titulo}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -195,47 +389,94 @@ struct TareasView: View {
 
 Abstrae el origen de datos detrás de un protocolo:
 
-```swift
-// Protocolo
-protocol ProductoRepository {
-    func obtenerTodos() async throws -> [Producto]
-    func obtenerPorId(_ id: Int) async throws -> Producto
-    func crear(_ producto: Producto) async throws -> Producto
-}
-
-// Implementación real (API)
-class APIProductoRepository: ProductoRepository {
-    func obtenerTodos() async throws -> [Producto] {
-        try await APIService.shared.fetch("/productos")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Protocolo
+    protocol ProductoRepository {
+        func obtenerTodos() async throws -> [Producto]
+        func obtenerPorId(_ id: Int) async throws -> Producto
+        func crear(_ producto: Producto) async throws -> Producto
     }
 
-    func obtenerPorId(_ id: Int) async throws -> Producto {
-        try await APIService.shared.fetch("/productos/\(id)")
+    // Implementación real (API)
+    class APIProductoRepository: ProductoRepository {
+        func obtenerTodos() async throws -> [Producto] {
+            try await APIService.shared.fetch("/productos")
+        }
+
+        func obtenerPorId(_ id: Int) async throws -> Producto {
+            try await APIService.shared.fetch("/productos/\(id)")
+        }
+
+        func crear(_ producto: Producto) async throws -> Producto {
+            try await APIService.shared.post("/productos", body: producto)
+        }
     }
 
-    func crear(_ producto: Producto) async throws -> Producto {
-        try await APIService.shared.post("/productos", body: producto)
-    }
-}
+    // Implementación mock (para previews y tests)
+    class MockProductoRepository: ProductoRepository {
+        func obtenerTodos() async throws -> [Producto] {
+            [
+                Producto(id: 1, name: "iPhone", price: 999, inStock: true),
+                Producto(id: 2, name: "iPad", price: 799, inStock: false),
+            ]
+        }
 
-// Implementación mock (para previews y tests)
-class MockProductoRepository: ProductoRepository {
-    func obtenerTodos() async throws -> [Producto] {
-        [
-            Producto(id: 1, name: "iPhone", price: 999, inStock: true),
-            Producto(id: 2, name: "iPad", price: 799, inStock: false),
-        ]
+        func obtenerPorId(_ id: Int) async throws -> Producto {
+            Producto(id: id, name: "Test", price: 0, inStock: true)
+        }
+
+        func crear(_ producto: Producto) async throws -> Producto {
+            producto
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Interface (equivalente a Protocol)
+    interface ProductoRepository {
+      obtenerTodos(): Promise<Producto[]>;
+      obtenerPorId(id: number): Promise<Producto>;
+      crear(producto: Producto): Promise<Producto>;
     }
 
-    func obtenerPorId(_ id: Int) async throws -> Producto {
-        Producto(id: id, name: "Test", price: 0, inStock: true)
+    // Implementación real (API)
+    class APIProductoRepository implements ProductoRepository {
+      async obtenerTodos() {
+        return fetchAPI<Producto[]>("/productos");
+      }
+
+      async obtenerPorId(id: number) {
+        return fetchAPI<Producto>(`/productos/${id}`);
+      }
+
+      async crear(producto: Producto) {
+        return postAPI<Producto, Producto>("/productos", producto);
+      }
     }
 
-    func crear(_ producto: Producto) async throws -> Producto {
-        producto
+    // Implementación mock (para tests)
+    class MockProductoRepository implements ProductoRepository {
+      async obtenerTodos() {
+        return [
+          { id: 1, name: "iPhone", price: 999, inStock: true },
+          { id: 2, name: "iPad", price: 799, inStock: false },
+        ];
+      }
+
+      async obtenerPorId(id: number) {
+        return { id, name: "Test", price: 0, inStock: true };
+      }
+
+      async crear(producto: Producto) {
+        return producto;
+      }
     }
-}
-```
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -243,137 +484,302 @@ class MockProductoRepository: ProductoRepository {
 
 ### 1. Vistas pequeñas y componibles
 
-```swift
-// MAL: una vista gigante con todo
-struct HomeView: View {
-    var body: some View {
-        // 200+ líneas de código...
-    }
-}
-
-// BIEN: dividir en componentes
-struct HomeView: View {
-    var body: some View {
-        ScrollView {
-            HeaderView()
-            ProductosDestacadosView()
-            CategoriasView()
-            PromocionBannerView()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // MAL: una vista gigante con todo
+    struct HomeView: View {
+        var body: some View {
+            // 200+ líneas de código...
         }
     }
-}
-```
+
+    // BIEN: dividir en componentes
+    struct HomeView: View {
+        var body: some View {
+            ScrollView {
+                HeaderView()
+                ProductosDestacadosView()
+                CategoriasView()
+                PromocionBannerView()
+            }
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // MAL: un componente gigante con todo
+    function HomePage() {
+      return (
+        <>{/* 200+ líneas de código... */}</>
+      );
+    }
+
+    // BIEN: dividir en componentes
+    function HomePage() {
+      return (
+        <div className="space-y-6">
+          <Header />
+          <ProductosDestacados />
+          <Categorias />
+          <PromocionBanner />
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 ### 2. ViewModifiers reutilizables
 
-```swift
-// Crear un modifier personalizado
-struct TarjetaModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding()
-            .background(Color(.systemBackground))
-            .clipShape(.rect(cornerRadius: 12))
-            .shadow(color: .black.opacity(0.1), radius: 5, y: 2)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Crear un modifier personalizado
+    struct TarjetaModifier: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .padding()
+                .background(Color(.systemBackground))
+                .clipShape(.rect(cornerRadius: 12))
+                .shadow(color: .black.opacity(0.1), radius: 5, y: 2)
+        }
     }
-}
 
-extension View {
-    func estiloTarjeta() -> some View {
-        modifier(TarjetaModifier())
+    extension View {
+        func estiloTarjeta() -> some View {
+            modifier(TarjetaModifier())
+        }
     }
-}
 
-// Uso
-Text("Contenido")
-    .estiloTarjeta()
-```
+    // Uso
+    Text("Contenido")
+        .estiloTarjeta()
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Crear un componente wrapper (equivalente a ViewModifier)
+    import { cn } from "@/lib/utils";
+
+    function Tarjeta({
+      children,
+      className,
+    }: {
+      children: React.ReactNode;
+      className?: string;
+    }) {
+      return (
+        <div
+          className={cn(
+            "rounded-xl bg-white p-4 shadow-md dark:bg-gray-900",
+            className
+          )}
+        >
+          {children}
+        </div>
+      );
+    }
+
+    // Uso
+    <Tarjeta>
+      <p>Contenido</p>
+    </Tarjeta>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### 3. Previews útiles
 
-```swift
-#Preview("Estado normal") {
-    ProductoCardView(producto: .preview)
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    #Preview("Estado normal") {
+        ProductoCardView(producto: .preview)
+    }
 
-#Preview("Cargando") {
-    ProductosView()
-        .environment(ProductosViewModel.cargando)
-}
+    #Preview("Cargando") {
+        ProductosView()
+            .environment(ProductosViewModel.cargando)
+    }
 
-#Preview("Error") {
-    ProductosView()
-        .environment(ProductosViewModel.conError)
-}
+    #Preview("Error") {
+        ProductosView()
+            .environment(ProductosViewModel.conError)
+    }
 
-// Datos de preview
-extension Producto {
-    static let preview = Producto(
-        id: 1, name: "iPhone 16", price: 999, inStock: true
-    )
-}
-```
+    // Datos de preview
+    extension Producto {
+        static let preview = Producto(
+            id: 1, name: "iPhone 16", price: 999, inStock: true
+        )
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Con Storybook (storybook.js.org)
+    import type { Meta, StoryObj } from "@storybook/react";
+    import { ProductoCard } from "./ProductoCard";
+
+    const meta: Meta<typeof ProductoCard> = {
+      component: ProductoCard,
+    };
+    export default meta;
+
+    type Story = StoryObj<typeof ProductoCard>;
+
+    export const Normal: Story = {
+      args: {
+        producto: { id: 1, name: "iPhone 16", price: 999, inStock: true },
+      },
+    };
+
+    export const Agotado: Story = {
+      args: {
+        producto: { id: 2, name: "iPad", price: 799, inStock: false },
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### 4. Constantes centralizadas
 
-```swift
-enum AppConstants {
-    static let appName = "MiApp"
-    static let maxItems = 50
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum AppConstants {
+        static let appName = "MiApp"
+        static let maxItems = 50
 
-    enum API {
-        static let baseURL = "https://api.miapp.com/v1"
-        static let timeout: TimeInterval = 30
+        enum API {
+            static let baseURL = "https://api.miapp.com/v1"
+            static let timeout: TimeInterval = 30
+        }
+
+        enum UI {
+            static let cornerRadius: CGFloat = 12
+            static let padding: CGFloat = 16
+            static let animationDuration: Double = 0.3
+        }
     }
 
-    enum UI {
-        static let cornerRadius: CGFloat = 12
-        static let padding: CGFloat = 16
-        static let animationDuration: Double = 0.3
-    }
-}
+    // Uso
+    Text(AppConstants.appName)
+        .padding(AppConstants.UI.padding)
+        .background(Color.blue.opacity(0.1))
+        .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    export const APP_CONSTANTS = {
+      appName: "MiApp",
+      maxItems: 50,
 
-// Uso
-Text(AppConstants.appName)
-    .padding(AppConstants.UI.padding)
-    .background(Color.blue.opacity(0.1))
-    .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
-```
+      api: {
+        baseURL: "https://api.miapp.com/v1",
+        timeout: 30_000,
+      },
+
+      ui: {
+        cornerRadius: 12,
+        padding: 16,
+        animationDuration: 300,
+      },
+    } as const;
+
+    // Uso con Tailwind (valores en clases utilitarias)
+    // <p className="rounded-xl bg-blue-500/10 p-4">{APP_CONSTANTS.appName}</p>
+
+    // O con variables CSS en tailwind.config.ts:
+    // theme: { extend: { borderRadius: { app: "12px" }, spacing: { app: "16px" } } }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### 5. Inyección de dependencias
 
-```swift
-// Definir con protocolo
-@Observable
-class ProductosViewModel {
-    private let repository: ProductoRepository
-    var productos: [Producto] = []
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Definir con protocolo
+    @Observable
+    class ProductosViewModel {
+        private let repository: ProductoRepository
+        var productos: [Producto] = []
 
-    init(repository: ProductoRepository = APIProductoRepository()) {
-        self.repository = repository
-    }
+        init(repository: ProductoRepository = APIProductoRepository()) {
+            self.repository = repository
+        }
 
-    func cargar() async {
-        do {
-            productos = try await repository.obtenerTodos()
-        } catch {
-            print(error)
+        func cargar() async {
+            do {
+                productos = try await repository.obtenerTodos()
+            } catch {
+                print(error)
+            }
         }
     }
-}
 
-// En producción: usa API real
-let vm = ProductosViewModel()
+    // En producción: usa API real
+    let vm = ProductosViewModel()
 
-// En tests/previews: usa mock
-let vmTest = ProductosViewModel(repository: MockProductoRepository())
-```
+    // En tests/previews: usa mock
+    let vmTest = ProductosViewModel(repository: MockProductoRepository())
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { createContext, useContext, ReactNode } from "react";
+
+    // Context para inyectar la dependencia
+    const ProductoRepoContext = createContext<ProductoRepository>(
+      new APIProductoRepository()
+    );
+
+    function ProductoRepoProvider({
+      repository,
+      children,
+    }: {
+      repository: ProductoRepository;
+      children: ReactNode;
+    }) {
+      return (
+        <ProductoRepoContext.Provider value={repository}>
+          {children}
+        </ProductoRepoContext.Provider>
+      );
+    }
+
+    function useProductoRepo() {
+      return useContext(ProductoRepoContext);
+    }
+
+    // En producción
+    <ProductoRepoProvider repository={new APIProductoRepository()}>
+      <App />
+    </ProductoRepoProvider>
+
+    // En tests
+    <ProductoRepoProvider repository={new MockProductoRepository()}>
+      <App />
+    </ProductoRepoProvider>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

@@ -4,6 +4,7 @@ description: Persistencia de datos en SwiftUI con SwiftData — @Model, @Query, 
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 **SwiftData** (iOS 17+) es el framework de persistencia moderno de Apple. Reemplaza Core Data con una sintaxis declarativa basada en macros Swift.
 
@@ -11,22 +12,48 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 El macro `@Model` convierte una clase Swift en un modelo persistente. Todas sus propiedades almacenadas se persisten automáticamente.
 
-```swift
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftData
 
-@Model
-class Tarea {
-    var titulo: String
-    var completada: Bool
-    var fecha: Date
+    @Model
+    class Tarea {
+        var titulo: String
+        var completada: Bool
+        var fecha: Date
 
-    init(titulo: String) {
-        self.titulo = titulo
-        self.completada = false
-        self.fecha = Date()
+        init(titulo: String) {
+            self.titulo = titulo
+            self.completada = false
+            self.fecha = Date()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Con Prisma ORM — definir en prisma/schema.prisma:
+    // model Tarea {
+    //   id         String   @id @default(cuid())
+    //   titulo     String
+    //   completada Boolean  @default(false)
+    //   fecha      DateTime @default(now())
+    // }
+
+    // Prisma genera automáticamente el tipo TypeScript:
+    import type { Tarea } from "@prisma/client";
+
+    // O define el tipo manualmente:
+    interface Tarea {
+      id: string;
+      titulo: string;
+      completada: boolean;
+      fecha: Date;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -34,26 +61,46 @@ class Tarea {
 
 `ModelContainer` es el contenedor de la base de datos. Se configura una vez en el punto de entrada de la app:
 
-```swift
-import SwiftUI
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
+    import SwiftData
 
-@main
-struct MiApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+    @main
+    struct MiApp: App {
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+            }
+            .modelContainer(for: Tarea.self)
         }
-        .modelContainer(for: Tarea.self)  // Configura el contenedor para Tarea
     }
-}
-```
 
-Para múltiples modelos:
+    // Para múltiples modelos:
+    .modelContainer(for: [Tarea.self, Proyecto.self, Etiqueta.self])
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // lib/db.ts — Singleton del cliente Prisma
+    import { PrismaClient } from "@prisma/client";
 
-```swift
-.modelContainer(for: [Tarea.self, Proyecto.self, Etiqueta.self])
-```
+    const globalForPrisma = global as { prisma?: PrismaClient };
+
+    export const db = globalForPrisma.prisma ?? new PrismaClient();
+
+    if (process.env.NODE_ENV !== "production") {
+      globalForPrisma.prisma = db;
+    }
+
+    // Prisma maneja todos los modelos definidos en schema.prisma:
+    // await db.tarea.findMany();
+    // await db.proyecto.findMany();
+    // await db.etiqueta.findMany();
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -61,56 +108,111 @@ Para múltiples modelos:
 
 `@Query` carga datos desde el contenedor y actualiza la vista automáticamente cuando cambian:
 
-```swift
-import SwiftUI
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
+    import SwiftData
 
-struct ListaTareasView: View {
-    @Query var tareas: [Tarea]
-    @Environment(\.modelContext) private var contexto
+    struct ListaTareasView: View {
+        @Query var tareas: [Tarea]
+        @Environment(\.modelContext) private var contexto
 
-    var body: some View {
-        List {
-            ForEach(tareas) { tarea in
-                HStack {
-                    Image(systemName: tarea.completada ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(tarea.completada ? .green : .gray)
-                    Text(tarea.titulo)
-                        .strikethrough(tarea.completada)
+        var body: some View {
+            List {
+                ForEach(tareas) { tarea in
+                    HStack {
+                        Image(systemName: tarea.completada ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(tarea.completada ? .green : .gray)
+                        Text(tarea.titulo)
+                            .strikethrough(tarea.completada)
+                    }
+                    .onTapGesture {
+                        tarea.completada.toggle()
+                    }
                 }
-                .onTapGesture {
-                    tarea.completada.toggle()
+                .onDelete { indices in
+                    for indice in indices {
+                        contexto.delete(tareas[indice])
+                    }
                 }
             }
-            .onDelete { indices in
-                for indice in indices {
-                    contexto.delete(tareas[indice])
-                }
-            }
+            .navigationTitle("Tareas")
         }
-        .navigationTitle("Tareas")
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // app/tareas/page.tsx — Server Component (carga datos en el servidor)
+    import { db } from "@/lib/db";
+    import { toggleTarea, eliminarTarea } from "./actions";
+    import TareaItem from "./TareaItem";
+
+    export default async function ListaTareasPage() {
+      const tareas = await db.tarea.findMany();
+
+      return (
+        <div className="mx-auto max-w-lg">
+          <h1 className="mb-4 text-2xl font-bold">Tareas</h1>
+          <ul className="space-y-2">
+            {tareas.map((tarea) => (
+              <TareaItem
+                key={tarea.id}
+                tarea={tarea}
+                toggleAction={toggleTarea}
+                deleteAction={eliminarTarea}
+              />
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### Ordenar y filtrar con @Query
 
-```swift
-// Ordenar por fecha, más reciente primero
-@Query(sort: \Tarea.fecha, order: .reverse) var tareas: [Tarea]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Ordenar por fecha, más reciente primero
+    @Query(sort: \Tarea.fecha, order: .reverse) var tareas: [Tarea]
 
-// Solo tareas pendientes
-@Query(filter: #Predicate<Tarea> { !$0.completada }) var pendientes: [Tarea]
+    // Solo tareas pendientes
+    @Query(filter: #Predicate<Tarea> { !$0.completada }) var pendientes: [Tarea]
 
-// Combinar filtro y orden
-@Query(
-    filter: #Predicate<Tarea> { !$0.completada },
-    sort: \Tarea.fecha,
-    order: .forward
-) var pendientesOrdenadas: [Tarea]
-```
+    // Combinar filtro y orden
+    @Query(
+        filter: #Predicate<Tarea> { !$0.completada },
+        sort: \Tarea.fecha,
+        order: .forward
+    ) var pendientesOrdenadas: [Tarea]
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Ordenar por fecha, más reciente primero
+    const tareas = await db.tarea.findMany({
+      orderBy: { fecha: "desc" },
+    });
+
+    // Solo tareas pendientes
+    const pendientes = await db.tarea.findMany({
+      where: { completada: false },
+    });
+
+    // Combinar filtro y orden
+    const pendientesOrdenadas = await db.tarea.findMany({
+      where: { completada: false },
+      orderBy: { fecha: "asc" },
+    });
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -118,35 +220,78 @@ struct ListaTareasView: View {
 
 `ModelContext` es el objeto de trabajo para modificar datos:
 
-```swift
-struct NuevaTareaView: View {
-    @Environment(\.modelContext) private var contexto
-    @State private var titulo = ""
-    @Environment(\.dismiss) private var cerrar
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct NuevaTareaView: View {
+        @Environment(\.modelContext) private var contexto
+        @State private var titulo = ""
+        @Environment(\.dismiss) private var cerrar
 
-    var body: some View {
-        NavigationStack {
-            Form {
-                TextField("Título de la tarea", text: $titulo)
-            }
-            .navigationTitle("Nueva tarea")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Guardar") {
-                        let nuevaTarea = Tarea(titulo: titulo)
-                        contexto.insert(nuevaTarea)  // Insertar
-                        cerrar()
-                    }
-                    .disabled(titulo.isEmpty)
+        var body: some View {
+            NavigationStack {
+                Form {
+                    TextField("Título de la tarea", text: $titulo)
                 }
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") { cerrar() }
+                .navigationTitle("Nueva tarea")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Guardar") {
+                            let nuevaTarea = Tarea(titulo: titulo)
+                            contexto.insert(nuevaTarea)  // Insertar
+                            cerrar()
+                        }
+                        .disabled(titulo.isEmpty)
+                    }
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancelar") { cerrar() }
+                    }
                 }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // app/tareas/actions.ts — Server Actions (CRUD)
+    "use server";
+
+    import { db } from "@/lib/db";
+    import { revalidatePath } from "next/cache";
+
+    export async function crearTarea(formData: FormData) {
+      const titulo = formData.get("titulo") as string;
+      await db.tarea.create({ data: { titulo } });
+      revalidatePath("/tareas");
+    }
+
+    // app/tareas/NuevaTarea.tsx — Client Component
+    "use client";
+
+    import { crearTarea } from "./actions";
+
+    export default function NuevaTarea() {
+      return (
+        <form action={crearTarea} className="flex gap-2">
+          <input
+            name="titulo"
+            placeholder="Título de la tarea"
+            required
+            className="flex-1 rounded-lg border px-4 py-2"
+          />
+          <button
+            type="submit"
+            className="rounded-lg bg-blue-500 px-4 py-2 text-white"
+          >
+            Guardar
+          </button>
+        </form>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -154,31 +299,64 @@ struct NuevaTareaView: View {
 
 SwiftData maneja relaciones con `@Relationship`:
 
-```swift
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftData
 
-@Model
-class Proyecto {
-    var nombre: String
-    @Relationship(deleteRule: .cascade) var tareas: [Tarea] = []
+    @Model
+    class Proyecto {
+        var nombre: String
+        @Relationship(deleteRule: .cascade) var tareas: [Tarea] = []
 
-    init(nombre: String) {
-        self.nombre = nombre
+        init(nombre: String) {
+            self.nombre = nombre
+        }
     }
-}
 
-@Model
-class Tarea {
-    var titulo: String
-    var completada: Bool
-    var proyecto: Proyecto?  // Relación inversa (opcional)
+    @Model
+    class Tarea {
+        var titulo: String
+        var completada: Bool
+        var proyecto: Proyecto?  // Relación inversa (opcional)
 
-    init(titulo: String) {
-        self.titulo = titulo
-        self.completada = false
+        init(titulo: String) {
+            self.titulo = titulo
+            self.completada = false
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // prisma/schema.prisma
+    // model Proyecto {
+    //   id     String  @id @default(cuid())
+    //   nombre String
+    //   tareas Tarea[] // onDelete: Cascade en la relación inversa
+    // }
+    //
+    // model Tarea {
+    //   id         String    @id @default(cuid())
+    //   titulo     String
+    //   completada Boolean   @default(false)
+    //   proyecto   Proyecto? @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+    //   proyectoId String?
+    // }
+
+    // Consulta con relaciones incluidas:
+    const proyecto = await db.proyecto.findUnique({
+      where: { id: proyectoId },
+      include: { tareas: true },
+    });
+
+    // Crear tarea dentro de un proyecto:
+    await db.tarea.create({
+      data: { titulo: "Nueva tarea", proyectoId: proyecto.id },
+    });
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -190,41 +368,69 @@ class Tarea {
 
 Cuando cambias el modelo, SwiftData necesita migrar los datos existentes. Define un `VersionedSchema`:
 
-```swift
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftData
 
-enum EsquemaTareasV1: VersionedSchema {
-    static var versionIdentifier = Schema.Version(1, 0, 0)
-    static var models: [any PersistentModel.Type] { [Tarea.self] }
+    enum EsquemaTareasV1: VersionedSchema {
+        static var versionIdentifier = Schema.Version(1, 0, 0)
+        static var models: [any PersistentModel.Type] { [Tarea.self] }
 
-    @Model
-    class Tarea {
-        var titulo: String
-        init(titulo: String) { self.titulo = titulo }
+        @Model
+        class Tarea {
+            var titulo: String
+            init(titulo: String) { self.titulo = titulo }
+        }
     }
-}
 
-enum EsquemaTareasV2: VersionedSchema {
-    static var versionIdentifier = Schema.Version(2, 0, 0)
-    static var models: [any PersistentModel.Type] { [Tarea.self] }
+    enum EsquemaTareasV2: VersionedSchema {
+        static var versionIdentifier = Schema.Version(2, 0, 0)
+        static var models: [any PersistentModel.Type] { [Tarea.self] }
 
-    @Model
-    class Tarea {
-        var titulo: String
-        var prioridad: Int = 0  // Nueva propiedad en V2
-        init(titulo: String) { self.titulo = titulo }
+        @Model
+        class Tarea {
+            var titulo: String
+            var prioridad: Int = 0  // Nueva propiedad en V2
+            init(titulo: String) { self.titulo = titulo }
+        }
     }
-}
 
-// Plan de migración de V1 a V2
-enum PlanMigracion: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] {
-        [EsquemaTareasV1.self, EsquemaTareasV2.self]
+    // Plan de migración de V1 a V2
+    enum PlanMigracion: SchemaMigrationPlan {
+        static var schemas: [any VersionedSchema.Type] {
+            [EsquemaTareasV1.self, EsquemaTareasV2.self]
+        }
+        static var stages: [MigrationStage] {
+            [MigrationStage.lightweight(fromVersion: EsquemaTareasV1.self, toVersion: EsquemaTareasV2.self)]
+        }
     }
-    static var stages: [MigrationStage] {
-        [MigrationStage.lightweight(fromVersion: EsquemaTareasV1.self, toVersion: EsquemaTareasV2.self)]
-    }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // 1. Modifica el schema en prisma/schema.prisma:
+    // model Tarea {
+    //   id        String @id @default(cuid())
+    //   titulo    String
+    //   prioridad Int    @default(0)  // ← Nueva propiedad
+    // }
+
+    // 2. Crea y aplica la migración:
+    // npx prisma migrate dev --name add-prioridad
+
+    // Prisma genera automáticamente el SQL:
+    // ALTER TABLE "Tarea" ADD COLUMN "prioridad" INTEGER NOT NULL DEFAULT 0;
+
+    // 3. El tipo TypeScript se actualiza con:
+    // npx prisma generate
+
+    // Las migraciones se guardan en prisma/migrations/:
+    // prisma/migrations/
+    // ├── 20240101_init/migration.sql
+    // └── 20240201_add_prioridad/migration.sql
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

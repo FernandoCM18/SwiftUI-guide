@@ -4,56 +4,95 @@ description: Crea animaciones complejas en SwiftUI con keyframeAnimator — cont
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `keyframeAnimator` (iOS 17+) permite definir animaciones con fotogramas clave donde cada propiedad tiene su propia curva de animación independiente.
 
 ## Estructura básica
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct EjemploKeyframe: View {
-    @State private var animar = false
+    struct EjemploKeyframe: View {
+        @State private var animar = false
 
-    var body: some View {
-        Image(systemName: "star.fill")
-            .font(.system(size: 60))
-            .foregroundStyle(.yellow)
-            .keyframeAnimator(
-                initialValue: PropiedadesAnimacion(),
-                trigger: animar
-            ) { contenido, valor in
-                contenido
-                    .scaleEffect(valor.escala)
-                    .offset(y: valor.offsetY)
-                    .opacity(valor.opacidad)
-            } keyframes: { _ in
-                KeyframeTrack(\.escala) {
-                    LinearKeyframe(1.0, duration: 0.1)
-                    SpringKeyframe(1.5, duration: 0.3)
-                    SpringKeyframe(1.0, duration: 0.3)
+        var body: some View {
+            Image(systemName: "star.fill")
+                .font(.system(size: 60))
+                .foregroundStyle(.yellow)
+                .keyframeAnimator(
+                    initialValue: PropiedadesAnimacion(),
+                    trigger: animar
+                ) { contenido, valor in
+                    contenido
+                        .scaleEffect(valor.escala)
+                        .offset(y: valor.offsetY)
+                        .opacity(valor.opacidad)
+                } keyframes: { _ in
+                    KeyframeTrack(\.escala) {
+                        LinearKeyframe(1.0, duration: 0.1)
+                        SpringKeyframe(1.5, duration: 0.3)
+                        SpringKeyframe(1.0, duration: 0.3)
+                    }
+                    KeyframeTrack(\.offsetY) {
+                        LinearKeyframe(0, duration: 0.1)
+                        SpringKeyframe(-30, duration: 0.3)
+                        SpringKeyframe(0, duration: 0.3)
+                    }
+                    KeyframeTrack(\.opacidad) {
+                        LinearKeyframe(1.0, duration: 0.5)
+                        LinearKeyframe(0.7, duration: 0.2)
+                        LinearKeyframe(1.0, duration: 0.1)
+                    }
                 }
-                KeyframeTrack(\.offsetY) {
-                    LinearKeyframe(0, duration: 0.1)
-                    SpringKeyframe(-30, duration: 0.3)
-                    SpringKeyframe(0, duration: 0.3)
-                }
-                KeyframeTrack(\.opacidad) {
-                    LinearKeyframe(1.0, duration: 0.5)
-                    LinearKeyframe(0.7, duration: 0.2)
-                    LinearKeyframe(1.0, duration: 0.1)
-                }
-            }
-            .onTapGesture { animar.toggle() }
+                .onTapGesture { animar.toggle() }
+        }
     }
-}
 
-struct PropiedadesAnimacion {
-    var escala: CGFloat = 1.0
-    var offsetY: CGFloat = 0
-    var opacidad: Double = 1.0
-}
-```
+    struct PropiedadesAnimacion {
+        var escala: CGFloat = 1.0
+        var offsetY: CGFloat = 0
+        var opacidad: Double = 1.0
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function EjemploKeyframe() {
+      const [animar, setAnimar] = useState(false);
+
+      return (
+        <>
+          <style>{`
+            @keyframes star-pop {
+              0%   { transform: scale(1) translateY(0); opacity: 1; }
+              14%  { transform: scale(1) translateY(0); opacity: 1; }
+              43%  { transform: scale(1.5) translateY(-30px); opacity: 1; }
+              71%  { transform: scale(1) translateY(0); opacity: 0.7; }
+              100% { transform: scale(1) translateY(0); opacity: 1; }
+            }
+          `}</style>
+          <span
+            onClick={() => setAnimar(!animar)}
+            className="inline-block cursor-pointer select-none text-6xl text-yellow-400"
+            style={{
+              animation: animar ? "star-pop 0.7s ease-out" : "none",
+            }}
+            onAnimationEnd={() => setAnimar(false)}
+          >
+            ★
+          </span>
+        </>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -68,66 +107,128 @@ Cada `KeyframeTrack` controla una propiedad usando su keyPath. Dentro del track 
 | `CubicKeyframe` | Curva cúbica suave (Bézier) |
 | `MoveKeyframe` | Salta al valor sin animación |
 
-```swift
-KeyframeTrack(\.escala) {
-    LinearKeyframe(1.0, duration: 0.05)   // Sin animación inicial
-    SpringKeyframe(2.0, duration: 0.4)    // Escala con resorte
-    CubicKeyframe(1.2, duration: 0.3)     // Baja suavemente
-    SpringKeyframe(1.0, duration: 0.2)    // Vuelve al normal
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    KeyframeTrack(\.escala) {
+        LinearKeyframe(1.0, duration: 0.05)   // Sin animación inicial
+        SpringKeyframe(2.0, duration: 0.4)    // Escala con resorte
+        CubicKeyframe(1.2, duration: 0.3)     // Baja suavemente
+        SpringKeyframe(1.0, duration: 0.2)    // Vuelve al normal
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    /* Equivalente CSS — un @keyframes controla una propiedad con timing independiente */
+    const scaleKeyframes = `
+      @keyframes scale-track {
+        0%   { transform: scale(1); }                              /* Linear  → 1.0 */
+        5%   { transform: scale(1); }                              /* 0.05s   sin cambio */
+        47%  { transform: scale(2); animation-timing-function: cubic-bezier(.5,1.5,.5,1); }  /* Spring → 2.0 */
+        79%  { transform: scale(1.2); animation-timing-function: ease-in-out; }               /* Cubic  → 1.2 */
+        100% { transform: scale(1); animation-timing-function: cubic-bezier(.5,1.5,.5,1); }  /* Spring → 1.0 */
+      }
+    `;
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Ejemplo completo: botón de like animado
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct LikeButton: View {
-    @State private var estaDandoLike = false
-    @State private var disparar = false
+    struct LikeButton: View {
+        @State private var estaDandoLike = false
+        @State private var disparar = false
 
-    var body: some View {
-        Button {
-            estaDandoLike.toggle()
-            disparar.toggle()
-        } label: {
-            Image(systemName: estaDandoLike ? "heart.fill" : "heart")
-                .font(.system(size: 44))
-                .foregroundStyle(estaDandoLike ? .red : .gray)
-                .keyframeAnimator(
-                    initialValue: ValoresLike(),
-                    trigger: disparar
-                ) { vista, valor in
-                    vista
-                        .scaleEffect(valor.escala)
-                        .rotationEffect(.degrees(valor.rotacion))
-                } keyframes: { _ in
-                    KeyframeTrack(\.escala) {
-                        MoveKeyframe(1.0)
-                        SpringKeyframe(1.4, duration: 0.2, spring: .bouncy)
-                        SpringKeyframe(1.0, duration: 0.3, spring: .smooth)
+        var body: some View {
+            Button {
+                estaDandoLike.toggle()
+                disparar.toggle()
+            } label: {
+                Image(systemName: estaDandoLike ? "heart.fill" : "heart")
+                    .font(.system(size: 44))
+                    .foregroundStyle(estaDandoLike ? .red : .gray)
+                    .keyframeAnimator(
+                        initialValue: ValoresLike(),
+                        trigger: disparar
+                    ) { vista, valor in
+                        vista
+                            .scaleEffect(valor.escala)
+                            .rotationEffect(.degrees(valor.rotacion))
+                    } keyframes: { _ in
+                        KeyframeTrack(\.escala) {
+                            MoveKeyframe(1.0)
+                            SpringKeyframe(1.4, duration: 0.2, spring: .bouncy)
+                            SpringKeyframe(1.0, duration: 0.3, spring: .smooth)
+                        }
+                        KeyframeTrack(\.rotacion) {
+                            MoveKeyframe(0)
+                            LinearKeyframe(-8, duration: 0.1)
+                            LinearKeyframe(8, duration: 0.1)
+                            LinearKeyframe(-4, duration: 0.1)
+                            SpringKeyframe(0, duration: 0.2)
+                        }
                     }
-                    KeyframeTrack(\.rotacion) {
-                        MoveKeyframe(0)
-                        LinearKeyframe(-8, duration: 0.1)
-                        LinearKeyframe(8, duration: 0.1)
-                        LinearKeyframe(-4, duration: 0.1)
-                        SpringKeyframe(0, duration: 0.2)
-                    }
-                }
+            }
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
     }
-}
 
-struct ValoresLike {
-    var escala: CGFloat = 1.0
-    var rotacion: Double = 0
-}
+    struct ValoresLike {
+        var escala: CGFloat = 1.0
+        var rotacion: Double = 0
+    }
 
-#Preview { LikeButton() }
-```
+    #Preview { LikeButton() }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+    import { Heart } from "lucide-react";
+
+    export default function LikeButton() {
+      const [liked, setLiked] = useState(false);
+      const [animating, setAnimating] = useState(false);
+
+      function handleClick() {
+        setLiked((prev) => !prev);
+        setAnimating(true);
+      }
+
+      return (
+        <>
+          <style>{`
+            @keyframes like-pop {
+              0%   { transform: scale(1) rotate(0deg); }
+              20%  { transform: scale(1.4) rotate(-8deg); }
+              40%  { transform: scale(1.4) rotate(8deg); }
+              60%  { transform: scale(1.2) rotate(-4deg); }
+              100% { transform: scale(1) rotate(0deg); }
+            }
+          `}</style>
+          <button onClick={handleClick} className="p-2">
+            <Heart
+              className={`h-11 w-11 transition-colors ${liked ? "fill-red-500 text-red-500" : "text-gray-400"}`}
+              style={{
+                animation: animating ? "like-pop 0.5s ease-out" : "none",
+              }}
+              onAnimationEnd={() => setAnimating(false)}
+            />
+          </button>
+        </>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

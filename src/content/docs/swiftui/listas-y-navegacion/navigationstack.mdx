@@ -4,6 +4,7 @@ description: Cómo usar NavigationStack en SwiftUI para crear jerarquías de nav
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `NavigationStack` proporciona una pila de navegación que permite al usuario ir de una vista a otra con transiciones animadas y un botón de retroceso automático.
 
@@ -13,94 +14,208 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Uso básico
 
-```swift
-NavigationStack {
-    List {
-        NavigationLink("Perfil") {
-            Text("Vista de Perfil")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    NavigationStack {
+        List {
+            NavigationLink("Perfil") {
+                Text("Vista de Perfil")
+            }
+            NavigationLink("Configuración") {
+                Text("Vista de Configuración")
+            }
         }
-        NavigationLink("Configuración") {
-            Text("Vista de Configuración")
-        }
+        .navigationTitle("Inicio")
     }
-    .navigationTitle("Inicio")
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // app/page.tsx
+    import Link from "next/link";
+
+    export default function Inicio() {
+      return (
+        <div className="mx-auto max-w-md">
+          <h1 className="mb-4 text-2xl font-bold">Inicio</h1>
+          <ul className="divide-y divide-gray-200 rounded-lg bg-white">
+            <li>
+              <Link href="/perfil" className="block px-4 py-3 hover:bg-gray-50">
+                Perfil
+              </Link>
+            </li>
+            <li>
+              <Link href="/configuracion" className="block px-4 py-3 hover:bg-gray-50">
+                Configuración
+              </Link>
+            </li>
+          </ul>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## NavigationLink con datos
 
-```swift
-struct Fruta: Identifiable, Hashable {
-    let id = UUID()
-    let nombre: String
-    let emoji: String
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Fruta: Identifiable, Hashable {
+        let id = UUID()
+        let nombre: String
+        let emoji: String
+    }
 
-struct FrutasView: View {
-    let frutas = [
-        Fruta(nombre: "Manzana", emoji: "🍎"),
-        Fruta(nombre: "Plátano", emoji: "🍌"),
-        Fruta(nombre: "Naranja", emoji: "🍊"),
-    ]
+    struct FrutasView: View {
+        let frutas = [
+            Fruta(nombre: "Manzana", emoji: "🍎"),
+            Fruta(nombre: "Plátano", emoji: "🍌"),
+            Fruta(nombre: "Naranja", emoji: "🍊"),
+        ]
 
-    var body: some View {
-        NavigationStack {
-            List(frutas) { fruta in
-                NavigationLink(value: fruta) {
-                    Text("\(fruta.emoji) \(fruta.nombre)")
+        var body: some View {
+            NavigationStack {
+                List(frutas) { fruta in
+                    NavigationLink(value: fruta) {
+                        Text("\(fruta.emoji) \(fruta.nombre)")
+                    }
                 }
-            }
-            .navigationTitle("Frutas")
-            .navigationDestination(for: Fruta.self) { fruta in
-                Text("Detalle de \(fruta.nombre)")
-                    .font(.largeTitle)
+                .navigationTitle("Frutas")
+                .navigationDestination(for: Fruta.self) { fruta in
+                    Text("Detalle de \(fruta.nombre)")
+                        .font(.largeTitle)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // app/frutas/page.tsx
+    import Link from "next/link";
+
+    const frutas = [
+      { id: "manzana", nombre: "Manzana", emoji: "🍎" },
+      { id: "platano", nombre: "Plátano", emoji: "🍌" },
+      { id: "naranja", nombre: "Naranja", emoji: "🍊" },
+    ];
+
+    export default function FrutasPage() {
+      return (
+        <div className="mx-auto max-w-md">
+          <h1 className="mb-4 text-2xl font-bold">Frutas</h1>
+          <ul className="divide-y divide-gray-200 rounded-lg bg-white">
+            {frutas.map((fruta) => (
+              <li key={fruta.id}>
+                <Link
+                  href={`/frutas/${fruta.id}`}
+                  className="block px-4 py-3 hover:bg-gray-50"
+                >
+                  {fruta.emoji} {fruta.nombre}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    // app/frutas/[id]/page.tsx
+    export default function FrutaDetalle({ params }: { params: { id: string } }) {
+      return (
+        <h1 className="text-4xl font-bold">
+          Detalle de {params.id}
+        </h1>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Barra de herramientas
 
-```swift
-NavigationStack {
-    Text("Contenido")
-        .navigationTitle("Mi App")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    // Acción
-                } label: {
-                    Image(systemName: "plus")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    NavigationStack {
+        Text("Contenido")
+            .navigationTitle("Mi App")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        // Acción
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
-            }
 
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button("Editar") {
-                    // Acción
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Editar") {
+                        // Acción
+                    }
                 }
             }
-        }
-}
-```
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function MiAppLayout({ children }: { children: React.ReactNode }) {
+      return (
+        <div>
+          <nav className="flex items-center justify-between border-b px-4 py-3">
+            <button className="text-blue-500 hover:text-blue-700">
+              Editar
+            </button>
+            <h1 className="text-lg font-semibold">Mi App</h1>
+            <button className="text-2xl text-blue-500 hover:text-blue-700">
+              +
+            </button>
+          </nav>
+          <main className="p-4">{children}</main>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Estilos de título
 
-```swift
-// Título grande (por defecto)
-.navigationTitle("Título")
-.navigationBarTitleDisplayMode(.large)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Título grande (por defecto)
+    .navigationTitle("Título")
+    .navigationBarTitleDisplayMode(.large)
 
-// Título en línea (compacto)
-.navigationTitle("Título")
-.navigationBarTitleDisplayMode(.inline)
-```
+    // Título en línea (compacto)
+    .navigationTitle("Título")
+    .navigationBarTitleDisplayMode(.inline)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Título grande
+    <h1 className="text-3xl font-bold">Título</h1>
+
+    // Título compacto (en la barra de navegación)
+    <nav className="border-b px-4 py-3">
+      <h1 className="text-center text-lg font-semibold">Título</h1>
+    </nav>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -110,57 +225,120 @@ NavigationStack {
 
 ## Ejemplo completo
 
-```swift
-struct AppConfiguracionView: View {
-    var body: some View {
-        NavigationStack {
-            List {
-                Section("Cuenta") {
-                    NavigationLink {
-                        Text("Editar Perfil")
-                    } label: {
-                        Label("Perfil", systemImage: "person")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct AppConfiguracionView: View {
+        var body: some View {
+            NavigationStack {
+                List {
+                    Section("Cuenta") {
+                        NavigationLink {
+                            Text("Editar Perfil")
+                        } label: {
+                            Label("Perfil", systemImage: "person")
+                        }
+
+                        NavigationLink {
+                            Text("Notificaciones")
+                        } label: {
+                            Label("Notificaciones", systemImage: "bell")
+                        }
                     }
 
-                    NavigationLink {
-                        Text("Notificaciones")
-                    } label: {
-                        Label("Notificaciones", systemImage: "bell")
+                    Section("General") {
+                        NavigationLink {
+                            Text("Apariencia")
+                        } label: {
+                            Label("Apariencia", systemImage: "paintbrush")
+                        }
+
+                        NavigationLink {
+                            Text("Privacidad")
+                        } label: {
+                            Label("Privacidad", systemImage: "lock")
+                        }
+
+                        NavigationLink {
+                            Text("Almacenamiento")
+                        } label: {
+                            Label("Almacenamiento", systemImage: "internaldrive")
+                        }
+                    }
+
+                    Section("Acerca de") {
+                        NavigationLink {
+                            Text("Versión 1.0.0")
+                        } label: {
+                            Label("Versión", systemImage: "info.circle")
+                        }
                     }
                 }
-
-                Section("General") {
-                    NavigationLink {
-                        Text("Apariencia")
-                    } label: {
-                        Label("Apariencia", systemImage: "paintbrush")
-                    }
-
-                    NavigationLink {
-                        Text("Privacidad")
-                    } label: {
-                        Label("Privacidad", systemImage: "lock")
-                    }
-
-                    NavigationLink {
-                        Text("Almacenamiento")
-                    } label: {
-                        Label("Almacenamiento", systemImage: "internaldrive")
-                    }
-                }
-
-                Section("Acerca de") {
-                    NavigationLink {
-                        Text("Versión 1.0.0")
-                    } label: {
-                        Label("Versión", systemImage: "info.circle")
-                    }
-                }
+                .navigationTitle("Configuración")
             }
-            .navigationTitle("Configuración")
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import Link from "next/link";
+
+    const secciones = [
+      {
+        titulo: "Cuenta",
+        items: [
+          { label: "Perfil", icono: "👤", href: "/configuracion/perfil" },
+          { label: "Notificaciones", icono: "🔔", href: "/configuracion/notificaciones" },
+        ],
+      },
+      {
+        titulo: "General",
+        items: [
+          { label: "Apariencia", icono: "🎨", href: "/configuracion/apariencia" },
+          { label: "Privacidad", icono: "🔒", href: "/configuracion/privacidad" },
+          { label: "Almacenamiento", icono: "💾", href: "/configuracion/almacenamiento" },
+        ],
+      },
+      {
+        titulo: "Acerca de",
+        items: [
+          { label: "Versión", icono: "ℹ️", href: "/configuracion/version" },
+        ],
+      },
+    ];
+
+    export default function ConfiguracionPage() {
+      return (
+        <div className="mx-auto max-w-md">
+          <h1 className="mb-6 text-2xl font-bold">Configuración</h1>
+          <div className="space-y-6">
+            {secciones.map((seccion) => (
+              <div key={seccion.titulo}>
+                <h2 className="mb-2 text-sm font-semibold uppercase text-gray-500">
+                  {seccion.titulo}
+                </h2>
+                <ul className="divide-y divide-gray-200 rounded-lg bg-white">
+                  {seccion.items.map((item) => (
+                    <li key={item.label}>
+                      <Link
+                        href={item.href}
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50"
+                      >
+                        <span>{item.icono}</span>
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

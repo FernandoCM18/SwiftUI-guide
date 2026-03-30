@@ -4,6 +4,7 @@ description: Cómo usar TabView en SwiftUI para crear navegación con pestañas.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `TabView` organiza el contenido en pestañas, mostrando una barra de pestañas en la parte inferior de la pantalla. Es el patrón de navegación principal en muchas apps de iOS.
 
@@ -13,88 +14,244 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Uso básico
 
-```swift
-TabView {
-    Text("Inicio")
-        .tabItem {
-            Label("Inicio", systemImage: "house")
-        }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    TabView {
+        Text("Inicio")
+            .tabItem {
+                Label("Inicio", systemImage: "house")
+            }
 
-    Text("Buscar")
-        .tabItem {
-            Label("Buscar", systemImage: "magnifyingglass")
-        }
+        Text("Buscar")
+            .tabItem {
+                Label("Buscar", systemImage: "magnifyingglass")
+            }
 
-    Text("Perfil")
-        .tabItem {
-            Label("Perfil", systemImage: "person")
-        }
-}
-```
+        Text("Perfil")
+            .tabItem {
+                Label("Perfil", systemImage: "person")
+            }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+    import { Home, Search, User } from "lucide-react";
+
+    const tabs = [
+      { label: "Inicio", icon: Home },
+      { label: "Buscar", icon: Search },
+      { label: "Perfil", icon: User },
+    ];
+
+    export default function TabViewBasico() {
+      const [activeTab, setActiveTab] = useState(0);
+
+      return (
+        <div className="flex h-screen flex-col">
+          <div className="flex-1 flex items-center justify-center">
+            <p className="text-xl">{tabs[activeTab].label}</p>
+          </div>
+
+          <nav className="flex border-t bg-white">
+            {tabs.map((tab, i) => (
+              <button
+                key={tab.label}
+                onClick={() => setActiveTab(i)}
+                className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs ${
+                  activeTab === i ? "text-blue-500" : "text-gray-400"
+                }`}
+              >
+                <tab.icon className="h-5 w-5" />
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Selección programática
 
-```swift
-struct AppPrincipal: View {
-    @State private var tabSeleccionada = 0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct AppPrincipal: View {
+        @State private var tabSeleccionada = 0
 
-    var body: some View {
-        TabView(selection: $tabSeleccionada) {
-            InicioView()
-                .tabItem {
-                    Label("Inicio", systemImage: "house")
-                }
-                .tag(0)
+        var body: some View {
+            TabView(selection: $tabSeleccionada) {
+                InicioView()
+                    .tabItem {
+                        Label("Inicio", systemImage: "house")
+                    }
+                    .tag(0)
 
-            BuscarView()
-                .tabItem {
-                    Label("Buscar", systemImage: "magnifyingglass")
-                }
-                .tag(1)
+                BuscarView()
+                    .tabItem {
+                        Label("Buscar", systemImage: "magnifyingglass")
+                    }
+                    .tag(1)
 
-            PerfilView()
-                .tabItem {
-                    Label("Perfil", systemImage: "person")
-                }
-                .tag(2)
+                PerfilView()
+                    .tabItem {
+                        Label("Perfil", systemImage: "person")
+                    }
+                    .tag(2)
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+    import { Home, Search, User } from "lucide-react";
+
+    const tabs = [
+      { id: 0, label: "Inicio", icon: Home, content: <InicioView /> },
+      { id: 1, label: "Buscar", icon: Search, content: <BuscarView /> },
+      { id: 2, label: "Perfil", icon: User, content: <PerfilView /> },
+    ];
+
+    export default function AppPrincipal() {
+      const [tabSeleccionada, setTabSeleccionada] = useState(0);
+
+      return (
+        <div className="flex h-screen flex-col">
+          <div className="flex-1 overflow-auto">
+            {tabs[tabSeleccionada].content}
+          </div>
+
+          <nav className="flex border-t bg-white">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setTabSeleccionada(tab.id)}
+                className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs ${
+                  tabSeleccionada === tab.id ? "text-blue-500" : "text-gray-400"
+                }`}
+              >
+                <tab.icon className="h-5 w-5" />
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Badges (insignias)
 
-```swift
-Text("Mensajes")
-    .tabItem {
-        Label("Mensajes", systemImage: "message")
-    }
-    .badge(5)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Text("Mensajes")
+        .tabItem {
+            Label("Mensajes", systemImage: "message")
+        }
+        .badge(5)
 
-Text("Correo")
-    .tabItem {
-        Label("Correo", systemImage: "envelope")
-    }
-    .badge("Nuevo")
-```
+    Text("Correo")
+        .tabItem {
+            Label("Correo", systemImage: "envelope")
+        }
+        .badge("Nuevo")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <button className="relative flex flex-col items-center gap-1 py-2 text-xs text-blue-500">
+      <div className="relative">
+        <MessageCircle className="h-5 w-5" />
+        <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] text-white">
+          5
+        </span>
+      </div>
+      Mensajes
+    </button>
+
+    <button className="relative flex flex-col items-center gap-1 py-2 text-xs text-gray-400">
+      <div className="relative">
+        <Mail className="h-5 w-5" />
+        <span className="absolute -right-3 -top-1 rounded-full bg-red-500 px-1.5 text-[10px] text-white">
+          Nuevo
+        </span>
+      </div>
+      Correo
+    </button>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## TabView como paginador
 
-```swift
-TabView {
-    Color.red
-    Color.green
-    Color.blue
-}
-.tabViewStyle(.page)
-.indexViewStyle(.page(backgroundDisplayMode: .always))
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    TabView {
+        Color.red
+        Color.green
+        Color.blue
+    }
+    .tabViewStyle(.page)
+    .indexViewStyle(.page(backgroundDisplayMode: .always))
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    const pages = ["bg-red-500", "bg-green-500", "bg-blue-500"];
+
+    export default function Paginador() {
+      const [pagina, setPagina] = useState(0);
+
+      return (
+        <div className="relative h-64 w-full overflow-hidden rounded-xl">
+          <div
+            className="flex h-full transition-transform duration-300"
+            style={{ transform: `translateX(-${pagina * 100}%)` }}
+          >
+            {pages.map((color, i) => (
+              <div key={i} className={`h-full w-full shrink-0 ${color}`} />
+            ))}
+          </div>
+
+          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+            {pages.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPagina(i)}
+                className={`h-2 w-2 rounded-full ${
+                  pagina === i ? "bg-white" : "bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -104,66 +261,158 @@ Usa `TabView` como contenedor raíz de tu app. Cada pestaña puede contener su p
 
 ## Ejemplo completo
 
-```swift
-struct MiAppView: View {
-    @State private var tab = 0
-    @State private var mensajesSinLeer = 3
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct MiAppView: View {
+        @State private var tab = 0
+        @State private var mensajesSinLeer = 3
 
-    var body: some View {
-        TabView(selection: $tab) {
-            NavigationStack {
-                List(0..<10) { i in
-                    NavigationLink("Publicación \(i + 1)") {
-                        Text("Detalle de la publicación \(i + 1)")
+        var body: some View {
+            TabView(selection: $tab) {
+                NavigationStack {
+                    List(0..<10) { i in
+                        NavigationLink("Publicación \(i + 1)") {
+                            Text("Detalle de la publicación \(i + 1)")
+                        }
                     }
+                    .navigationTitle("Inicio")
                 }
-                .navigationTitle("Inicio")
-            }
-            .tabItem {
-                Label("Inicio", systemImage: "house.fill")
-            }
-            .tag(0)
+                .tabItem {
+                    Label("Inicio", systemImage: "house.fill")
+                }
+                .tag(0)
 
-            NavigationStack {
-                Text("Buscar contenido")
-                    .navigationTitle("Buscar")
-            }
-            .tabItem {
-                Label("Buscar", systemImage: "magnifyingglass")
-            }
-            .tag(1)
+                NavigationStack {
+                    Text("Buscar contenido")
+                        .navigationTitle("Buscar")
+                }
+                .tabItem {
+                    Label("Buscar", systemImage: "magnifyingglass")
+                }
+                .tag(1)
 
-            NavigationStack {
-                List {
-                    ForEach(0..<mensajesSinLeer, id: \.self) { i in
-                        Text("Mensaje \(i + 1)")
+                NavigationStack {
+                    List {
+                        ForEach(0..<mensajesSinLeer, id: \.self) { i in
+                            Text("Mensaje \(i + 1)")
+                        }
                     }
+                    .navigationTitle("Mensajes")
                 }
-                .navigationTitle("Mensajes")
-            }
-            .tabItem {
-                Label("Mensajes", systemImage: "message.fill")
-            }
-            .badge(mensajesSinLeer)
-            .tag(2)
+                .tabItem {
+                    Label("Mensajes", systemImage: "message.fill")
+                }
+                .badge(mensajesSinLeer)
+                .tag(2)
 
-            NavigationStack {
-                VStack {
-                    Image(systemName: "person.circle.fill")
-                        .font(.system(size: 80))
-                        .foregroundStyle(.blue)
-                    Text("Mi Perfil")
-                        .font(.title)
+                NavigationStack {
+                    VStack {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 80))
+                            .foregroundStyle(.blue)
+                        Text("Mi Perfil")
+                            .font(.title)
+                    }
+                    .navigationTitle("Perfil")
                 }
-                .navigationTitle("Perfil")
+                .tabItem {
+                    Label("Perfil", systemImage: "person.fill")
+                }
+                .tag(3)
             }
-            .tabItem {
-                Label("Perfil", systemImage: "person.fill")
-            }
-            .tag(3)
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+    import { Home, Search, MessageCircle, User } from "lucide-react";
+
+    const tabConfig = [
+      { id: 0, label: "Inicio", icon: Home },
+      { id: 1, label: "Buscar", icon: Search },
+      { id: 2, label: "Mensajes", icon: MessageCircle },
+      { id: 3, label: "Perfil", icon: User },
+    ];
+
+    export default function MiAppView() {
+      const [tab, setTab] = useState(0);
+      const [mensajesSinLeer] = useState(3);
+
+      return (
+        <div className="flex h-screen flex-col">
+          <div className="flex-1 overflow-auto">
+            {tab === 0 && (
+              <div>
+                <h1 className="border-b px-4 py-3 text-xl font-bold">Inicio</h1>
+                <ul className="divide-y">
+                  {Array.from({ length: 10 }, (_, i) => (
+                    <li key={i} className="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+                      Publicación {i + 1}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {tab === 1 && (
+              <div className="flex flex-col items-center pt-20">
+                <h1 className="text-xl font-bold">Buscar</h1>
+                <p className="mt-2 text-gray-500">Buscar contenido</p>
+              </div>
+            )}
+
+            {tab === 2 && (
+              <div>
+                <h1 className="border-b px-4 py-3 text-xl font-bold">Mensajes</h1>
+                <ul className="divide-y">
+                  {Array.from({ length: mensajesSinLeer }, (_, i) => (
+                    <li key={i} className="px-4 py-3">
+                      Mensaje {i + 1}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {tab === 3 && (
+              <div className="flex flex-col items-center pt-20">
+                <h1 className="text-xl font-bold">Perfil</h1>
+                <User className="mt-4 h-20 w-20 text-blue-500" />
+                <p className="mt-2 text-2xl font-bold">Mi Perfil</p>
+              </div>
+            )}
+          </div>
+
+          <nav className="flex border-t bg-white">
+            {tabConfig.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                className={`relative flex flex-1 flex-col items-center gap-1 py-2 text-xs ${
+                  tab === t.id ? "text-blue-500" : "text-gray-400"
+                }`}
+              >
+                <div className="relative">
+                  <t.icon className="h-5 w-5" />
+                  {t.id === 2 && mensajesSinLeer > 0 && (
+                    <span className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] text-white">
+                      {mensajesSinLeer}
+                    </span>
+                  )}
+                </div>
+                {t.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

@@ -4,6 +4,7 @@ description: How to implement the MVVM pattern in SwiftUI with ViewModels, @Obse
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 The **MVVM** (Model-View-ViewModel) pattern is the most widely used architecture in SwiftUI apps. It separates business logic (ViewModel) from the interface (View) and data (Model).
 
@@ -19,50 +20,110 @@ Model      → Data and structures
 
 Since iOS 17, Apple recommends using the `@Observable` macro instead of `ObservableObject`:
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-@Observable
-class CounterViewModel {
-    var value = 0
-    var history: [Int] = []
+    @Observable
+    class CounterViewModel {
+        var value = 0
+        var history: [Int] = []
 
-    func increment() {
-        value += 1
-        history.append(value)
+        func increment() {
+            value += 1
+            history.append(value)
+        }
+
+        func reset() {
+            value = 0
+            history.removeAll()
+        }
     }
 
-    func reset() {
-        value = 0
-        history.removeAll()
-    }
-}
+    struct CounterView: View {
+        @State private var vm = CounterViewModel()
 
-struct CounterView: View {
-    @State private var vm = CounterViewModel()
+        var body: some View {
+            VStack(spacing: 20) {
+                Text("\(vm.value)")
+                    .font(.system(size: 72, weight: .bold))
 
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("\(vm.value)")
-                .font(.system(size: 72, weight: .bold))
+                HStack(spacing: 16) {
+                    Button("Reset") { vm.reset() }
+                        .buttonStyle(.bordered)
 
-            HStack(spacing: 16) {
-                Button("Reset") { vm.reset() }
-                    .buttonStyle(.bordered)
+                    Button("Add") { vm.increment() }
+                        .buttonStyle(.borderedProminent)
+                }
 
-                Button("Add") { vm.increment() }
-                    .buttonStyle(.borderedProminent)
-            }
-
-            if !vm.history.isEmpty {
-                Text("History: \(vm.history.map(String.init).joined(separator: ", "))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if !vm.history.isEmpty {
+                    Text("History: \(vm.history.map(String.init).joined(separator: ", "))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState, useCallback } from "react";
+
+    // Custom hook replaces the ViewModel
+    function useCounter() {
+      const [value, setValue] = useState(0);
+      const [history, setHistory] = useState<number[]>([]);
+
+      const increment = useCallback(() => {
+        setValue((prev) => {
+          const next = prev + 1;
+          setHistory((h) => [...h, next]);
+          return next;
+        });
+      }, []);
+
+      const reset = useCallback(() => {
+        setValue(0);
+        setHistory([]);
+      }, []);
+
+      return { value, history, increment, reset };
+    }
+
+    export default function Counter() {
+      const { value, history, increment, reset } = useCounter();
+
+      return (
+        <div className="flex flex-col items-center gap-5">
+          <span className="text-7xl font-bold">{value}</span>
+
+          <div className="flex gap-4">
+            <button onClick={reset} className="rounded-lg border px-4 py-2">
+              Reset
+            </button>
+            <button
+              onClick={increment}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+            >
+              Add
+            </button>
+          </div>
+
+          {history.length > 0 && (
+            <p className="text-sm text-gray-500">
+              History: {history.join(", ")}
+            </p>
+          )}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -112,96 +173,251 @@ If your app supports iOS 17+, use `@Observable`. It's simpler, more efficient, a
 
 ### Model
 
-```swift
-struct Note: Identifiable, Codable {
-    let id: UUID
-    var title: String
-    var content: String
-    var date: Date
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Note: Identifiable, Codable {
+        let id: UUID
+        var title: String
+        var content: String
+        var date: Date
 
-    init(title: String, content: String) {
-        self.id = UUID()
-        self.title = title
-        self.content = content
-        self.date = Date()
+        init(title: String, content: String) {
+            self.id = UUID()
+            self.title = title
+            self.content = content
+            self.date = Date()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Note {
+      id: string;
+      title: string;
+      content: string;
+      date: Date;
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 ### ViewModel
 
-```swift
-@Observable
-class NotesViewModel {
-    var notes: [Note] = []
-    var selectedNote: Note?
-    var searchText = ""
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    @Observable
+    class NotesViewModel {
+        var notes: [Note] = []
+        var selectedNote: Note?
+        var searchText = ""
 
-    var filteredNotes: [Note] {
-        if searchText.isEmpty { return notes }
-        return notes.filter {
-            $0.title.localizedCaseInsensitiveContains(searchText) ||
-            $0.content.localizedCaseInsensitiveContains(searchText)
+        var filteredNotes: [Note] {
+            if searchText.isEmpty { return notes }
+            return notes.filter {
+                $0.title.localizedCaseInsensitiveContains(searchText) ||
+                $0.content.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+
+        func add(title: String, content: String) {
+            let note = Note(title: title, content: content)
+            notes.insert(note, at: 0)
+        }
+
+        func delete(at offsets: IndexSet) {
+            notes.remove(atOffsets: offsets)
+        }
+
+        func update(_ note: Note, title: String, content: String) {
+            if let index = notes.firstIndex(where: { $0.id == note.id }) {
+                notes[index].title = title
+                notes[index].content = content
+            }
         }
     }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    "use client";
 
-    func add(title: String, content: String) {
-        let note = Note(title: title, content: content)
-        notes.insert(note, at: 0)
-    }
+    import { useState, useMemo, useCallback } from "react";
 
-    func delete(at offsets: IndexSet) {
-        notes.remove(atOffsets: offsets)
-    }
+    // Custom hook replaces the ViewModel
+    function useNotes() {
+      const [notes, setNotes] = useState<Note[]>([]);
+      const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+      const [searchText, setSearchText] = useState("");
 
-    func update(_ note: Note, title: String, content: String) {
-        if let index = notes.firstIndex(where: { $0.id == note.id }) {
-            notes[index].title = title
-            notes[index].content = content
-        }
+      const filteredNotes = useMemo(() => {
+        if (!searchText) return notes;
+        const q = searchText.toLowerCase();
+        return notes.filter(
+          (n) =>
+            n.title.toLowerCase().includes(q) ||
+            n.content.toLowerCase().includes(q)
+        );
+      }, [notes, searchText]);
+
+      const add = useCallback((title: string, content: string) => {
+        const note: Note = {
+          id: crypto.randomUUID(),
+          title,
+          content,
+          date: new Date(),
+        };
+        setNotes((prev) => [note, ...prev]);
+      }, []);
+
+      const remove = useCallback((id: string) => {
+        setNotes((prev) => prev.filter((n) => n.id !== id));
+      }, []);
+
+      const update = useCallback(
+        (id: string, title: string, content: string) => {
+          setNotes((prev) =>
+            prev.map((n) => (n.id === id ? { ...n, title, content } : n))
+          );
+        },
+        []
+      );
+
+      return {
+        notes,
+        filteredNotes,
+        selectedNote,
+        setSelectedNote,
+        searchText,
+        setSearchText,
+        add,
+        remove,
+        update,
+      };
     }
-}
-```
+    ```
+  </TabItem>
+</Tabs>
+
+<PlaygroundLink />
 
 ### View
 
-```swift
-struct NotesAppView: View {
-    @State private var vm = NotesViewModel()
-    @State private var showForm = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct NotesAppView: View {
+        @State private var vm = NotesViewModel()
+        @State private var showForm = false
 
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(vm.filteredNotes) { note in
-                    NavigationLink {
-                        NoteDetailView(vm: vm, note: note)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(note.title)
-                                .font(.headline)
-                            Text(note.content)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
+        var body: some View {
+            NavigationStack {
+                List {
+                    ForEach(vm.filteredNotes) { note in
+                        NavigationLink {
+                            NoteDetailView(vm: vm, note: note)
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text(note.title)
+                                    .font(.headline)
+                                Text(note.content)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                            }
                         }
                     }
+                    .onDelete { vm.delete(at: $0) }
                 }
-                .onDelete { vm.delete(at: $0) }
-            }
-            .navigationTitle("Notes")
-            .searchable(text: $vm.searchText)
-            .toolbar {
-                Button { showForm = true } label: {
-                    Image(systemName: "plus")
+                .navigationTitle("Notes")
+                .searchable(text: $vm.searchText)
+                .toolbar {
+                    Button { showForm = true } label: {
+                        Image(systemName: "plus")
+                    }
                 }
-            }
-            .sheet(isPresented: $showForm) {
-                NewNoteView(vm: vm)
+                .sheet(isPresented: $showForm) {
+                    NewNoteView(vm: vm)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+    import Link from "next/link";
+
+    export default function NotesPage() {
+      const {
+        filteredNotes,
+        searchText,
+        setSearchText,
+        add,
+        remove,
+      } = useNotes();
+      const [showForm, setShowForm] = useState(false);
+
+      return (
+        <div className="mx-auto max-w-2xl p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Notes</h1>
+            <button
+              onClick={() => setShowForm(true)}
+              className="rounded-lg bg-blue-600 px-3 py-1.5 text-white"
+            >
+              +
+            </button>
+          </div>
+
+          <input
+            type="search"
+            placeholder="Search…"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="mb-4 w-full rounded-lg border px-3 py-2"
+          />
+
+          <ul className="divide-y">
+            {filteredNotes.map((note) => (
+              <li key={note.id} className="flex items-center justify-between py-3">
+                <Link href={`/notes/${note.id}`}>
+                  <p className="font-semibold">{note.title}</p>
+                  <p className="truncate text-sm text-gray-500">
+                    {note.content}
+                  </p>
+                </Link>
+                <button
+                  onClick={() => remove(note.id)}
+                  className="text-sm text-red-500"
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {showForm && (
+            <NewNoteDialog
+              onSave={(title, content) => {
+                add(title, content);
+                setShowForm(false);
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          )}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

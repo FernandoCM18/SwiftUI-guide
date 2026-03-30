@@ -4,6 +4,7 @@ description: Learn about protocols in Swift including declaration, conformance, 
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Defining Interfaces and Contracts
 
@@ -11,28 +12,56 @@ Protocols define a blueprint of methods, properties, and other requirements that
 
 ## Declaring a Protocol
 
-```swift
-protocol Describable {
-    var description: String { get }
-    func describe()
-}
-
-// Conforming to a protocol
-struct Dog: Describable {
-    var name: String
-
-    var description: String {
-        "Dog named \(name)"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Describable {
+        var description: String { get }
+        func describe()
     }
 
-    func describe() {
-        print(description)
-    }
-}
+    // Conforming to a protocol
+    struct Dog: Describable {
+        var name: String
 
-let dog = Dog(name: "Rex")
-dog.describe()  // "Dog named Rex"
-```
+        var description: String {
+            "Dog named \(name)"
+        }
+
+        func describe() {
+            print(description)
+        }
+    }
+
+    let dog = Dog(name: "Rex")
+    dog.describe()  // "Dog named Rex"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Describable {
+      readonly description: string;
+      describe(): void;
+    }
+
+    // Implementing an interface
+    class Dog implements Describable {
+      constructor(public name: string) {}
+
+      get description(): string {
+        return `Dog named ${this.name}`;
+      }
+
+      describe(): void {
+        console.log(this.description);
+      }
+    }
+
+    const dog = new Dog("Rex");
+    dog.describe();  // "Dog named Rex"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -84,33 +113,65 @@ print(lightSwitch)  // off
 
 ## Protocol Conformance with Multiple Protocols
 
-```swift
-protocol Printable {
-    func printDetails()
-}
-
-protocol Storable {
-    func save()
-}
-
-struct Document: Printable, Storable {
-    var title: String
-    var content: String
-
-    func printDetails() {
-        print("Document: \(title)")
-        print("Content: \(content)")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Printable {
+        func printDetails()
     }
 
-    func save() {
-        print("Saving '\(title)' to disk...")
+    protocol Storable {
+        func save()
     }
-}
 
-let doc = Document(title: "Notes", content: "Hello World")
-doc.printDetails()
-doc.save()
-```
+    struct Document: Printable, Storable {
+        var title: String
+        var content: String
+
+        func printDetails() {
+            print("Document: \(title)")
+            print("Content: \(content)")
+        }
+
+        func save() {
+            print("Saving '\(title)' to disk...")
+        }
+    }
+
+    let doc = Document(title: "Notes", content: "Hello World")
+    doc.printDetails()
+    doc.save()
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Printable {
+      printDetails(): void;
+    }
+
+    interface Storable {
+      save(): void;
+    }
+
+    class Document implements Printable, Storable {
+      constructor(public title: string, public content: string) {}
+
+      printDetails(): void {
+        console.log(`Document: ${this.title}`);
+        console.log(`Content: ${this.content}`);
+      }
+
+      save(): void {
+        console.log(`Saving '${this.title}' to disk...`);
+      }
+    }
+
+    const doc = new Document("Notes", "Hello World");
+    doc.printDetails();
+    doc.save();
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -118,32 +179,62 @@ doc.save()
 
 Protocols can inherit from other protocols.
 
-```swift
-protocol Named {
-    var name: String { get }
-}
-
-protocol Aged {
-    var age: Int { get }
-}
-
-// PeopleProtocol inherits both
-protocol PersonProtocol: Named, Aged {
-    func greet() -> String
-}
-
-struct Person: PersonProtocol {
-    var name: String
-    var age: Int
-
-    func greet() -> String {
-        "Hi, I'm \(name), \(age) years old."
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Named {
+        var name: String { get }
     }
-}
 
-let person = Person(name: "Alice", age: 30)
-print(person.greet())
-```
+    protocol Aged {
+        var age: Int { get }
+    }
+
+    // PeopleProtocol inherits both
+    protocol PersonProtocol: Named, Aged {
+        func greet() -> String
+    }
+
+    struct Person: PersonProtocol {
+        var name: String
+        var age: Int
+
+        func greet() -> String {
+            "Hi, I'm \(name), \(age) years old."
+        }
+    }
+
+    let person = Person(name: "Alice", age: 30)
+    print(person.greet())
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Named {
+      readonly name: string;
+    }
+
+    interface Aged {
+      readonly age: number;
+    }
+
+    // PersonInterface extends both
+    interface PersonInterface extends Named, Aged {
+      greet(): string;
+    }
+
+    const person: PersonInterface = {
+      name: "Alice",
+      age: 30,
+      greet() {
+        return `Hi, I'm ${this.name}, ${this.age} years old.`;
+      },
+    };
+
+    console.log(person.greet());
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -151,39 +242,77 @@ print(person.greet())
 
 Protocol extensions let you provide default implementations for any method or property.
 
-```swift
-protocol Greetable {
-    var name: String { get }
-    func greet() -> String
-}
-
-// Default implementation
-extension Greetable {
-    func greet() -> String {
-        "Hello, my name is \(name)."
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Greetable {
+        var name: String { get }
+        func greet() -> String
     }
-}
 
-struct Student: Greetable {
-    var name: String
-    // Uses the default greet() implementation
-}
-
-struct Teacher: Greetable {
-    var name: String
-
-    // Provides a custom implementation
-    func greet() -> String {
-        "I'm Professor \(name)."
+    // Default implementation
+    extension Greetable {
+        func greet() -> String {
+            "Hello, my name is \(name)."
+        }
     }
-}
 
-let student = Student(name: "Alice")
-let teacher = Teacher(name: "Smith")
+    struct Student: Greetable {
+        var name: String
+        // Uses the default greet() implementation
+    }
 
-print(student.greet())  // "Hello, my name is Alice."
-print(teacher.greet())  // "I'm Professor Smith."
-```
+    struct Teacher: Greetable {
+        var name: String
+
+        // Provides a custom implementation
+        func greet() -> String {
+            "I'm Professor \(name)."
+        }
+    }
+
+    let student = Student(name: "Alice")
+    let teacher = Teacher(name: "Smith")
+
+    print(student.greet())  // "Hello, my name is Alice."
+    print(teacher.greet())  // "I'm Professor Smith."
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // TS has no direct equivalent to protocol extensions.
+    // Use a utility function to provide default behavior.
+
+    interface Greetable {
+      readonly name: string;
+      greet(): string;
+    }
+
+    function defaultGreet(name: string): string {
+      return `Hello, my name is ${name}.`;
+    }
+
+    // Uses the default greeting via utility function
+    const student: Greetable = {
+      name: "Alice",
+      greet() {
+        return defaultGreet(this.name);
+      },
+    };
+
+    // Custom implementation
+    const teacher: Greetable = {
+      name: "Smith",
+      greet() {
+        return `I'm Professor ${this.name}.`;
+      },
+    };
+
+    console.log(student.greet());  // "Hello, my name is Alice."
+    console.log(teacher.greet());  // "I'm Professor Smith."
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -227,41 +356,75 @@ for shape in shapes {
 
 Swift encourages building functionality through protocol composition rather than class inheritance.
 
-```swift
-protocol Flying {
-    var maxAltitude: Double { get }
-    func fly()
-}
-
-protocol Swimming {
-    var maxDepth: Double { get }
-    func swim()
-}
-
-extension Flying {
-    func fly() {
-        print("Flying up to \(maxAltitude) meters")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Flying {
+        var maxAltitude: Double { get }
+        func fly()
     }
-}
 
-extension Swimming {
-    func swim() {
-        print("Swimming down to \(maxDepth) meters")
+    protocol Swimming {
+        var maxDepth: Double { get }
+        func swim()
     }
-}
 
-// A duck can both fly and swim
-struct Duck: Flying, Swimming {
-    var maxAltitude: Double = 500
-    var maxDepth: Double = 2
+    extension Flying {
+        func fly() {
+            print("Flying up to \(maxAltitude) meters")
+        }
+    }
 
-    var name: String
-}
+    extension Swimming {
+        func swim() {
+            print("Swimming down to \(maxDepth) meters")
+        }
+    }
 
-let duck = Duck(name: "Donald")
-duck.fly()   // "Flying up to 500.0 meters"
-duck.swim()  // "Swimming down to 2.0 meters"
-```
+    // A duck can both fly and swim
+    struct Duck: Flying, Swimming {
+        var maxAltitude: Double = 500
+        var maxDepth: Double = 2
+
+        var name: String
+    }
+
+    let duck = Duck(name: "Donald")
+    duck.fly()   // "Flying up to 500.0 meters"
+    duck.swim()  // "Swimming down to 2.0 meters"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Flying {
+      maxAltitude: number;
+      fly(): void;
+    }
+
+    interface Swimming {
+      maxDepth: number;
+      swim(): void;
+    }
+
+    // Intersection type: must satisfy both interfaces
+    type FlyingSwimmer = Flying & Swimming;
+
+    const duck: FlyingSwimmer = {
+      maxAltitude: 500,
+      maxDepth: 2,
+      fly() {
+        console.log(`Flying up to ${this.maxAltitude} meters`);
+      },
+      swim() {
+        console.log(`Swimming down to ${this.maxDepth} meters`);
+      },
+    };
+
+    duck.fly();   // "Flying up to 500 meters"
+    duck.swim();  // "Swimming down to 2 meters"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

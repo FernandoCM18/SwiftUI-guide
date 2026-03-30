@@ -4,6 +4,7 @@ description: How to use TextField and SecureField in SwiftUI for text input.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `TextField` lets the user enter text. `SecureField` hides the input, ideal for passwords.
 
@@ -13,41 +14,123 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Basic Usage
 
-```swift
-struct TextFieldExample: View {
-    @State private var name = ""
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct TextFieldExample: View {
+        @State private var name = ""
 
-    var body: some View {
-        TextField("Enter your name", text: $name)
-            .textFieldStyle(.roundedBorder)
-            .padding()
+        var body: some View {
+            TextField("Enter your name", text: $name)
+                .textFieldStyle(.roundedBorder)
+                .padding()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function TextFieldExample() {
+      const [name, setName] = useState("");
+
+      return (
+        <input
+          type="text"
+          placeholder="Enter your name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        />
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## SecureField
 
-```swift
-@State private var password = ""
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    @State private var password = ""
 
-SecureField("Password", text: $password)
-    .textFieldStyle(.roundedBorder)
-```
+    SecureField("Password", text: $password)
+        .textFieldStyle(.roundedBorder)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function PasswordField() {
+      const [password, setPassword] = useState("");
+
+      return (
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        />
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Keyboard Types
 
-```swift
-TextField("Email", text: $email)
-    .keyboardType(.emailAddress)
-    .autocapitalization(.none)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    TextField("Email", text: $email)
+        .keyboardType(.emailAddress)
+        .autocapitalization(.none)
 
-TextField("Phone", text: $phone)
-    .keyboardType(.phonePad)
-```
+    TextField("Phone", text: $phone)
+        .keyboardType(.phonePad)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function InputTypes() {
+      const [email, setEmail] = useState("");
+      const [phone, setPhone] = useState("");
+
+      return (
+        <div className="space-y-3">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+          />
+          <input
+            type="tel"
+            placeholder="Phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+          />
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -68,45 +151,114 @@ Use `@FocusState` to programmatically control which field has keyboard focus.
 
 ## Full Example
 
-```swift
-struct RegistrationFormView: View {
-    @State private var name = ""
-    @State private var email = ""
-    @State private var password = ""
-    @FocusState private var focusedField: Field?
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct RegistrationFormView: View {
+        @State private var name = ""
+        @State private var email = ""
+        @State private var password = ""
+        @FocusState private var focusedField: Field?
 
-    enum Field { case name, email, password }
+        enum Field { case name, email, password }
 
-    var isValid: Bool {
-        !name.isEmpty && email.contains("@") && password.count >= 8
-    }
+        var isValid: Bool {
+            !name.isEmpty && email.contains("@") && password.count >= 8
+        }
 
-    var body: some View {
-        Form {
-            Section("Personal Info") {
-                TextField("Full name", text: $name)
-                    .focused($focusedField, equals: .name)
-                    .submitLabel(.next)
-                    .onSubmit { focusedField = .email }
+        var body: some View {
+            Form {
+                Section("Personal Info") {
+                    TextField("Full name", text: $name)
+                        .focused($focusedField, equals: .name)
+                        .submitLabel(.next)
+                        .onSubmit { focusedField = .email }
 
-                TextField("Email", text: $email)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
-                    .focused($focusedField, equals: .email)
-                    .submitLabel(.next)
-                    .onSubmit { focusedField = .password }
+                    TextField("Email", text: $email)
+                        .keyboardType(.emailAddress)
+                        .autocapitalization(.none)
+                        .focused($focusedField, equals: .email)
+                        .submitLabel(.next)
+                        .onSubmit { focusedField = .password }
 
-                SecureField("Password (min. 8 chars)", text: $password)
-                    .focused($focusedField, equals: .password)
-                    .submitLabel(.done)
+                    SecureField("Password (min. 8 chars)", text: $password)
+                        .focused($focusedField, equals: .password)
+                        .submitLabel(.done)
+                }
+
+                Button("Register") { focusedField = nil }
+                    .disabled(!isValid)
+                    .frame(maxWidth: .infinity)
             }
-
-            Button("Register") { focusedField = nil }
-                .disabled(!isValid)
-                .frame(maxWidth: .infinity)
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useRef, useState } from "react";
+
+    export default function RegistrationForm() {
+      const [name, setName] = useState("");
+      const [email, setEmail] = useState("");
+      const [password, setPassword] = useState("");
+
+      const emailRef = useRef<HTMLInputElement>(null);
+      const passwordRef = useRef<HTMLInputElement>(null);
+
+      const isValid = name.length > 0 && email.includes("@") && password.length >= 8;
+
+      return (
+        <form
+          className="mx-auto max-w-md space-y-4 rounded-xl bg-white p-6 shadow"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (isValid) console.log("Register", { name, email, password });
+          }}
+        >
+          <fieldset className="space-y-3">
+            <legend className="mb-2 text-sm font-semibold text-gray-500">Personal Info</legend>
+
+            <input
+              type="text"
+              placeholder="Full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && emailRef.current?.focus()}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+            <input
+              ref={emailRef}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && passwordRef.current?.focus()}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+            <input
+              ref={passwordRef}
+              type="password"
+              placeholder="Password (min. 8 chars)"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+          </fieldset>
+
+          <button
+            type="submit"
+            disabled={!isValid}
+            className="w-full rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-500"
+          >
+            Register
+          </button>
+        </form>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

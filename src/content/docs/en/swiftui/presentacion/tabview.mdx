@@ -4,6 +4,7 @@ description: How to use TabView in SwiftUI to create tab-based navigation.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `TabView` organizes content into tabs, showing a tab bar at the bottom of the screen.
 
@@ -13,66 +14,203 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Basic Usage
 
-```swift
-TabView {
-    Text("Home")
-        .tabItem { Label("Home", systemImage: "house") }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    TabView {
+        Text("Home")
+            .tabItem { Label("Home", systemImage: "house") }
 
-    Text("Search")
-        .tabItem { Label("Search", systemImage: "magnifyingglass") }
+        Text("Search")
+            .tabItem { Label("Search", systemImage: "magnifyingglass") }
 
-    Text("Profile")
-        .tabItem { Label("Profile", systemImage: "person") }
-}
-```
+        Text("Profile")
+            .tabItem { Label("Profile", systemImage: "person") }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    const tabs = ["Home", "Search", "Profile"];
+    const icons = ["🏠", "🔍", "👤"];
+
+    export default function TabViewExample() {
+      const [activeTab, setActiveTab] = useState(0);
+
+      return (
+        <div className="flex flex-col h-screen">
+          <div className="flex-1 flex items-center justify-center">
+            <p className="text-xl">{tabs[activeTab]}</p>
+          </div>
+          <nav className="flex border-t">
+            {tabs.map((tab, i) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(i)}
+                className={`flex-1 flex flex-col items-center py-2 ${
+                  activeTab === i ? "text-blue-500" : "text-gray-500"
+                }`}
+              >
+                <span>{icons[i]}</span>
+                <span className="text-xs">{tab}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Programmatic Selection
 
-```swift
-struct MainApp: View {
-    @State private var selectedTab = 0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct MainApp: View {
+        @State private var selectedTab = 0
 
-    var body: some View {
-        TabView(selection: $selectedTab) {
-            HomeView()
-                .tabItem { Label("Home", systemImage: "house") }
-                .tag(0)
-            SearchView()
-                .tabItem { Label("Search", systemImage: "magnifyingglass") }
-                .tag(1)
-            ProfileView()
-                .tabItem { Label("Profile", systemImage: "person") }
-                .tag(2)
+        var body: some View {
+            TabView(selection: $selectedTab) {
+                HomeView()
+                    .tabItem { Label("Home", systemImage: "house") }
+                    .tag(0)
+                SearchView()
+                    .tabItem { Label("Search", systemImage: "magnifyingglass") }
+                    .tag(1)
+                ProfileView()
+                    .tabItem { Label("Profile", systemImage: "person") }
+                    .tag(2)
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    function HomeView() {
+      return <p>Home Content</p>;
+    }
+    function SearchView() {
+      return <p>Search Content</p>;
+    }
+    function ProfileView() {
+      return <p>Profile Content</p>;
+    }
+
+    const tabs = [
+      { label: "Home", icon: "🏠", content: <HomeView /> },
+      { label: "Search", icon: "🔍", content: <SearchView /> },
+      { label: "Profile", icon: "👤", content: <ProfileView /> },
+    ];
+
+    export default function MainApp() {
+      const [selectedTab, setSelectedTab] = useState(0);
+
+      return (
+        <div className="flex flex-col h-screen">
+          <div className="flex-1 p-4">{tabs[selectedTab].content}</div>
+          <nav className="flex border-t">
+            {tabs.map((tab, i) => (
+              <button
+                key={tab.label}
+                onClick={() => setSelectedTab(i)}
+                className={`flex-1 flex flex-col items-center py-2 ${
+                  selectedTab === i ? "text-blue-500" : "text-gray-500"
+                }`}
+              >
+                <span>{tab.icon}</span>
+                <span className="text-xs">{tab.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Badges
 
-```swift
-Text("Messages")
-    .tabItem { Label("Messages", systemImage: "message") }
-    .badge(5)
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Text("Messages")
+        .tabItem { Label("Messages", systemImage: "message") }
+        .badge(5)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <button className="flex-1 flex flex-col items-center py-2 relative">
+      <span>💬</span>
+      <span className="text-xs">Messages</span>
+      <span className="absolute top-1 right-1/4 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+        5
+      </span>
+    </button>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Page Style
 
-```swift
-TabView {
-    Color.red
-    Color.green
-    Color.blue
-}
-.tabViewStyle(.page)
-.indexViewStyle(.page(backgroundDisplayMode: .always))
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    TabView {
+        Color.red
+        Color.green
+        Color.blue
+    }
+    .tabViewStyle(.page)
+    .indexViewStyle(.page(backgroundDisplayMode: .always))
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    const pages = ["bg-red-500", "bg-green-500", "bg-blue-500"];
+
+    export default function PageStyleExample() {
+      const [page, setPage] = useState(0);
+
+      return (
+        <div className="relative h-64 overflow-hidden rounded-xl">
+          <div className={`h-full w-full ${pages[page]} transition-colors`} />
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {pages.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i)}
+                className={`w-2 h-2 rounded-full ${
+                  page === i ? "bg-white" : "bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -82,41 +220,114 @@ Use `TabView` as the root container of your app. Each tab can contain its own in
 
 ## Full Example
 
-```swift
-struct MyAppView: View {
-    @State private var tab = 0
-    @State private var unread = 3
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct MyAppView: View {
+        @State private var tab = 0
+        @State private var unread = 3
 
-    var body: some View {
-        TabView(selection: $tab) {
-            NavigationStack {
-                List(0..<10) { i in
-                    NavigationLink("Post \(i + 1)") {
-                        Text("Post detail \(i + 1)")
+        var body: some View {
+            TabView(selection: $tab) {
+                NavigationStack {
+                    List(0..<10) { i in
+                        NavigationLink("Post \(i + 1)") {
+                            Text("Post detail \(i + 1)")
+                        }
                     }
+                    .navigationTitle("Home")
                 }
-                .navigationTitle("Home")
-            }
-            .tabItem { Label("Home", systemImage: "house.fill") }
-            .tag(0)
+                .tabItem { Label("Home", systemImage: "house.fill") }
+                .tag(0)
 
-            NavigationStack {
-                Text("Search content")
-                    .navigationTitle("Search")
-            }
-            .tabItem { Label("Search", systemImage: "magnifyingglass") }
-            .tag(1)
+                NavigationStack {
+                    Text("Search content")
+                        .navigationTitle("Search")
+                }
+                .tabItem { Label("Search", systemImage: "magnifyingglass") }
+                .tag(1)
 
-            NavigationStack {
-                Text("Messages")
-                    .navigationTitle("Messages")
+                NavigationStack {
+                    Text("Messages")
+                        .navigationTitle("Messages")
+                }
+                .tabItem { Label("Messages", systemImage: "message.fill") }
+                .badge(unread)
+                .tag(2)
             }
-            .tabItem { Label("Messages", systemImage: "message.fill") }
-            .badge(unread)
-            .tag(2)
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function MyAppView() {
+      const [tab, setTab] = useState(0);
+      const [unread] = useState(3);
+      const posts = Array.from({ length: 10 }, (_, i) => `Post ${i + 1}`);
+
+      return (
+        <div className="flex flex-col h-screen">
+          <div className="flex-1 overflow-y-auto">
+            {tab === 0 && (
+              <div>
+                <h1 className="text-2xl font-bold p-4">Home</h1>
+                <ul className="divide-y">
+                  {posts.map((post) => (
+                    <li
+                      key={post}
+                      className="p-4 hover:bg-gray-50 cursor-pointer"
+                    >
+                      {post}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {tab === 1 && (
+              <div className="p-4">
+                <h1 className="text-2xl font-bold">Search</h1>
+                <p>Search content</p>
+              </div>
+            )}
+            {tab === 2 && (
+              <div className="p-4">
+                <h1 className="text-2xl font-bold">Messages</h1>
+                <p>Messages</p>
+              </div>
+            )}
+          </div>
+          <nav className="flex border-t">
+            {[
+              { label: "Home", icon: "🏠" },
+              { label: "Search", icon: "🔍" },
+              { label: "Messages", icon: "💬", badge: unread },
+            ].map((item, i) => (
+              <button
+                key={item.label}
+                onClick={() => setTab(i)}
+                className={`flex-1 flex flex-col items-center py-2 relative ${
+                  tab === i ? "text-blue-500" : "text-gray-500"
+                }`}
+              >
+                <span>{item.icon}</span>
+                <span className="text-xs">{item.label}</span>
+                {item.badge && (
+                  <span className="absolute top-1 right-1/4 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </nav>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

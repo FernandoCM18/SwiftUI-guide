@@ -4,6 +4,7 @@ description: Cómo usar sheet y fullScreenCover en SwiftUI para presentar vistas
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 El modificador `.sheet` presenta una vista modal que se desliza desde la parte inferior de la pantalla. Es ideal para formularios, configuraciones o contenido secundario.
 
@@ -13,48 +14,118 @@ El modificador `.sheet` presenta una vista modal que se desliza desde la parte i
 
 ## Uso básico
 
-```swift
-struct SheetEjemplo: View {
-    @State private var mostrarSheet = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct SheetEjemplo: View {
+        @State private var mostrarSheet = false
 
-    var body: some View {
-        Button("Abrir Sheet") {
-            mostrarSheet = true
-        }
-        .sheet(isPresented: $mostrarSheet) {
-            Text("¡Hola desde el Sheet!")
-                .font(.title)
+        var body: some View {
+            Button("Abrir Sheet") {
+                mostrarSheet = true
+            }
+            .sheet(isPresented: $mostrarSheet) {
+                Text("¡Hola desde el Sheet!")
+                    .font(.title)
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function SheetEjemplo() {
+      const [mostrarSheet, setMostrarSheet] = useState(false);
+
+      return (
+        <>
+          <button
+            onClick={() => setMostrarSheet(true)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Abrir Sheet
+          </button>
+
+          {mostrarSheet && (
+            <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
+              <div className="w-full max-w-lg rounded-t-2xl bg-white p-6 animate-slide-up">
+                <h2 className="text-2xl font-bold">¡Hola desde el Sheet!</h2>
+                <button
+                  onClick={() => setMostrarSheet(false)}
+                  className="mt-4 text-blue-500"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Sheet con contenido completo
 
-```swift
-struct DetalleSheet: View {
-    @Environment(\.dismiss) var dismiss
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct DetalleSheet: View {
+        @Environment(\.dismiss) var dismiss
 
-    var body: some View {
-        NavigationStack {
-            VStack {
-                Text("Contenido del sheet")
-                    .padding()
-            }
-            .navigationTitle("Detalle")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Cerrar") {
-                        dismiss()
+        var body: some View {
+            NavigationStack {
+                VStack {
+                    Text("Contenido del sheet")
+                        .padding()
+                }
+                .navigationTitle("Detalle")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Cerrar") {
+                            dismiss()
+                        }
                     }
                 }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    interface DetalleSheetProps {
+      onClose: () => void;
+    }
+
+    export default function DetalleSheet({ onClose }: DetalleSheetProps) {
+      return (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
+          <div className="w-full max-w-lg rounded-t-2xl bg-white">
+            <div className="flex items-center justify-between border-b px-4 py-3">
+              <h2 className="text-lg font-semibold">Detalle</h2>
+              <button onClick={onClose} className="text-blue-500 font-medium">
+                Cerrar
+              </button>
+            </div>
+            <div className="p-4">
+              <p>Contenido del sheet</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -62,11 +133,24 @@ struct DetalleSheet: View {
 
 Cubre toda la pantalla sin posibilidad de cerrar deslizando:
 
-```swift
-.fullScreenCover(isPresented: $mostrar) {
-    VistaCompleta()
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    .fullScreenCover(isPresented: $mostrar) {
+        VistaCompleta()
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    {mostrar && (
+      <div className="fixed inset-0 z-50 bg-white">
+        <VistaCompleta onClose={() => setMostrar(false)} />
+      </div>
+    )}
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -74,37 +158,100 @@ Cubre toda la pantalla sin posibilidad de cerrar deslizando:
 
 Controla la altura del sheet:
 
-```swift
-.sheet(isPresented: $mostrar) {
-    ContenidoSheet()
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    .sheet(isPresented: $mostrar) {
+        ContenidoSheet()
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    {mostrar && (
+      <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
+        <div className="w-full max-w-lg rounded-t-2xl bg-white h-1/2 max-h-[90vh] overflow-auto resize-y">
+          <div className="mx-auto mt-2 h-1 w-10 rounded-full bg-gray-300" />
+          <ContenidoSheet />
+        </div>
+      </div>
+    )}
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Pasar datos al sheet
 
-```swift
-struct Producto: Identifiable {
-    let id = UUID()
-    let nombre: String
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Producto: Identifiable {
+        let id = UUID()
+        let nombre: String
+    }
 
-struct TiendaView: View {
-    @State private var productoSeleccionado: Producto?
+    struct TiendaView: View {
+        @State private var productoSeleccionado: Producto?
 
-    var body: some View {
-        Button("Ver producto") {
-            productoSeleccionado = Producto(nombre: "iPhone")
-        }
-        .sheet(item: $productoSeleccionado) { producto in
-            Text("Detalle de \(producto.nombre)")
+        var body: some View {
+            Button("Ver producto") {
+                productoSeleccionado = Producto(nombre: "iPhone")
+            }
+            .sheet(item: $productoSeleccionado) { producto in
+                Text("Detalle de \(producto.nombre)")
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    interface Producto {
+      id: string;
+      nombre: string;
+    }
+
+    export default function TiendaView() {
+      const [productoSeleccionado, setProductoSeleccionado] =
+        useState<Producto | null>(null);
+
+      return (
+        <>
+          <button
+            onClick={() =>
+              setProductoSeleccionado({ id: crypto.randomUUID(), nombre: "iPhone" })
+            }
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Ver producto
+          </button>
+
+          {productoSeleccionado && (
+            <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
+              <div className="w-full max-w-lg rounded-t-2xl bg-white p-6">
+                <p>Detalle de {productoSeleccionado.nombre}</p>
+                <button
+                  onClick={() => setProductoSeleccionado(null)}
+                  className="mt-4 text-blue-500"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -114,60 +261,137 @@ Usa `.presentationDetents([.medium, .large])` para que el usuario pueda ajustar 
 
 ## Ejemplo completo
 
-```swift
-struct NuevaNotaView: View {
-    @State private var mostrarFormulario = false
-    @State private var notas = ["Primera nota", "Segunda nota"]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct NuevaNotaView: View {
+        @State private var mostrarFormulario = false
+        @State private var notas = ["Primera nota", "Segunda nota"]
 
-    var body: some View {
-        NavigationStack {
-            List(notas, id: \.self) { nota in
-                Text(nota)
-            }
-            .navigationTitle("Notas")
-            .toolbar {
-                Button {
-                    mostrarFormulario = true
-                } label: {
-                    Image(systemName: "plus")
+        var body: some View {
+            NavigationStack {
+                List(notas, id: \.self) { nota in
+                    Text(nota)
                 }
-            }
-            .sheet(isPresented: $mostrarFormulario) {
-                FormularioNota(notas: $notas)
-                    .presentationDetents([.medium])
-            }
-        }
-    }
-}
-
-struct FormularioNota: View {
-    @Binding var notas: [String]
-    @State private var texto = ""
-    @Environment(\.dismiss) var dismiss
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                TextField("Escribe tu nota...", text: $texto, axis: .vertical)
-                    .lineLimit(3...6)
-            }
-            .navigationTitle("Nueva Nota")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Guardar") {
-                        notas.append(texto)
-                        dismiss()
+                .navigationTitle("Notas")
+                .toolbar {
+                    Button {
+                        mostrarFormulario = true
+                    } label: {
+                        Image(systemName: "plus")
                     }
-                    .disabled(texto.isEmpty)
+                }
+                .sheet(isPresented: $mostrarFormulario) {
+                    FormularioNota(notas: $notas)
+                        .presentationDetents([.medium])
                 }
             }
         }
     }
-}
-```
+
+    struct FormularioNota: View {
+        @Binding var notas: [String]
+        @State private var texto = ""
+        @Environment(\.dismiss) var dismiss
+
+        var body: some View {
+            NavigationStack {
+                Form {
+                    TextField("Escribe tu nota...", text: $texto, axis: .vertical)
+                        .lineLimit(3...6)
+                }
+                .navigationTitle("Nueva Nota")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancelar") { dismiss() }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Guardar") {
+                            notas.append(texto)
+                            dismiss()
+                        }
+                        .disabled(texto.isEmpty)
+                    }
+                }
+            }
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function NuevaNotaView() {
+      const [mostrarFormulario, setMostrarFormulario] = useState(false);
+      const [notas, setNotas] = useState(["Primera nota", "Segunda nota"]);
+      const [texto, setTexto] = useState("");
+
+      function guardar() {
+        if (!texto.trim()) return;
+        setNotas([...notas, texto]);
+        setTexto("");
+        setMostrarFormulario(false);
+      }
+
+      return (
+        <div className="mx-auto max-w-lg">
+          <div className="flex items-center justify-between border-b px-4 py-3">
+            <h1 className="text-xl font-bold">Notas</h1>
+            <button
+              onClick={() => setMostrarFormulario(true)}
+              className="text-2xl text-blue-500"
+            >
+              +
+            </button>
+          </div>
+
+          <ul className="divide-y">
+            {notas.map((nota, i) => (
+              <li key={i} className="px-4 py-3">
+                {nota}
+              </li>
+            ))}
+          </ul>
+
+          {mostrarFormulario && (
+            <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40">
+              <div className="w-full max-w-lg rounded-t-2xl bg-white">
+                <div className="flex items-center justify-between border-b px-4 py-3">
+                  <button
+                    onClick={() => setMostrarFormulario(false)}
+                    className="text-blue-500"
+                  >
+                    Cancelar
+                  </button>
+                  <h2 className="font-semibold">Nueva Nota</h2>
+                  <button
+                    onClick={guardar}
+                    disabled={!texto.trim()}
+                    className="font-semibold text-blue-500 disabled:opacity-40"
+                  >
+                    Guardar
+                  </button>
+                </div>
+                <div className="p-4">
+                  <textarea
+                    value={texto}
+                    onChange={(e) => setTexto(e.target.value)}
+                    placeholder="Escribe tu nota..."
+                    rows={4}
+                    className="w-full rounded-lg border p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

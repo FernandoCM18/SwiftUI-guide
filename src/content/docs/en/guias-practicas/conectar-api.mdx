@@ -4,6 +4,7 @@ description: How to consume REST APIs in SwiftUI with URLSession, async/await, C
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Connecting a SwiftUI app to a REST API is one of the most common tasks. Swift provides powerful native tools: `URLSession`, `async/await`, and `Codable`.
 
@@ -17,23 +18,40 @@ REST API → URLSession → JSON → Codable (decode) → Model → ViewModel �
 
 Use `Codable` to automatically map JSON to Swift structs:
 
-```swift
-// JSON from the API:
-// { "id": 1, "name": "iPhone 16", "price": 999.99, "in_stock": true }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // JSON from the API:
+    // { "id": 1, "name": "iPhone 16", "price": 999.99, "in_stock": true }
 
-struct Product: Codable, Identifiable {
-    let id: Int
-    let name: String
-    let price: Double
-    let inStock: Bool
+    struct Product: Codable, Identifiable {
+        let id: Int
+        let name: String
+        let price: Double
+        let inStock: Bool
 
-    // Map snake_case from JSON to Swift's camelCase
-    enum CodingKeys: String, CodingKey {
-        case id, name, price
-        case inStock = "in_stock"
+        // Map snake_case from JSON to Swift's camelCase
+        enum CodingKeys: String, CodingKey {
+            case id, name, price
+            case inStock = "in_stock"
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // JSON from the API:
+    // { "id": 1, "name": "iPhone 16", "price": 999.99, "in_stock": true }
+
+    interface Product {
+      id: number;
+      name: string;
+      price: number;
+      inStock: boolean; // camelCase handled by key mapping on fetch
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -43,138 +61,256 @@ If the API uses `snake_case`, you can avoid manual `CodingKeys` by configuring t
 
 ## 2. Create the Network Service
 
-```swift
-enum NetworkError: Error, LocalizedError {
-    case invalidURL
-    case noResponse
-    case decodingFailed
-    case serverError(Int)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum NetworkError: Error, LocalizedError {
+        case invalidURL
+        case noResponse
+        case decodingFailed
+        case serverError(Int)
 
-    var errorDescription: String? {
-        switch self {
-        case .invalidURL: return "Invalid URL"
-        case .noResponse: return "No response received from server"
-        case .decodingFailed: return "Error processing data"
-        case .serverError(let code): return "Server error: \(code)"
+        var errorDescription: String? {
+            switch self {
+            case .invalidURL: return "Invalid URL"
+            case .noResponse: return "No response received from server"
+            case .decodingFailed: return "Error processing data"
+            case .serverError(let code): return "Server error: \(code)"
+            }
         }
     }
-}
 
-class APIService {
-    static let shared = APIService()
-    private let baseURL = "https://api.example.com"
+    class APIService {
+        static let shared = APIService()
+        private let baseURL = "https://api.example.com"
 
-    func fetch<T: Decodable>(_ endpoint: String) async throws -> T {
-        guard let url = URL(string: "\(baseURL)\(endpoint)") else {
-            throw NetworkError.invalidURL
-        }
+        func fetch<T: Decodable>(_ endpoint: String) async throws -> T {
+            guard let url = URL(string: "\(baseURL)\(endpoint)") else {
+                throw NetworkError.invalidURL
+            }
 
-        let (data, response) = try await URLSession.shared.data(from: url)
+            let (data, response) = try await URLSession.shared.data(from: url)
 
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw NetworkError.noResponse
-        }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw NetworkError.noResponse
+            }
 
-        guard (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkError.serverError(httpResponse.statusCode)
-        }
+            guard (200...299).contains(httpResponse.statusCode) else {
+                throw NetworkError.serverError(httpResponse.statusCode)
+            }
 
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
 
-        do {
-            return try decoder.decode(T.self, from: data)
-        } catch {
-            throw NetworkError.decodingFailed
+            do {
+                return try decoder.decode(T.self, from: data)
+            } catch {
+                throw NetworkError.decodingFailed
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const BASE_URL = "https://api.example.com";
+
+    class NetworkError extends Error {
+      constructor(public status: number, message: string) {
+        super(message);
+      }
+    }
+
+    async function apiFetch<T>(endpoint: string): Promise<T> {
+      const res = await fetch(`${BASE_URL}${endpoint}`);
+
+      if (!res.ok) {
+        throw new NetworkError(res.status, `Server error: ${res.status}`);
+      }
+
+      return res.json() as Promise<T>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## 3. ViewModel with async/await
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-@Observable
-class ProductsViewModel {
-    var products: [Product] = []
-    var isLoading = false
-    var errorMessage: String?
+    @Observable
+    class ProductsViewModel {
+        var products: [Product] = []
+        var isLoading = false
+        var errorMessage: String?
 
-    func loadProducts() async {
-        isLoading = true
-        errorMessage = nil
+        func loadProducts() async {
+            isLoading = true
+            errorMessage = nil
 
-        do {
-            products = try await APIService.shared.fetch("/products")
-        } catch {
-            errorMessage = error.localizedDescription
+            do {
+                products = try await APIService.shared.fetch("/products")
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+
+            isLoading = false
         }
 
-        isLoading = false
+        func refresh() async {
+            await loadProducts()
+        }
     }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    "use client";
 
-    func refresh() async {
-        await loadProducts()
+    import { useState, useCallback } from "react";
+
+    function useProducts() {
+      const [products, setProducts] = useState<Product[]>([]);
+      const [isLoading, setIsLoading] = useState(false);
+      const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+      const loadProducts = useCallback(async () => {
+        setIsLoading(true);
+        setErrorMessage(null);
+
+        try {
+          const data = await apiFetch<Product[]>("/products");
+          setProducts(data);
+        } catch (err) {
+          setErrorMessage(
+            err instanceof Error ? err.message : "Unknown error"
+          );
+        } finally {
+          setIsLoading(false);
+        }
+      }, []);
+
+      return { products, isLoading, errorMessage, loadProducts };
     }
-}
-```
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## 4. Connected View
 
-```swift
-struct ProductsView: View {
-    @State private var vm = ProductsViewModel()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct ProductsView: View {
+        @State private var vm = ProductsViewModel()
 
-    var body: some View {
-        NavigationStack {
-            Group {
-                if vm.isLoading {
-                    ProgressView("Loading products...")
-                } else if let error = vm.errorMessage {
-                    ContentUnavailableView {
-                        Label("Error", systemImage: "exclamationmark.triangle")
-                    } description: {
-                        Text(error)
-                    } actions: {
-                        Button("Retry") {
-                            Task { await vm.loadProducts() }
-                        }
-                    }
-                } else {
-                    List(vm.products) { product in
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(product.name)
-                                    .font(.headline)
-                                Text(product.inStock ? "In stock" : "Out of stock")
-                                    .font(.caption)
-                                    .foregroundStyle(product.inStock ? .green : .red)
+        var body: some View {
+            NavigationStack {
+                Group {
+                    if vm.isLoading {
+                        ProgressView("Loading products...")
+                    } else if let error = vm.errorMessage {
+                        ContentUnavailableView {
+                            Label("Error", systemImage: "exclamationmark.triangle")
+                        } description: {
+                            Text(error)
+                        } actions: {
+                            Button("Retry") {
+                                Task { await vm.loadProducts() }
                             }
-                            Spacer()
-                            Text("$\(product.price, specifier: "%.2f")")
-                                .font(.title3)
-                                .bold()
                         }
-                    }
-                    .refreshable {
-                        await vm.refresh()
+                    } else {
+                        List(vm.products) { product in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(product.name)
+                                        .font(.headline)
+                                    Text(product.inStock ? "In stock" : "Out of stock")
+                                        .font(.caption)
+                                        .foregroundStyle(product.inStock ? .green : .red)
+                                }
+                                Spacer()
+                                Text("$\(product.price, specifier: "%.2f")")
+                                    .font(.title3)
+                                    .bold()
+                            }
+                        }
+                        .refreshable {
+                            await vm.refresh()
+                        }
                     }
                 }
-            }
-            .navigationTitle("Products")
-            .task {
-                await vm.loadProducts()
+                .navigationTitle("Products")
+                .task {
+                    await vm.loadProducts()
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useEffect } from "react";
+
+    export default function ProductsPage() {
+      const { products, isLoading, errorMessage, loadProducts } = useProducts();
+
+      useEffect(() => {
+        loadProducts();
+      }, [loadProducts]);
+
+      if (isLoading) {
+        return <p className="p-8 text-center">Loading products…</p>;
+      }
+
+      if (errorMessage) {
+        return (
+          <div className="flex flex-col items-center gap-4 p-8">
+            <p className="text-red-600">{errorMessage}</p>
+            <button
+              onClick={loadProducts}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+            >
+              Retry
+            </button>
+          </div>
+        );
+      }
+
+      return (
+        <div className="mx-auto max-w-2xl p-4">
+          <h1 className="mb-4 text-2xl font-bold">Products</h1>
+          <ul className="divide-y">
+            {products.map((product) => (
+              <li key={product.id} className="flex items-center justify-between py-3">
+                <div>
+                  <p className="font-semibold">{product.name}</p>
+                  <p className={`text-sm ${product.inStock ? "text-green-600" : "text-red-500"}`}>
+                    {product.inStock ? "In stock" : "Out of stock"}
+                  </p>
+                </div>
+                <span className="text-lg font-bold">
+                  ${product.price.toFixed(2)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -184,142 +320,279 @@ Use `.task { }` instead of `.onAppear` for async calls. It automatically cancels
 
 ## Send Data (POST)
 
-```swift
-extension APIService {
-    func post<T: Codable, R: Decodable>(
-        _ endpoint: String,
-        body: T
-    ) async throws -> R {
-        guard let url = URL(string: "\(baseURL)\(endpoint)") else {
-            throw NetworkError.invalidURL
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    extension APIService {
+        func post<T: Codable, R: Decodable>(
+            _ endpoint: String,
+            body: T
+        ) async throws -> R {
+            guard let url = URL(string: "\(baseURL)\(endpoint)") else {
+                throw NetworkError.invalidURL
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            let encoder = JSONEncoder()
+            encoder.keyEncodingStrategy = .convertToSnakeCase
+            request.httpBody = try encoder.encode(body)
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                throw NetworkError.noResponse
+            }
+
+            return try JSONDecoder().decode(R.self, from: data)
         }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        request.httpBody = try encoder.encode(body)
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
-            throw NetworkError.noResponse
-        }
-
-        return try JSONDecoder().decode(R.self, from: data)
     }
-}
 
-// Usage:
-struct NewProduct: Codable {
-    let name: String
-    let price: Double
-}
+    // Usage:
+    struct NewProduct: Codable {
+        let name: String
+        let price: Double
+    }
 
-let new = NewProduct(name: "iPad", price: 799)
-let created: Product = try await APIService.shared.post("/products", body: new)
-```
+    let new = NewProduct(name: "iPad", price: 799)
+    let created: Product = try await APIService.shared.post("/products", body: new)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    async function apiPost<T, R>(endpoint: string, body: T): Promise<R> {
+      const res = await fetch(`${BASE_URL}${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        throw new NetworkError(res.status, `Server error: ${res.status}`);
+      }
+
+      return res.json() as Promise<R>;
+    }
+
+    // Usage:
+    interface NewProduct {
+      name: string;
+      price: number;
+    }
+
+    const created = await apiPost<NewProduct, Product>("/products", {
+      name: "iPad",
+      price: 799,
+    });
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Authentication with Bearer Token
 
-```swift
-extension APIService {
-    func fetchAuthenticated<T: Decodable>(
-        _ endpoint: String,
-        token: String
-    ) async throws -> T {
-        guard let url = URL(string: "\(baseURL)\(endpoint)") else {
-            throw NetworkError.invalidURL
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    extension APIService {
+        func fetchAuthenticated<T: Decodable>(
+            _ endpoint: String,
+            token: String
+        ) async throws -> T {
+            guard let url = URL(string: "\(baseURL)\(endpoint)") else {
+                throw NetworkError.invalidURL
+            }
+
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+            let (data, _) = try await URLSession.shared.data(for: request)
+            return try JSONDecoder().decode(T.self, from: data)
         }
-
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-        let (data, _) = try await URLSession.shared.data(for: request)
-        return try JSONDecoder().decode(T.self, from: data)
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    async function apiFetchAuth<T>(
+      endpoint: string,
+      token: string
+    ): Promise<T> {
+      const res = await fetch(`${BASE_URL}${endpoint}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        throw new NetworkError(res.status, `Server error: ${res.status}`);
+      }
+
+      return res.json() as Promise<T>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Real-world example: Weather App
 
-```swift
-// Model
-struct Weather: Codable {
-    let temperature: Double
-    let description: String
-    let icon: String
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Model
+    struct Weather: Codable {
+        let temperature: Double
+        let description: String
+        let icon: String
 
-    enum CodingKeys: String, CodingKey {
-        case temperature = "temp"
-        case description
-        case icon
-    }
-}
-
-// ViewModel
-@Observable
-class WeatherViewModel {
-    var weather: Weather?
-    var isLoading = false
-    var error: String?
-
-    func getWeather(city: String) async {
-        isLoading = true
-        error = nil
-
-        do {
-            let endpoint = "/weather?city=\(city.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? city)"
-            weather = try await APIService.shared.fetch(endpoint)
-        } catch {
-            self.error = error.localizedDescription
+        enum CodingKeys: String, CodingKey {
+            case temperature = "temp"
+            case description
+            case icon
         }
-
-        isLoading = false
     }
-}
 
-// View
-struct WeatherView: View {
-    @State private var vm = WeatherViewModel()
-    @State private var city = "Madrid"
+    // ViewModel
+    @Observable
+    class WeatherViewModel {
+        var weather: Weather?
+        var isLoading = false
+        var error: String?
 
-    var body: some View {
-        VStack(spacing: 20) {
-            TextField("City", text: $city)
-                .textFieldStyle(.roundedBorder)
-                .submitLabel(.search)
-                .onSubmit {
-                    Task { await vm.getWeather(city: city) }
-                }
+        func getWeather(city: String) async {
+            isLoading = true
+            error = nil
 
-            if vm.isLoading {
-                ProgressView()
-            } else if let weather = vm.weather {
-                VStack {
-                    Text("\(weather.temperature, specifier: "%.1f")°C")
-                        .font(.system(size: 64, weight: .thin))
-                    Text(weather.description)
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
-                }
-            } else if let error = vm.error {
-                Text(error)
-                    .foregroundStyle(.red)
+            do {
+                let endpoint = "/weather?city=\(city.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? city)"
+                weather = try await APIService.shared.fetch(endpoint)
+            } catch {
+                self.error = error.localizedDescription
             }
+
+            isLoading = false
         }
-        .padding()
-        .task { await vm.getWeather(city: city) }
     }
-}
-```
+
+    // View
+    struct WeatherView: View {
+        @State private var vm = WeatherViewModel()
+        @State private var city = "Madrid"
+
+        var body: some View {
+            VStack(spacing: 20) {
+                TextField("City", text: $city)
+                    .textFieldStyle(.roundedBorder)
+                    .submitLabel(.search)
+                    .onSubmit {
+                        Task { await vm.getWeather(city: city) }
+                    }
+
+                if vm.isLoading {
+                    ProgressView()
+                } else if let weather = vm.weather {
+                    VStack {
+                        Text("\(weather.temperature, specifier: "%.1f")°C")
+                            .font(.system(size: 64, weight: .thin))
+                        Text(weather.description)
+                            .font(.title3)
+                            .foregroundStyle(.secondary)
+                    }
+                } else if let error = vm.error {
+                    Text(error)
+                        .foregroundStyle(.red)
+                }
+            }
+            .padding()
+            .task { await vm.getWeather(city: city) }
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState, useEffect, useCallback, FormEvent } from "react";
+
+    // Model
+    interface Weather {
+      temp: number;
+      description: string;
+      icon: string;
+    }
+
+    // Custom hook (replaces ViewModel)
+    function useWeather() {
+      const [weather, setWeather] = useState<Weather | null>(null);
+      const [isLoading, setIsLoading] = useState(false);
+      const [error, setError] = useState<string | null>(null);
+
+      const getWeather = useCallback(async (city: string) => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+          const data = await apiFetch<Weather>(
+            `/weather?city=${encodeURIComponent(city)}`
+          );
+          setWeather(data);
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "Unknown error");
+        } finally {
+          setIsLoading(false);
+        }
+      }, []);
+
+      return { weather, isLoading, error, getWeather };
+    }
+
+    // Component (replaces View)
+    export default function WeatherPage() {
+      const [city, setCity] = useState("Madrid");
+      const { weather, isLoading, error, getWeather } = useWeather();
+
+      useEffect(() => {
+        getWeather(city);
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+      const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        getWeather(city);
+      };
+
+      return (
+        <div className="mx-auto flex max-w-md flex-col items-center gap-5 p-6">
+          <form onSubmit={handleSubmit} className="w-full">
+            <input
+              type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="City"
+              className="w-full rounded-lg border px-3 py-2"
+            />
+          </form>
+
+          {isLoading && <p>Loading…</p>}
+
+          {weather && (
+            <div className="text-center">
+              <p className="text-6xl font-thin">{weather.temp.toFixed(1)}°C</p>
+              <p className="text-lg text-gray-500">{weather.description}</p>
+            </div>
+          )}
+
+          {error && <p className="text-red-600">{error}</p>}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

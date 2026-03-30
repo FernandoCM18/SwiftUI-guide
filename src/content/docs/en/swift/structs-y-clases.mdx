@@ -4,6 +4,7 @@ description: Understand the differences between structs and classes in Swift, in
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Custom Data Types
 
@@ -13,22 +14,43 @@ Structs and classes are the building blocks for your app's data models. They sha
 
 Structs are **value types** -- when you copy them, you get an independent copy.
 
-```swift
-struct Point {
-    var x: Double
-    var y: Double
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Point {
+        var x: Double
+        var y: Double
+    }
 
-// Structs get an automatic memberwise initializer
-var origin = Point(x: 0, y: 0)
-var target = Point(x: 10, y: 20)
+    // Structs get an automatic memberwise initializer
+    var origin = Point(x: 0, y: 0)
+    var target = Point(x: 10, y: 20)
 
-// Value semantics: copies are independent
-var copy = origin
-copy.x = 99
-print(origin.x)  // 0 (unchanged)
-print(copy.x)    // 99
-```
+    // Value semantics: copies are independent
+    var copy = origin
+    copy.x = 99
+    print(origin.x)  // 0 (unchanged)
+    print(copy.x)    // 99
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Point {
+      x: number;
+      y: number;
+    }
+
+    let origin: Point = { x: 0, y: 0 };
+    let target: Point = { x: 10, y: 20 };
+
+    // Spread creates a shallow copy (value-like semantics)
+    let copy = { ...origin };
+    copy.x = 99;
+    console.log(origin.x); // 0 (unchanged)
+    console.log(copy.x);   // 99
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -36,29 +58,58 @@ print(copy.x)    // 99
 
 Classes are **reference types** -- when you copy them, both variables point to the same instance.
 
-```swift
-class Animal {
-    var name: String
-    var sound: String
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    class Animal {
+        var name: String
+        var sound: String
 
-    init(name: String, sound: String) {
-        self.name = name
-        self.sound = sound
+        init(name: String, sound: String) {
+            self.name = name
+            self.sound = sound
+        }
+
+        func speak() {
+            print("\(name) says \(sound)")
+        }
     }
 
-    func speak() {
-        print("\(name) says \(sound)")
+    let dog = Animal(name: "Rex", sound: "Woof")
+    dog.speak()  // "Rex says Woof"
+
+    // Reference semantics: both point to the same object
+    let sameDog = dog
+    sameDog.name = "Buddy"
+    print(dog.name)  // "Buddy" (changed!)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Animal {
+      name: string;
+      sound: string;
+
+      constructor(name: string, sound: string) {
+        this.name = name;
+        this.sound = sound;
+      }
+
+      speak(): void {
+        console.log(`${this.name} says ${this.sound}`);
+      }
     }
-}
 
-let dog = Animal(name: "Rex", sound: "Woof")
-dog.speak()  // "Rex says Woof"
+    const dog = new Animal("Rex", "Woof");
+    dog.speak(); // "Rex says Woof"
 
-// Reference semantics: both point to the same object
-let sameDog = dog
-sameDog.name = "Buddy"
-print(dog.name)  // "Buddy" (changed!)
-```
+    // Reference semantics: both point to the same object
+    const sameDog = dog;
+    sameDog.name = "Buddy";
+    console.log(dog.name); // "Buddy" (changed!)
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -68,39 +119,79 @@ With classes, assigning to a new variable does not create a copy. Both variables
 
 ## Stored and Computed Properties
 
-```swift
-struct Rectangle {
-    // Stored properties
-    var width: Double
-    var height: Double
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Rectangle {
+        // Stored properties
+        var width: Double
+        var height: Double
 
-    // Computed property
-    var area: Double {
-        width * height
+        // Computed property
+        var area: Double {
+            width * height
+        }
+
+        // Computed property with getter and setter
+        var perimeter: Double {
+            get {
+                2 * (width + height)
+            }
+            set {
+                // Assume square for simplicity
+                let side = newValue / 4
+                width = side
+                height = side
+            }
+        }
     }
 
-    // Computed property with getter and setter
-    var perimeter: Double {
-        get {
-            2 * (width + height)
-        }
-        set {
-            // Assume square for simplicity
-            let side = newValue / 4
-            width = side
-            height = side
-        }
+    var rect = Rectangle(width: 10, height: 5)
+    print(rect.area)       // 50.0
+    print(rect.perimeter)  // 30.0
+
+    rect.perimeter = 40
+    print(rect.width)   // 10.0
+    print(rect.height)  // 10.0
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Rectangle {
+      width: number;
+      height: number;
+
+      constructor(width: number, height: number) {
+        this.width = width;
+        this.height = height;
+      }
+
+      // Getter (computed property)
+      get area(): number {
+        return this.width * this.height;
+      }
+
+      // Getter and setter
+      get perimeter(): number {
+        return 2 * (this.width + this.height);
+      }
+      set perimeter(value: number) {
+        const side = value / 4;
+        this.width = side;
+        this.height = side;
+      }
     }
-}
 
-var rect = Rectangle(width: 10, height: 5)
-print(rect.area)       // 50.0
-print(rect.perimeter)  // 30.0
+    const rect = new Rectangle(10, 5);
+    console.log(rect.area);      // 50
+    console.log(rect.perimeter); // 30
 
-rect.perimeter = 40
-print(rect.width)   // 10.0
-print(rect.height)  // 10.0
-```
+    rect.perimeter = 40;
+    console.log(rect.width);  // 10
+    console.log(rect.height); // 10
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -138,29 +229,57 @@ counter.totalSteps = 250
 
 Both structs and classes can have methods.
 
-```swift
-struct Calculator {
-    var result: Double = 0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Calculator {
+        var result: Double = 0
 
-    // Structs need 'mutating' to modify properties
-    mutating func add(_ value: Double) {
-        result += value
+        // Structs need 'mutating' to modify properties
+        mutating func add(_ value: Double) {
+            result += value
+        }
+
+        mutating func multiply(by value: Double) {
+            result *= value
+        }
+
+        func display() {
+            print("Result: \(result)")
+        }
     }
 
-    mutating func multiply(by value: Double) {
-        result *= value
+    var calc = Calculator()
+    calc.add(10)
+    calc.multiply(by: 3)
+    calc.display()  // "Result: 30.0"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Calculator {
+      result: number = 0;
+
+      add(value: number): void {
+        this.result += value;
+      }
+
+      multiply(value: number): void {
+        this.result *= value;
+      }
+
+      display(): void {
+        console.log(`Result: ${this.result}`);
+      }
     }
 
-    func display() {
-        print("Result: \(result)")
-    }
-}
-
-var calc = Calculator()
-calc.add(10)
-calc.multiply(by: 3)
-calc.display()  // "Result: 30.0"
-```
+    const calc = new Calculator();
+    calc.add(10);
+    calc.multiply(3);
+    calc.display(); // "Result: 30"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -170,19 +289,38 @@ Struct methods that modify properties must be marked with `mutating`. Classes do
 
 ## Static Properties and Methods
 
-```swift
-struct MathConstants {
-    static let pi = 3.14159265358979
-    static let e = 2.71828182845905
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct MathConstants {
+        static let pi = 3.14159265358979
+        static let e = 2.71828182845905
 
-    static func circleArea(radius: Double) -> Double {
-        pi * radius * radius
+        static func circleArea(radius: Double) -> Double {
+            pi * radius * radius
+        }
     }
-}
 
-print(MathConstants.pi)                       // 3.14159...
-print(MathConstants.circleArea(radius: 5))    // 78.539...
-```
+    print(MathConstants.pi)                       // 3.14159...
+    print(MathConstants.circleArea(radius: 5))    // 78.539...
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class MathConstants {
+      static readonly pi = 3.14159265358979;
+      static readonly e = 2.71828182845905;
+
+      static circleArea(radius: number): number {
+        return this.pi * radius * radius;
+      }
+    }
+
+    console.log(MathConstants.pi);              // 3.14159...
+    console.log(MathConstants.circleArea(5));    // 78.539...
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -225,38 +363,76 @@ let white = Color.white
 
 Only classes support inheritance. A class can inherit properties and methods from another class.
 
-```swift
-class Vehicle {
-    var speed: Double = 0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    class Vehicle {
+        var speed: Double = 0
 
-    func describe() -> String {
-        "Traveling at \(speed) km/h"
+        func describe() -> String {
+            "Traveling at \(speed) km/h"
+        }
     }
-}
 
-class Car: Vehicle {
-    var gear: Int = 1
+    class Car: Vehicle {
+        var gear: Int = 1
 
-    override func describe() -> String {
-        "\(super.describe()) in gear \(gear)"
+        override func describe() -> String {
+            "\(super.describe()) in gear \(gear)"
+        }
     }
-}
 
-class ElectricCar: Car {
-    var batteryLevel: Double = 100
+    class ElectricCar: Car {
+        var batteryLevel: Double = 100
 
-    override func describe() -> String {
-        "\(super.describe()), battery at \(batteryLevel)%"
+        override func describe() -> String {
+            "\(super.describe()), battery at \(batteryLevel)%"
+        }
     }
-}
 
-let tesla = ElectricCar()
-tesla.speed = 120
-tesla.gear = 4
-tesla.batteryLevel = 85
-print(tesla.describe())
-// "Traveling at 120.0 km/h in gear 4, battery at 85.0%"
-```
+    let tesla = ElectricCar()
+    tesla.speed = 120
+    tesla.gear = 4
+    tesla.batteryLevel = 85
+    print(tesla.describe())
+    // "Traveling at 120.0 km/h in gear 4, battery at 85.0%"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Vehicle {
+      speed: number = 0;
+
+      describe(): string {
+        return `Traveling at ${this.speed} km/h`;
+      }
+    }
+
+    class Car extends Vehicle {
+      gear: number = 1;
+
+      describe(): string {
+        return `${super.describe()} in gear ${this.gear}`;
+      }
+    }
+
+    class ElectricCar extends Car {
+      batteryLevel: number = 100;
+
+      describe(): string {
+        return `${super.describe()}, battery at ${this.batteryLevel}%`;
+      }
+    }
+
+    const tesla = new ElectricCar();
+    tesla.speed = 120;
+    tesla.gear = 4;
+    tesla.batteryLevel = 85;
+    console.log(tesla.describe());
+    // "Traveling at 120 km/h in gear 4, battery at 85%"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

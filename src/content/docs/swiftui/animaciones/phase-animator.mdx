@@ -4,54 +4,104 @@ description: Crea secuencias de animación en SwiftUI con PhaseAnimator — cicl
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `PhaseAnimator` (iOS 17+) anima una vista a través de una secuencia de fases definidas por un enum. Ideal para animaciones en bucle o secuencias con pasos discretos.
 
 ## Estructura básica
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-enum FaseRebote: CaseIterable {
-    case normal, arriba, abajo
-}
+    enum FaseRebote: CaseIterable {
+        case normal, arriba, abajo
+    }
 
-struct EjemploPhase: View {
-    var body: some View {
-        PhaseAnimator(FaseRebote.allCases) { fase in
-            Image(systemName: "basketball.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(.orange)
-                .offset(y: offsetPara(fase))
-                .scaleEffect(escalaPara(fase))
-        } animation: { fase in
+    struct EjemploPhase: View {
+        var body: some View {
+            PhaseAnimator(FaseRebote.allCases) { fase in
+                Image(systemName: "basketball.fill")
+                    .font(.system(size: 60))
+                    .foregroundStyle(.orange)
+                    .offset(y: offsetPara(fase))
+                    .scaleEffect(escalaPara(fase))
+            } animation: { fase in
+                switch fase {
+                case .normal: .spring(duration: 0.3)
+                case .arriba: .easeOut(duration: 0.4)
+                case .abajo: .easeIn(duration: 0.3)
+                }
+            }
+        }
+
+        func offsetPara(_ fase: FaseRebote) -> CGFloat {
             switch fase {
-            case .normal: .spring(duration: 0.3)
-            case .arriba: .easeOut(duration: 0.4)
-            case .abajo: .easeIn(duration: 0.3)
+            case .normal: 0
+            case .arriba: -80
+            case .abajo: 20
+            }
+        }
+
+        func escalaPara(_ fase: FaseRebote) -> CGFloat {
+            switch fase {
+            case .normal: 1.0
+            case .arriba: 0.9
+            case .abajo: 1.1
             }
         }
     }
 
-    func offsetPara(_ fase: FaseRebote) -> CGFloat {
-        switch fase {
-        case .normal: 0
-        case .arriba: -80
-        case .abajo: 20
-        }
-    }
+    #Preview { EjemploPhase() }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useEffect, useState } from "react";
 
-    func escalaPara(_ fase: FaseRebote) -> CGFloat {
-        switch fase {
-        case .normal: 1.0
-        case .arriba: 0.9
-        case .abajo: 1.1
-        }
-    }
-}
+    type Fase = "normal" | "arriba" | "abajo";
+    const fases: Fase[] = ["normal", "arriba", "abajo"];
 
-#Preview { EjemploPhase() }
-```
+    const estilos: Record<Fase, { y: number; scale: number; transition: string }> = {
+      normal: { y: 0, scale: 1.0, transition: "all 0.3s cubic-bezier(.5,1.5,.5,1)" },
+      arriba:  { y: -80, scale: 0.9, transition: "all 0.4s ease-out" },
+      abajo:   { y: 20, scale: 1.1, transition: "all 0.3s ease-in" },
+    };
+
+    export default function EjemploPhase() {
+      const [indice, setIndice] = useState(0);
+      const fase = fases[indice];
+
+      useEffect(() => {
+        const duraciones = [300, 400, 300];
+        const timer = setTimeout(
+          () => setIndice((i) => (i + 1) % fases.length),
+          duraciones[indice]
+        );
+        return () => clearTimeout(timer);
+      }, [indice]);
+
+      const { y, scale, transition } = estilos[fase];
+
+      return (
+        <div className="flex min-h-40 items-center justify-center">
+          <span
+            className="inline-block text-6xl"
+            style={{
+              transform: `translateY(${y}px) scale(${scale})`,
+              transition,
+            }}
+          >
+            🏀
+          </span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -63,69 +113,121 @@ struct EjemploPhase: View {
 
 Para controlar cuándo empieza la secuencia, usa el parámetro `trigger`:
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-enum FaseCarga: CaseIterable {
-    case reposo, cargando, completado
-}
+    enum FaseCarga: CaseIterable {
+        case reposo, cargando, completado
+    }
 
-struct BotonCarga: View {
-    @State private var disparar = false
+    struct BotonCarga: View {
+        @State private var disparar = false
 
-    var body: some View {
-        PhaseAnimator(
-            FaseCarga.allCases,
-            trigger: disparar  // Solo anima cuando disparar cambia
-        ) { fase in
-            Button {
-                disparar.toggle()
-            } label: {
-                HStack {
-                    imagenPara(fase)
-                    Text(textoPara(fase))
-                        .fontWeight(.semibold)
+        var body: some View {
+            PhaseAnimator(
+                FaseCarga.allCases,
+                trigger: disparar  // Solo anima cuando disparar cambia
+            ) { fase in
+                Button {
+                    disparar.toggle()
+                } label: {
+                    HStack {
+                        imagenPara(fase)
+                        Text(textoPara(fase))
+                            .fontWeight(.semibold)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(.blue)
+                    .foregroundStyle(.white)
+                    .clipShape(.capsule)
                 }
-                .padding(.horizontal, 24)
-                .padding(.vertical, 12)
-                .background(.blue)
-                .foregroundStyle(.white)
-                .clipShape(.capsule)
+                .buttonStyle(.plain)
+                .scaleEffect(fase == .cargando ? 0.95 : 1.0)
+            } animation: { fase in
+                switch fase {
+                case .reposo: .smooth(duration: 0.3)
+                case .cargando: .linear(duration: 0.5).repeatCount(3)
+                case .completado: .spring(duration: 0.4)
+                }
             }
-            .buttonStyle(.plain)
-            .scaleEffect(fase == .cargando ? 0.95 : 1.0)
-        } animation: { fase in
+        }
+
+        @ViewBuilder
+        func imagenPara(_ fase: FaseCarga) -> some View {
             switch fase {
-            case .reposo: .smooth(duration: 0.3)
-            case .cargando: .linear(duration: 0.5).repeatCount(3)
-            case .completado: .spring(duration: 0.4)
+            case .reposo:
+                Image(systemName: "arrow.up.circle")
+            case .cargando:
+                ProgressView().tint(.white).scaleEffect(0.8)
+            case .completado:
+                Image(systemName: "checkmark.circle.fill")
+            }
+        }
+
+        func textoPara(_ fase: FaseCarga) -> String {
+            switch fase {
+            case .reposo: "Subir archivo"
+            case .cargando: "Subiendo..."
+            case .completado: "¡Listo!"
             }
         }
     }
 
-    @ViewBuilder
-    func imagenPara(_ fase: FaseCarga) -> some View {
-        switch fase {
-        case .reposo:
-            Image(systemName: "arrow.up.circle")
-        case .cargando:
-            ProgressView().tint(.white).scaleEffect(0.8)
-        case .completado:
-            Image(systemName: "checkmark.circle.fill")
-        }
-    }
+    #Preview { BotonCarga() }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useEffect, useState } from "react";
+    import { Upload, Loader2, CheckCircle } from "lucide-react";
 
-    func textoPara(_ fase: FaseCarga) -> String {
-        switch fase {
-        case .reposo: "Subir archivo"
-        case .cargando: "Subiendo..."
-        case .completado: "¡Listo!"
-        }
-    }
-}
+    type Fase = "reposo" | "cargando" | "completado";
 
-#Preview { BotonCarga() }
-```
+    const config: Record<Fase, {
+      icon: React.ReactNode;
+      text: string;
+      scale: number;
+      next?: Fase;
+      delay: number;
+    }> = {
+      reposo:     { icon: <Upload className="h-5 w-5" />, text: "Subir archivo", scale: 1, delay: 0 },
+      cargando:   { icon: <Loader2 className="h-5 w-5 animate-spin" />, text: "Subiendo...", scale: 0.95, next: "completado", delay: 1500 },
+      completado: { icon: <CheckCircle className="h-5 w-5" />, text: "¡Listo!", scale: 1, next: "reposo", delay: 800 },
+    };
+
+    export default function BotonCarga() {
+      const [fase, setFase] = useState<Fase>("reposo");
+      const { icon, text, scale, next, delay } = config[fase];
+
+      useEffect(() => {
+        if (!next) return;
+        const timer = setTimeout(() => setFase(next), delay);
+        return () => clearTimeout(timer);
+      }, [fase, next, delay]);
+
+      function handleClick() {
+        if (fase === "reposo") setFase("cargando");
+      }
+
+      return (
+        <button
+          onClick={handleClick}
+          disabled={fase !== "reposo"}
+          className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 font-semibold text-white transition-transform"
+          style={{ transform: `scale(${scale})` }}
+        >
+          {icon}
+          {text}
+        </button>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

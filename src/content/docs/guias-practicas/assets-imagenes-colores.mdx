@@ -4,6 +4,7 @@ description: Cómo agregar y gestionar assets, imágenes, colores, SF Symbols e 
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Los **assets** (recursos) son los archivos visuales de tu app: imágenes, colores, iconos y más. Xcode organiza estos recursos en un **Asset Catalog** (`.xcassets`).
 
@@ -31,13 +32,31 @@ MiImagen/
 
 ### Usar la imagen en SwiftUI
 
-```swift
-// Imagen del Asset Catalog
-Image("MiImagen")
-    .resizable()
-    .aspectRatio(contentMode: .fit)
-    .frame(width: 200, height: 200)
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Imagen del Asset Catalog
+    Image("MiImagen")
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 200, height: 200)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Imagen de la carpeta public/
+    import Image from "next/image";
+
+    <Image
+      src="/mi-imagen.png"
+      alt="Mi Imagen"
+      width={200}
+      height={200}
+      className="object-contain"
+    />
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -45,24 +64,46 @@ Image("MiImagen")
 
 Apple proporciona más de 5,000 iconos gratuitos con **SF Symbols**. Son vectoriales, se adaptan al tamaño del texto y soportan colores múltiples.
 
-```swift
-// Icono básico
-Image(systemName: "heart.fill")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Icono básico
+    Image(systemName: "heart.fill")
 
-// Con tamaño
-Image(systemName: "star.fill")
-    .font(.largeTitle)
+    // Con tamaño
+    Image(systemName: "star.fill")
+        .font(.largeTitle)
 
-// Con color
-Image(systemName: "bell.badge.fill")
-    .foregroundStyle(.blue, .red)
-    .font(.title)
+    // Con color
+    Image(systemName: "bell.badge.fill")
+        .foregroundStyle(.blue, .red)
+        .font(.title)
 
-// Multi-color
-Image(systemName: "externaldrive.badge.checkmark")
-    .symbolRenderingMode(.multicolor)
-    .font(.largeTitle)
-```
+    // Multi-color
+    Image(systemName: "externaldrive.badge.checkmark")
+        .symbolRenderingMode(.multicolor)
+        .font(.largeTitle)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Usando lucide-react (npm install lucide-react)
+    import { Heart, Star, Bell, HardDrive } from "lucide-react";
+
+    // Icono básico
+    <Heart className="fill-current" />
+
+    // Con tamaño
+    <Star className="h-8 w-8" />
+
+    // Con color
+    <Bell className="h-7 w-7 text-blue-500" />
+
+    // Multi-color
+    <HardDrive className="h-8 w-8 text-green-500" />
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -103,45 +144,89 @@ MiColor/
 
 ### Usar en SwiftUI
 
-```swift
-// Color del Asset Catalog
-Text("Hola")
-    .foregroundStyle(Color("MiColor"))
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Color del Asset Catalog
+    Text("Hola")
+        .foregroundStyle(Color("MiColor"))
 
-// Colores del sistema (se adaptan automáticamente a modo oscuro)
-Text("Sistema")
-    .foregroundStyle(.primary)    // Negro/Blanco según modo
-    .background(Color(.systemBackground)) // Fondo del sistema
+    // Colores del sistema (se adaptan automáticamente a modo oscuro)
+    Text("Sistema")
+        .foregroundStyle(.primary)    // Negro/Blanco según modo
+        .background(Color(.systemBackground)) // Fondo del sistema
 
-// Color personalizado en código
-let miAzul = Color(red: 0.0, green: 0.48, blue: 1.0)
-let miColor = Color(hex: "#FF5733") // Necesita extensión
-```
+    // Color personalizado en código
+    let miAzul = Color(red: 0.0, green: 0.48, blue: 1.0)
+    let miColor = Color(hex: "#FF5733") // Necesita extensión
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    {/* CSS variable definida en globals.css */}
+    {/* :root { --mi-color: #007AFF } */}
+    {/* .dark { --mi-color: #0A84FF } */}
+    <p className="text-[var(--mi-color)]">Hola</p>
+
+    {/* Colores semánticos con Tailwind (se adaptan a dark mode) */}
+    <p className="text-foreground bg-background">Sistema</p>
+
+    {/* Color arbitrario en Tailwind */}
+    <p className="text-[rgb(0,122,255)]">Azul personalizado</p>
+    <p className="text-[#FF5733]">Color hex directo</p>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### Extensión para colores hexadecimales
 
-```swift
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: .init(charactersIn: "#"))
-        let scanner = Scanner(string: hex)
-        var rgb: UInt64 = 0
-        scanner.scanHexInt64(&rgb)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    extension Color {
+        init(hex: String) {
+            let hex = hex.trimmingCharacters(in: .init(charactersIn: "#"))
+            let scanner = Scanner(string: hex)
+            var rgb: UInt64 = 0
+            scanner.scanHexInt64(&rgb)
 
-        self.init(
-            red: Double((rgb >> 16) & 0xFF) / 255,
-            green: Double((rgb >> 8) & 0xFF) / 255,
-            blue: Double(rgb & 0xFF) / 255
-        )
+            self.init(
+                red: Double((rgb >> 16) & 0xFF) / 255,
+                green: Double((rgb >> 8) & 0xFF) / 255,
+                blue: Double(rgb & 0xFF) / 255
+            )
+        }
     }
-}
 
-// Uso
-let rojo = Color(hex: "#FF3B30")
-let verde = Color(hex: "#34C759")
-```
+    // Uso
+    let rojo = Color(hex: "#FF3B30")
+    let verde = Color(hex: "#34C759")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function hexToRgb(hex: string) {
+      const clean = hex.replace("#", "");
+      const num = parseInt(clean, 16);
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255,
+      };
+    }
+
+    // Con Tailwind, usa colores hex directamente en las clases:
+    // className="text-[#FF3B30]"  → rojo
+    // className="text-[#34C759]"  → verde
+
+    // O defínelos en tailwind.config.ts:
+    // theme: { extend: { colors: { rojo: "#FF3B30", verde: "#34C759" } } }
+    // className="text-rojo" / "text-verde"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -169,79 +254,156 @@ El icono de la app se configura en `Assets.xcassets` → `AppIcon`:
 2. Xcode genera automáticamente todos los tamaños necesarios
 3. En iOS 18+, puedes ofrecer iconos alternativos con tinte automático
 
-```swift
-// Cambiar icono programáticamente (si hay alternativas)
-UIApplication.shared.setAlternateIconName("IconoAlternativo") { error in
-    if let error {
-        print("Error: \(error)")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Cambiar icono programáticamente (si hay alternativas)
+    UIApplication.shared.setAlternateIconName("IconoAlternativo") { error in
+        if let error {
+            print("Error: \(error)")
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // En Next.js, el favicon se coloca en app/favicon.ico
+    // o se define en app/layout.tsx con metadata:
+    import type { Metadata } from "next";
+
+    export const metadata: Metadata = {
+      icons: {
+        icon: "/favicon.ico",
+        apple: "/apple-icon.png",
+      },
+    };
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Imágenes desde URL
 
-```swift
-// AsyncImage carga imágenes de internet
-AsyncImage(url: URL(string: "https://ejemplo.com/foto.jpg")) { phase in
-    switch phase {
-    case .empty:
-        ProgressView()
-    case .success(let image):
-        image
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-    case .failure:
-        Image(systemName: "photo")
-            .foregroundStyle(.gray)
-    @unknown default:
-        EmptyView()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // AsyncImage carga imágenes de internet
+    AsyncImage(url: URL(string: "https://ejemplo.com/foto.jpg")) { phase in
+        switch phase {
+        case .empty:
+            ProgressView()
+        case .success(let image):
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+        case .failure:
+            Image(systemName: "photo")
+                .foregroundStyle(.gray)
+        @unknown default:
+            EmptyView()
+        }
     }
-}
-.frame(width: 200, height: 200)
-.clipShape(RoundedRectangle(cornerRadius: 12))
-```
+    .frame(width: 200, height: 200)
+    .clipShape(RoundedRectangle(cornerRadius: 12))
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // next/image maneja carga y optimización automáticamente
+    // Requiere configurar dominios en next.config.ts:
+    // images: { remotePatterns: [{ hostname: "ejemplo.com" }] }
+    import Image from "next/image";
+
+    <div className="relative h-[200px] w-[200px] overflow-hidden rounded-xl">
+      <Image
+        src="https://ejemplo.com/foto.jpg"
+        alt="Foto"
+        fill
+        className="object-cover"
+        sizes="200px"
+      />
+    </div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Ejemplo completo: Galería con assets
 
-```swift
-struct GaleriaView: View {
-    let fotos = ["paisaje", "ciudad", "playa", "montaña"]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct GaleriaView: View {
+        let fotos = ["paisaje", "ciudad", "playa", "montaña"]
 
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVGrid(columns: [
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ], spacing: 12) {
-                    ForEach(fotos, id: \.self) { foto in
-                        Image(foto) // Del Asset Catalog
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(height: 150)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .overlay(alignment: .bottomLeading) {
-                                Text(foto.capitalized)
-                                    .font(.caption)
-                                    .bold()
-                                    .foregroundStyle(.white)
-                                    .padding(8)
-                                    .background(.ultraThinMaterial)
-                                    .clipShape(.rect(cornerRadius: 6))
-                                    .padding(8)
-                            }
+        var body: some View {
+            NavigationStack {
+                ScrollView {
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 12) {
+                        ForEach(fotos, id: \.self) { foto in
+                            Image(foto) // Del Asset Catalog
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 150)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .overlay(alignment: .bottomLeading) {
+                                    Text(foto.capitalized)
+                                        .font(.caption)
+                                        .bold()
+                                        .foregroundStyle(.white)
+                                        .padding(8)
+                                        .background(.ultraThinMaterial)
+                                        .clipShape(.rect(cornerRadius: 6))
+                                        .padding(8)
+                                }
+                        }
                     }
+                    .padding()
                 }
-                .padding()
+                .navigationTitle("Galería")
             }
-            .navigationTitle("Galería")
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import Image from "next/image";
+
+    const fotos = ["paisaje", "ciudad", "playa", "montaña"];
+
+    export default function Galeria() {
+      return (
+        <div className="mx-auto max-w-2xl p-4">
+          <h1 className="mb-4 text-2xl font-bold">Galería</h1>
+          <div className="grid grid-cols-2 gap-3">
+            {fotos.map((foto) => (
+              <div
+                key={foto}
+                className="relative h-[150px] overflow-hidden rounded-xl"
+              >
+                <Image
+                  src={`/${foto}.jpg`}
+                  alt={foto}
+                  fill
+                  className="object-cover"
+                />
+                <span className="absolute bottom-2 left-2 rounded-md bg-black/40 px-2 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                  {foto.charAt(0).toUpperCase() + foto.slice(1)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

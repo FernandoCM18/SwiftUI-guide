@@ -4,6 +4,7 @@ description: Cómo usar el componente Slider en SwiftUI para seleccionar valores
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 El componente `Slider` permite al usuario seleccionar un valor dentro de un rango definido arrastrando un indicador.
 
@@ -13,48 +14,141 @@ El componente `Slider` permite al usuario seleccionar un valor dentro de un rang
 
 ## Uso básico
 
-```swift
-struct SliderEjemplo: View {
-    @State private var valor = 50.0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct SliderEjemplo: View {
+        @State private var valor = 50.0
 
-    var body: some View {
-        VStack {
-            Slider(value: $valor, in: 0...100)
-            Text("Valor: \(valor, specifier: "%.0f")")
+        var body: some View {
+            VStack {
+                Slider(value: $valor, in: 0...100)
+                Text("Valor: \(valor, specifier: "%.0f")")
+            }
+            .padding()
         }
-        .padding()
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    export default function SliderEjemplo() {
+      const [valor, setValor] = useState(50);
+
+      return (
+        <div className="flex flex-col gap-2 p-4">
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={valor}
+            onChange={(e) => setValor(Number(e.target.value))}
+            className="w-full accent-blue-500"
+          />
+          <p className="text-center">Valor: {valor}</p>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Slider con paso definido
 
-```swift
-Slider(value: $temperatura, in: 16...30, step: 0.5) {
-    Text("Temperatura")
-} minimumValueLabel: {
-    Text("16°")
-} maximumValueLabel: {
-    Text("30°")
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Slider(value: $temperatura, in: 16...30, step: 0.5) {
+        Text("Temperatura")
+    } minimumValueLabel: {
+        Text("16°")
+    } maximumValueLabel: {
+        Text("30°")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    export default function SliderTemperatura() {
+      const [temperatura, setTemperatura] = useState(23);
+
+      return (
+        <div className="flex items-center gap-3 p-4">
+          <span className="text-sm text-gray-500">16°</span>
+          <input
+            type="range"
+            min={16}
+            max={30}
+            step={0.5}
+            value={temperatura}
+            onChange={(e) => setTemperatura(Number(e.target.value))}
+            className="flex-1 accent-blue-500"
+          />
+          <span className="text-sm text-gray-500">30°</span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Detectar cambios
 
-```swift
-Slider(value: $brillo, in: 0...1) {
-    Text("Brillo")
-} onEditingChanged: { editando in
-    if !editando {
-        // El usuario soltó el slider
-        guardarBrillo(brillo)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Slider(value: $brillo, in: 0...1) {
+        Text("Brillo")
+    } onEditingChanged: { editando in
+        if !editando {
+            // El usuario soltó el slider
+            guardarBrillo(brillo)
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    function guardarBrillo(valor: number) {
+      console.log("Brillo guardado:", valor);
+    }
+
+    export default function SliderBrillo() {
+      const [brillo, setBrillo] = useState(0.5);
+
+      return (
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={brillo}
+          onChange={(e) => setBrillo(Number(e.target.value))}
+          onMouseUp={() => guardarBrillo(brillo)}
+          onTouchEnd={() => guardarBrillo(brillo)}
+          className="w-full accent-blue-500 p-4"
+        />
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -72,49 +166,134 @@ Combina `Slider` con `Text` para mostrar el valor actual al usuario.
 
 ## Ejemplo completo
 
-```swift
-struct ControlVolumenView: View {
-    @State private var volumen = 0.5
-    @State private var brillo = 0.8
-    @State private var velocidad = 1.0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct ControlVolumenView: View {
+        @State private var volumen = 0.5
+        @State private var brillo = 0.8
+        @State private var velocidad = 1.0
 
-    var body: some View {
-        Form {
-            Section("Audio") {
-                HStack {
-                    Image(systemName: "speaker.fill")
-                    Slider(value: $volumen, in: 0...1)
-                    Image(systemName: "speaker.wave.3.fill")
+        var body: some View {
+            Form {
+                Section("Audio") {
+                    HStack {
+                        Image(systemName: "speaker.fill")
+                        Slider(value: $volumen, in: 0...1)
+                        Image(systemName: "speaker.wave.3.fill")
+                    }
+
+                    Text("Volumen: \(Int(volumen * 100))%")
+                        .foregroundStyle(.secondary)
                 }
 
-                Text("Volumen: \(Int(volumen * 100))%")
-                    .foregroundStyle(.secondary)
-            }
-
-            Section("Pantalla") {
-                HStack {
-                    Image(systemName: "sun.min")
-                    Slider(value: $brillo, in: 0...1)
-                    Image(systemName: "sun.max")
-                }
-                .tint(.yellow)
-            }
-
-            Section("Reproducción") {
-                Slider(value: $velocidad, in: 0.5...2.0, step: 0.25) {
-                    Text("Velocidad")
-                } minimumValueLabel: {
-                    Text("0.5x")
-                } maximumValueLabel: {
-                    Text("2x")
+                Section("Pantalla") {
+                    HStack {
+                        Image(systemName: "sun.min")
+                        Slider(value: $brillo, in: 0...1)
+                        Image(systemName: "sun.max")
+                    }
+                    .tint(.yellow)
                 }
 
-                Text("Velocidad: \(velocidad, specifier: "%.2f")x")
-                    .foregroundStyle(.secondary)
+                Section("Reproducción") {
+                    Slider(value: $velocidad, in: 0.5...2.0, step: 0.25) {
+                        Text("Velocidad")
+                    } minimumValueLabel: {
+                        Text("0.5x")
+                    } maximumValueLabel: {
+                        Text("2x")
+                    }
+
+                    Text("Velocidad: \(velocidad, specifier: "%.2f")x")
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+    import {
+      SpeakerWaveIcon,
+      SpeakerXMarkIcon,
+      SunIcon,
+    } from "@heroicons/react/24/solid";
+
+    export default function ControlVolumen() {
+      const [volumen, setVolumen] = useState(50);
+      const [brillo, setBrillo] = useState(80);
+      const [velocidad, setVelocidad] = useState(1);
+
+      return (
+        <div className="max-w-md mx-auto divide-y">
+          <section className="py-4">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+              Audio
+            </h3>
+            <div className="flex items-center gap-3">
+              <SpeakerXMarkIcon className="w-5 h-5 text-gray-400" />
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={volumen}
+                onChange={(e) => setVolumen(Number(e.target.value))}
+                className="flex-1 accent-blue-500"
+              />
+              <SpeakerWaveIcon className="w-5 h-5 text-gray-400" />
+            </div>
+            <p className="text-sm text-gray-500 mt-1">Volumen: {volumen}%</p>
+          </section>
+
+          <section className="py-4">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+              Pantalla
+            </h3>
+            <div className="flex items-center gap-3">
+              <SunIcon className="w-4 h-4 text-gray-400" />
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={brillo}
+                onChange={(e) => setBrillo(Number(e.target.value))}
+                className="flex-1 accent-yellow-500"
+              />
+              <SunIcon className="w-6 h-6 text-yellow-500" />
+            </div>
+          </section>
+
+          <section className="py-4">
+            <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">
+              Reproducción
+            </h3>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-500">0.5x</span>
+              <input
+                type="range"
+                min={0.5}
+                max={2}
+                step={0.25}
+                value={velocidad}
+                onChange={(e) => setVelocidad(Number(e.target.value))}
+                className="flex-1 accent-blue-500"
+              />
+              <span className="text-sm text-gray-500">2x</span>
+            </div>
+            <p className="text-sm text-gray-500 mt-1">
+              Velocidad: {velocidad.toFixed(2)}x
+            </p>
+          </section>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

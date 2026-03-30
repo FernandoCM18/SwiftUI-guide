@@ -3,6 +3,7 @@ title: Liquid Glass
 description: Apple's new visual language in iOS 26 and macOS 26 — translucent materials, glass effects and native blur in SwiftUI.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 **Liquid Glass** is Apple's new visual language introduced at WWDC 2025 with iOS 26 and macOS 26. Interface elements adopt a translucent glass appearance that reflects and refracts the content behind them.
@@ -11,36 +12,57 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 SwiftUI provides a hierarchy of materials that apply the Liquid Glass effect. Use them with the `.background()` modifier:
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct GlassCard: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Liquid Glass")
-                .font(.title2.bold())
-            Text("iOS 26 · macOS 26")
-                .foregroundStyle(.secondary)
+    struct GlassCard: View {
+        var body: some View {
+            VStack(spacing: 16) {
+                Text("Liquid Glass")
+                    .font(.title2.bold())
+                Text("iOS 26 · macOS 26")
+                    .foregroundStyle(.secondary)
+            }
+            .padding(24)
+            .background(.ultraThinMaterial)  // Most translucent material
+            .clipShape(.rect(cornerRadius: 20))
         }
-        .padding(24)
-        .background(.ultraThinMaterial)  // Most translucent material
-        .clipShape(.rect(cornerRadius: 20))
     }
-}
 
-#Preview {
-    ZStack {
-        LinearGradient(
-            colors: [.blue, .purple, .pink],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-        .ignoresSafeArea()
+    #Preview {
+        ZStack {
+            LinearGradient(
+                colors: [.blue, .purple, .pink],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
-        GlassCard()
+            GlassCard()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // backdrop-blur + semi-transparent background = glassmorphism
+    function GlassCard() {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500">
+          <div className="rounded-2xl border border-white/20 bg-white/10 px-8 py-6 text-center backdrop-blur-xl">
+            <h2 className="text-xl font-bold text-white">Liquid Glass</h2>
+            <p className="mt-2 text-white/70">iOS 26 · macOS 26</p>
+          </div>
+        </div>
+      );
+    }
+
+    export default GlassCard;
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -60,30 +82,52 @@ From most to least translucent:
 
 The `.glassBackgroundEffect()` modifier applies the native iOS 26 Liquid Glass effect in its full expression, including dynamic reflection and refraction:
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct GlassButton: View {
-    var body: some View {
-        Button(action: {}) {
-            Label("Open camera", systemImage: "camera.fill")
-                .font(.headline)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
+    struct GlassButton: View {
+        var body: some View {
+            Button(action: {}) {
+                Label("Open camera", systemImage: "camera.fill")
+                    .font(.headline)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+            }
+            .glassBackgroundEffect()  // Native Liquid Glass effect (iOS 26+)
         }
-        .glassBackgroundEffect()  // Native Liquid Glass effect (iOS 26+)
     }
-}
 
-#Preview {
-    ZStack {
-        LinearGradient(colors: [.cyan, .blue], startPoint: .top, endPoint: .bottom)
-            .ignoresSafeArea()
+    #Preview {
+        ZStack {
+            LinearGradient(colors: [.cyan, .blue], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
 
-        GlassButton()
+            GlassButton()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { Camera } from "lucide-react";
+
+    function GlassButton() {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-cyan-400 to-blue-600">
+          <button className="flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-5 py-3 font-semibold text-white shadow-lg backdrop-blur-2xl transition hover:bg-white/25">
+            <Camera className="h-5 w-5" />
+            Open camera
+          </button>
+        </div>
+      );
+    }
+
+    export default GlassButton;
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -95,108 +139,188 @@ struct GlassButton: View {
 
 The `vibrancy` effect adapts text color to the underlying material to improve readability:
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct GlassPanel: View {
-    let title: String
-    let subtitle: String
+    struct GlassPanel: View {
+        let title: String
+        let subtitle: String
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.headline)
+        var body: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                Text(title)
+                    .font(.headline)
 
-            Text(subtitle)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                Text(subtitle)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
 
-            Divider()
+                Divider()
 
-            HStack {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
-                Text("Active")
-                    .foregroundStyle(.primary)
+                HStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                    Text("Active")
+                        .foregroundStyle(.primary)
+                }
             }
+            .padding(20)
+            .background(.ultraThinMaterial)
+            .clipShape(.rect(cornerRadius: 16))
+            .shadow(color: .black.opacity(0.1), radius: 10, y: 4)
         }
-        .padding(20)
-        .background(.ultraThinMaterial)
-        .clipShape(.rect(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.1), radius: 10, y: 4)
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { CheckCircle } from "lucide-react";
+
+    interface GlassPanelProps {
+      title: string;
+      subtitle: string;
+    }
+
+    function GlassPanel({ title, subtitle }: GlassPanelProps) {
+      return (
+        <div className="rounded-2xl border border-white/20 bg-white/10 p-5 shadow-lg backdrop-blur-xl">
+          <h3 className="font-semibold text-white">{title}</h3>
+          <p className="mt-1 text-sm text-white/60">{subtitle}</p>
+          <hr className="my-3 border-white/20" />
+          <div className="flex items-center gap-2">
+            <CheckCircle className="h-5 w-5 text-green-400" />
+            <span className="text-white">Active</span>
+          </div>
+        </div>
+      );
+    }
+
+    export default GlassPanel;
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Full example: Dashboard with Liquid Glass
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct DashboardView: View {
-    var body: some View {
-        ZStack {
-            // Dynamic background
-            LinearGradient(
-                colors: [.indigo, .purple, .pink],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+    struct DashboardView: View {
+        var body: some View {
+            ZStack {
+                // Dynamic background
+                LinearGradient(
+                    colors: [.indigo, .purple, .pink],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
 
-            ScrollView {
-                VStack(spacing: 16) {
-                    // Main card
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("System status", systemImage: "cpu")
-                            .font(.headline)
-                        Text("Everything working correctly")
-                            .foregroundStyle(.secondary)
-                        ProgressView(value: 0.72)
-                            .tint(.green)
+                ScrollView {
+                    VStack(spacing: 16) {
+                        // Main card
+                        VStack(alignment: .leading, spacing: 12) {
+                            Label("System status", systemImage: "cpu")
+                                .font(.headline)
+                            Text("Everything working correctly")
+                                .foregroundStyle(.secondary)
+                            ProgressView(value: 0.72)
+                                .tint(.green)
+                        }
+                        .padding(20)
+                        .background(.regularMaterial)
+                        .clipShape(.rect(cornerRadius: 20))
+
+                        // Stats row
+                        HStack(spacing: 12) {
+                            StatCard(icon: "bolt.fill", value: "98%", label: "CPU")
+                            StatCard(icon: "memorychip", value: "4.2 GB", label: "RAM")
+                            StatCard(icon: "internaldrive", value: "128 GB", label: "Disk")
+                        }
                     }
-                    .padding(20)
-                    .background(.regularMaterial)
-                    .clipShape(.rect(cornerRadius: 20))
-
-                    // Stats row
-                    HStack(spacing: 12) {
-                        StatCard(icon: "bolt.fill", value: "98%", label: "CPU")
-                        StatCard(icon: "memorychip", value: "4.2 GB", label: "RAM")
-                        StatCard(icon: "internaldrive", value: "128 GB", label: "Disk")
-                    }
+                    .padding()
                 }
-                .padding()
             }
         }
     }
-}
 
-struct StatCard: View {
-    let icon: String
-    let value: String
-    let label: String
+    struct StatCard: View {
+        let icon: String
+        let value: String
+        let label: String
 
-    var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title2)
-            Text(value)
-                .font(.headline)
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        var body: some View {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.title2)
+                Text(value)
+                    .font(.headline)
+                Text(label)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(.ultraThinMaterial)
+            .clipShape(.rect(cornerRadius: 16))
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
-        .background(.ultraThinMaterial)
-        .clipShape(.rect(cornerRadius: 16))
     }
-}
 
-#Preview { DashboardView() }
-```
+    #Preview { DashboardView() }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { Cpu, Zap, MemoryStick, HardDrive } from "lucide-react";
+
+    interface StatCardProps {
+      icon: React.ReactNode;
+      value: string;
+      label: string;
+    }
+
+    function StatCard({ icon, value, label }: StatCardProps) {
+      return (
+        <div className="flex flex-1 flex-col items-center gap-2 rounded-2xl border border-white/20 bg-white/10 py-4 backdrop-blur-xl">
+          {icon}
+          <span className="font-semibold text-white">{value}</span>
+          <span className="text-xs text-white/60">{label}</span>
+        </div>
+      );
+    }
+
+    export default function Dashboard() {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-6">
+          {/* Main card */}
+          <div className="rounded-2xl border border-white/20 bg-white/15 p-5 backdrop-blur-lg">
+            <div className="flex items-center gap-2">
+              <Cpu className="h-5 w-5 text-white" />
+              <h2 className="font-semibold text-white">System status</h2>
+            </div>
+            <p className="mt-1 text-sm text-white/60">Everything working correctly</p>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/20">
+              <div className="h-full w-[72%] rounded-full bg-green-400" />
+            </div>
+          </div>
+
+          {/* Stats row */}
+          <div className="mt-4 flex gap-3">
+            <StatCard icon={<Zap className="h-6 w-6 text-white" />} value="98%" label="CPU" />
+            <StatCard icon={<MemoryStick className="h-6 w-6 text-white" />} value="4.2 GB" label="RAM" />
+            <StatCard icon={<HardDrive className="h-6 w-6 text-white" />} value="128 GB" label="Disk" />
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

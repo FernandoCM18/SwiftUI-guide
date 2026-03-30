@@ -3,6 +3,7 @@ title: HStack
 description: How to use HStack in SwiftUI to arrange views horizontally.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 `HStack` (Horizontal Stack) arranges its child views in a horizontal row, from left to right.
@@ -13,27 +14,62 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Basic Usage
 
-```swift
-HStack {
-    Image(systemName: "star.fill")
-    Text("Favorite")
-    Spacer()
-    Text("5.0")
-}
-.padding()
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    HStack {
+        Image(systemName: "star.fill")
+        Text("Favorite")
+        Spacer()
+        Text("5.0")
+    }
+    .padding()
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function HorizontalLayout() {
+      return (
+        <div className="flex flex-row items-center p-4">
+          <span>⭐</span>
+          <span>Favorite</span>
+          <div className="flex-1" />
+          <span>5.0</span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Spacing and Alignment
 
-```swift
-HStack(alignment: .top, spacing: 30) {
-    Text("Short")
-    Text("Taller\ntext")
-    Text("Medium\nheight")
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    HStack(alignment: .top, spacing: 30) {
+        Text("Short")
+        Text("Taller\ntext")
+        Text("Medium\nheight")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function AlignedRow() {
+      return (
+        <div className="flex flex-row items-start gap-[30px]">
+          <span>Short</span>
+          <span className="whitespace-pre-line">{"Taller\ntext"}</span>
+          <span className="whitespace-pre-line">{"Medium\nheight"}</span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -45,36 +81,62 @@ Use `Spacer()` between elements to distribute available space. Multiple spacers 
 
 ## Full Example
 
-```swift
-struct ProductCardView: View {
-    var body: some View {
-        HStack(spacing: 16) {
-            Image(systemName: "cup.and.saucer.fill")
-                .resizable()
-                .frame(width: 60, height: 60)
-                .foregroundStyle(.brown)
-                .padding()
-                .background(Color.brown.opacity(0.1))
-                .clipShape(.rect(cornerRadius: 12))
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct ProductCardView: View {
+        var body: some View {
+            HStack(spacing: 16) {
+                Image(systemName: "cup.and.saucer.fill")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    .foregroundStyle(.brown)
+                    .padding()
+                    .background(Color.brown.opacity(0.1))
+                    .clipShape(.rect(cornerRadius: 12))
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Cafe Latte").font(.headline)
-                Text("With oat milk")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Cafe Latte").font(.headline)
+                    Text("With oat milk")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Text("$4.99")
+                    .font(.title2).bold()
             }
-
-            Spacer()
-
-            Text("$4.99")
-                .font(.title2).bold()
+            .padding()
+            .background(Color(.systemBackground))
+            .clipShape(.rect(cornerRadius: 16))
+            .shadow(radius: 2)
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(.rect(cornerRadius: 16))
-        .shadow(radius: 2)
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function ProductCard() {
+      return (
+        <div className="flex flex-row items-center gap-4 rounded-2xl bg-white p-4 shadow-sm">
+          <div className="flex h-[60px] w-[60px] items-center justify-center rounded-xl bg-amber-50 p-2">
+            <span className="text-3xl">☕</span>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="font-semibold">Cafe Latte</span>
+            <span className="text-sm text-gray-500">With oat milk</span>
+          </div>
+
+          <div className="flex-1" />
+
+          <span className="text-xl font-bold">$4.99</span>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

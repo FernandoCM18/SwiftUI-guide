@@ -4,6 +4,7 @@ description: Aprende a declarar funciones en Swift, con parámetros, valores de 
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Funciones en Swift
 
@@ -11,19 +12,43 @@ Las funciones son bloques de código reutilizables que realizan una tarea espec�
 
 ## Declaración básica
 
-```swift
-// Función sin parámetros ni retorno
-func saludar() {
-    print("¡Hola, mundo!")
-}
-saludar()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Función sin parámetros ni retorno
+    func saludar() {
+        print("¡Hola, mundo!")
+    }
+    saludar()
 
-// Función con parámetros
-func saludarA(nombre: String) {
-    print("¡Hola, \(nombre)!")
-}
-saludarA(nombre: "Carlos")
-```
+    // Función con parámetros
+    func saludarA(nombre: String) {
+        print("¡Hola, \(nombre)!")
+    }
+    saludarA(nombre: "Carlos")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Función sin parámetros ni retorno
+    function saludar(): void {
+      console.log("¡Hola, mundo!");
+    }
+    saludar();
+
+    // Función con parámetros
+    function saludarA(nombre: string): void {
+      console.log(`¡Hola, ${nombre}!`);
+    }
+    saludarA("Carlos");
+
+    // Arrow function equivalente
+    const saludarB = (nombre: string): void => {
+      console.log(`¡Hola, ${nombre}!`);
+    };
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -31,26 +56,50 @@ saludarA(nombre: "Carlos")
 
 Usa `->` para especificar el tipo de retorno.
 
-```swift
-func sumar(a: Int, b: Int) -> Int {
-    return a + b
-}
-let resultado = sumar(a: 5, b: 3)
-print("5 + 3 = \(resultado)")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func sumar(a: Int, b: Int) -> Int {
+        return a + b
+    }
+    let resultado = sumar(a: 5, b: 3)
+    print("5 + 3 = \(resultado)")
 
-// Retorno implícito (funciones de una sola expresión)
-func multiplicar(a: Int, b: Int) -> Int {
-    a * b  // No necesita 'return' explícito
-}
-print("4 × 7 = \(multiplicar(a: 4, b: 7))")
+    // Retorno implícito (funciones de una sola expresión)
+    func multiplicar(a: Int, b: Int) -> Int {
+        a * b  // No necesita 'return' explícito
+    }
+    print("4 × 7 = \(multiplicar(a: 4, b: 7))")
 
-// Retornar múltiples valores con tuplas
-func dividir(_ a: Int, entre b: Int) -> (cociente: Int, resto: Int) {
-    return (a / b, a % b)
-}
-let division = dividir(17, entre: 5)
-print("Cociente: \(division.cociente), Resto: \(division.resto)")
-```
+    // Retornar múltiples valores con tuplas
+    func dividir(_ a: Int, entre b: Int) -> (cociente: Int, resto: Int) {
+        return (a / b, a % b)
+    }
+    let division = dividir(17, entre: 5)
+    print("Cociente: \(division.cociente), Resto: \(division.resto)")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function sumar(a: number, b: number): number {
+      return a + b;
+    }
+    const resultado = sumar(5, 3);
+    console.log(`5 + 3 = ${resultado}`);
+
+    // Arrow function con retorno implícito
+    const multiplicar = (a: number, b: number): number => a * b;
+    console.log(`4 × 7 = ${multiplicar(4, 7)}`);
+
+    // Retornar múltiples valores con un objeto desestructurado
+    function dividir(a: number, b: number): { cociente: number; resto: number } {
+      return { cociente: Math.floor(a / b), resto: a % b };
+    }
+    const { cociente, resto } = dividir(17, 5);
+    console.log(`Cociente: ${cociente}, Resto: ${resto}`);
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -80,15 +129,34 @@ print(potencia(2, elevadoA: 10))  // 1024
 
 ## Valores por defecto
 
-```swift
-func crearUsuario(nombre: String, edad: Int = 18, pais: String = "España") -> String {
-    return "\(nombre), \(edad) años, \(pais)"
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func crearUsuario(nombre: String, edad: Int = 18, pais: String = "España") -> String {
+        return "\(nombre), \(edad) años, \(pais)"
+    }
 
-print(crearUsuario(nombre: "Ana"))                    // Usa valores por defecto
-print(crearUsuario(nombre: "Luis", edad: 25))         // Solo cambia edad
-print(crearUsuario(nombre: "María", pais: "México"))  // Solo cambia país
-```
+    print(crearUsuario(nombre: "Ana"))                    // Usa valores por defecto
+    print(crearUsuario(nombre: "Luis", edad: 25))         // Solo cambia edad
+    print(crearUsuario(nombre: "María", pais: "México"))  // Solo cambia país
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function crearUsuario(
+      nombre: string,
+      edad: number = 18,
+      pais: string = "España"
+    ): string {
+      return `${nombre}, ${edad} años, ${pais}`;
+    }
+
+    console.log(crearUsuario("Ana"));
+    console.log(crearUsuario("Luis", 25));
+    console.log(crearUsuario("María", undefined, "México"));
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -136,25 +204,54 @@ Usa `inout` con moderación. En la mayoría de casos es mejor retornar un nuevo 
 
 Las funciones tienen un tipo definido por sus parámetros y retorno.
 
-```swift
-// El tipo de esta función es (Int, Int) -> Int
-func sumar(_ a: Int, _ b: Int) -> Int { a + b }
-func restar(_ a: Int, _ b: Int) -> Int { a - b }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // El tipo de esta función es (Int, Int) -> Int
+    func sumar(_ a: Int, _ b: Int) -> Int { a + b }
+    func restar(_ a: Int, _ b: Int) -> Int { a - b }
 
-// Asignar función a una variable
-var operacion: (Int, Int) -> Int = sumar
-print(operacion(10, 5))  // 15
+    // Asignar función a una variable
+    var operacion: (Int, Int) -> Int = sumar
+    print(operacion(10, 5))  // 15
 
-operacion = restar
-print(operacion(10, 5))  // 5
+    operacion = restar
+    print(operacion(10, 5))  // 5
 
-// Función como parámetro
-func aplicar(_ funcion: (Int, Int) -> Int, a: Int, b: Int) -> Int {
-    return funcion(a, b)
-}
-print(aplicar(sumar, a: 3, b: 4))   // 7
-print(aplicar(restar, a: 3, b: 4))  // -1
-```
+    // Función como parámetro
+    func aplicar(_ funcion: (Int, Int) -> Int, a: Int, b: Int) -> Int {
+        return funcion(a, b)
+    }
+    print(aplicar(sumar, a: 3, b: 4))   // 7
+    print(aplicar(restar, a: 3, b: 4))  // -1
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // El tipo de esta función es (a: number, b: number) => number
+    const sumar = (a: number, b: number): number => a + b;
+    const restar = (a: number, b: number): number => a - b;
+
+    // Asignar función a una variable con tipo explícito
+    let operacion: (a: number, b: number) => number = sumar;
+    console.log(operacion(10, 5)); // 15
+
+    operacion = restar;
+    console.log(operacion(10, 5)); // 5
+
+    // Función como parámetro
+    function aplicar(
+      fn: (a: number, b: number) => number,
+      a: number,
+      b: number
+    ): number {
+      return fn(a, b);
+    }
+    console.log(aplicar(sumar, 3, 4));  // 7
+    console.log(aplicar(restar, 3, 4)); // -1
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -162,20 +259,40 @@ print(aplicar(restar, a: 3, b: 4))  // -1
 
 Los closures son bloques de código autocontenidos que capturan valores de su contexto. Son el equivalente a las lambdas o funciones anónimas en otros lenguajes.
 
-```swift
-// Sintaxis completa de un closure
-let saludoClosure = { (nombre: String) -> String in
-    return "¡Hola, \(nombre)!"
-}
-print(saludoClosure("Swift"))
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Sintaxis completa de un closure
+    let saludoClosure = { (nombre: String) -> String in
+        return "¡Hola, \(nombre)!"
+    }
+    print(saludoClosure("Swift"))
 
-// Closure como argumento
-let numeros = [5, 2, 8, 1, 9, 3]
-let ordenados = numeros.sorted(by: { (a: Int, b: Int) -> Bool in
-    return a < b
-})
-print(ordenados)  // [1, 2, 3, 5, 8, 9]
-```
+    // Closure como argumento
+    let numeros = [5, 2, 8, 1, 9, 3]
+    let ordenados = numeros.sorted(by: { (a: Int, b: Int) -> Bool in
+        return a < b
+    })
+    print(ordenados)  // [1, 2, 3, 5, 8, 9]
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Arrow function (equivalente a un closure)
+    const saludoClosure = (nombre: string): string => {
+      return `¡Hola, ${nombre}!`;
+    };
+    console.log(saludoClosure("TypeScript"));
+
+    // Arrow function como argumento
+    const numeros = [5, 2, 8, 1, 9, 3];
+    const ordenados = numeros.sort((a: number, b: number): number => {
+      return a - b;
+    });
+    console.log(ordenados); // [1, 2, 3, 5, 8, 9]
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -208,28 +325,56 @@ print(v5)  // [1, 2, 3, 5, 8, 9]
 
 ### Closures con map, filter y reduce
 
-```swift
-let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-// map: transforma cada elemento
-let dobles = numeros.map { $0 * 2 }
-print("Dobles: \(dobles)")  // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    // map: transforma cada elemento
+    let dobles = numeros.map { $0 * 2 }
+    print("Dobles: \(dobles)")  // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 
-// filter: filtra elementos que cumplan una condición
-let pares = numeros.filter { $0 % 2 == 0 }
-print("Pares: \(pares)")  // [2, 4, 6, 8, 10]
+    // filter: filtra elementos que cumplan una condición
+    let pares = numeros.filter { $0 % 2 == 0 }
+    print("Pares: \(pares)")  // [2, 4, 6, 8, 10]
 
-// reduce: combina todos los elementos en un solo valor
-let suma = numeros.reduce(0) { $0 + $1 }
-print("Suma: \(suma)")  // 55
+    // reduce: combina todos los elementos en un solo valor
+    let suma = numeros.reduce(0) { $0 + $1 }
+    print("Suma: \(suma)")  // 55
 
-// Encadenar operaciones
-let resultado = numeros
-    .filter { $0 % 2 == 0 }   // Solo pares
-    .map { $0 * $0 }           // Elevar al cuadrado
-    .reduce(0, +)              // Sumar todo
-print("Suma de cuadrados de pares: \(resultado)")  // 220
-```
+    // Encadenar operaciones
+    let resultado = numeros
+        .filter { $0 % 2 == 0 }   // Solo pares
+        .map { $0 * $0 }           // Elevar al cuadrado
+        .reduce(0, +)              // Sumar todo
+    print("Suma de cuadrados de pares: \(resultado)")  // 220
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    // map: transforma cada elemento
+    const dobles = numeros.map((n) => n * 2);
+    console.log("Dobles:", dobles); // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
+    // filter: filtra elementos que cumplan una condición
+    const pares = numeros.filter((n) => n % 2 === 0);
+    console.log("Pares:", pares); // [2, 4, 6, 8, 10]
+
+    // reduce: combina todos los elementos en un solo valor
+    const suma = numeros.reduce((acc, n) => acc + n, 0);
+    console.log("Suma:", suma); // 55
+
+    // Encadenar operaciones
+    const resultado = numeros
+      .filter((n) => n % 2 === 0)
+      .map((n) => n * n)
+      .reduce((acc, n) => acc + n, 0);
+    console.log("Suma de cuadrados de pares:", resultado); // 220
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

@@ -4,6 +4,7 @@ description: How to use Picker in SwiftUI to select from multiple options.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `Picker` lets the user select a value from a list of options, with multiple presentation styles.
 
@@ -13,71 +14,188 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Basic Usage
 
-```swift
-struct PickerExample: View {
-    @State private var selection = "Apple"
-    let fruits = ["Apple", "Banana", "Orange", "Grape"]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct PickerExample: View {
+        @State private var selection = "Apple"
+        let fruits = ["Apple", "Banana", "Orange", "Grape"]
 
-    var body: some View {
-        Picker("Favorite Fruit", selection: $selection) {
-            ForEach(fruits, id: \.self) { fruit in
-                Text(fruit)
+        var body: some View {
+            Picker("Favorite Fruit", selection: $selection) {
+                ForEach(fruits, id: \.self) { fruit in
+                    Text(fruit)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    const fruits = ["Apple", "Banana", "Orange", "Grape"];
+
+    export default function PickerExample() {
+      const [selection, setSelection] = useState("Apple");
+
+      return (
+        <label className="flex items-center gap-3">
+          <span>Favorite Fruit</span>
+          <select
+            value={selection}
+            onChange={(e) => setSelection(e.target.value)}
+            className="rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+          >
+            {fruits.map((fruit) => (
+              <option key={fruit} value={fruit}>{fruit}</option>
+            ))}
+          </select>
+        </label>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Picker Styles
 
-```swift
-// Segmented
-Picker("Period", selection: $period) {
-    Text("Daily").tag("daily")
-    Text("Weekly").tag("weekly")
-    Text("Monthly").tag("monthly")
-}
-.pickerStyle(.segmented)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Segmented
+    Picker("Period", selection: $period) {
+        Text("Daily").tag("daily")
+        Text("Weekly").tag("weekly")
+        Text("Monthly").tag("monthly")
+    }
+    .pickerStyle(.segmented)
 
-// Wheel
-Picker("Age", selection: $age) {
-    ForEach(18...99, id: \.self) { Text("\($0)") }
-}
-.pickerStyle(.wheel)
+    // Wheel
+    Picker("Age", selection: $age) {
+        ForEach(18...99, id: \.self) { Text("\($0)") }
+    }
+    .pickerStyle(.wheel)
 
-// Menu (default on iOS)
-Picker("Color", selection: $color) {
-    ForEach(colors, id: \.self) { Text($0) }
-}
-.pickerStyle(.menu)
-```
+    // Menu (default on iOS)
+    Picker("Color", selection: $color) {
+        ForEach(colors, id: \.self) { Text($0) }
+    }
+    .pickerStyle(.menu)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function PickerStyles() {
+      const [period, setPeriod] = useState("daily");
+      const [color, setColor] = useState("Red");
+      const colors = ["Red", "Blue", "Green", "Yellow"];
+
+      return (
+        <div className="space-y-6">
+          {/* Segmented — button group */}
+          <div className="inline-flex rounded-lg border border-gray-300">
+            {["daily", "weekly", "monthly"].map((opt) => (
+              <button
+                key={opt}
+                onClick={() => setPeriod(opt)}
+                className={`px-4 py-2 text-sm capitalize first:rounded-l-lg last:rounded-r-lg ${
+                  period === opt
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+
+          {/* Menu — native select */}
+          <label className="flex items-center gap-3">
+            <span>Color</span>
+            <select
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className="rounded-lg border border-gray-300 px-3 py-2"
+            >
+              {colors.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Picker with Enum
 
-```swift
-enum Size: String, CaseIterable {
-    case small = "Small"
-    case medium = "Medium"
-    case large = "Large"
-}
-
-struct SizePickerView: View {
-    @State private var size: Size = .medium
-
-    var body: some View {
-        Picker("Size", selection: $size) {
-            ForEach(Size.allCases, id: \.self) { s in
-                Text(s.rawValue).tag(s)
-            }
-        }
-        .pickerStyle(.segmented)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Size: String, CaseIterable {
+        case small = "Small"
+        case medium = "Medium"
+        case large = "Large"
     }
-}
-```
+
+    struct SizePickerView: View {
+        @State private var size: Size = .medium
+
+        var body: some View {
+            Picker("Size", selection: $size) {
+                ForEach(Size.allCases, id: \.self) { s in
+                    Text(s.rawValue).tag(s)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    const sizes = ["Small", "Medium", "Large"] as const;
+    type Size = (typeof sizes)[number];
+
+    export default function SizePicker() {
+      const [size, setSize] = useState<Size>("Medium");
+
+      return (
+        <div className="inline-flex rounded-lg border border-gray-300">
+          {sizes.map((s) => (
+            <button
+              key={s}
+              onClick={() => setSize(s)}
+              className={`px-4 py-2 text-sm first:rounded-l-lg last:rounded-r-lg ${
+                size === s
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -87,30 +205,92 @@ Use `.pickerStyle(.segmented)` for 2-5 short options. For more options, use `.me
 
 ## Full Example
 
-```swift
-struct OrderView: View {
-    @State private var size = "Medium"
-    @State private var drink = "Coffee"
-    let sizes = ["Small", "Medium", "Large"]
-    let drinks = ["Coffee", "Tea", "Chocolate", "Juice"]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct OrderView: View {
+        @State private var size = "Medium"
+        @State private var drink = "Coffee"
+        let sizes = ["Small", "Medium", "Large"]
+        let drinks = ["Coffee", "Tea", "Chocolate", "Juice"]
 
-    var body: some View {
-        Form {
-            Picker("Drink", selection: $drink) {
-                ForEach(drinks, id: \.self) { Text($0) }
-            }
-            Picker("Size", selection: $size) {
-                ForEach(sizes, id: \.self) { Text($0) }
-            }
-            .pickerStyle(.segmented)
+        var body: some View {
+            Form {
+                Picker("Drink", selection: $drink) {
+                    ForEach(drinks, id: \.self) { Text($0) }
+                }
+                Picker("Size", selection: $size) {
+                    ForEach(sizes, id: \.self) { Text($0) }
+                }
+                .pickerStyle(.segmented)
 
-            Section("Summary") {
-                Text("\(drink) (\(size))")
-                    .font(.headline)
+                Section("Summary") {
+                    Text("\(drink) (\(size))")
+                        .font(.headline)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    const drinks = ["Coffee", "Tea", "Chocolate", "Juice"];
+    const sizes = ["Small", "Medium", "Large"];
+
+    export default function OrderView() {
+      const [drink, setDrink] = useState("Coffee");
+      const [size, setSize] = useState("Medium");
+
+      return (
+        <form className="mx-auto max-w-md divide-y rounded-xl bg-white shadow">
+          <div className="space-y-4 p-4">
+            <label className="flex items-center justify-between">
+              <span>Drink</span>
+              <select
+                value={drink}
+                onChange={(e) => setDrink(e.target.value)}
+                className="rounded-lg border border-gray-300 px-3 py-2"
+              >
+                {drinks.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </label>
+
+            <div>
+              <span className="mb-2 block text-sm">Size</span>
+              <div className="inline-flex rounded-lg border border-gray-300">
+                {sizes.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setSize(s)}
+                    className={`px-4 py-2 text-sm first:rounded-l-lg last:rounded-r-lg ${
+                      size === s
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4">
+            <p className="text-sm text-gray-500">Summary</p>
+            <p className="text-lg font-semibold">{drink} ({size})</p>
+          </div>
+        </form>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

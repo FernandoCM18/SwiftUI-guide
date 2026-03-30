@@ -4,22 +4,40 @@ description: Domina el sistema de opcionales de Swift, incluyendo optional bindi
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## ¿Qué son los opcionales?
 
 Un opcional en Swift representa un valor que puede existir o ser `nil` (ausente). Es una de las características más importantes del lenguaje para garantizar la seguridad del código.
 
-```swift
-// Un String normal siempre tiene un valor
-let nombre: String = "Ana"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Un String normal siempre tiene un valor
+    let nombre: String = "Ana"
 
-// Un String opcional puede tener un valor o ser nil
-var apodo: String? = "Anita"
-apodo = nil  // Esto es válido
+    // Un String opcional puede tener un valor o ser nil
+    var apodo: String? = "Anita"
+    apodo = nil  // Esto es válido
 
-// Sin opcionales, esto sería un error:
-// let otro: String = nil  // Error de compilación
-```
+    // Sin opcionales, esto sería un error:
+    // let otro: String = nil  // Error de compilación
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // En TypeScript, usamos union types con null o undefined
+    const nombre: string = "Ana";
+
+    // El equivalente a un opcional es string | null
+    let apodo: string | null = "Anita";
+    apodo = null; // Esto es válido
+
+    // Sin la union con null, esto sería un error:
+    // const otro: string = null; // Type error (con strictNullChecks)
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -44,28 +62,52 @@ print(invalido as Any)  // nil
 
 La forma más común y segura de extraer el valor de un opcional.
 
-```swift
-let posibleNumero = Int("123")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let posibleNumero = Int("123")
 
-if let numero = posibleNumero {
-    print("El número es \(numero)")  // Se ejecuta si no es nil
-} else {
-    print("No se pudo convertir")
-}
+    if let numero = posibleNumero {
+        print("El número es \(numero)")  // Se ejecuta si no es nil
+    } else {
+        print("No se pudo convertir")
+    }
 
-// Múltiples bindings en una sola condición
-let nombre: String? = "Ana"
-let edad: Int? = 25
+    // Múltiples bindings en una sola condición
+    let nombre: String? = "Ana"
+    let edad: Int? = 25
 
-if let nombre = nombre, let edad = edad {
-    print("\(nombre) tiene \(edad) años")
-}
+    if let nombre = nombre, let edad = edad {
+        print("\(nombre) tiene \(edad) años")
+    }
 
-// En Swift 5.7+ puedes usar la forma abreviada
-if let nombre, let edad {
-    print("\(nombre) tiene \(edad) años")
-}
-```
+    // En Swift 5.7+ puedes usar la forma abreviada
+    if let nombre, let edad {
+        print("\(nombre) tiene \(edad) años")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const posibleNumero: number | null = parseInt("123") || null;
+
+    if (posibleNumero !== null) {
+        console.log(`El número es ${posibleNumero}`);
+    } else {
+        console.log("No se pudo convertir");
+    }
+
+    // Múltiples null checks en una sola condición
+    const nombre: string | null = "Ana";
+    const edad: number | null = 25;
+
+    if (nombre !== null && edad !== null) {
+        // TypeScript estrecha los tipos automáticamente (type narrowing)
+        console.log(`${nombre} tiene ${edad} años`);
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -73,26 +115,52 @@ if let nombre, let edad {
 
 `guard let` es ideal para salir de una función si el valor es nil.
 
-```swift
-func procesarUsuario(nombre: String?, edad: Int?) {
-    guard let nombre = nombre else {
-        print("Error: nombre es requerido")
-        return
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func procesarUsuario(nombre: String?, edad: Int?) {
+        guard let nombre = nombre else {
+            print("Error: nombre es requerido")
+            return
+        }
+
+        guard let edad = edad else {
+            print("Error: edad es requerida")
+            return
+        }
+
+        // Aquí nombre y edad están disponibles como no opcionales
+        print("Usuario: \(nombre), \(edad) años")
     }
 
-    guard let edad = edad else {
-        print("Error: edad es requerida")
-        return
+    procesarUsuario(nombre: "Ana", edad: 25)   // "Usuario: Ana, 25 años"
+    procesarUsuario(nombre: nil, edad: 25)      // "Error: nombre es requerido"
+    procesarUsuario(nombre: "Luis", edad: nil)  // "Error: edad es requerida"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function procesarUsuario(nombre: string | null, edad: number | null): void {
+        if (nombre === null) {
+            console.log("Error: nombre es requerido");
+            return;
+        }
+
+        if (edad === null) {
+            console.log("Error: edad es requerida");
+            return;
+        }
+
+        // Aquí TypeScript sabe que nombre es string y edad es number
+        console.log(`Usuario: ${nombre}, ${edad} años`);
     }
 
-    // Aquí nombre y edad están disponibles como no opcionales
-    print("Usuario: \(nombre), \(edad) años")
-}
-
-procesarUsuario(nombre: "Ana", edad: 25)   // "Usuario: Ana, 25 años"
-procesarUsuario(nombre: nil, edad: 25)      // "Error: nombre es requerido"
-procesarUsuario(nombre: "Luis", edad: nil)  // "Error: edad es requerida"
-```
+    procesarUsuario("Ana", 25);    // "Usuario: Ana, 25 años"
+    procesarUsuario(null, 25);     // "Error: nombre es requerido"
+    procesarUsuario("Luis", null); // "Error: edad es requerida"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -104,23 +172,46 @@ Prefiere `guard let` sobre `if let` cuando quieras usar el valor desenvuelto en 
 
 Proporciona un valor por defecto cuando el opcional es nil.
 
-```swift
-let nombreUsuario: String? = nil
-let nombreMostrado = nombreUsuario ?? "Invitado"
-print("Bienvenido, \(nombreMostrado)")  // "Bienvenido, Invitado"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let nombreUsuario: String? = nil
+    let nombreMostrado = nombreUsuario ?? "Invitado"
+    print("Bienvenido, \(nombreMostrado)")  // "Bienvenido, Invitado"
 
-// Encadenar con múltiples opcionales
-let apodo: String? = nil
-let nombreCompleto: String? = "Ana García"
-let nombreFinal = apodo ?? nombreCompleto ?? "Desconocido"
-print(nombreFinal)  // "Ana García"
+    // Encadenar con múltiples opcionales
+    let apodo: String? = nil
+    let nombreCompleto: String? = "Ana García"
+    let nombreFinal = apodo ?? nombreCompleto ?? "Desconocido"
+    print(nombreFinal)  // "Ana García"
 
-// Útil con diccionarios
-let configuracion: [String: Int] = ["maxIntentos": 3]
-let maxIntentos = configuracion["maxIntentos"] ?? 5
-let timeout = configuracion["timeout"] ?? 30
-print("Max intentos: \(maxIntentos), Timeout: \(timeout)")
-```
+    // Útil con diccionarios
+    let configuracion: [String: Int] = ["maxIntentos": 3]
+    let maxIntentos = configuracion["maxIntentos"] ?? 5
+    let timeout = configuracion["timeout"] ?? 30
+    print("Max intentos: \(maxIntentos), Timeout: \(timeout)")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const nombreUsuario: string | null = null;
+    const nombreMostrado = nombreUsuario ?? "Invitado";
+    console.log(`Bienvenido, ${nombreMostrado}`); // "Bienvenido, Invitado"
+
+    // Encadenar con múltiples valores nullish
+    const apodo: string | null = null;
+    const nombreCompleto: string | null = "Ana García";
+    const nombreFinal = apodo ?? nombreCompleto ?? "Desconocido";
+    console.log(nombreFinal); // "Ana García"
+
+    // Útil con objetos/records
+    const configuracion: Record<string, number> = { maxIntentos: 3 };
+    const maxIntentos = configuracion["maxIntentos"] ?? 5;
+    const timeout = configuracion["timeout"] ?? 30;
+    console.log(`Max intentos: ${maxIntentos}, Timeout: ${timeout}`);
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -147,41 +238,82 @@ Evita el force unwrap (`!`) siempre que sea posible. Usa `if let`, `guard let` o
 
 Permite acceder a propiedades, métodos y subíndices de un opcional de forma segura. Si cualquier eslabón de la cadena es nil, toda la expresión retorna nil.
 
-```swift
-struct Direccion {
-    var calle: String
-    var ciudad: String
-    var codigoPostal: String
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Direccion {
+        var calle: String
+        var ciudad: String
+        var codigoPostal: String
+    }
 
-struct Contacto {
-    var nombre: String
-    var direccion: Direccion?
-    var telefonos: [String]?
-}
+    struct Contacto {
+        var nombre: String
+        var direccion: Direccion?
+        var telefonos: [String]?
+    }
 
-var contacto = Contacto(
-    nombre: "Ana",
-    direccion: Direccion(calle: "Gran Vía 1", ciudad: "Madrid", codigoPostal: "28001"),
-    telefonos: ["612345678", "698765432"]
-)
+    var contacto = Contacto(
+        nombre: "Ana",
+        direccion: Direccion(calle: "Gran Vía 1", ciudad: "Madrid", codigoPostal: "28001"),
+        telefonos: ["612345678", "698765432"]
+    )
 
-// Optional chaining para acceder a propiedades
-let ciudad = contacto.direccion?.ciudad
-print(ciudad ?? "Sin ciudad")  // "Madrid"
+    // Optional chaining para acceder a propiedades
+    let ciudad = contacto.direccion?.ciudad
+    print(ciudad ?? "Sin ciudad")  // "Madrid"
 
-// Encadenar múltiples niveles
-let longitudCalle = contacto.direccion?.calle.count
-print(longitudCalle ?? 0)  // 10
+    // Encadenar múltiples niveles
+    let longitudCalle = contacto.direccion?.calle.count
+    print(longitudCalle ?? 0)  // 10
 
-// Acceder a elementos de un array opcional
-let primerTelefono = contacto.telefonos?.first
-print(primerTelefono ?? "Sin teléfono")
+    // Acceder a elementos de un array opcional
+    let primerTelefono = contacto.telefonos?.first
+    print(primerTelefono ?? "Sin teléfono")
 
-// Llamar métodos a través de la cadena
-let calleMayusculas = contacto.direccion?.calle.uppercased()
-print(calleMayusculas ?? "N/A")  // "GRAN VÍA 1"
-```
+    // Llamar métodos a través de la cadena
+    let calleMayusculas = contacto.direccion?.calle.uppercased()
+    print(calleMayusculas ?? "N/A")  // "GRAN VÍA 1"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Direccion {
+        calle: string;
+        ciudad: string;
+        codigoPostal: string;
+    }
+
+    interface Contacto {
+        nombre: string;
+        direccion?: Direccion;
+        telefonos?: string[];
+    }
+
+    const contacto: Contacto = {
+        nombre: "Ana",
+        direccion: { calle: "Gran Vía 1", ciudad: "Madrid", codigoPostal: "28001" },
+        telefonos: ["612345678", "698765432"],
+    };
+
+    // Optional chaining para acceder a propiedades
+    const ciudad = contacto.direccion?.ciudad;
+    console.log(ciudad ?? "Sin ciudad"); // "Madrid"
+
+    // Encadenar múltiples niveles
+    const longitudCalle = contacto.direccion?.calle.length;
+    console.log(longitudCalle ?? 0); // 10
+
+    // Acceder a elementos de un array opcional
+    const primerTelefono = contacto.telefonos?.[0];
+    console.log(primerTelefono ?? "Sin teléfono");
+
+    // Llamar métodos a través de la cadena
+    const calleMayusculas = contacto.direccion?.calle.toUpperCase();
+    console.log(calleMayusculas ?? "N/A"); // "GRAN VÍA 1"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

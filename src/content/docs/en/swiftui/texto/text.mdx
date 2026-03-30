@@ -4,6 +4,7 @@ description: How to use the Text view in SwiftUI to display static and dynamic t
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 The `Text` view displays one or more lines of read-only text.
 
@@ -13,53 +14,117 @@ The `Text` view displays one or more lines of read-only text.
 
 ## Basic Usage
 
-```swift
-Text("Hello, World!")
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Text("Hello, World!")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function BasicText() {
+      return <p>Hello, World!</p>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Text Modifiers
 
-```swift
-VStack(alignment: .leading, spacing: 12) {
-    Text("Large Title")
-        .font(.largeTitle)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    VStack(alignment: .leading, spacing: 12) {
+        Text("Large Title")
+            .font(.largeTitle)
 
-    Text("Bold and Blue")
-        .bold()
-        .foregroundStyle(.blue)
+        Text("Bold and Blue")
+            .bold()
+            .foregroundStyle(.blue)
 
-    Text("Italic Caption")
-        .font(.caption)
-        .italic()
+        Text("Italic Caption")
+            .font(.caption)
+            .italic()
 
-    Text("Custom Font")
-        .font(.system(size: 24, weight: .heavy, design: .rounded))
-}
-```
+        Text("Custom Font")
+            .font(.system(size: 24, weight: .heavy, design: .rounded))
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function TextModifiers() {
+      return (
+        <div className="flex flex-col items-start gap-3">
+          <p className="text-4xl font-bold">Large Title</p>
+          <p className="font-bold text-blue-500">Bold and Blue</p>
+          <p className="text-xs italic">Italic Caption</p>
+          <p
+            className="text-2xl font-extrabold"
+            style={{ fontFamily: "ui-rounded, system-ui" }}
+          >
+            Custom Font
+          </p>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Multiline Text
 
-```swift
-Text("This is a long paragraph that will wrap across multiple lines automatically when it exceeds the available width.")
-    .multilineTextAlignment(.center)
-    .lineLimit(3)
-    .lineSpacing(4)
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Text("This is a long paragraph that will wrap across multiple lines automatically when it exceeds the available width.")
+        .multilineTextAlignment(.center)
+        .lineLimit(3)
+        .lineSpacing(4)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function MultilineText() {
+      return (
+        <p className="text-center leading-relaxed line-clamp-3">
+          This is a long paragraph that will wrap across multiple lines
+          automatically when it exceeds the available width.
+        </p>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## String Interpolation
 
-```swift
-let name = "Maria"
-let age = 28
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let name = "Maria"
+    let age = 28
 
-Text("Hello, \(name)! You are \(age) years old.")
-```
+    Text("Hello, \(name)! You are \(age) years old.")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function StringInterpolation() {
+      const name = "Maria";
+      const age = 28;
+
+      return <p>Hello, {name}! You are {age} years old.</p>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -82,29 +147,51 @@ Combine multiple `Text` views with `+` to create attributed strings: `Text("Hell
 
 ## Full Example
 
-```swift
-struct WelcomeView: View {
-    let username = "Developer"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct WelcomeView: View {
+        let username = "Developer"
 
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Welcome!")
-                .font(.largeTitle)
-                .bold()
+        var body: some View {
+            VStack(spacing: 16) {
+                Text("Welcome!")
+                    .font(.largeTitle)
+                    .bold()
 
-            Text("Hello, \(username)")
-                .font(.title2)
-                .foregroundStyle(.secondary)
+                Text("Hello, \(username)")
+                    .font(.title2)
+                    .foregroundStyle(.secondary)
 
-            Text("Start building amazing apps with SwiftUI. This framework makes it easy to create beautiful interfaces.")
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-                .padding()
+                Text("Start building amazing apps with SwiftUI. This framework makes it easy to create beautiful interfaces.")
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .padding()
+            }
+            .padding()
         }
-        .padding()
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function WelcomeView() {
+      const username = "Developer";
+
+      return (
+        <div className="flex flex-col items-center gap-4 p-4">
+          <h1 className="text-4xl font-bold">Welcome!</h1>
+          <p className="text-2xl text-gray-500">Hello, {username}</p>
+          <p className="text-center text-gray-500">
+            Start building amazing apps with SwiftUI. This framework makes it
+            easy to create beautiful interfaces.
+          </p>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

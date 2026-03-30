@@ -4,6 +4,7 @@ description: Master modern Swift 6 concurrency with async/await, Task, actors an
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Concurrency in Swift allows running multiple operations in parallel without blocking the interface. Swift 6 introduces strict concurrency by default, eliminating data races at compile time.
 
@@ -11,26 +12,50 @@ Concurrency in Swift allows running multiple operations in parallel without bloc
 
 Mark a function with `async` to indicate it can suspend. Use `await` to call it.
 
-```swift
-import Foundation
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import Foundation
 
-// Async function
-func fetchUser(id: Int) async throws -> String {
-    let url = URL(string: "https://api.example.com/users/\(id)")!
-    let (data, _) = try await URLSession.shared.data(from: url)
-    return String(data: data, encoding: .utf8) ?? ""
-}
-
-// Call from async context
-func loadProfile() async {
-    do {
-        let user = try await fetchUser(id: 1)
-        print("User: \(user)")
-    } catch {
-        print("Error: \(error)")
+    // Async function
+    func fetchUser(id: Int) async throws -> String {
+        let url = URL(string: "https://api.example.com/users/\(id)")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return String(data: data, encoding: .utf8) ?? ""
     }
-}
-```
+
+    // Call from async context
+    func loadProfile() async {
+        do {
+            let user = try await fetchUser(id: 1)
+            print("User: \(user)")
+        } catch {
+            print("Error: \(error)")
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Async function
+    async function fetchUser(id: number): Promise<string> {
+      const res = await fetch(`https://api.example.com/users/${id}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.text();
+    }
+
+    // Call from async context
+    async function loadProfile(): Promise<void> {
+      try {
+        const user = await fetchUser(1);
+        console.log(`User: ${user}`);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -38,56 +63,101 @@ func loadProfile() async {
 
 `Task` creates a unit of async work. Use it to launch async work from synchronous context (like `onAppear`).
 
-```swift
-import SwiftUI
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
 
-struct ProfileView: View {
-    @State private var name = ""
+    struct ProfileView: View {
+        @State private var name = ""
 
-    var body: some View {
-        Text(name.isEmpty ? "Loading..." : name)
-            .onAppear {
-                Task {
-                    // Launch async work from sync context
-                    name = await loadName()
+        var body: some View {
+            Text(name.isEmpty ? "Loading..." : name)
+                .onAppear {
+                    Task {
+                        // Launch async work from sync context
+                        name = await loadName()
+                    }
                 }
-            }
-    }
+        }
 
-    func loadName() async -> String {
-        try? await Task.sleep(for: .seconds(1))
-        return "Carlos"
+        func loadName() async -> String {
+            try? await Task.sleep(for: .seconds(1))
+            return "Carlos"
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    "use client";
+    import { useState, useEffect } from "react";
+
+    function ProfileView() {
+      const [name, setName] = useState("");
+
+      useEffect(() => {
+        // Launch async work when the component mounts
+        async function loadName(): Promise<string> {
+          await new Promise((r) => setTimeout(r, 1000));
+          return "Carlos";
+        }
+        loadName().then(setName);
+      }, []);
+
+      return <p>{name || "Loading..."}</p>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 `TaskGroup` runs multiple tasks in parallel and waits for all to finish:
 
-```swift
-func loadImages(ids: [Int]) async -> [String] {
-    await withTaskGroup(of: String.self) { group in
-        for id in ids {
-            group.addTask {
-                // Each image downloads in parallel
-                await downloadImage(id: id)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func loadImages(ids: [Int]) async -> [String] {
+        await withTaskGroup(of: String.self) { group in
+            for id in ids {
+                group.addTask {
+                    // Each image downloads in parallel
+                    await downloadImage(id: id)
+                }
             }
-        }
 
-        var results: [String] = []
-        for await image in group {
-            results.append(image)
+            var results: [String] = []
+            for await image in group {
+                results.append(image)
+            }
+            return results
         }
-        return results
     }
-}
 
-func downloadImage(id: Int) async -> String {
-    try? await Task.sleep(for: .milliseconds(100))
-    return "image_\(id)"
-}
-```
+    func downloadImage(id: Int) async -> String {
+        try? await Task.sleep(for: .milliseconds(100))
+        return "image_\(id)"
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    async function loadImages(ids: number[]): Promise<string[]> {
+      // All downloads run in parallel with Promise.all
+      const results = await Promise.all(
+        ids.map((id) => downloadImage(id))
+      );
+      return results;
+    }
+
+    async function downloadImage(id: number): Promise<string> {
+      await new Promise((r) => setTimeout(r, 100));
+      return `image_${id}`;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

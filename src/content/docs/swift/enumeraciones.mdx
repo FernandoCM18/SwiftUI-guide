@@ -4,6 +4,7 @@ description: Aprende sobre enumeraciones en Swift, incluyendo raw values, associ
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## ¿Qué son las enumeraciones?
 
@@ -11,34 +12,64 @@ Las enumeraciones (enums) definen un tipo con un conjunto finito de valores posi
 
 ## Enumeración básica
 
-```swift
-enum Direccion {
-    case norte
-    case sur
-    case este
-    case oeste
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Direccion {
+        case norte
+        case sur
+        case este
+        case oeste
+    }
 
-// También en una sola línea
-enum Estacion {
-    case primavera, verano, otoño, invierno
-}
+    // También en una sola línea
+    enum Estacion {
+        case primavera, verano, otoño, invierno
+    }
 
-var rumbo = Direccion.norte
-rumbo = .este  // Swift infiere el tipo
+    var rumbo = Direccion.norte
+    rumbo = .este  // Swift infiere el tipo
 
-// Uso con switch
-switch rumbo {
-case .norte:
-    print("Hacia el norte")
-case .sur:
-    print("Hacia el sur")
-case .este:
-    print("Hacia el este")
-case .oeste:
-    print("Hacia el oeste")
-}
-```
+    // Uso con switch
+    switch rumbo {
+    case .norte:
+        print("Hacia el norte")
+    case .sur:
+        print("Hacia el sur")
+    case .este:
+        print("Hacia el este")
+    case .oeste:
+        print("Hacia el oeste")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Opción 1: Union type (más idiomático en TS)
+    type Direccion = "norte" | "sur" | "este" | "oeste";
+    type Estacion = "primavera" | "verano" | "otoño" | "invierno";
+
+    let rumbo: Direccion = "norte";
+    rumbo = "este";
+
+    // Uso con switch (exhaustivo con el tipo de retorno)
+    switch (rumbo) {
+        case "norte":
+            console.log("Hacia el norte");
+            break;
+        case "sur":
+            console.log("Hacia el sur");
+            break;
+        case "este":
+            console.log("Hacia el este");
+            break;
+        case "oeste":
+            console.log("Hacia el oeste");
+            break;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -46,38 +77,76 @@ case .oeste:
 
 Los enums pueden tener un valor asociado fijo de tipo String, Int, Double, etc.
 
-```swift
-// Raw values de tipo Int (auto-incremento)
-enum Planeta: Int {
-    case mercurio = 1
-    case venus      // 2 (automático)
-    case tierra     // 3
-    case marte      // 4
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Raw values de tipo Int (auto-incremento)
+    enum Planeta: Int {
+        case mercurio = 1
+        case venus      // 2 (automático)
+        case tierra     // 3
+        case marte      // 4
+    }
 
-print(Planeta.tierra.rawValue)  // 3
+    print(Planeta.tierra.rawValue)  // 3
 
-// Crear desde raw value (retorna opcional)
-if let planeta = Planeta(rawValue: 3) {
-    print("Planeta: \(planeta)")  // tierra
-}
+    // Crear desde raw value (retorna opcional)
+    if let planeta = Planeta(rawValue: 3) {
+        print("Planeta: \(planeta)")  // tierra
+    }
 
-// Raw values de tipo String
-enum Moneda: String {
-    case euro = "EUR"
-    case dolar = "USD"
-    case libra = "GBP"
-    case yen = "JPY"
-}
+    // Raw values de tipo String
+    enum Moneda: String {
+        case euro = "EUR"
+        case dolar = "USD"
+        case libra = "GBP"
+        case yen = "JPY"
+    }
 
-print(Moneda.euro.rawValue)  // "EUR"
+    print(Moneda.euro.rawValue)  // "EUR"
 
-// Si no se especifica, el raw value es el nombre del caso
-enum Color: String {
-    case rojo, verde, azul
-}
-print(Color.rojo.rawValue)  // "rojo"
-```
+    // Si no se especifica, el raw value es el nombre del caso
+    enum Color: String {
+        case rojo, verde, azul
+    }
+    print(Color.rojo.rawValue)  // "rojo"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Enum numérico con valores explícitos
+    enum Planeta {
+        Mercurio = 1,
+        Venus,    // 2 (automático)
+        Tierra,   // 3
+        Marte,    // 4
+    }
+
+    console.log(Planeta.Tierra); // 3
+
+    // Crear desde valor numérico
+    const planeta = Planeta[3];
+    if (planeta) {
+        console.log(`Planeta: ${planeta}`); // "Tierra"
+    }
+
+    // Enum de tipo String
+    enum Moneda {
+        Euro = "EUR",
+        Dolar = "USD",
+        Libra = "GBP",
+        Yen = "JPY",
+    }
+
+    console.log(Moneda.Euro); // "EUR"
+
+    // Con union types, el valor es el propio string
+    type Color = "rojo" | "verde" | "azul";
+    const color: Color = "rojo";
+    console.log(color); // "rojo"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -85,97 +154,187 @@ print(Color.rojo.rawValue)  // "rojo"
 
 Permiten adjuntar datos diferentes a cada caso del enum.
 
-```swift
-enum CodigoDeBarras {
-    case upc(Int, Int, Int, Int)
-    case qr(String)
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum CodigoDeBarras {
+        case upc(Int, Int, Int, Int)
+        case qr(String)
+    }
 
-var producto = CodigoDeBarras.upc(8, 85909, 51226, 3)
-producto = .qr("ABCDEFGHIJ")
+    var producto = CodigoDeBarras.upc(8, 85909, 51226, 3)
+    producto = .qr("ABCDEFGHIJ")
 
-// Extraer valores asociados con switch
-switch producto {
-case .upc(let sistema, let fabricante, let producto, let control):
-    print("UPC: \(sistema)-\(fabricante)-\(producto)-\(control)")
-case .qr(let codigo):
-    print("QR: \(codigo)")
-}
+    // Extraer valores asociados con switch
+    switch producto {
+    case .upc(let sistema, let fabricante, let producto, let control):
+        print("UPC: \(sistema)-\(fabricante)-\(producto)-\(control)")
+    case .qr(let codigo):
+        print("QR: \(codigo)")
+    }
 
-// Forma abreviada cuando todos usan let
-switch producto {
-case let .upc(s, f, p, c):
-    print("UPC: \(s)-\(f)-\(p)-\(c)")
-case let .qr(codigo):
-    print("QR: \(codigo)")
-}
-```
+    // Forma abreviada cuando todos usan let
+    switch producto {
+    case let .upc(s, f, p, c):
+        print("UPC: \(s)-\(f)-\(p)-\(c)")
+    case let .qr(codigo):
+        print("QR: \(codigo)")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // En TS, los associated values se modelan con discriminated unions
+    // usando un campo "type" como discriminador
+    type CodigoDeBarras =
+        | { type: "upc"; sistema: number; fabricante: number; producto: number; control: number }
+        | { type: "qr"; codigo: string };
+
+    let producto: CodigoDeBarras = {
+        type: "upc", sistema: 8, fabricante: 85909, producto: 51226, control: 3,
+    };
+    producto = { type: "qr", codigo: "ABCDEFGHIJ" };
+
+    // Extraer valores con switch sobre el discriminador
+    switch (producto.type) {
+        case "upc":
+            console.log(`UPC: ${producto.sistema}-${producto.fabricante}-${producto.producto}-${producto.control}`);
+            break;
+        case "qr":
+            console.log(`QR: ${producto.codigo}`);
+            break;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### Ejemplo práctico con valores asociados
 
-```swift
-enum ResultadoRed {
-    case exito(datos: String, codigo: Int)
-    case error(mensaje: String, codigo: Int)
-    case sinConexion
-}
-
-func manejarResultado(_ resultado: ResultadoRed) {
-    switch resultado {
-    case .exito(let datos, let codigo):
-        print("Éxito (\(codigo)): \(datos)")
-    case .error(let mensaje, let codigo):
-        print("Error (\(codigo)): \(mensaje)")
-    case .sinConexion:
-        print("Sin conexión a internet")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum ResultadoRed {
+        case exito(datos: String, codigo: Int)
+        case error(mensaje: String, codigo: Int)
+        case sinConexion
     }
-}
 
-manejarResultado(.exito(datos: "{\"usuario\": \"Ana\"}", codigo: 200))
-manejarResultado(.error(mensaje: "No encontrado", codigo: 404))
-manejarResultado(.sinConexion)
-```
+    func manejarResultado(_ resultado: ResultadoRed) {
+        switch resultado {
+        case .exito(let datos, let codigo):
+            print("Éxito (\(codigo)): \(datos)")
+        case .error(let mensaje, let codigo):
+            print("Error (\(codigo)): \(mensaje)")
+        case .sinConexion:
+            print("Sin conexión a internet")
+        }
+    }
+
+    manejarResultado(.exito(datos: "{\"usuario\": \"Ana\"}", codigo: 200))
+    manejarResultado(.error(mensaje: "No encontrado", codigo: 404))
+    manejarResultado(.sinConexion)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    type ResultadoRed =
+        | { status: "exito"; datos: string; codigo: number }
+        | { status: "error"; mensaje: string; codigo: number }
+        | { status: "sinConexion" };
+
+    function manejarResultado(resultado: ResultadoRed): void {
+        switch (resultado.status) {
+            case "exito":
+                console.log(`Éxito (${resultado.codigo}): ${resultado.datos}`);
+                break;
+            case "error":
+                console.log(`Error (${resultado.codigo}): ${resultado.mensaje}`);
+                break;
+            case "sinConexion":
+                console.log("Sin conexión a internet");
+                break;
+        }
+    }
+
+    manejarResultado({ status: "exito", datos: '{"usuario": "Ana"}', codigo: 200 });
+    manejarResultado({ status: "error", mensaje: "No encontrado", codigo: 404 });
+    manejarResultado({ status: "sinConexion" });
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Métodos y propiedades computadas
 
-```swift
-enum Semaforo {
-    case rojo, amarillo, verde
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Semaforo {
+        case rojo, amarillo, verde
 
-    var descripcion: String {
-        switch self {
-        case .rojo:
-            return "Detenerse"
-        case .amarillo:
-            return "Precaución"
-        case .verde:
-            return "Avanzar"
+        var descripcion: String {
+            switch self {
+            case .rojo:
+                return "Detenerse"
+            case .amarillo:
+                return "Precaución"
+            case .verde:
+                return "Avanzar"
+            }
+        }
+
+        mutating func siguiente() {
+            switch self {
+            case .rojo:
+                self = .verde
+            case .verde:
+                self = .amarillo
+            case .amarillo:
+                self = .rojo
+            }
         }
     }
 
-    mutating func siguiente() {
-        switch self {
-        case .rojo:
-            self = .verde
-        case .verde:
-            self = .amarillo
-        case .amarillo:
-            self = .rojo
+    var semaforo = Semaforo.rojo
+    print(semaforo.descripcion)  // "Detenerse"
+    semaforo.siguiente()
+    print(semaforo.descripcion)  // "Avanzar"
+    semaforo.siguiente()
+    print(semaforo.descripcion)  // "Precaución"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    type Semaforo = "rojo" | "amarillo" | "verde";
+
+    function descripcion(semaforo: Semaforo): string {
+        switch (semaforo) {
+            case "rojo": return "Detenerse";
+            case "amarillo": return "Precaución";
+            case "verde": return "Avanzar";
         }
     }
-}
 
-var semaforo = Semaforo.rojo
-print(semaforo.descripcion)  // "Detenerse"
-semaforo.siguiente()
-print(semaforo.descripcion)  // "Avanzar"
-semaforo.siguiente()
-print(semaforo.descripcion)  // "Precaución"
-```
+    function siguiente(semaforo: Semaforo): Semaforo {
+        switch (semaforo) {
+            case "rojo": return "verde";
+            case "verde": return "amarillo";
+            case "amarillo": return "rojo";
+        }
+    }
+
+    let semaforo: Semaforo = "rojo";
+    console.log(descripcion(semaforo));  // "Detenerse"
+    semaforo = siguiente(semaforo);
+    console.log(descripcion(semaforo));  // "Avanzar"
+    semaforo = siguiente(semaforo);
+    console.log(descripcion(semaforo));  // "Precaución"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -183,25 +342,51 @@ print(semaforo.descripcion)  // "Precaución"
 
 El protocolo `CaseIterable` proporciona una colección de todos los casos del enum.
 
-```swift
-enum Bebida: String, CaseIterable {
-    case cafe = "Café"
-    case te = "Té"
-    case agua = "Agua"
-    case zumo = "Zumo"
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Bebida: String, CaseIterable {
+        case cafe = "Café"
+        case te = "Té"
+        case agua = "Agua"
+        case zumo = "Zumo"
+    }
 
-// Acceder a todos los casos
-print("Tenemos \(Bebida.allCases.count) bebidas:")
+    // Acceder a todos los casos
+    print("Tenemos \(Bebida.allCases.count) bebidas:")
 
-for bebida in Bebida.allCases {
-    print("- \(bebida.rawValue)")
-}
+    for bebida in Bebida.allCases {
+        print("- \(bebida.rawValue)")
+    }
 
-// Útil para crear menús o pickers
-let opciones = Bebida.allCases.map { $0.rawValue }
-print("Opciones: \(opciones)")
-```
+    // Útil para crear menús o pickers
+    let opciones = Bebida.allCases.map { $0.rawValue }
+    print("Opciones: \(opciones)")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    enum Bebida {
+        Cafe = "Café",
+        Te = "Té",
+        Agua = "Agua",
+        Zumo = "Zumo",
+    }
+
+    // Acceder a todos los valores con Object.values()
+    const todasLasBebidas = Object.values(Bebida);
+    console.log(`Tenemos ${todasLasBebidas.length} bebidas:`);
+
+    for (const bebida of todasLasBebidas) {
+        console.log(`- ${bebida}`);
+    }
+
+    // Útil para crear menús o selects
+    const opciones = Object.values(Bebida);
+    console.log("Opciones:", opciones);
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

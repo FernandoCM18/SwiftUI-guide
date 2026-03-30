@@ -4,6 +4,7 @@ description: Aprende las diferencias entre structs y clases en Swift, incluyendo
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Tipos personalizados en Swift
 
@@ -13,20 +14,41 @@ Los structs y las clases son los pilares fundamentales para modelar datos en Swi
 
 Un struct es un tipo de valor. Cuando se asigna o pasa como parámetro, se crea una copia.
 
-```swift
-struct Punto {
-    var x: Double
-    var y: Double
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Punto {
+        var x: Double
+        var y: Double
+    }
 
-// Swift genera un inicializador memberwise automáticamente
-var punto1 = Punto(x: 3.0, y: 4.0)
-var punto2 = punto1  // Se crea una COPIA
+    // Swift genera un inicializador memberwise automáticamente
+    var punto1 = Punto(x: 3.0, y: 4.0)
+    var punto2 = punto1  // Se crea una COPIA
 
-punto2.x = 10.0
-print("punto1.x = \(punto1.x)")  // 3.0 (no cambia)
-print("punto2.x = \(punto2.x)")  // 10.0
-```
+    punto2.x = 10.0
+    print("punto1.x = \(punto1.x)")  // 3.0 (no cambia)
+    print("punto2.x = \(punto2.x)")  // 10.0
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // TS usa interfaces/types para definir la forma de los datos
+    interface Punto {
+      x: number;
+      y: number;
+    }
+
+    const punto1: Punto = { x: 3.0, y: 4.0 };
+    // Los objetos en TS son por referencia; usar spread para copiar
+    const punto2: Punto = { ...punto1 };
+
+    punto2.x = 10.0;
+    console.log(`punto1.x = ${punto1.x}`); // 3.0 (no cambia)
+    console.log(`punto2.x = ${punto2.x}`); // 10.0
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -34,24 +56,48 @@ print("punto2.x = \(punto2.x)")  // 10.0
 
 Una clase es un tipo de referencia. Cuando se asigna o pasa, se comparte la misma instancia.
 
-```swift
-class Persona {
-    var nombre: String
-    var edad: Int
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    class Persona {
+        var nombre: String
+        var edad: Int
 
-    init(nombre: String, edad: Int) {
-        self.nombre = nombre
-        self.edad = edad
+        init(nombre: String, edad: Int) {
+            self.nombre = nombre
+            self.edad = edad
+        }
     }
-}
 
-let persona1 = Persona(nombre: "Ana", edad: 25)
-let persona2 = persona1  // Ambas apuntan a la MISMA instancia
+    let persona1 = Persona(nombre: "Ana", edad: 25)
+    let persona2 = persona1  // Ambas apuntan a la MISMA instancia
 
-persona2.nombre = "Luis"
-print("persona1.nombre = \(persona1.nombre)")  // "Luis" (¡cambió!)
-print("persona2.nombre = \(persona2.nombre)")  // "Luis"
-```
+    persona2.nombre = "Luis"
+    print("persona1.nombre = \(persona1.nombre)")  // "Luis" (¡cambió!)
+    print("persona2.nombre = \(persona2.nombre)")  // "Luis"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Persona {
+      nombre: string;
+      edad: number;
+
+      constructor(nombre: string, edad: number) {
+        this.nombre = nombre;
+        this.edad = edad;
+      }
+    }
+
+    const persona1 = new Persona("Ana", 25);
+    const persona2 = persona1; // Ambas apuntan a la MISMA instancia
+
+    persona2.nombre = "Luis";
+    console.log(`persona1.nombre = ${persona1.nombre}`); // "Luis" (¡cambió!)
+    console.log(`persona2.nombre = ${persona2.nombre}`); // "Luis"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -80,33 +126,68 @@ print("Ancho: \(rect.ancho)")
 
 No almacenan un valor; lo calculan cada vez que se accede.
 
-```swift
-struct Circulo {
-    var radio: Double
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Circulo {
+        var radio: Double
 
-    // Propiedad computada de solo lectura
-    var area: Double {
-        return .pi * radio * radio
+        // Propiedad computada de solo lectura
+        var area: Double {
+            return .pi * radio * radio
+        }
+
+        // Propiedad computada con getter y setter
+        var diametro: Double {
+            get {
+                return radio * 2
+            }
+            set {
+                radio = newValue / 2
+            }
+        }
     }
 
-    // Propiedad computada con getter y setter
-    var diametro: Double {
-        get {
-            return radio * 2
-        }
-        set {
-            radio = newValue / 2
-        }
+    var circulo = Circulo(radio: 5)
+    print("Área: \(circulo.area)")          // 78.54...
+    print("Diámetro: \(circulo.diametro)")  // 10.0
+
+    circulo.diametro = 20
+    print("Nuevo radio: \(circulo.radio)")  // 10.0
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Circulo {
+      radio: number;
+
+      constructor(radio: number) {
+        this.radio = radio;
+      }
+
+      // Getter (propiedad computada de solo lectura)
+      get area(): number {
+        return Math.PI * this.radio * this.radio;
+      }
+
+      // Getter y setter
+      get diametro(): number {
+        return this.radio * 2;
+      }
+      set diametro(valor: number) {
+        this.radio = valor / 2;
+      }
     }
-}
 
-var circulo = Circulo(radio: 5)
-print("Área: \(circulo.area)")          // 78.54...
-print("Diámetro: \(circulo.diametro)")  // 10.0
+    const circulo = new Circulo(5);
+    console.log(`Área: ${circulo.area}`);         // 78.54...
+    console.log(`Diámetro: ${circulo.diametro}`); // 10.0
 
-circulo.diametro = 20
-print("Nuevo radio: \(circulo.radio)")  // 10.0
-```
+    circulo.diametro = 20;
+    console.log(`Nuevo radio: ${circulo.radio}`); // 10.0
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -138,49 +219,94 @@ temp.celsius = 105  // Dispara advertencia
 
 Pertenecen al tipo, no a las instancias.
 
-```swift
-struct Configuracion {
-    static let version = "1.0.0"
-    static var modoOscuro = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Configuracion {
+        static let version = "1.0.0"
+        static var modoOscuro = false
 
-    static func descripcion() -> String {
-        return "App v\(version), modo oscuro: \(modoOscuro)"
+        static func descripcion() -> String {
+            return "App v\(version), modo oscuro: \(modoOscuro)"
+        }
     }
-}
 
-print(Configuracion.version)
-print(Configuracion.descripcion())
-Configuracion.modoOscuro = true
-print(Configuracion.descripcion())
-```
+    print(Configuracion.version)
+    print(Configuracion.descripcion())
+    Configuracion.modoOscuro = true
+    print(Configuracion.descripcion())
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Configuracion {
+      static readonly version = "1.0.0";
+      static modoOscuro = false;
+
+      static descripcion(): string {
+        return `App v${this.version}, modo oscuro: ${this.modoOscuro}`;
+      }
+    }
+
+    console.log(Configuracion.version);
+    console.log(Configuracion.descripcion());
+    Configuracion.modoOscuro = true;
+    console.log(Configuracion.descripcion());
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Métodos
 
-```swift
-struct Contador {
-    var cuenta: Int = 0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Contador {
+        var cuenta: Int = 0
 
-    // Los structs necesitan 'mutating' para modificar propiedades
-    mutating func incrementar() {
-        cuenta += 1
+        // Los structs necesitan 'mutating' para modificar propiedades
+        mutating func incrementar() {
+            cuenta += 1
+        }
+
+        mutating func incrementar(en cantidad: Int) {
+            cuenta += cantidad
+        }
+
+        func mostrar() {
+            print("Cuenta actual: \(cuenta)")
+        }
     }
 
-    mutating func incrementar(en cantidad: Int) {
-        cuenta += cantidad
+    var contador = Contador()
+    contador.incrementar()
+    contador.incrementar(en: 5)
+    contador.mostrar()  // "Cuenta actual: 6"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Contador {
+      cuenta = 0;
+
+      incrementar(cantidad = 1): void {
+        this.cuenta += cantidad;
+      }
+
+      mostrar(): void {
+        console.log(`Cuenta actual: ${this.cuenta}`);
+      }
     }
 
-    func mostrar() {
-        print("Cuenta actual: \(cuenta)")
-    }
-}
-
-var contador = Contador()
-contador.incrementar()
-contador.incrementar(en: 5)
-contador.mostrar()  // "Cuenta actual: 6"
-```
+    const contador = new Contador();
+    contador.incrementar();
+    contador.incrementar(5);
+    contador.mostrar(); // "Cuenta actual: 6"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -222,77 +348,149 @@ print("Gris: (\(gris.rojo), \(gris.verde), \(gris.azul))")
 
 ### Inicializadores en clases
 
-```swift
-class Vehiculo {
-    var marca: String
-    var modelo: String
-    var año: Int
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    class Vehiculo {
+        var marca: String
+        var modelo: String
+        var año: Int
 
-    // Inicializador designado
-    init(marca: String, modelo: String, año: Int) {
-        self.marca = marca
-        self.modelo = modelo
-        self.año = año
+        // Inicializador designado
+        init(marca: String, modelo: String, año: Int) {
+            self.marca = marca
+            self.modelo = modelo
+            self.año = año
+        }
+
+        // Inicializador de conveniencia
+        convenience init(marca: String) {
+            self.init(marca: marca, modelo: "Desconocido", año: 2024)
+        }
+
+        func descripcion() -> String {
+            return "\(marca) \(modelo) (\(año))"
+        }
     }
 
-    // Inicializador de conveniencia
-    convenience init(marca: String) {
-        self.init(marca: marca, modelo: "Desconocido", año: 2024)
+    let coche = Vehiculo(marca: "Toyota", modelo: "Corolla", año: 2023)
+    let otro = Vehiculo(marca: "Honda")
+    print(coche.descripcion())
+    print(otro.descripcion())
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Vehiculo {
+      marca: string;
+      modelo: string;
+      año: number;
+
+      constructor(marca: string, modelo?: string, año?: number) {
+        this.marca = marca;
+        this.modelo = modelo ?? "Desconocido";
+        this.año = año ?? 2024;
+      }
+
+      descripcion(): string {
+        return `${this.marca} ${this.modelo} (${this.año})`;
+      }
     }
 
-    func descripcion() -> String {
-        return "\(marca) \(modelo) (\(año))"
-    }
-}
-
-let coche = Vehiculo(marca: "Toyota", modelo: "Corolla", año: 2023)
-let otro = Vehiculo(marca: "Honda")
-print(coche.descripcion())
-print(otro.descripcion())
-```
+    const coche = new Vehiculo("Toyota", "Corolla", 2023);
+    const otro = new Vehiculo("Honda");
+    console.log(coche.descripcion());
+    console.log(otro.descripcion());
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Herencia (solo clases)
 
-```swift
-class Animal {
-    var nombre: String
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    class Animal {
+        var nombre: String
 
-    init(nombre: String) {
-        self.nombre = nombre
+        init(nombre: String) {
+            self.nombre = nombre
+        }
+
+        func hacerSonido() -> String {
+            return "..."
+        }
     }
 
-    func hacerSonido() -> String {
-        return "..."
+    class Perro: Animal {
+        var raza: String
+
+        init(nombre: String, raza: String) {
+            self.raza = raza
+            super.init(nombre: nombre)
+        }
+
+        override func hacerSonido() -> String {
+            return "¡Guau!"
+        }
     }
-}
 
-class Perro: Animal {
-    var raza: String
-
-    init(nombre: String, raza: String) {
-        self.raza = raza
-        super.init(nombre: nombre)
+    class Gato: Animal {
+        override func hacerSonido() -> String {
+            return "¡Miau!"
+        }
     }
 
-    override func hacerSonido() -> String {
-        return "¡Guau!"
+    let perro = Perro(nombre: "Rex", raza: "Pastor Alemán")
+    let gato = Gato(nombre: "Michi")
+
+    print("\(perro.nombre) dice \(perro.hacerSonido())")  // Rex dice ¡Guau!
+    print("\(gato.nombre) dice \(gato.hacerSonido())")    // Michi dice ¡Miau!
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    class Animal {
+      nombre: string;
+
+      constructor(nombre: string) {
+        this.nombre = nombre;
+      }
+
+      hacerSonido(): string {
+        return "...";
+      }
     }
-}
 
-class Gato: Animal {
-    override func hacerSonido() -> String {
-        return "¡Miau!"
+    class Perro extends Animal {
+      raza: string;
+
+      constructor(nombre: string, raza: string) {
+        super(nombre);
+        this.raza = raza;
+      }
+
+      override hacerSonido(): string {
+        return "¡Guau!";
+      }
     }
-}
 
-let perro = Perro(nombre: "Rex", raza: "Pastor Alemán")
-let gato = Gato(nombre: "Michi")
+    class Gato extends Animal {
+      override hacerSonido(): string {
+        return "¡Miau!";
+      }
+    }
 
-print("\(perro.nombre) dice \(perro.hacerSonido())")  // Rex dice ¡Guau!
-print("\(gato.nombre) dice \(gato.hacerSonido())")    // Michi dice ¡Miau!
-```
+    const perro = new Perro("Rex", "Pastor Alemán");
+    const gato = new Gato("Michi");
+
+    console.log(`${perro.nombre} dice ${perro.hacerSonido()}`); // Rex dice ¡Guau!
+    console.log(`${gato.nombre} dice ${gato.hacerSonido()}`);   // Michi dice ¡Miau!
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

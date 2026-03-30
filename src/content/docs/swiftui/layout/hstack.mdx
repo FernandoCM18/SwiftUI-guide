@@ -4,6 +4,7 @@ description: Cómo usar HStack en SwiftUI para organizar vistas horizontalmente.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `HStack` (Horizontal Stack) organiza sus vistas hijas en una fila horizontal, de izquierda a derecha.
 
@@ -13,35 +14,70 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Uso básico
 
-```swift
-HStack {
-    Image(systemName: "star.fill")
-    Text("Favorito")
-    Spacer()
-    Text("5.0")
-}
-.padding()
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    HStack {
+        Image(systemName: "star.fill")
+        Text("Favorito")
+        Spacer()
+        Text("5.0")
+    }
+    .padding()
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <div className="flex flex-row items-center p-4">
+      <span>⭐</span>
+      <span>Favorito</span>
+      <div className="flex-1" />
+      <span>5.0</span>
+    </div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Espaciado y alineación
 
-```swift
-// Espaciado personalizado
-HStack(spacing: 30) {
-    Color.red.frame(width: 50, height: 50)
-    Color.green.frame(width: 50, height: 50)
-    Color.blue.frame(width: 50, height: 50)
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Espaciado personalizado
+    HStack(spacing: 30) {
+        Color.red.frame(width: 50, height: 50)
+        Color.green.frame(width: 50, height: 50)
+        Color.blue.frame(width: 50, height: 50)
+    }
 
-// Alineación vertical
-HStack(alignment: .top) {
-    Text("Corto")
-    Text("Texto\nmás\nlargo")
-    Text("Medio\nalto")
-}
-```
+    // Alineación vertical
+    HStack(alignment: .top) {
+        Text("Corto")
+        Text("Texto\nmás\nlargo")
+        Text("Medio\nalto")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    {/* Espaciado personalizado */}
+    <div className="flex flex-row gap-[30px]">
+      <div className="w-[50px] h-[50px] bg-red-500" />
+      <div className="w-[50px] h-[50px] bg-green-500" />
+      <div className="w-[50px] h-[50px] bg-blue-500" />
+    </div>
+
+    {/* Alineación vertical */}
+    <div className="flex flex-row items-start">
+      <p>Corto</p>
+      <p>{"Texto\nmás\nlargo"}</p>
+      <p>{"Medio\nalto"}</p>
+    </div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -54,14 +90,26 @@ Opciones de alineación vertical:
 
 ## Spacer en HStack
 
-```swift
-HStack {
-    Text("Izquierda")
-    Spacer()
-    Text("Derecha")
-}
-.padding()
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    HStack {
+        Text("Izquierda")
+        Spacer()
+        Text("Derecha")
+    }
+    .padding()
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <div className="flex flex-row justify-between p-4">
+      <span>Izquierda</span>
+      <span>Derecha</span>
+    </div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -71,54 +119,93 @@ Usa `Spacer()` entre elementos para distribuir el espacio disponible. Varios `Sp
 
 ## Ejemplo completo
 
-```swift
-struct TarjetaProductoView: View {
-    var body: some View {
-        HStack(spacing: 16) {
-            // Imagen del producto
-            Image(systemName: "cup.and.saucer.fill")
-                .resizable()
-                .frame(width: 60, height: 60)
-                .foregroundStyle(.brown)
-                .padding()
-                .background(Color.brown.opacity(0.1))
-                .clipShape(.rect(cornerRadius: 12))
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct TarjetaProductoView: View {
+        var body: some View {
+            HStack(spacing: 16) {
+                // Imagen del producto
+                Image(systemName: "cup.and.saucer.fill")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    .foregroundStyle(.brown)
+                    .padding()
+                    .background(Color.brown.opacity(0.1))
+                    .clipShape(.rect(cornerRadius: 12))
 
-            // Información
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Café Latte")
-                    .font(.headline)
-                Text("Con leche de avena")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                HStack {
-                    ForEach(0..<5) { i in
-                        Image(systemName: i < 4 ? "star.fill" : "star")
-                            .foregroundStyle(.yellow)
-                            .font(.caption)
+                // Información
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Café Latte")
+                        .font(.headline)
+                    Text("Con leche de avena")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    HStack {
+                        ForEach(0..<5) { i in
+                            Image(systemName: i < 4 ? "star.fill" : "star")
+                                .foregroundStyle(.yellow)
+                                .font(.caption)
+                        }
                     }
                 }
-            }
 
-            Spacer()
+                Spacer()
 
-            // Precio
-            VStack {
-                Text("$65")
-                    .font(.title2)
-                    .bold()
-                Text("MXN")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                // Precio
+                VStack {
+                    Text("$65")
+                        .font(.title2)
+                        .bold()
+                    Text("MXN")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
+            .padding()
+            .background(Color(.systemBackground))
+            .clipShape(.rect(cornerRadius: 16))
+            .shadow(radius: 2)
+            .padding(.horizontal)
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .clipShape(.rect(cornerRadius: 16))
-        .shadow(radius: 2)
-        .padding(.horizontal)
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    function TarjetaProducto() {
+      return (
+        <div className="flex flex-row items-center gap-4 p-4 bg-white rounded-2xl shadow-sm mx-4">
+          {/* Imagen del producto */}
+          <div className="w-[60px] h-[60px] p-3 bg-amber-50 rounded-xl flex items-center justify-center">
+            <span className="text-3xl">☕</span>
+          </div>
+
+          {/* Información */}
+          <div className="flex flex-col items-start gap-1">
+            <h3 className="font-semibold">Café Latte</h3>
+            <p className="text-sm text-gray-500">Con leche de avena</p>
+            <div className="flex flex-row">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-xs text-yellow-400">
+                  {i < 4 ? "★" : "☆"}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1" />
+
+          {/* Precio */}
+          <div className="flex flex-col items-center">
+            <span className="text-xl font-bold">$65</span>
+            <span className="text-xs text-gray-500">MXN</span>
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

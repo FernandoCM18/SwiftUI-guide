@@ -4,6 +4,7 @@ description: Data persistence in SwiftUI with SwiftData — @Model, @Query, Mode
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 **SwiftData** (iOS 17+) is Apple's modern persistence framework. It replaces Core Data with a declarative syntax based on Swift macros.
 
@@ -11,22 +12,46 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 The `@Model` macro converts a Swift class into a persistent model. All its stored properties are automatically persisted.
 
-```swift
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftData
 
-@Model
-class Task {
-    var title: String
-    var completed: Bool
-    var date: Date
+    @Model
+    class Task {
+        var title: String
+        var completed: Bool
+        var date: Date
 
-    init(title: String) {
-        self.title = title
-        self.completed = false
-        self.date = Date()
+        init(title: String) {
+            self.title = title
+            self.completed = false
+            self.date = Date()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // prisma/schema.prisma
+    // model Task {
+    //   id        String   @id @default(cuid())
+    //   title     String
+    //   completed Boolean  @default(false)
+    //   date      DateTime @default(now())
+    // }
+
+    // Generated Prisma client provides the Task type automatically.
+    // You can also define a plain TypeScript type:
+    interface Task {
+      id: string;
+      title: string;
+      completed: boolean;
+      date: Date;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -34,26 +59,46 @@ class Task {
 
 `ModelContainer` is the database container. It's configured once at the app entry point:
 
-```swift
-import SwiftUI
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
+    import SwiftData
 
-@main
-struct MyApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+    @main
+    struct MyApp: App {
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+            }
+            .modelContainer(for: Task.self)  // Configure container for Task
         }
-        .modelContainer(for: Task.self)  // Configure container for Task
     }
-}
-```
+    ```
 
-For multiple models:
+    For multiple models:
 
-```swift
-.modelContainer(for: [Task.self, Project.self, Tag.self])
-```
+    ```swift
+    .modelContainer(for: [Task.self, Project.self, Tag.self])
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // lib/prisma.ts — singleton Prisma client (replaces ModelContainer)
+    import { PrismaClient } from "@prisma/client";
+
+    const globalForPrisma = globalThis as unknown as {
+      prisma: PrismaClient | undefined;
+    };
+
+    export const prisma = globalForPrisma.prisma ?? new PrismaClient();
+
+    if (process.env.NODE_ENV !== "production") {
+      globalForPrisma.prisma = prisma;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -61,56 +106,117 @@ For multiple models:
 
 `@Query` loads data from the container and automatically updates the view when it changes:
 
-```swift
-import SwiftUI
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
+    import SwiftData
 
-struct TaskListView: View {
-    @Query var tasks: [Task]
-    @Environment(\.modelContext) private var context
+    struct TaskListView: View {
+        @Query var tasks: [Task]
+        @Environment(\.modelContext) private var context
 
-    var body: some View {
-        List {
-            ForEach(tasks) { task in
-                HStack {
-                    Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(task.completed ? .green : .gray)
-                    Text(task.title)
-                        .strikethrough(task.completed)
+        var body: some View {
+            List {
+                ForEach(tasks) { task in
+                    HStack {
+                        Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(task.completed ? .green : .gray)
+                        Text(task.title)
+                            .strikethrough(task.completed)
+                    }
+                    .onTapGesture {
+                        task.completed.toggle()
+                    }
                 }
-                .onTapGesture {
-                    task.completed.toggle()
+                .onDelete { indices in
+                    for index in indices {
+                        context.delete(tasks[index])
+                    }
                 }
             }
-            .onDelete { indices in
-                for index in indices {
-                    context.delete(tasks[index])
-                }
-            }
+            .navigationTitle("Tasks")
         }
-        .navigationTitle("Tasks")
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Server Component — data is fetched on the server (replaces @Query)
+    import { prisma } from "@/lib/prisma";
+    import { toggleTask, deleteTask } from "./actions";
+
+    export default async function TaskListPage() {
+      const tasks = await prisma.task.findMany();
+
+      return (
+        <div className="mx-auto max-w-lg p-4">
+          <h1 className="mb-4 text-2xl font-bold">Tasks</h1>
+          <ul className="divide-y">
+            {tasks.map((task) => (
+              <li key={task.id} className="flex items-center gap-3 py-2">
+                <form action={toggleTask.bind(null, task.id)}>
+                  <button className={task.completed ? "text-green-600" : "text-gray-400"}>
+                    {task.completed ? "✓" : "○"}
+                  </button>
+                </form>
+                <span className={task.completed ? "line-through" : ""}>
+                  {task.title}
+                </span>
+                <form action={deleteTask.bind(null, task.id)} className="ml-auto">
+                  <button className="text-sm text-red-500">Delete</button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### Sort and filter with @Query
 
-```swift
-// Sort by date, most recent first
-@Query(sort: \Task.date, order: .reverse) var tasks: [Task]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Sort by date, most recent first
+    @Query(sort: \Task.date, order: .reverse) var tasks: [Task]
 
-// Only incomplete tasks
-@Query(filter: #Predicate<Task> { !$0.completed }) var pending: [Task]
+    // Only incomplete tasks
+    @Query(filter: #Predicate<Task> { !$0.completed }) var pending: [Task]
 
-// Combine filter and sort
-@Query(
-    filter: #Predicate<Task> { !$0.completed },
-    sort: \Task.date,
-    order: .forward
-) var sortedPending: [Task]
-```
+    // Combine filter and sort
+    @Query(
+        filter: #Predicate<Task> { !$0.completed },
+        sort: \Task.date,
+        order: .forward
+    ) var sortedPending: [Task]
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Sort by date, most recent first
+    const tasks = await prisma.task.findMany({
+      orderBy: { date: "desc" },
+    });
+
+    // Only incomplete tasks
+    const pending = await prisma.task.findMany({
+      where: { completed: false },
+    });
+
+    // Combine filter and sort
+    const sortedPending = await prisma.task.findMany({
+      where: { completed: false },
+      orderBy: { date: "asc" },
+    });
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -118,35 +224,68 @@ struct TaskListView: View {
 
 `ModelContext` is the working object for modifying data:
 
-```swift
-struct NewTaskView: View {
-    @Environment(\.modelContext) private var context
-    @State private var title = ""
-    @Environment(\.dismiss) private var dismiss
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct NewTaskView: View {
+        @Environment(\.modelContext) private var context
+        @State private var title = ""
+        @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        NavigationStack {
-            Form {
-                TextField("Task title", text: $title)
-            }
-            .navigationTitle("New task")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        let newTask = Task(title: title)
-                        context.insert(newTask)  // Insert
-                        dismiss()
-                    }
-                    .disabled(title.isEmpty)
+        var body: some View {
+            NavigationStack {
+                Form {
+                    TextField("Task title", text: $title)
                 }
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                .navigationTitle("New task")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            let newTask = Task(title: title)
+                            context.insert(newTask)  // Insert
+                            dismiss()
+                        }
+                        .disabled(title.isEmpty)
+                    }
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") { dismiss() }
+                    }
                 }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // app/tasks/actions.ts — Server Actions (replace ModelContext)
+    "use server";
+
+    import { prisma } from "@/lib/prisma";
+    import { revalidatePath } from "next/cache";
+
+    export async function createTask(formData: FormData) {
+      const title = formData.get("title") as string;
+      await prisma.task.create({ data: { title } });
+      revalidatePath("/tasks");
+    }
+
+    export async function toggleTask(id: string) {
+      const task = await prisma.task.findUniqueOrThrow({ where: { id } });
+      await prisma.task.update({
+        where: { id },
+        data: { completed: !task.completed },
+      });
+      revalidatePath("/tasks");
+    }
+
+    export async function deleteTask(id: string) {
+      await prisma.task.delete({ where: { id } });
+      revalidatePath("/tasks");
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -154,31 +293,60 @@ struct NewTaskView: View {
 
 SwiftData handles relationships with `@Relationship`:
 
-```swift
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftData
 
-@Model
-class Project {
-    var name: String
-    @Relationship(deleteRule: .cascade) var tasks: [Task] = []
+    @Model
+    class Project {
+        var name: String
+        @Relationship(deleteRule: .cascade) var tasks: [Task] = []
 
-    init(name: String) {
-        self.name = name
+        init(name: String) {
+            self.name = name
+        }
     }
-}
 
-@Model
-class Task {
-    var title: String
-    var completed: Bool
-    var project: Project?  // Inverse relationship (optional)
+    @Model
+    class Task {
+        var title: String
+        var completed: Bool
+        var project: Project?  // Inverse relationship (optional)
 
-    init(title: String) {
-        self.title = title
-        self.completed = false
+        init(title: String) {
+            self.title = title
+            self.completed = false
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // prisma/schema.prisma
+    //
+    // model Project {
+    //   id    String @id @default(cuid())
+    //   name  String
+    //   tasks Task[] // One-to-many, cascade delete via onDelete
+    // }
+    //
+    // model Task {
+    //   id        String   @id @default(cuid())
+    //   title     String
+    //   completed Boolean  @default(false)
+    //   project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    //   projectId String?
+    // }
+
+    // Query with relations included
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      include: { tasks: true },
+    });
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -190,41 +358,69 @@ class Task {
 
 When you change the model, SwiftData needs to migrate existing data. Define a `VersionedSchema`:
 
-```swift
-import SwiftData
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftData
 
-enum TaskSchemaV1: VersionedSchema {
-    static var versionIdentifier = Schema.Version(1, 0, 0)
-    static var models: [any PersistentModel.Type] { [Task.self] }
+    enum TaskSchemaV1: VersionedSchema {
+        static var versionIdentifier = Schema.Version(1, 0, 0)
+        static var models: [any PersistentModel.Type] { [Task.self] }
 
-    @Model
-    class Task {
-        var title: String
-        init(title: String) { self.title = title }
+        @Model
+        class Task {
+            var title: String
+            init(title: String) { self.title = title }
+        }
     }
-}
 
-enum TaskSchemaV2: VersionedSchema {
-    static var versionIdentifier = Schema.Version(2, 0, 0)
-    static var models: [any PersistentModel.Type] { [Task.self] }
+    enum TaskSchemaV2: VersionedSchema {
+        static var versionIdentifier = Schema.Version(2, 0, 0)
+        static var models: [any PersistentModel.Type] { [Task.self] }
 
-    @Model
-    class Task {
-        var title: String
-        var priority: Int = 0  // New property in V2
-        init(title: String) { self.title = title }
+        @Model
+        class Task {
+            var title: String
+            var priority: Int = 0  // New property in V2
+            init(title: String) { self.title = title }
+        }
     }
-}
 
-// Migration plan from V1 to V2
-enum MigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] {
-        [TaskSchemaV1.self, TaskSchemaV2.self]
+    // Migration plan from V1 to V2
+    enum MigrationPlan: SchemaMigrationPlan {
+        static var schemas: [any VersionedSchema.Type] {
+            [TaskSchemaV1.self, TaskSchemaV2.self]
+        }
+        static var stages: [MigrationStage] {
+            [MigrationStage.lightweight(fromVersion: TaskSchemaV1.self, toVersion: TaskSchemaV2.self)]
+        }
     }
-    static var stages: [MigrationStage] {
-        [MigrationStage.lightweight(fromVersion: TaskSchemaV1.self, toVersion: TaskSchemaV2.self)]
-    }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Prisma handles migrations via the CLI instead of code.
+
+    // 1. Edit prisma/schema.prisma to add the new field:
+    // model Task {
+    //   id       String @id @default(cuid())
+    //   title    String
+    //   priority Int    @default(0)   // ← new field
+    // }
+
+    // 2. Generate and apply the migration:
+    // npx prisma migrate dev --name add-task-priority
+
+    // Prisma creates a SQL migration file automatically:
+    // prisma/migrations/
+    // └── 20260330_add_task_priority/
+    //     └── migration.sql
+    //         → ALTER TABLE "Task" ADD COLUMN "priority" INT DEFAULT 0;
+
+    // 3. In production, apply with:
+    // npx prisma migrate deploy
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

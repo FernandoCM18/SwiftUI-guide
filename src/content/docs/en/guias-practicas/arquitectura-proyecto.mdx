@@ -4,6 +4,7 @@ description: Best practices for organizing folders, code, and architecture in Sw
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Good project organization facilitates maintenance, collaboration, and scalability of your app.
 
@@ -11,45 +12,86 @@ Good project organization facilitates maintenance, collaboration, and scalabilit
 
 ### Small-medium app (MVVM)
 
-```
-MyApp/
-├── MyApp.swift              # @main entry point
-├── ContentView.swift        # Main view
-├── Models/
-│   ├── User.swift
-│   ├── Product.swift
-│   └── Order.swift
-├── ViewModels/
-│   ├── AuthViewModel.swift
-│   ├── ProductsViewModel.swift
-│   └── OrdersViewModel.swift
-├── Views/
-│   ├── Auth/
-│   │   ├── LoginView.swift
-│   │   └── RegisterView.swift
-│   ├── Home/
-│   │   ├── HomeView.swift
-│   │   └── ProductCardView.swift
-│   ├── Profile/
-│   │   └── ProfileView.swift
-│   └── Components/
-│       ├── PrimaryButton.swift
-│       ├── CardView.swift
-│       └── LoadingView.swift
-├── Services/
-│   ├── APIService.swift
-│   ├── AuthService.swift
-│   └── StorageService.swift
-├── Utilities/
-│   ├── Extensions/
-│   │   ├── Color+Hex.swift
-│   │   ├── Date+Format.swift
-│   │   └── View+Modifiers.swift
-│   └── Constants.swift
-├── Resources/
-│   └── Assets.xcassets
-└── Info.plist
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```
+    MyApp/
+    ├── MyApp.swift              # @main entry point
+    ├── ContentView.swift        # Main view
+    ├── Models/
+    │   ├── User.swift
+    │   ├── Product.swift
+    │   └── Order.swift
+    ├── ViewModels/
+    │   ├── AuthViewModel.swift
+    │   ├── ProductsViewModel.swift
+    │   └── OrdersViewModel.swift
+    ├── Views/
+    │   ├── Auth/
+    │   │   ├── LoginView.swift
+    │   │   └── RegisterView.swift
+    │   ├── Home/
+    │   │   ├── HomeView.swift
+    │   │   └── ProductCardView.swift
+    │   ├── Profile/
+    │   │   └── ProfileView.swift
+    │   └── Components/
+    │       ├── PrimaryButton.swift
+    │       ├── CardView.swift
+    │       └── LoadingView.swift
+    ├── Services/
+    │   ├── APIService.swift
+    │   ├── AuthService.swift
+    │   └── StorageService.swift
+    ├── Utilities/
+    │   ├── Extensions/
+    │   │   ├── Color+Hex.swift
+    │   │   ├── Date+Format.swift
+    │   │   └── View+Modifiers.swift
+    │   └── Constants.swift
+    ├── Resources/
+    │   └── Assets.xcassets
+    └── Info.plist
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```
+    my-app/
+    ├── app/                      # App Router entry
+    │   ├── layout.tsx            # Root layout
+    │   ├── page.tsx              # Home page
+    │   ├── auth/
+    │   │   ├── login/page.tsx
+    │   │   └── register/page.tsx
+    │   ├── home/
+    │   │   └── page.tsx
+    │   └── profile/
+    │       └── page.tsx
+    ├── components/
+    │   ├── ui/
+    │   │   ├── PrimaryButton.tsx
+    │   │   ├── Card.tsx
+    │   │   └── Loading.tsx
+    │   ├── ProductCard.tsx
+    │   └── Navbar.tsx
+    ├── hooks/
+    │   ├── useAuth.ts
+    │   ├── useProducts.ts
+    │   └── useOrders.ts
+    ├── lib/
+    │   ├── api.ts
+    │   ├── auth.ts
+    │   └── storage.ts
+    ├── types/
+    │   ├── user.ts
+    │   ├── product.ts
+    │   └── order.ts
+    ├── public/
+    │   └── images/
+    └── tailwind.config.ts
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -57,45 +99,88 @@ MyApp/
 
 For larger apps, organize by **feature** instead of file type:
 
-```
-MyApp/
-├── App/
-│   ├── MyApp.swift
-│   └── AppDelegate.swift
-├── Features/
-│   ├── Auth/
-│   │   ├── Models/
-│   │   │   └── AuthResponse.swift
-│   │   ├── ViewModels/
-│   │   │   └── AuthViewModel.swift
-│   │   ├── Views/
-│   │   │   ├── LoginView.swift
-│   │   │   └── RegisterView.swift
-│   │   └── Services/
-│   │       └── AuthService.swift
-│   ├── Home/
-│   │   ├── Models/
-│   │   ├── ViewModels/
-│   │   ├── Views/
-│   │   └── Services/
-│   └── Profile/
-│       ├── Models/
-│       ├── ViewModels/
-│       ├── Views/
-│       └── Services/
-├── Core/
-│   ├── Network/
-│   │   ├── APIClient.swift
-│   │   ├── Endpoints.swift
-│   │   └── NetworkError.swift
-│   ├── Storage/
-│   │   └── UserDefaults+Keys.swift
-│   └── UI/
-│       ├── Components/
-│       ├── Modifiers/
-│       └── Theme/
-└── Resources/
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```
+    MyApp/
+    ├── App/
+    │   ├── MyApp.swift
+    │   └── AppDelegate.swift
+    ├── Features/
+    │   ├── Auth/
+    │   │   ├── Models/
+    │   │   │   └── AuthResponse.swift
+    │   │   ├── ViewModels/
+    │   │   │   └── AuthViewModel.swift
+    │   │   ├── Views/
+    │   │   │   ├── LoginView.swift
+    │   │   │   └── RegisterView.swift
+    │   │   └── Services/
+    │   │       └── AuthService.swift
+    │   ├── Home/
+    │   │   ├── Models/
+    │   │   ├── ViewModels/
+    │   │   ├── Views/
+    │   │   └── Services/
+    │   └── Profile/
+    │       ├── Models/
+    │       ├── ViewModels/
+    │       ├── Views/
+    │       └── Services/
+    ├── Core/
+    │   ├── Network/
+    │   │   ├── APIClient.swift
+    │   │   ├── Endpoints.swift
+    │   │   └── NetworkError.swift
+    │   ├── Storage/
+    │   │   └── UserDefaults+Keys.swift
+    │   └── UI/
+    │       ├── Components/
+    │       ├── Modifiers/
+    │       └── Theme/
+    └── Resources/
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```
+    my-app/
+    ├── app/
+    │   ├── layout.tsx
+    │   ├── (auth)/
+    │   │   ├── login/page.tsx
+    │   │   └── register/page.tsx
+    │   ├── (dashboard)/
+    │   │   ├── layout.tsx
+    │   │   ├── page.tsx
+    │   │   └── profile/page.tsx
+    │   └── api/
+    │       └── [...route]/route.ts
+    ├── features/
+    │   ├── auth/
+    │   │   ├── components/
+    │   │   ├── hooks/
+    │   │   ├── types.ts
+    │   │   └── actions.ts
+    │   ├── home/
+    │   │   ├── components/
+    │   │   ├── hooks/
+    │   │   └── types.ts
+    │   └── profile/
+    │       ├── components/
+    │       ├── hooks/
+    │       └── types.ts
+    ├── lib/
+    │   ├── api-client.ts
+    │   ├── endpoints.ts
+    │   └── errors.ts
+    ├── components/ui/
+    │   ├── Button.tsx
+    │   ├── Card.tsx
+    │   └── Modal.tsx
+    └── styles/
+    ```
+  </TabItem>
+</Tabs>
 
 :::tip
 For small apps, organizing by type (Models/, Views/, ViewModels/) is sufficient. For large apps with multiple features, feature-based organization scales better.
@@ -105,89 +190,199 @@ For small apps, organizing by type (Models/, Views/, ViewModels/) is sufficient.
 
 ### Files and types
 
-```swift
-// Views: "View" suffix
-struct ProductDetailView: View { }
-struct LoginView: View { }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Views: "View" suffix
+    struct ProductDetailView: View { }
+    struct LoginView: View { }
 
-// ViewModels: "ViewModel" suffix
-class ProductsViewModel { }
-class AuthViewModel { }
+    // ViewModels: "ViewModel" suffix
+    class ProductsViewModel { }
+    class AuthViewModel { }
 
-// Models: concept name
-struct Product { }
-struct User { }
+    // Models: concept name
+    struct Product { }
+    struct User { }
 
-// Services: "Service" suffix
-class APIService { }
-class AuthService { }
+    // Services: "Service" suffix
+    class APIService { }
+    class AuthService { }
 
-// Reusable components: descriptive
-struct PrimaryButton: View { }
-struct ProductCard: View { }
-```
+    // Reusable components: descriptive
+    struct PrimaryButton: View { }
+    struct ProductCard: View { }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Pages: page.tsx inside route folder
+    // app/products/[id]/page.tsx
+
+    // Components: PascalCase, no suffix needed
+    function ProductDetail() { }
+    function LoginForm() { }
+
+    // Hooks: "use" prefix
+    function useProducts() { }
+    function useAuth() { }
+
+    // Types: concept name (PascalCase)
+    interface Product { }
+    interface User { }
+
+    // Services / lib: camelCase files
+    // lib/api.ts, lib/auth.ts
+
+    // Reusable components: descriptive
+    function PrimaryButton() { }
+    function ProductCard() { }
+    ```
+  </TabItem>
+</Tabs>
 
 ### Variables and functions
 
-```swift
-// Properties: nouns in camelCase
-var userName: String
-var isLoading: Bool
-var productList: [Product]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Properties: nouns in camelCase
+    var userName: String
+    var isLoading: Bool
+    var productList: [Product]
 
-// Functions: verbs in camelCase
-func loadData() { }
-func saveProfile() { }
-func deleteProduct(_ product: Product) { }
+    // Functions: verbs in camelCase
+    func loadData() { }
+    func saveProfile() { }
+    func deleteProduct(_ product: Product) { }
 
-// Closures/callbacks: "on" + action
-var onSave: () -> Void
-var onSelect: (Product) -> Void
-```
+    // Closures/callbacks: "on" + action
+    var onSave: () -> Void
+    var onSelect: (Product) -> Void
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // State: nouns in camelCase
+    const [userName, setUserName] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [products, setProducts] = useState<Product[]>([]);
+
+    // Functions: verbs in camelCase
+    function loadData() { }
+    function saveProfile() { }
+    function deleteProduct(product: Product) { }
+
+    // Callbacks (props): "on" + action
+    interface Props {
+      onSave: () => void;
+      onSelect: (product: Product) => void;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 ## Architecture patterns
 
 ### MVVM (recommended for SwiftUI)
 
-```swift
-// Model: pure data
-struct Task: Identifiable {
-    let id = UUID()
-    var title: String
-    var completed: Bool
-}
-
-// ViewModel: business logic
-@Observable
-class TasksViewModel {
-    var tasks: [Task] = []
-
-    var pending: [Task] {
-        tasks.filter { !$0.completed }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Model: pure data
+    struct Task: Identifiable {
+        let id = UUID()
+        var title: String
+        var completed: Bool
     }
 
-    func add(_ title: String) {
-        tasks.append(Task(title: title, completed: false))
-    }
+    // ViewModel: business logic
+    @Observable
+    class TasksViewModel {
+        var tasks: [Task] = []
 
-    func toggle(_ task: Task) {
-        if let i = tasks.firstIndex(where: { $0.id == task.id }) {
-            tasks[i].completed.toggle()
+        var pending: [Task] {
+            tasks.filter { !$0.completed }
+        }
+
+        func add(_ title: String) {
+            tasks.append(Task(title: title, completed: false))
+        }
+
+        func toggle(_ task: Task) {
+            if let i = tasks.firstIndex(where: { $0.id == task.id }) {
+                tasks[i].completed.toggle()
+            }
         }
     }
-}
 
-// View: UI only
-struct TasksView: View {
-    @State private var vm = TasksViewModel()
+    // View: UI only
+    struct TasksView: View {
+        @State private var vm = TasksViewModel()
 
-    var body: some View {
-        List(vm.tasks) { task in
-            Text(task.title)
+        var body: some View {
+            List(vm.tasks) { task in
+                Text(task.title)
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState, useMemo, useCallback } from "react";
+
+    // Type (replaces Model)
+    interface Task {
+      id: string;
+      title: string;
+      completed: boolean;
+    }
+
+    // Custom hook (replaces ViewModel)
+    function useTasks() {
+      const [tasks, setTasks] = useState<Task[]>([]);
+
+      const pending = useMemo(
+        () => tasks.filter((t) => !t.completed),
+        [tasks]
+      );
+
+      const add = useCallback((title: string) => {
+        setTasks((prev) => [
+          ...prev,
+          { id: crypto.randomUUID(), title, completed: false },
+        ]);
+      }, []);
+
+      const toggle = useCallback((id: string) => {
+        setTasks((prev) =>
+          prev.map((t) =>
+            t.id === id ? { ...t, completed: !t.completed } : t
+          )
+        );
+      }, []);
+
+      return { tasks, pending, add, toggle };
+    }
+
+    // Component (replaces View)
+    export default function TasksPage() {
+      const { tasks } = useTasks();
+
+      return (
+        <ul>
+          {tasks.map((task) => (
+            <li key={task.id}>{task.title}</li>
+          ))}
+        </ul>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -195,47 +390,78 @@ struct TasksView: View {
 
 Abstract the data source behind a protocol:
 
-```swift
-// Protocol
-protocol ProductRepository {
-    func getAll() async throws -> [Product]
-    func getById(_ id: Int) async throws -> Product
-    func create(_ product: Product) async throws -> Product
-}
-
-// Real implementation (API)
-class APIProductRepository: ProductRepository {
-    func getAll() async throws -> [Product] {
-        try await APIService.shared.fetch("/products")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Protocol
+    protocol ProductRepository {
+        func getAll() async throws -> [Product]
+        func getById(_ id: Int) async throws -> Product
+        func create(_ product: Product) async throws -> Product
     }
 
-    func getById(_ id: Int) async throws -> Product {
-        try await APIService.shared.fetch("/products/\(id)")
+    // Real implementation (API)
+    class APIProductRepository: ProductRepository {
+        func getAll() async throws -> [Product] {
+            try await APIService.shared.fetch("/products")
+        }
+
+        func getById(_ id: Int) async throws -> Product {
+            try await APIService.shared.fetch("/products/\(id)")
+        }
+
+        func create(_ product: Product) async throws -> Product {
+            try await APIService.shared.post("/products", body: product)
+        }
     }
 
-    func create(_ product: Product) async throws -> Product {
-        try await APIService.shared.post("/products", body: product)
-    }
-}
+    // Mock implementation (for previews and tests)
+    class MockProductRepository: ProductRepository {
+        func getAll() async throws -> [Product] {
+            [
+                Product(id: 1, name: "iPhone", price: 999, inStock: true),
+                Product(id: 2, name: "iPad", price: 799, inStock: false),
+            ]
+        }
 
-// Mock implementation (for previews and tests)
-class MockProductRepository: ProductRepository {
-    func getAll() async throws -> [Product] {
-        [
-            Product(id: 1, name: "iPhone", price: 999, inStock: true),
-            Product(id: 2, name: "iPad", price: 799, inStock: false),
-        ]
+        func getById(_ id: Int) async throws -> Product {
+            Product(id: id, name: "Test", price: 0, inStock: true)
+        }
+
+        func create(_ product: Product) async throws -> Product {
+            product
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Interface (replaces Protocol)
+    interface ProductRepository {
+      getAll(): Promise<Product[]>;
+      getById(id: number): Promise<Product>;
+      create(product: Omit<Product, "id">): Promise<Product>;
     }
 
-    func getById(_ id: Int) async throws -> Product {
-        Product(id: id, name: "Test", price: 0, inStock: true)
-    }
+    // Real implementation (API)
+    const apiProductRepo: ProductRepository = {
+      getAll: () => apiFetch<Product[]>("/products"),
+      getById: (id) => apiFetch<Product>(`/products/${id}`),
+      create: (product) => apiPost<typeof product, Product>("/products", product),
+    };
 
-    func create(_ product: Product) async throws -> Product {
-        product
-    }
-}
-```
+    // Mock implementation (for tests / Storybook)
+    const mockProductRepo: ProductRepository = {
+      getAll: async () => [
+        { id: 1, name: "iPhone", price: 999, inStock: true },
+        { id: 2, name: "iPad", price: 799, inStock: false },
+      ],
+      getById: async (id) => ({ id, name: "Test", price: 0, inStock: true }),
+      create: async (product) => ({ id: 99, ...product }),
+    };
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -243,137 +469,270 @@ class MockProductRepository: ProductRepository {
 
 ### 1. Small and composable views
 
-```swift
-// BAD: one giant view with everything
-struct HomeView: View {
-    var body: some View {
-        // 200+ lines of code...
-    }
-}
-
-// GOOD: split into components
-struct HomeView: View {
-    var body: some View {
-        ScrollView {
-            HeaderView()
-            FeaturedProductsView()
-            CategoriesView()
-            PromoBannerView()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // BAD: one giant view with everything
+    struct HomeView: View {
+        var body: some View {
+            // 200+ lines of code...
         }
     }
-}
-```
+
+    // GOOD: split into components
+    struct HomeView: View {
+        var body: some View {
+            ScrollView {
+                HeaderView()
+                FeaturedProductsView()
+                CategoriesView()
+                PromoBannerView()
+            }
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // BAD: one giant component with everything
+    function HomePage() {
+      return <main>{/* 200+ lines of JSX... */}</main>;
+    }
+
+    // GOOD: split into components
+    function HomePage() {
+      return (
+        <main>
+          <Header />
+          <FeaturedProducts />
+          <Categories />
+          <PromoBanner />
+        </main>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 ### 2. Reusable ViewModifiers
 
-```swift
-// Create a custom modifier
-struct CardModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding()
-            .background(Color(.systemBackground))
-            .clipShape(.rect(cornerRadius: 12))
-            .shadow(color: .black.opacity(0.1), radius: 5, y: 2)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Create a custom modifier
+    struct CardModifier: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+                .padding()
+                .background(Color(.systemBackground))
+                .clipShape(.rect(cornerRadius: 12))
+                .shadow(color: .black.opacity(0.1), radius: 5, y: 2)
+        }
     }
-}
 
-extension View {
-    func cardStyle() -> some View {
-        modifier(CardModifier())
+    extension View {
+        func cardStyle() -> some View {
+            modifier(CardModifier())
+        }
     }
-}
 
-// Usage
-Text("Content")
-    .cardStyle()
-```
+    // Usage
+    Text("Content")
+        .cardStyle()
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Wrapper component (replaces ViewModifier)
+    function Card({ children }: { children: React.ReactNode }) {
+      return (
+        <div className="rounded-xl bg-white p-4 shadow-md dark:bg-gray-900">
+          {children}
+        </div>
+      );
+    }
+
+    // Or use a Tailwind utility via cn() helper
+    import { cn } from "@/lib/utils";
+
+    const cardClass = "rounded-xl bg-white p-4 shadow-md dark:bg-gray-900";
+
+    // Usage
+    <Card>Content</Card>
+    <div className={cn(cardClass, "mt-4")}>Content</div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### 3. Useful Previews
 
-```swift
-#Preview("Normal state") {
-    ProductCardView(product: .preview)
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    #Preview("Normal state") {
+        ProductCardView(product: .preview)
+    }
 
-#Preview("Loading") {
-    ProductsView()
-        .environment(ProductsViewModel.loading)
-}
+    #Preview("Loading") {
+        ProductsView()
+            .environment(ProductsViewModel.loading)
+    }
 
-#Preview("Error") {
-    ProductsView()
-        .environment(ProductsViewModel.withError)
-}
+    #Preview("Error") {
+        ProductsView()
+            .environment(ProductsViewModel.withError)
+    }
 
-// Preview data
-extension Product {
-    static let preview = Product(
-        id: 1, name: "iPhone 16", price: 999, inStock: true
-    )
-}
-```
+    // Preview data
+    extension Product {
+        static let preview = Product(
+            id: 1, name: "iPhone 16", price: 999, inStock: true
+        )
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    // Storybook stories (equivalent to #Preview)
+    // ProductCard.stories.tsx
+    import type { Meta, StoryObj } from "@storybook/react";
+    import { ProductCard } from "./ProductCard";
+
+    const meta: Meta<typeof ProductCard> = { component: ProductCard };
+    export default meta;
+
+    type Story = StoryObj<typeof ProductCard>;
+
+    export const Normal: Story = {
+      args: { product: { id: 1, name: "iPhone 16", price: 999, inStock: true } },
+    };
+
+    export const OutOfStock: Story = {
+      args: { product: { id: 2, name: "iPad", price: 799, inStock: false } },
+    };
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### 4. Centralized constants
 
-```swift
-enum AppConstants {
-    static let appName = "MyApp"
-    static let maxItems = 50
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum AppConstants {
+        static let appName = "MyApp"
+        static let maxItems = 50
 
-    enum API {
-        static let baseURL = "https://api.myapp.com/v1"
-        static let timeout: TimeInterval = 30
+        enum API {
+            static let baseURL = "https://api.myapp.com/v1"
+            static let timeout: TimeInterval = 30
+        }
+
+        enum UI {
+            static let cornerRadius: CGFloat = 12
+            static let padding: CGFloat = 16
+            static let animationDuration: Double = 0.3
+        }
     }
 
-    enum UI {
-        static let cornerRadius: CGFloat = 12
-        static let padding: CGFloat = 16
-        static let animationDuration: Double = 0.3
-    }
-}
+    // Usage
+    Text(AppConstants.appName)
+        .padding(AppConstants.UI.padding)
+        .background(Color.blue.opacity(0.1))
+        .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // lib/constants.ts
+    export const APP_NAME = "MyApp";
+    export const MAX_ITEMS = 50;
 
-// Usage
-Text(AppConstants.appName)
-    .padding(AppConstants.UI.padding)
-    .background(Color.blue.opacity(0.1))
-    .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
-```
+    export const API = {
+      BASE_URL: process.env.NEXT_PUBLIC_API_URL ?? "https://api.myapp.com/v1",
+      TIMEOUT: 30_000,
+    } as const;
+
+    // UI constants live in tailwind.config.ts theme
+    // or as CSS variables in globals.css
+
+    // Usage in a component:
+    // <h1>{APP_NAME}</h1>
+    // <div className="rounded-xl p-4 bg-blue-50">…</div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### 5. Dependency injection
 
-```swift
-// Define with protocol
-@Observable
-class ProductsViewModel {
-    private let repository: ProductRepository
-    var products: [Product] = []
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Define with protocol
+    @Observable
+    class ProductsViewModel {
+        private let repository: ProductRepository
+        var products: [Product] = []
 
-    init(repository: ProductRepository = APIProductRepository()) {
-        self.repository = repository
-    }
+        init(repository: ProductRepository = APIProductRepository()) {
+            self.repository = repository
+        }
 
-    func load() async {
-        do {
-            products = try await repository.getAll()
-        } catch {
-            print(error)
+        func load() async {
+            do {
+                products = try await repository.getAll()
+            } catch {
+                print(error)
+            }
         }
     }
-}
 
-// In production: uses real API
-let vm = ProductsViewModel()
+    // In production: uses real API
+    let vm = ProductsViewModel()
 
-// In tests/previews: uses mock
-let vmTest = ProductsViewModel(repository: MockProductRepository())
-```
+    // In tests/previews: uses mock
+    let vmTest = ProductsViewModel(repository: MockProductRepository())
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { createContext, useContext, ReactNode } from "react";
+
+    // Context for dependency injection
+    const RepoContext = createContext<ProductRepository>(apiProductRepo);
+
+    function RepoProvider({
+      repo,
+      children,
+    }: {
+      repo: ProductRepository;
+      children: ReactNode;
+    }) {
+      return <RepoContext.Provider value={repo}>{children}</RepoContext.Provider>;
+    }
+
+    // Hook that reads the injected repository
+    function useProducts() {
+      const repo = useContext(RepoContext);
+      // ... useState, useEffect with repo.getAll(), etc.
+    }
+
+    // In production
+    <RepoProvider repo={apiProductRepo}><ProductsPage /></RepoProvider>
+
+    // In tests / Storybook
+    <RepoProvider repo={mockProductRepo}><ProductsPage /></RepoProvider>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

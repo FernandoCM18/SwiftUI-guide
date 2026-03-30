@@ -4,6 +4,7 @@ description: Learn how to declare and use functions in Swift, including paramete
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Reusable Blocks of Code
 
@@ -11,13 +12,26 @@ Functions are self-contained blocks of code that perform a specific task. They a
 
 ## Basic Function Declaration
 
-```swift
-func sayHello() {
-    print("Hello, World!")
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func sayHello() {
+        print("Hello, World!")
+    }
 
-sayHello()  // "Hello, World!"
-```
+    sayHello()  // "Hello, World!"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function sayHello(): void {
+      console.log("Hello, World!");
+    }
+
+    sayHello(); // "Hello, World!"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -42,37 +56,71 @@ greet(person: "Bob", from: "London")
 
 ## Return Values
 
-```swift
-func add(a: Int, b: Int) -> Int {
-    return a + b
-}
-
-let result = add(a: 5, b: 3)
-print(result)  // 8
-
-// Single-expression functions can omit return
-func multiply(a: Int, b: Int) -> Int {
-    a * b
-}
-
-print(multiply(a: 4, b: 7))  // 28
-
-// Returning multiple values with tuples
-func minMax(array: [Int]) -> (min: Int, max: Int)? {
-    guard let first = array.first else { return nil }
-    var min = first
-    var max = first
-    for value in array {
-        if value < min { min = value }
-        if value > max { max = value }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func add(a: Int, b: Int) -> Int {
+        return a + b
     }
-    return (min, max)
-}
 
-if let bounds = minMax(array: [3, 1, 7, 2, 9]) {
-    print("Min: \(bounds.min), Max: \(bounds.max)")
-}
-```
+    let result = add(a: 5, b: 3)
+    print(result)  // 8
+
+    // Single-expression functions can omit return
+    func multiply(a: Int, b: Int) -> Int {
+        a * b
+    }
+
+    print(multiply(a: 4, b: 7))  // 28
+
+    // Returning multiple values with tuples
+    func minMax(array: [Int]) -> (min: Int, max: Int)? {
+        guard let first = array.first else { return nil }
+        var min = first
+        var max = first
+        for value in array {
+            if value < min { min = value }
+            if value > max { max = value }
+        }
+        return (min, max)
+    }
+
+    if let bounds = minMax(array: [3, 1, 7, 2, 9]) {
+        print("Min: \(bounds.min), Max: \(bounds.max)")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function add(a: number, b: number): number {
+      return a + b;
+    }
+
+    const result = add(5, 3);
+    console.log(result); // 8
+
+    function multiply(a: number, b: number): number {
+      return a * b;
+    }
+
+    console.log(multiply(4, 7)); // 28
+
+    // Returning multiple values with an object
+    function minMax(array: number[]): { min: number; max: number } | null {
+      if (array.length === 0) return null;
+      return {
+        min: Math.min(...array),
+        max: Math.max(...array),
+      };
+    }
+
+    const bounds = minMax([3, 1, 7, 2, 9]);
+    if (bounds) {
+      console.log(`Min: ${bounds.min}, Max: ${bounds.max}`);
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -104,14 +152,28 @@ move(from: "Paris", to: "Tokyo")
 
 ## Default Parameter Values
 
-```swift
-func greet(name: String, greeting: String = "Hello") {
-    print("\(greeting), \(name)!")
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func greet(name: String, greeting: String = "Hello") {
+        print("\(greeting), \(name)!")
+    }
 
-greet(name: "Alice")                    // "Hello, Alice!"
-greet(name: "Alice", greeting: "Hi")    // "Hi, Alice!"
-```
+    greet(name: "Alice")                    // "Hello, Alice!"
+    greet(name: "Alice", greeting: "Hi")    // "Hi, Alice!"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function greet(name: string, greeting: string = "Hello"): void {
+      console.log(`${greeting}, ${name}!`);
+    }
+
+    greet("Alice");           // "Hello, Alice!"
+    greet("Alice", "Hi");     // "Hi, Alice!"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -162,25 +224,54 @@ print("x: \(x), y: \(y)")  // "x: 10, y: 5"
 
 Functions in Swift are first-class types. You can assign them to variables and pass them as arguments.
 
-```swift
-func add(_ a: Int, _ b: Int) -> Int { a + b }
-func subtract(_ a: Int, _ b: Int) -> Int { a - b }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func add(_ a: Int, _ b: Int) -> Int { a + b }
+    func subtract(_ a: Int, _ b: Int) -> Int { a - b }
 
-// Function type: (Int, Int) -> Int
-var operation: (Int, Int) -> Int = add
-print(operation(10, 5))  // 15
+    // Function type: (Int, Int) -> Int
+    var operation: (Int, Int) -> Int = add
+    print(operation(10, 5))  // 15
 
-operation = subtract
-print(operation(10, 5))  // 5
+    operation = subtract
+    print(operation(10, 5))  // 5
 
-// Functions as parameters
-func apply(_ a: Int, _ b: Int, operation: (Int, Int) -> Int) -> Int {
-    operation(a, b)
-}
+    // Functions as parameters
+    func apply(_ a: Int, _ b: Int, operation: (Int, Int) -> Int) -> Int {
+        operation(a, b)
+    }
 
-print(apply(10, 5, operation: add))       // 15
-print(apply(10, 5, operation: subtract))  // 5
-```
+    print(apply(10, 5, operation: add))       // 15
+    print(apply(10, 5, operation: subtract))  // 5
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const add = (a: number, b: number): number => a + b;
+    const subtract = (a: number, b: number): number => a - b;
+
+    // Function type: (a: number, b: number) => number
+    let operation: (a: number, b: number) => number = add;
+    console.log(operation(10, 5)); // 15
+
+    operation = subtract;
+    console.log(operation(10, 5)); // 5
+
+    // Functions as parameters
+    function apply(
+      a: number,
+      b: number,
+      operation: (a: number, b: number) => number
+    ): number {
+      return operation(a, b);
+    }
+
+    console.log(apply(10, 5, add));      // 15
+    console.log(apply(10, 5, subtract)); // 5
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -188,32 +279,52 @@ print(apply(10, 5, operation: subtract))  // 5
 
 Closures are self-contained blocks of functionality that can be passed around. They are essentially unnamed functions.
 
-```swift
-// Full closure syntax
-let greet = { (name: String) -> String in
-    return "Hello, \(name)!"
-}
-print(greet("Alice"))  // "Hello, Alice!"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Full closure syntax
+    let greet = { (name: String) -> String in
+        return "Hello, \(name)!"
+    }
+    print(greet("Alice"))  // "Hello, Alice!"
 
-// Using closures with sorted
-let names = ["Charlie", "Alice", "Bob"]
+    // Using closures with sorted
+    let names = ["Charlie", "Alice", "Bob"]
 
-// Full syntax
-let sorted1 = names.sorted(by: { (a: String, b: String) -> Bool in
-    return a < b
-})
+    // Full syntax
+    let sorted1 = names.sorted(by: { (a: String, b: String) -> Bool in
+        return a < b
+    })
 
-// Shorthand: type inference + implicit return
-let sorted2 = names.sorted(by: { a, b in a < b })
+    // Shorthand: type inference + implicit return
+    let sorted2 = names.sorted(by: { a, b in a < b })
 
-// Even shorter: shorthand argument names
-let sorted3 = names.sorted(by: { $0 < $1 })
+    // Even shorter: shorthand argument names
+    let sorted3 = names.sorted(by: { $0 < $1 })
 
-// Shortest: operator function
-let sorted4 = names.sorted(by: <)
+    // Shortest: operator function
+    let sorted4 = names.sorted(by: <)
 
-print(sorted4)  // ["Alice", "Bob", "Charlie"]
-```
+    print(sorted4)  // ["Alice", "Bob", "Charlie"]
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Arrow function (equivalent to closures)
+    const greet = (name: string): string => {
+      return `Hello, ${name}!`;
+    };
+    console.log(greet("Alice")); // "Hello, Alice!"
+
+    // Sorting with a comparator
+    const names = ["Charlie", "Alice", "Bob"];
+
+    const sorted = [...names].sort((a, b) => a.localeCompare(b));
+
+    console.log(sorted); // ["Alice", "Bob", "Charlie"]
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -221,23 +332,44 @@ print(sorted4)  // ["Alice", "Bob", "Charlie"]
 
 When the last parameter of a function is a closure, you can use trailing closure syntax.
 
-```swift
-let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-// Standard call
-let evens = numbers.filter({ $0 % 2 == 0 })
+    // Standard call
+    let evens = numbers.filter({ $0 % 2 == 0 })
 
-// Trailing closure
-let odds = numbers.filter { $0 % 2 != 0 }
+    // Trailing closure
+    let odds = numbers.filter { $0 % 2 != 0 }
 
-// Chaining with trailing closures
-let result = numbers
-    .filter { $0 % 2 == 0 }
-    .map { $0 * $0 }
-    .sorted { $0 > $1 }
+    // Chaining with trailing closures
+    let result = numbers
+        .filter { $0 % 2 == 0 }
+        .map { $0 * $0 }
+        .sorted { $0 > $1 }
 
-print(result)  // [100, 64, 36, 16, 4]
-```
+    print(result)  // [100, 64, 36, 16, 4]
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    const evens = numbers.filter((n) => n % 2 === 0);
+
+    const odds = numbers.filter((n) => n % 2 !== 0);
+
+    // Chaining array methods
+    const result = numbers
+      .filter((n) => n % 2 === 0)
+      .map((n) => n * n)
+      .sort((a, b) => b - a);
+
+    console.log(result); // [100, 64, 36, 16, 4]
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

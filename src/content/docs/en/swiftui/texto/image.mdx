@@ -4,6 +4,7 @@ description: How to use Image in SwiftUI to display images and SF Symbols.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 The `Image` view displays images from assets, SF Symbols, or other sources.
 
@@ -13,43 +14,101 @@ The `Image` view displays images from assets, SF Symbols, or other sources.
 
 ## SF Symbols
 
-```swift
-Image(systemName: "heart.fill")
-    .font(.largeTitle)
-    .foregroundStyle(.red)
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Image(systemName: "heart.fill")
+        .font(.largeTitle)
+        .foregroundStyle(.red)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { Heart } from "lucide-react";
+
+    export default function SFSymbolIcon() {
+      return <Heart className="size-10 text-red-500" fill="currentColor" />;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Image from Assets
 
-```swift
-Image("photo")
-    .resizable()
-    .aspectRatio(contentMode: .fit)
-    .frame(width: 200, height: 200)
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Image("photo")
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 200, height: 200)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import Image from "next/image";
+
+    export default function AssetImage() {
+      return (
+        <Image
+          src="/photo.jpg"
+          alt="Photo"
+          width={200}
+          height={200}
+          className="object-contain"
+        />
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Resizing and Scaling
 
-```swift
-VStack {
-    // Fit: maintains aspect ratio inside frame
-    Image(systemName: "photo")
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(width: 150, height: 150)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    VStack {
+        // Fit: maintains aspect ratio inside frame
+        Image(systemName: "photo")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 150, height: 150)
 
-    // Fill: fills the frame, may clip
-    Image(systemName: "photo")
-        .resizable()
-        .aspectRatio(contentMode: .fill)
-        .frame(width: 150, height: 100)
-        .clipped()
-}
-```
+        // Fill: fills the frame, may clip
+        Image(systemName: "photo")
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: 150, height: 100)
+            .clipped()
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import Image from "next/image";
+
+    export default function ResizingScaling() {
+      return (
+        <div className="flex flex-col items-center gap-5">
+          {/* Fit: image fits inside the container */}
+          <div className="relative size-[150px] bg-gray-200">
+            <Image src="/photo.jpg" alt="Fit" fill className="object-contain" />
+          </div>
+          {/* Fill: image fills the container, may clip */}
+          <div className="relative h-[100px] w-[150px] overflow-hidden bg-gray-200">
+            <Image src="/photo.jpg" alt="Fill" fill className="object-cover" />
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -70,23 +129,41 @@ Always call `.resizable()` before `.frame()`. Without it, the image renders at i
 
 ## Full Example
 
-```swift
-struct AvatarView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "person.circle.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 120, height: 120)
-                .foregroundStyle(.blue)
-                .shadow(radius: 5)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct AvatarView: View {
+        var body: some View {
+            VStack {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 120, height: 120)
+                    .foregroundStyle(.blue)
+                    .shadow(radius: 5)
 
-            Text("John Doe")
-                .font(.title2)
-                .bold()
+                Text("John Doe")
+                    .font(.title2)
+                    .bold()
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { UserCircle } from "lucide-react";
+
+    export default function AvatarView() {
+      return (
+        <div className="flex flex-col items-center">
+          <UserCircle className="size-[120px] text-blue-500 drop-shadow-md" />
+          <p className="text-2xl font-bold">John Doe</p>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

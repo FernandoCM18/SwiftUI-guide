@@ -4,6 +4,7 @@ description: El framework Observation de Swift — gestión de estado moderna en
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 El framework **Observation** (iOS 17+) reemplaza `ObservableObject` con el macro `@Observable`. Es más simple, más eficiente y requiere menos código.
 
@@ -11,26 +12,76 @@ El framework **Observation** (iOS 17+) reemplaza `ObservableObject` con el macro
 
 Aplica `@Observable` a una clase para que SwiftUI observe automáticamente todos sus cambios de propiedad.
 
-```swift
-import SwiftUI
-import Observation
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
+    import Observation
 
-@Observable
-class ContadorViewModel {
-    var cuenta = 0
-    var historial: [Int] = []
+    @Observable
+    class ContadorViewModel {
+        var cuenta = 0
+        var historial: [Int] = []
 
-    func incrementar() {
-        cuenta += 1
-        historial.append(cuenta)
+        func incrementar() {
+            cuenta += 1
+            historial.append(cuenta)
+        }
+
+        func reiniciar() {
+            cuenta = 0
+            historial.removeAll()
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { createContext, useContext, useState, ReactNode } from "react";
+
+    interface ContadorState {
+      cuenta: number;
+      historial: number[];
     }
 
-    func reiniciar() {
-        cuenta = 0
-        historial.removeAll()
+    interface ContadorContextType extends ContadorState {
+      incrementar: () => void;
+      reiniciar: () => void;
     }
-}
-```
+
+    const ContadorContext = createContext<ContadorContextType | null>(null);
+
+    export function ContadorProvider({ children }: { children: ReactNode }) {
+      const [cuenta, setCuenta] = useState(0);
+      const [historial, setHistorial] = useState<number[]>([]);
+
+      function incrementar() {
+        const nueva = cuenta + 1;
+        setCuenta(nueva);
+        setHistorial((prev) => [...prev, nueva]);
+      }
+
+      function reiniciar() {
+        setCuenta(0);
+        setHistorial([]);
+      }
+
+      return (
+        <ContadorContext.Provider value={{ cuenta, historial, incrementar, reiniciar }}>
+          {children}
+        </ContadorContext.Provider>
+      );
+    }
+
+    export function useContador() {
+      const ctx = useContext(ContadorContext);
+      if (!ctx) throw new Error("useContador must be inside ContadorProvider");
+      return ctx;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -40,35 +91,84 @@ A diferencia de `ObservableObject`, no necesitas marcar cada propiedad con `@Pub
 
 Con `@Observable`, crea el ViewModel con `@State` en la vista que lo posee:
 
-```swift
-struct ContadorView: View {
-    @State private var vm = ContadorViewModel()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct ContadorView: View {
+        @State private var vm = ContadorViewModel()
 
-    var body: some View {
-        VStack(spacing: 24) {
-            Text("\(vm.cuenta)")
-                .font(.system(size: 80, weight: .bold, design: .rounded))
+        var body: some View {
+            VStack(spacing: 24) {
+                Text("\(vm.cuenta)")
+                    .font(.system(size: 80, weight: .bold, design: .rounded))
 
-            HStack(spacing: 16) {
-                Button("Reiniciar") { vm.reiniciar() }
-                    .buttonStyle(.bordered)
+                HStack(spacing: 16) {
+                    Button("Reiniciar") { vm.reiniciar() }
+                        .buttonStyle(.bordered)
 
-                Button("Sumar") { vm.incrementar() }
-                    .buttonStyle(.borderedProminent)
+                    Button("Sumar") { vm.incrementar() }
+                        .buttonStyle(.borderedProminent)
+                }
+
+                if !vm.historial.isEmpty {
+                    Text("Historial: \(vm.historial.map(String.init).joined(separator: " → "))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
-
-            if !vm.historial.isEmpty {
-                Text("Historial: \(vm.historial.map(String.init).joined(separator: " → "))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            .padding()
         }
-        .padding()
     }
-}
 
-#Preview { ContadorView() }
-```
+    #Preview { ContadorView() }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useContador, ContadorProvider } from "./ContadorProvider";
+
+    function ContadorView() {
+      const { cuenta, historial, incrementar, reiniciar } = useContador();
+
+      return (
+        <div className="flex flex-col items-center gap-6 p-4">
+          <span className="text-8xl font-bold tabular-nums">{cuenta}</span>
+
+          <div className="flex gap-4">
+            <button
+              onClick={reiniciar}
+              className="rounded-lg border px-4 py-2"
+            >
+              Reiniciar
+            </button>
+            <button
+              onClick={incrementar}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white"
+            >
+              Sumar
+            </button>
+          </div>
+
+          {historial.length > 0 && (
+            <p className="text-sm text-gray-500">
+              Historial: {historial.join(" → ")}
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    export default function Page() {
+      return (
+        <ContadorProvider>
+          <ContadorView />
+        </ContadorProvider>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -80,28 +180,71 @@ Con `@Observable`, usa `@State` (no `@StateObject`) para crear el ViewModel. Swi
 
 Para pasar el ViewModel a una vista hija sin `@EnvironmentObject`, simplemente pásalo como parámetro. `@Observable` no necesita ningún wrapper especial:
 
-```swift
-struct ContadorView: View {
-    @State private var vm = ContadorViewModel()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct ContadorView: View {
+        @State private var vm = ContadorViewModel()
 
-    var body: some View {
-        VStack {
-            HistorialView(vm: vm)  // Paso directo, sin wrapper
-            ContadorControlesView(vm: vm)
+        var body: some View {
+            VStack {
+                HistorialView(vm: vm)  // Paso directo, sin wrapper
+                ContadorControlesView(vm: vm)
+            }
         }
     }
-}
 
-struct HistorialView: View {
-    let vm: ContadorViewModel  // Sin @ObservedObject
+    struct HistorialView: View {
+        let vm: ContadorViewModel  // Sin @ObservedObject
 
-    var body: some View {
-        List(vm.historial, id: \.self) { valor in
-            Text("\(valor)")
+        var body: some View {
+            List(vm.historial, id: \.self) { valor in
+                Text("\(valor)")
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useContador, ContadorProvider } from "./ContadorProvider";
+
+    function HistorialView({ historial }: { historial: number[] }) {
+      return (
+        <ul className="divide-y">
+          {historial.map((valor, i) => (
+            <li key={i} className="py-2">{valor}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    function ContadorControlesView({ incrementar, reiniciar }: {
+      incrementar: () => void;
+      reiniciar: () => void;
+    }) {
+      return (
+        <div className="flex gap-4">
+          <button onClick={reiniciar}>Reiniciar</button>
+          <button onClick={incrementar}>Sumar</button>
+        </div>
+      );
+    }
+
+    export default function ContadorView() {
+      const { historial, incrementar, reiniciar } = useContador();
+
+      return (
+        <div className="flex flex-col gap-4">
+          <HistorialView historial={historial} />
+          <ContadorControlesView incrementar={incrementar} reiniciar={reiniciar} />
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -109,47 +252,112 @@ struct HistorialView: View {
 
 Para compartir un ViewModel en toda la jerarquía de vistas, usa `@Environment` con una clave de entorno personalizada:
 
-```swift
-@Observable
-class SesionUsuario {
-    var nombre = ""
-    var estaAutenticado = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    @Observable
+    class SesionUsuario {
+        var nombre = ""
+        var estaAutenticado = false
 
-    func iniciarSesion(nombre: String) {
-        self.nombre = nombre
-        estaAutenticado = true
-    }
+        func iniciarSesion(nombre: String) {
+            self.nombre = nombre
+            estaAutenticado = true
+        }
 
-    func cerrarSesion() {
-        nombre = ""
-        estaAutenticado = false
-    }
-}
-
-struct MiApp: App {
-    @State private var sesion = SesionUsuario()
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(sesion)  // Inyectar en el entorno
+        func cerrarSesion() {
+            nombre = ""
+            estaAutenticado = false
         }
     }
-}
 
-struct PerfilView: View {
-    @Environment(SesionUsuario.self) private var sesion  // Leer del entorno
+    struct MiApp: App {
+        @State private var sesion = SesionUsuario()
 
-    var body: some View {
-        if sesion.estaAutenticado {
-            Text("Hola, \(sesion.nombre)")
-            Button("Cerrar sesión") { sesion.cerrarSesion() }
-        } else {
-            Button("Iniciar sesión") { sesion.iniciarSesion(nombre: "Carlos") }
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+                    .environment(sesion)  // Inyectar en el entorno
+            }
         }
     }
-}
-```
+
+    struct PerfilView: View {
+        @Environment(SesionUsuario.self) private var sesion  // Leer del entorno
+
+        var body: some View {
+            if sesion.estaAutenticado {
+                Text("Hola, \(sesion.nombre)")
+                Button("Cerrar sesión") { sesion.cerrarSesion() }
+            } else {
+                Button("Iniciar sesión") { sesion.iniciarSesion(nombre: "Carlos") }
+            }
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { createContext, useContext, useState, ReactNode } from "react";
+
+    interface SesionContextType {
+      nombre: string;
+      estaAutenticado: boolean;
+      iniciarSesion: (nombre: string) => void;
+      cerrarSesion: () => void;
+    }
+
+    const SesionContext = createContext<SesionContextType | null>(null);
+
+    export function useSesion() {
+      const ctx = useContext(SesionContext);
+      if (!ctx) throw new Error("useSesion must be inside SesionProvider");
+      return ctx;
+    }
+
+    // layout.tsx — Provider en la raíz (equivalente a .environment())
+    export function SesionProvider({ children }: { children: ReactNode }) {
+      const [nombre, setNombre] = useState("");
+      const [estaAutenticado, setAutenticado] = useState(false);
+
+      function iniciarSesion(n: string) {
+        setNombre(n);
+        setAutenticado(true);
+      }
+
+      function cerrarSesion() {
+        setNombre("");
+        setAutenticado(false);
+      }
+
+      return (
+        <SesionContext.Provider
+          value={{ nombre, estaAutenticado, iniciarSesion, cerrarSesion }}
+        >
+          {children}
+        </SesionContext.Provider>
+      );
+    }
+
+    // PerfilView.tsx — Lee del contexto (equivalente a @Environment)
+    function PerfilView() {
+      const { nombre, estaAutenticado, iniciarSesion, cerrarSesion } = useSesion();
+
+      if (estaAutenticado) {
+        return (
+          <div>
+            <p>Hola, {nombre}</p>
+            <button onClick={cerrarSesion}>Cerrar sesión</button>
+          </div>
+        );
+      }
+
+      return <button onClick={() => iniciarSesion("Carlos")}>Iniciar sesión</button>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

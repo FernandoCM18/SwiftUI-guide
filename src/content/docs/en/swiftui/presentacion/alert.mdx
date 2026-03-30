@@ -4,6 +4,7 @@ description: How to use the .alert modifier in SwiftUI to display alert dialogs.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 The `.alert` modifier displays an alert dialog over the current content, useful for confirming important actions.
 
@@ -13,47 +14,151 @@ The `.alert` modifier displays an alert dialog over the current content, useful 
 
 ## Basic Usage
 
-```swift
-struct AlertExample: View {
-    @State private var showAlert = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct AlertExample: View {
+        @State private var showAlert = false
 
-    var body: some View {
-        Button("Delete") { showAlert = true }
-        .alert("Delete item?", isPresented: $showAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
-                // Perform deletion
+        var body: some View {
+            Button("Delete") { showAlert = true }
+            .alert("Delete item?", isPresented: $showAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    // Perform deletion
+                }
+            } message: {
+                Text("This action cannot be undone.")
             }
-        } message: {
-            Text("This action cannot be undone.")
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useRef } from "react";
+
+    export default function AlertExample() {
+      const dialogRef = useRef<HTMLDialogElement>(null);
+
+      return (
+        <>
+          <button
+            onClick={() => dialogRef.current?.showModal()}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg"
+          >
+            Delete
+          </button>
+
+          <dialog
+            ref={dialogRef}
+            className="rounded-xl p-6 backdrop:bg-black/50"
+          >
+            <h2 className="text-lg font-bold">Delete item?</h2>
+            <p className="text-gray-600 mt-1">
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={() => dialogRef.current?.close()}
+                className="px-4 py-2 bg-gray-200 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  // Perform deletion
+                  dialogRef.current?.close();
+                }}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg"
+              >
+                Delete
+              </button>
+            </div>
+          </dialog>
+        </>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Simple Alert
 
-```swift
-.alert("Saved successfully", isPresented: $show) {
-    Button("OK") { }
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    .alert("Saved successfully", isPresented: $show) {
+        Button("OK") { }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <dialog ref={dialogRef} className="rounded-xl p-6 backdrop:bg-black/50">
+      <h2 className="text-lg font-bold">Saved successfully</h2>
+      <div className="flex justify-end mt-4">
+        <button
+          onClick={() => dialogRef.current?.close()}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+        >
+          OK
+        </button>
+      </div>
+    </dialog>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Alert with TextField
 
-```swift
-@State private var name = ""
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    @State private var name = ""
 
-.alert("New name", isPresented: $show) {
-    TextField("Name", text: $name)
-    Button("Cancel", role: .cancel) { }
-    Button("Save") { }
-}
-```
+    .alert("New name", isPresented: $show) {
+        TextField("Name", text: $name)
+        Button("Cancel", role: .cancel) { }
+        Button("Save") { }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    const [name, setName] = useState("");
+
+    <dialog ref={dialogRef} className="rounded-xl p-6 backdrop:bg-black/50">
+      <h2 className="text-lg font-bold">New name</h2>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
+        className="w-full border rounded-lg p-2 mt-2"
+      />
+      <div className="flex justify-end gap-2 mt-4">
+        <button
+          onClick={() => dialogRef.current?.close()}
+          className="px-4 py-2 bg-gray-200 rounded-lg"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => dialogRef.current?.close()}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+        >
+          Save
+        </button>
+      </div>
+    </dialog>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -63,33 +168,107 @@ Alerts interrupt the user's flow. Only use them for important or irreversible ac
 
 ## Full Example
 
-```swift
-struct TaskListView: View {
-    @State private var tasks = ["Buy groceries", "Study Swift", "Exercise"]
-    @State private var showDelete = false
-    @State private var deleteIndex: IndexSet?
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct TaskListView: View {
+        @State private var tasks = ["Buy groceries", "Study Swift", "Exercise"]
+        @State private var showDelete = false
+        @State private var deleteIndex: IndexSet?
 
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(tasks, id: \.self) { Text($0) }
-                .onDelete { indices in
-                    deleteIndex = indices
-                    showDelete = true
+        var body: some View {
+            NavigationStack {
+                List {
+                    ForEach(tasks, id: \.self) { Text($0) }
+                    .onDelete { indices in
+                        deleteIndex = indices
+                        showDelete = true
+                    }
                 }
-            }
-            .navigationTitle("Tasks")
-            .alert("Delete task?", isPresented: $showDelete) {
-                Button("Cancel", role: .cancel) { deleteIndex = nil }
-                Button("Delete", role: .destructive) {
-                    if let i = deleteIndex { tasks.remove(atOffsets: i) }
+                .navigationTitle("Tasks")
+                .alert("Delete task?", isPresented: $showDelete) {
+                    Button("Cancel", role: .cancel) { deleteIndex = nil }
+                    Button("Delete", role: .destructive) {
+                        if let i = deleteIndex { tasks.remove(atOffsets: i) }
+                    }
+                } message: {
+                    Text("You won't be able to recover this task.")
                 }
-            } message: {
-                Text("You won't be able to recover this task.")
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useRef, useState } from "react";
+
+    export default function TaskListView() {
+      const [tasks, setTasks] = useState([
+        "Buy groceries",
+        "Study Swift",
+        "Exercise",
+      ]);
+      const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+      const dialogRef = useRef<HTMLDialogElement>(null);
+
+      return (
+        <div className="max-w-lg mx-auto">
+          <h1 className="text-2xl font-bold p-4">Tasks</h1>
+          <ul className="divide-y">
+            {tasks.map((task, i) => (
+              <li key={i} className="flex justify-between items-center p-4">
+                <span>{task}</span>
+                <button
+                  onClick={() => {
+                    setDeleteIndex(i);
+                    dialogRef.current?.showModal();
+                  }}
+                  className="text-red-500 text-sm"
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <dialog
+            ref={dialogRef}
+            className="rounded-xl p-6 backdrop:bg-black/50"
+          >
+            <h2 className="text-lg font-bold">Delete task?</h2>
+            <p className="text-gray-600 mt-1">
+              You won&apos;t be able to recover this task.
+            </p>
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={() => {
+                  setDeleteIndex(null);
+                  dialogRef.current?.close();
+                }}
+                className="px-4 py-2 bg-gray-200 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (deleteIndex !== null) {
+                    setTasks(tasks.filter((_, i) => i !== deleteIndex));
+                  }
+                  dialogRef.current?.close();
+                }}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg"
+              >
+                Delete
+              </button>
+            </div>
+          </dialog>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

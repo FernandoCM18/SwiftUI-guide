@@ -4,6 +4,7 @@ description: Cómo usar el componente Button en SwiftUI para crear botones inter
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 El componente `Button` es uno de los controles más utilizados en SwiftUI. Permite crear elementos interactivos que ejecutan una acción cuando el usuario los presiona.
 
@@ -13,11 +14,29 @@ El componente `Button` es uno de los controles más utilizados en SwiftUI. Permi
 
 ## Uso básico
 
-```swift
-Button("Presionar") {
-    print("¡Botón presionado!")
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Button("Presionar") {
+        print("¡Botón presionado!")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function BotonBasico() {
+      return (
+        <button
+          onClick={() => console.log("¡Botón presionado!")}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+        >
+          Presionar
+        </button>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -25,20 +44,41 @@ Button("Presionar") {
 
 Puedes crear botones con contenido visual más complejo usando el parámetro `label`:
 
-```swift
-Button {
-    print("Guardar")
-} label: {
-    HStack {
-        Image(systemName: "square.and.arrow.down")
-        Text("Guardar")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    Button {
+        print("Guardar")
+    } label: {
+        HStack {
+            Image(systemName: "square.and.arrow.down")
+            Text("Guardar")
+        }
+        .padding()
+        .background(Color.blue)
+        .foregroundStyle(.white)
+        .clipShape(.rect(cornerRadius: 10))
     }
-    .padding()
-    .background(Color.blue)
-    .foregroundStyle(.white)
-    .clipShape(.rect(cornerRadius: 10))
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    import { ArrowDownTrayIcon } from "@heroicons/react/24/solid";
+
+    export default function BotonGuardar() {
+      return (
+        <button
+          onClick={() => console.log("Guardar")}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+        >
+          <ArrowDownTrayIcon className="w-5 h-5" />
+          Guardar
+        </button>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -46,24 +86,53 @@ Button {
 
 SwiftUI ofrece varios estilos predefinidos:
 
-```swift
-VStack(spacing: 20) {
-    Button("Automático") { }
-        .buttonStyle(.automatic)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    VStack(spacing: 20) {
+        Button("Automático") { }
+            .buttonStyle(.automatic)
 
-    Button("Con borde") { }
-        .buttonStyle(.bordered)
+        Button("Con borde") { }
+            .buttonStyle(.bordered)
 
-    Button("Prominente") { }
-        .buttonStyle(.borderedProminent)
+        Button("Prominente") { }
+            .buttonStyle(.borderedProminent)
 
-    Button("Sin borde") { }
-        .buttonStyle(.borderless)
+        Button("Sin borde") { }
+            .buttonStyle(.borderless)
 
-    Button("Simple") { }
-        .buttonStyle(.plain)
-}
-```
+        Button("Simple") { }
+            .buttonStyle(.plain)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function EstilosBotones() {
+      return (
+        <div className="flex flex-col gap-5">
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+            Automático
+          </button>
+          <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition">
+            Con borde
+          </button>
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+            Prominente
+          </button>
+          <button className="px-4 py-2 text-blue-500 hover:underline transition">
+            Sin borde
+          </button>
+          <button className="px-4 py-2 text-gray-800 hover:text-gray-600 transition">
+            Simple
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -71,17 +140,37 @@ VStack(spacing: 20) {
 
 Los roles indican la intención semántica del botón:
 
-```swift
-VStack(spacing: 20) {
-    Button("Eliminar", role: .destructive) {
-        // Acción destructiva
-    }
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    VStack(spacing: 20) {
+        Button("Eliminar", role: .destructive) {
+            // Acción destructiva
+        }
 
-    Button("Cancelar", role: .cancel) {
-        // Acción de cancelación
+        Button("Cancelar", role: .cancel) {
+            // Acción de cancelación
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function RolesBotones() {
+      return (
+        <div className="flex flex-col gap-5">
+          <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+            Eliminar
+          </button>
+          <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+            Cancelar
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -101,37 +190,81 @@ Usa `role: .destructive` para acciones que eliminan datos. SwiftUI automáticame
 
 ## Ejemplo completo
 
-```swift
-struct BotonEjemploView: View {
-    @State private var contador = 0
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct BotonEjemploView: View {
+        @State private var contador = 0
 
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Contador: \(contador)")
-                .font(.largeTitle)
+        var body: some View {
+            VStack(spacing: 20) {
+                Text("Contador: \(contador)")
+                    .font(.largeTitle)
 
-            HStack(spacing: 16) {
-                Button("Restar") {
-                    contador -= 1
+                HStack(spacing: 16) {
+                    Button("Restar") {
+                        contador -= 1
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.red)
+
+                    Button("Sumar") {
+                        contador += 1
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
                 }
-                .buttonStyle(.bordered)
-                .tint(.red)
 
-                Button("Sumar") {
-                    contador += 1
+                Button("Reiniciar", role: .destructive) {
+                    contador = 0
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
+                .disabled(contador == 0)
             }
-
-            Button("Reiniciar", role: .destructive) {
-                contador = 0
-            }
-            .disabled(contador == 0)
+            .padding()
         }
-        .padding()
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    export default function BotonEjemplo() {
+      const [contador, setContador] = useState(0);
+
+      return (
+        <div className="flex flex-col items-center gap-5 p-6">
+          <p className="text-4xl font-bold">Contador: {contador}</p>
+
+          <div className="flex gap-4">
+            <button
+              onClick={() => setContador(contador - 1)}
+              className="px-4 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition"
+            >
+              Restar
+            </button>
+            <button
+              onClick={() => setContador(contador + 1)}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition"
+            >
+              Sumar
+            </button>
+          </div>
+
+          <button
+            onClick={() => setContador(0)}
+            disabled={contador === 0}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Reiniciar
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

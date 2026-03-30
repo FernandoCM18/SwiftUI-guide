@@ -3,6 +3,7 @@ title: "@Observable"
 description: Swift's Observation framework — modern state management in SwiftUI with @Observable, @State and @Environment.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 The **Observation** framework (iOS 17+) replaces `ObservableObject` with the `@Observable` macro. It's simpler, more efficient and requires less code.
@@ -11,26 +12,77 @@ The **Observation** framework (iOS 17+) replaces `ObservableObject` with the `@O
 
 Apply `@Observable` to a class so SwiftUI automatically observes all its property changes.
 
-```swift
-import SwiftUI
-import Observation
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    import SwiftUI
+    import Observation
 
-@Observable
-class CounterViewModel {
-    var count = 0
-    var history: [Int] = []
+    @Observable
+    class CounterViewModel {
+        var count = 0
+        var history: [Int] = []
 
-    func increment() {
-        count += 1
-        history.append(count)
+        func increment() {
+            count += 1
+            history.append(count)
+        }
+
+        func reset() {
+            count = 0
+            history.removeAll()
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { createContext, useContext, useState } from "react";
+
+    // React Context + useState replaces @Observable
+    interface CounterState {
+      count: number;
+      history: number[];
     }
 
-    func reset() {
-        count = 0
-        history.removeAll()
+    interface CounterContextType extends CounterState {
+      increment: () => void;
+      reset: () => void;
     }
-}
-```
+
+    const CounterContext = createContext<CounterContextType | null>(null);
+
+    export function CounterProvider({ children }: { children: React.ReactNode }) {
+      const [count, setCount] = useState(0);
+      const [history, setHistory] = useState<number[]>([]);
+
+      const increment = () => {
+        const next = count + 1;
+        setCount(next);
+        setHistory((prev) => [...prev, next]);
+      };
+
+      const reset = () => {
+        setCount(0);
+        setHistory([]);
+      };
+
+      return (
+        <CounterContext.Provider value={{ count, history, increment, reset }}>
+          {children}
+        </CounterContext.Provider>
+      );
+    }
+
+    export function useCounter() {
+      const ctx = useContext(CounterContext);
+      if (!ctx) throw new Error("useCounter must be used within CounterProvider");
+      return ctx;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -40,35 +92,84 @@ Unlike `ObservableObject`, you don't need to mark each property with `@Published
 
 With `@Observable`, create the ViewModel with `@State` in the owning view:
 
-```swift
-struct CounterView: View {
-    @State private var vm = CounterViewModel()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct CounterView: View {
+        @State private var vm = CounterViewModel()
 
-    var body: some View {
-        VStack(spacing: 24) {
-            Text("\(vm.count)")
-                .font(.system(size: 80, weight: .bold, design: .rounded))
+        var body: some View {
+            VStack(spacing: 24) {
+                Text("\(vm.count)")
+                    .font(.system(size: 80, weight: .bold, design: .rounded))
 
-            HStack(spacing: 16) {
-                Button("Reset") { vm.reset() }
-                    .buttonStyle(.bordered)
+                HStack(spacing: 16) {
+                    Button("Reset") { vm.reset() }
+                        .buttonStyle(.bordered)
 
-                Button("Add") { vm.increment() }
-                    .buttonStyle(.borderedProminent)
+                    Button("Add") { vm.increment() }
+                        .buttonStyle(.borderedProminent)
+                }
+
+                if !vm.history.isEmpty {
+                    Text("History: \(vm.history.map(String.init).joined(separator: " → "))")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
-
-            if !vm.history.isEmpty {
-                Text("History: \(vm.history.map(String.init).joined(separator: " → "))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            .padding()
         }
-        .padding()
     }
-}
 
-#Preview { CounterView() }
-```
+    #Preview { CounterView() }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useCounter, CounterProvider } from "./counter-context";
+
+    function Counter() {
+      const { count, history, increment, reset } = useCounter();
+
+      return (
+        <div className="flex flex-col items-center gap-6 p-6">
+          <span className="text-8xl font-bold tabular-nums">{count}</span>
+
+          <div className="flex gap-4">
+            <button
+              onClick={reset}
+              className="rounded-lg border px-4 py-2 hover:bg-gray-100"
+            >
+              Reset
+            </button>
+            <button
+              onClick={increment}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              Add
+            </button>
+          </div>
+
+          {history.length > 0 && (
+            <p className="text-sm text-gray-500">
+              History: {history.join(" → ")}
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    export default function CounterPage() {
+      return (
+        <CounterProvider>
+          <Counter />
+        </CounterProvider>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -80,28 +181,71 @@ With `@Observable`, use `@State` (not `@StateObject`) to create the ViewModel. S
 
 To pass the ViewModel to a child view without `@EnvironmentObject`, just pass it as a parameter. `@Observable` doesn't need any special wrapper:
 
-```swift
-struct CounterView: View {
-    @State private var vm = CounterViewModel()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct CounterView: View {
+        @State private var vm = CounterViewModel()
 
-    var body: some View {
-        VStack {
-            HistoryView(vm: vm)      // Direct pass, no wrapper
-            CounterControlsView(vm: vm)
+        var body: some View {
+            VStack {
+                HistoryView(vm: vm)      // Direct pass, no wrapper
+                CounterControlsView(vm: vm)
+            }
         }
     }
-}
 
-struct HistoryView: View {
-    let vm: CounterViewModel  // No @ObservedObject needed
+    struct HistoryView: View {
+        let vm: CounterViewModel  // No @ObservedObject needed
 
-    var body: some View {
-        List(vm.history, id: \.self) { value in
-            Text("\(value)")
+        var body: some View {
+            List(vm.history, id: \.self) { value in
+                Text("\(value)")
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useCounter, CounterProvider } from "./counter-context";
+
+    // Props drilling — equivalent to passing the ViewModel directly
+    function HistoryView() {
+      const { history } = useCounter();
+
+      return (
+        <ul className="divide-y">
+          {history.map((value, i) => (
+            <li key={i} className="py-2">{value}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    function CounterControls() {
+      const { increment, reset } = useCounter();
+
+      return (
+        <div className="flex gap-4">
+          <button onClick={reset}>Reset</button>
+          <button onClick={increment}>Add</button>
+        </div>
+      );
+    }
+
+    export default function CounterPage() {
+      return (
+        <CounterProvider>
+          <HistoryView />
+          <CounterControls />
+        </CounterProvider>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -109,47 +253,114 @@ struct HistoryView: View {
 
 To share a ViewModel across the entire view hierarchy, use `@Environment` with a custom environment key:
 
-```swift
-@Observable
-class UserSession {
-    var name = ""
-    var isAuthenticated = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    @Observable
+    class UserSession {
+        var name = ""
+        var isAuthenticated = false
 
-    func signIn(name: String) {
-        self.name = name
-        isAuthenticated = true
-    }
+        func signIn(name: String) {
+            self.name = name
+            isAuthenticated = true
+        }
 
-    func signOut() {
-        name = ""
-        isAuthenticated = false
-    }
-}
-
-struct MyApp: App {
-    @State private var session = UserSession()
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(session)  // Inject into environment
+        func signOut() {
+            name = ""
+            isAuthenticated = false
         }
     }
-}
 
-struct ProfileView: View {
-    @Environment(UserSession.self) private var session  // Read from environment
+    struct MyApp: App {
+        @State private var session = UserSession()
 
-    var body: some View {
-        if session.isAuthenticated {
-            Text("Hello, \(session.name)")
-            Button("Sign out") { session.signOut() }
-        } else {
-            Button("Sign in") { session.signIn(name: "Carlos") }
+        var body: some Scene {
+            WindowGroup {
+                ContentView()
+                    .environment(session)  // Inject into environment
+            }
         }
     }
-}
-```
+
+    struct ProfileView: View {
+        @Environment(UserSession.self) private var session  // Read from environment
+
+        var body: some View {
+            if session.isAuthenticated {
+                Text("Hello, \(session.name)")
+                Button("Sign out") { session.signOut() }
+            } else {
+                Button("Sign in") { session.signIn(name: "Carlos") }
+            }
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { createContext, useContext, useState } from "react";
+
+    // React Context replaces @Environment with @Observable
+    interface SessionState {
+      name: string;
+      isAuthenticated: boolean;
+      signIn: (name: string) => void;
+      signOut: () => void;
+    }
+
+    const SessionContext = createContext<SessionState | null>(null);
+
+    export function SessionProvider({ children }: { children: React.ReactNode }) {
+      const [name, setName] = useState("");
+      const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+      const signIn = (n: string) => {
+        setName(n);
+        setIsAuthenticated(true);
+      };
+
+      const signOut = () => {
+        setName("");
+        setIsAuthenticated(false);
+      };
+
+      return (
+        <SessionContext.Provider value={{ name, isAuthenticated, signIn, signOut }}>
+          {children}
+        </SessionContext.Provider>
+      );
+    }
+
+    function useSession() {
+      const ctx = useContext(SessionContext);
+      if (!ctx) throw new Error("useSession must be used within SessionProvider");
+      return ctx;
+    }
+
+    // Wrap the app in layout.tsx
+    // export default function RootLayout({ children }) {
+    //   return <SessionProvider>{children}</SessionProvider>;
+    // }
+
+    function ProfileView() {
+      const session = useSession();
+
+      if (session.isAuthenticated) {
+        return (
+          <div>
+            <p>Hello, {session.name}</p>
+            <button onClick={session.signOut}>Sign out</button>
+          </div>
+        );
+      }
+
+      return <button onClick={() => session.signIn("Carlos")}>Sign in</button>;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

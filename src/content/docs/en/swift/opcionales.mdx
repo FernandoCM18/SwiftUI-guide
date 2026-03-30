@@ -4,6 +4,7 @@ description: Master optionals in Swift including optional binding, nil coalescin
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Handling the Absence of a Value
 
@@ -11,18 +12,36 @@ Optionals are one of Swift's most important features. An optional represents a v
 
 ## What is an Optional?
 
-```swift
-var name: String = "Alice"    // Must always have a value
-var nickname: String? = nil    // Can be nil
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    var name: String = "Alice"    // Must always have a value
+    var nickname: String? = nil    // Can be nil
 
-nickname = "Ali"               // Now it has a value
-nickname = nil                 // Back to nil
+    nickname = "Ali"               // Now it has a value
+    nickname = nil                 // Back to nil
 
-// Any type can be made optional
-var age: Int? = nil
-var score: Double? = 95.5
-var isActive: Bool? = nil
-```
+    // Any type can be made optional
+    var age: Int? = nil
+    var score: Double? = 95.5
+    var isActive: Bool? = nil
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    let name: string = "Alice";         // Must always have a value
+    let nickname: string | null = null;  // Can be null
+
+    nickname = "Ali";                    // Now it has a value
+    nickname = null;                     // Back to null
+
+    // Any type can be nullable
+    let age: number | null = null;
+    let score: number | null = 95.5;
+    let isActive: boolean | null = null;
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -34,29 +53,58 @@ You cannot use `nil` with non-optional types. `var name: String = nil` will prod
 
 The safest way to unwrap an optional is with `if let`. The unwrapped value is only available inside the `if` block.
 
-```swift
-let input: String? = "42"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let input: String? = "42"
 
-if let value = input {
-    print("The value is \(value)")     // "The value is 42"
-} else {
-    print("No value provided")
-}
+    if let value = input {
+        print("The value is \(value)")     // "The value is 42"
+    } else {
+        print("No value provided")
+    }
 
-// Shorthand syntax (Swift 5.7+): same name
-let username: String? = "alice"
-if let username {
-    print("Welcome, \(username)")       // "Welcome, alice"
-}
+    // Shorthand syntax (Swift 5.7+): same name
+    let username: String? = "alice"
+    if let username {
+        print("Welcome, \(username)")       // "Welcome, alice"
+    }
 
-// Multiple optional bindings
-let firstName: String? = "John"
-let lastName: String? = "Doe"
+    // Multiple optional bindings
+    let firstName: String? = "John"
+    let lastName: String? = "Doe"
 
-if let first = firstName, let last = lastName {
-    print("Full name: \(first) \(last)")
-}
-```
+    if let first = firstName, let last = lastName {
+        print("Full name: \(first) \(last)")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const input: string | null = "42";
+
+    if (input !== null) {
+      console.log(`The value is ${input}`);   // "The value is 42"
+    } else {
+      console.log("No value provided");
+    }
+
+    // Variable is narrowed after null check
+    const username: string | null = "alice";
+    if (username !== null) {
+      console.log(`Welcome, ${username}`);    // "Welcome, alice"
+    }
+
+    // Multiple null checks
+    const firstName: string | null = "John";
+    const lastName: string | null = "Doe";
+
+    if (firstName !== null && lastName !== null) {
+      console.log(`Full name: ${firstName} ${lastName}`);
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -64,32 +112,64 @@ if let first = firstName, let last = lastName {
 
 Use `guard let` for early exits. The unwrapped value remains available after the guard statement.
 
-```swift
-func processInput(_ input: String?) {
-    guard let input = input else {
-        print("Input is nil")
-        return
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func processInput(_ input: String?) {
+        guard let input = input else {
+            print("Input is nil")
+            return
+        }
+        // 'input' is now a non-optional String
+        print("Processing: \(input)")
     }
-    // 'input' is now a non-optional String
-    print("Processing: \(input)")
-}
 
-processInput("Hello")  // "Processing: Hello"
-processInput(nil)       // "Input is nil"
+    processInput("Hello")  // "Processing: Hello"
+    processInput(nil)       // "Input is nil"
 
-// guard with multiple conditions
-func validateUser(name: String?, age: Int?) {
-    guard let name = name, let age = age, age >= 18 else {
-        print("Invalid user data")
-        return
+    // guard with multiple conditions
+    func validateUser(name: String?, age: Int?) {
+        guard let name = name, let age = age, age >= 18 else {
+            print("Invalid user data")
+            return
+        }
+        print("\(name) is \(age) years old")
     }
-    print("\(name) is \(age) years old")
-}
 
-validateUser(name: "Alice", age: 25)  // "Alice is 25 years old"
-validateUser(name: nil, age: 25)       // "Invalid user data"
-validateUser(name: "Bob", age: 15)     // "Invalid user data"
-```
+    validateUser(name: "Alice", age: 25)  // "Alice is 25 years old"
+    validateUser(name: nil, age: 25)       // "Invalid user data"
+    validateUser(name: "Bob", age: 15)     // "Invalid user data"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function processInput(input: string | null): void {
+      if (input === null) {
+        console.log("Input is null");
+        return;
+      }
+      // 'input' is narrowed to string after early return
+      console.log(`Processing: ${input}`);
+    }
+
+    processInput("Hello");  // "Processing: Hello"
+    processInput(null);     // "Input is null"
+
+    // Early return with multiple checks
+    function validateUser(name: string | null, age: number | null): void {
+      if (name === null || age === null || age < 18) {
+        console.log("Invalid user data");
+        return;
+      }
+      console.log(`${name} is ${age} years old`);
+    }
+
+    validateUser("Alice", 25);  // "Alice is 25 years old"
+    validateUser(null, 25);     // "Invalid user data"
+    validateUser("Bob", 15);    // "Invalid user data"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -97,22 +177,44 @@ validateUser(name: "Bob", age: 15)     // "Invalid user data"
 
 The nil coalescing operator provides a default value when the optional is nil.
 
-```swift
-let savedUsername: String? = nil
-let displayName = savedUsername ?? "Guest"
-print(displayName)  // "Guest"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let savedUsername: String? = nil
+    let displayName = savedUsername ?? "Guest"
+    print(displayName)  // "Guest"
 
-let userScore: Int? = 85
-let finalScore = userScore ?? 0
-print(finalScore)  // 85
+    let userScore: Int? = 85
+    let finalScore = userScore ?? 0
+    print(finalScore)  // 85
 
-// Chaining nil coalescing
-let primary: String? = nil
-let secondary: String? = nil
-let fallback = "Default"
-let result = primary ?? secondary ?? fallback
-print(result)  // "Default"
-```
+    // Chaining nil coalescing
+    let primary: String? = nil
+    let secondary: String? = nil
+    let fallback = "Default"
+    let result = primary ?? secondary ?? fallback
+    print(result)  // "Default"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const savedUsername: string | null = null;
+    const displayName = savedUsername ?? "Guest";
+    console.log(displayName);  // "Guest"
+
+    const userScore: number | null = 85;
+    const finalScore = userScore ?? 0;
+    console.log(finalScore);  // 85
+
+    // Chaining nullish coalescing (identical operator!)
+    const primary: string | null = null;
+    const secondary: string | null = null;
+    const fallback = "Default";
+    const result = primary ?? secondary ?? fallback;
+    console.log(result);  // "Default"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -139,31 +241,62 @@ Avoid force unwrapping unless you are absolutely certain the value is not nil. P
 
 Optional chaining lets you call properties, methods, and subscripts on an optional that might be nil. If any part of the chain is nil, the entire expression returns nil.
 
-```swift
-struct Address {
-    var street: String
-    var city: String
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct Address {
+        var street: String
+        var city: String
+    }
 
-struct Person {
-    var name: String
-    var address: Address?
-}
+    struct Person {
+        var name: String
+        var address: Address?
+    }
 
-let alice = Person(name: "Alice", address: Address(street: "123 Main St", city: "London"))
-let bob = Person(name: "Bob", address: nil)
+    let alice = Person(name: "Alice", address: Address(street: "123 Main St", city: "London"))
+    let bob = Person(name: "Bob", address: nil)
 
-// Optional chaining
-print(alice.address?.city)        // Optional("London")
-print(bob.address?.city)          // nil
-print(alice.address?.city.count)  // Optional(6)
+    // Optional chaining
+    print(alice.address?.city)        // Optional("London")
+    print(bob.address?.city)          // nil
+    print(alice.address?.city.count)  // Optional(6)
 
-// With nil coalescing
-let aliceCity = alice.address?.city ?? "Unknown"
-let bobCity = bob.address?.city ?? "Unknown"
-print(aliceCity)  // "London"
-print(bobCity)    // "Unknown"
-```
+    // With nil coalescing
+    let aliceCity = alice.address?.city ?? "Unknown"
+    let bobCity = bob.address?.city ?? "Unknown"
+    print(aliceCity)  // "London"
+    print(bobCity)    // "Unknown"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Address {
+      street: string;
+      city: string;
+    }
+
+    interface Person {
+      name: string;
+      address?: Address;
+    }
+
+    const alice: Person = { name: "Alice", address: { street: "123 Main St", city: "London" } };
+    const bob: Person = { name: "Bob" };
+
+    // Optional chaining (identical operator!)
+    console.log(alice.address?.city);         // "London"
+    console.log(bob.address?.city);           // undefined
+    console.log(alice.address?.city.length);  // 6
+
+    // With nullish coalescing
+    const aliceCity = alice.address?.city ?? "Unknown";
+    const bobCity = bob.address?.city ?? "Unknown";
+    console.log(aliceCity);  // "London"
+    console.log(bobCity);    // "Unknown"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

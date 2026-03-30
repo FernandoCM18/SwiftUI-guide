@@ -4,6 +4,7 @@ description: Learn about enumerations in Swift including raw values, associated 
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Modeling a Group of Related Values
 
@@ -11,24 +12,41 @@ Enumerations (enums) define a common type for a group of related values, enablin
 
 ## Basic Enumerations
 
-```swift
-enum Direction {
-    case north
-    case south
-    case east
-    case west
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Direction {
+        case north
+        case south
+        case east
+        case west
+    }
 
-// Or on a single line
-enum Season {
-    case spring, summer, autumn, winter
-}
+    // Or on a single line
+    enum Season {
+        case spring, summer, autumn, winter
+    }
 
-var heading = Direction.north
-heading = .east  // Type already known, can use shorthand
+    var heading = Direction.north
+    heading = .east  // Type already known, can use shorthand
 
-print(heading)  // east
-```
+    print(heading)  // east
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Union types are the idiomatic TS equivalent
+    type Direction = "north" | "south" | "east" | "west";
+
+    type Season = "spring" | "summer" | "autumn" | "winter";
+
+    let heading: Direction = "north";
+    heading = "east";
+
+    console.log(heading);  // "east"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -62,36 +80,70 @@ default:
 
 Each enum case can have a pre-populated value (raw value) of the same type.
 
-```swift
-// String raw values
-enum Coin: String {
-    case penny = "1 cent"
-    case nickel = "5 cents"
-    case dime = "10 cents"
-    case quarter = "25 cents"
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // String raw values
+    enum Coin: String {
+        case penny = "1 cent"
+        case nickel = "5 cents"
+        case dime = "10 cents"
+        case quarter = "25 cents"
+    }
 
-print(Coin.dime.rawValue)  // "10 cents"
+    print(Coin.dime.rawValue)  // "10 cents"
 
-// Integer raw values (auto-increment)
-enum HTTPStatus: Int {
-    case ok = 200
-    case created = 201
-    case notFound = 404
-    case serverError = 500
-}
+    // Integer raw values (auto-increment)
+    enum HTTPStatus: Int {
+        case ok = 200
+        case created = 201
+        case notFound = 404
+        case serverError = 500
+    }
 
-print(HTTPStatus.ok.rawValue)       // 200
-print(HTTPStatus.notFound.rawValue) // 404
+    print(HTTPStatus.ok.rawValue)       // 200
+    print(HTTPStatus.notFound.rawValue) // 404
 
-// Initialize from raw value (returns Optional)
-if let status = HTTPStatus(rawValue: 404) {
-    print("Status: \(status)")  // "Status: notFound"
-}
+    // Initialize from raw value (returns Optional)
+    if let status = HTTPStatus(rawValue: 404) {
+        print("Status: \(status)")  // "Status: notFound"
+    }
 
-let unknown = HTTPStatus(rawValue: 999)
-print(unknown)  // nil
-```
+    let unknown = HTTPStatus(rawValue: 999)
+    print(unknown)  // nil
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // String enum
+    enum Coin {
+      Penny = "1 cent",
+      Nickel = "5 cents",
+      Dime = "10 cents",
+      Quarter = "25 cents",
+    }
+
+    console.log(Coin.Dime);  // "10 cents"
+
+    // Numeric enum
+    enum HTTPStatus {
+      Ok = 200,
+      Created = 201,
+      NotFound = 404,
+      ServerError = 500,
+    }
+
+    console.log(HTTPStatus.Ok);       // 200
+    console.log(HTTPStatus.NotFound); // 404
+
+    // Reverse lookup (numeric enums only)
+    const status: string | undefined = HTTPStatus[404];
+    if (status) {
+      console.log(`Status: ${status}`);  // "Status: NotFound"
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -124,51 +176,107 @@ print(Weekday.wednesday.rawValue)  // 3
 
 Unlike raw values, associated values let each case carry different types of data.
 
-```swift
-enum Barcode {
-    case upc(Int, Int, Int, Int)
-    case qrCode(String)
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Barcode {
+        case upc(Int, Int, Int, Int)
+        case qrCode(String)
+    }
 
-var product = Barcode.upc(8, 85909, 51226, 3)
-product = .qrCode("ABCDEFGHIJKLMNOP")
+    var product = Barcode.upc(8, 85909, 51226, 3)
+    product = .qrCode("ABCDEFGHIJKLMNOP")
 
-// Pattern matching with associated values
-switch product {
-case .upc(let numberSystem, let manufacturer, let product, let check):
-    print("UPC: \(numberSystem), \(manufacturer), \(product), \(check)")
-case .qrCode(let code):
-    print("QR code: \(code)")
-}
-// Prints: "QR code: ABCDEFGHIJKLMNOP"
-```
+    // Pattern matching with associated values
+    switch product {
+    case .upc(let numberSystem, let manufacturer, let product, let check):
+        print("UPC: \(numberSystem), \(manufacturer), \(product), \(check)")
+    case .qrCode(let code):
+        print("QR code: \(code)")
+    }
+    // Prints: "QR code: ABCDEFGHIJKLMNOP"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Discriminated union: each variant has a "type" tag
+    type Barcode =
+      | { type: "upc"; numberSystem: number; manufacturer: number; product: number; check: number }
+      | { type: "qrCode"; code: string };
+
+    let product: Barcode = { type: "upc", numberSystem: 8, manufacturer: 85909, product: 51226, check: 3 };
+    product = { type: "qrCode", code: "ABCDEFGHIJKLMNOP" };
+
+    // Pattern matching via switch on the discriminant
+    switch (product.type) {
+      case "upc":
+        console.log(`UPC: ${product.numberSystem}, ${product.manufacturer}, ${product.product}, ${product.check}`);
+        break;
+      case "qrCode":
+        console.log(`QR code: ${product.code}`);
+        break;
+    }
+    // Prints: "QR code: ABCDEFGHIJKLMNOP"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### Practical Example: Network Result
 
-```swift
-enum NetworkResult {
-    case success(data: String, statusCode: Int)
-    case failure(error: String)
-    case loading(progress: Double)
-}
-
-func handleResult(_ result: NetworkResult) {
-    switch result {
-    case .success(let data, let code):
-        print("Success (\(code)): \(data)")
-    case .failure(let error):
-        print("Error: \(error)")
-    case .loading(let progress):
-        print("Loading: \(Int(progress * 100))%")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum NetworkResult {
+        case success(data: String, statusCode: Int)
+        case failure(error: String)
+        case loading(progress: Double)
     }
-}
 
-handleResult(.success(data: "{\"name\": \"Alice\"}", statusCode: 200))
-handleResult(.failure(error: "Connection timeout"))
-handleResult(.loading(progress: 0.75))
-```
+    func handleResult(_ result: NetworkResult) {
+        switch result {
+        case .success(let data, let code):
+            print("Success (\(code)): \(data)")
+        case .failure(let error):
+            print("Error: \(error)")
+        case .loading(let progress):
+            print("Loading: \(Int(progress * 100))%")
+        }
+    }
+
+    handleResult(.success(data: "{\"name\": \"Alice\"}", statusCode: 200))
+    handleResult(.failure(error: "Connection timeout"))
+    handleResult(.loading(progress: 0.75))
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    type NetworkResult =
+      | { status: "success"; data: string; statusCode: number }
+      | { status: "failure"; error: string }
+      | { status: "loading"; progress: number };
+
+    function handleResult(result: NetworkResult): void {
+      switch (result.status) {
+        case "success":
+          console.log(`Success (${result.statusCode}): ${result.data}`);
+          break;
+        case "failure":
+          console.log(`Error: ${result.error}`);
+          break;
+        case "loading":
+          console.log(`Loading: ${Math.round(result.progress * 100)}%`);
+          break;
+      }
+    }
+
+    handleResult({ status: "success", data: '{"name": "Alice"}', statusCode: 200 });
+    handleResult({ status: "failure", error: "Connection timeout" });
+    handleResult({ status: "loading", progress: 0.75 });
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -176,26 +284,53 @@ handleResult(.loading(progress: 0.75))
 
 Conforming to `CaseIterable` gives you a collection of all cases.
 
-```swift
-enum Beverage: String, CaseIterable {
-    case coffee = "Coffee"
-    case tea = "Tea"
-    case juice = "Juice"
-    case water = "Water"
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Beverage: String, CaseIterable {
+        case coffee = "Coffee"
+        case tea = "Tea"
+        case juice = "Juice"
+        case water = "Water"
+    }
 
-// Access all cases
-print(Beverage.allCases.count)  // 4
+    // Access all cases
+    print(Beverage.allCases.count)  // 4
 
-for drink in Beverage.allCases {
-    print(drink.rawValue)
-}
-// Coffee, Tea, Juice, Water
+    for drink in Beverage.allCases {
+        print(drink.rawValue)
+    }
+    // Coffee, Tea, Juice, Water
 
-// Useful for creating menus or lists
-let options = Beverage.allCases.map { $0.rawValue }
-print(options)  // ["Coffee", "Tea", "Juice", "Water"]
-```
+    // Useful for creating menus or lists
+    let options = Beverage.allCases.map { $0.rawValue }
+    print(options)  // ["Coffee", "Tea", "Juice", "Water"]
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    enum Beverage {
+      Coffee = "Coffee",
+      Tea = "Tea",
+      Juice = "Juice",
+      Water = "Water",
+    }
+
+    // Access all values with Object.values
+    const allBeverages = Object.values(Beverage);
+    console.log(allBeverages.length);  // 4
+
+    for (const drink of allBeverages) {
+      console.log(drink);
+    }
+    // Coffee, Tea, Juice, Water
+
+    // Useful for creating menus or lists
+    const options = Object.values(Beverage);
+    console.log(options);  // ["Coffee", "Tea", "Juice", "Water"]
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -203,36 +338,69 @@ print(options)  // ["Coffee", "Tea", "Juice", "Water"]
 
 Enums can have computed properties, methods, and initializers.
 
-```swift
-enum Temperature {
-    case celsius(Double)
-    case fahrenheit(Double)
-    case kelvin(Double)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    enum Temperature {
+        case celsius(Double)
+        case fahrenheit(Double)
+        case kelvin(Double)
 
-    var inCelsius: Double {
-        switch self {
-        case .celsius(let value):
-            return value
-        case .fahrenheit(let value):
-            return (value - 32) * 5 / 9
-        case .kelvin(let value):
-            return value - 273.15
+        var inCelsius: Double {
+            switch self {
+            case .celsius(let value):
+                return value
+            case .fahrenheit(let value):
+                return (value - 32) * 5 / 9
+            case .kelvin(let value):
+                return value - 273.15
+            }
+        }
+
+        func description() -> String {
+            switch self {
+            case .celsius(let v): return "\(v)°C"
+            case .fahrenheit(let v): return "\(v)°F"
+            case .kelvin(let v): return "\(v)K"
+            }
         }
     }
 
-    func description() -> String {
-        switch self {
-        case .celsius(let v): return "\(v)°C"
-        case .fahrenheit(let v): return "\(v)°F"
-        case .kelvin(let v): return "\(v)K"
-        }
-    }
-}
+    let boiling = Temperature.fahrenheit(212)
+    print(boiling.description())  // "212.0°F"
+    print(boiling.inCelsius)      // 100.0
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Use standalone functions that operate on the union type
+    type Temperature =
+      | { unit: "celsius"; value: number }
+      | { unit: "fahrenheit"; value: number }
+      | { unit: "kelvin"; value: number };
 
-let boiling = Temperature.fahrenheit(212)
-print(boiling.description())  // "212.0°F"
-print(boiling.inCelsius)      // 100.0
-```
+    function toCelsius(temp: Temperature): number {
+      switch (temp.unit) {
+        case "celsius":    return temp.value;
+        case "fahrenheit": return (temp.value - 32) * 5 / 9;
+        case "kelvin":     return temp.value - 273.15;
+      }
+    }
+
+    function describeTemp(temp: Temperature): string {
+      switch (temp.unit) {
+        case "celsius":    return `${temp.value}°C`;
+        case "fahrenheit": return `${temp.value}°F`;
+        case "kelvin":     return `${temp.value}K`;
+      }
+    }
+
+    const boiling: Temperature = { unit: "fahrenheit", value: 212 };
+    console.log(describeTemp(boiling));  // "212°F"
+    console.log(toCelsius(boiling));     // 100
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

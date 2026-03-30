@@ -4,6 +4,7 @@ description: Learn about control flow in Swift including if/else, switch, for-in
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Making Decisions and Repeating Code
 
@@ -13,24 +14,44 @@ Control flow statements determine the order in which your code executes. Swift p
 
 The most basic conditional statement. The condition must be a `Bool` -- Swift does not implicitly convert other types.
 
-```swift
-let temperature = 25
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let temperature = 25
 
-if temperature > 30 {
-    print("It's hot!")
-} else if temperature > 20 {
-    print("It's warm.")
-} else if temperature > 10 {
-    print("It's cool.")
-} else {
-    print("It's cold!")
-}
-// Prints: "It's warm."
+    if temperature > 30 {
+        print("It's hot!")
+    } else if temperature > 20 {
+        print("It's warm.")
+    } else if temperature > 10 {
+        print("It's cool.")
+    } else {
+        print("It's cold!")
+    }
+    // Prints: "It's warm."
 
-// if as an expression (Swift 5.9+)
-let description = if temperature > 20 { "warm" } else { "cool" }
-print(description)  // "warm"
-```
+    // if as an expression (Swift 5.9+)
+    let description = if temperature > 20 { "warm" } else { "cool" }
+    print(description)  // "warm"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const temperature = 25;
+
+    if (temperature > 30) {
+      console.log("It's hot!");
+    } else if (temperature > 20) {
+      console.log("It's warm.");
+    } else if (temperature > 10) {
+      console.log("It's cool.");
+    } else {
+      console.log("It's cold!");
+    }
+    // Prints: "It's warm."
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -38,20 +59,44 @@ print(description)  // "warm"
 
 Switch statements in Swift are extremely powerful. They must be exhaustive and do not fall through by default.
 
-```swift
-let fruit = "apple"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let fruit = "apple"
 
-switch fruit {
-case "apple":
-    print("An apple a day keeps the doctor away.")
-case "banana":
-    print("Bananas are rich in potassium.")
-case "cherry", "strawberry":
-    print("Berries are delicious!")
-default:
-    print("Unknown fruit.")
-}
-```
+    switch fruit {
+    case "apple":
+        print("An apple a day keeps the doctor away.")
+    case "banana":
+        print("Bananas are rich in potassium.")
+    case "cherry", "strawberry":
+        print("Berries are delicious!")
+    default:
+        print("Unknown fruit.")
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    const fruit = "apple";
+
+    switch (fruit) {
+      case "apple":
+        console.log("An apple a day keeps the doctor away.");
+        break;
+      case "banana":
+        console.log("Bananas are rich in potassium.");
+        break;
+      case "cherry":
+      case "strawberry":
+        console.log("Berries are delicious!");
+        break;
+      default:
+        console.log("Unknown fruit.");
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -118,34 +163,68 @@ case let x:
 
 The for-in loop iterates over sequences such as arrays, ranges, strings, and dictionaries.
 
-```swift
-// Iterating over an array
-let names = ["Alice", "Bob", "Charlie"]
-for name in names {
-    print("Hello, \(name)!")
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    // Iterating over an array
+    let names = ["Alice", "Bob", "Charlie"]
+    for name in names {
+        print("Hello, \(name)!")
+    }
 
-// Iterating over a range
-for i in 1...5 {
-    print(i)  // 1, 2, 3, 4, 5
-}
+    // Iterating over a range
+    for i in 1...5 {
+        print(i)  // 1, 2, 3, 4, 5
+    }
 
-// Half-open range (excludes upper bound)
-for i in 0..<3 {
-    print(i)  // 0, 1, 2
-}
+    // Half-open range (excludes upper bound)
+    for i in 0..<3 {
+        print(i)  // 0, 1, 2
+    }
 
-// Iterating over a dictionary
-let ages = ["Alice": 30, "Bob": 25]
-for (name, age) in ages {
-    print("\(name) is \(age)")
-}
+    // Iterating over a dictionary
+    let ages = ["Alice": 30, "Bob": 25]
+    for (name, age) in ages {
+        print("\(name) is \(age)")
+    }
 
-// Iterating over a string
-for char in "Swift" {
-    print(char)  // S, w, i, f, t
-}
-```
+    // Iterating over a string
+    for char in "Swift" {
+        print(char)  // S, w, i, f, t
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // Iterating over an array
+    const names = ["Alice", "Bob", "Charlie"];
+    for (const name of names) {
+      console.log(`Hello, ${name}!`);
+    }
+
+    // Iterating over a range
+    for (let i = 1; i <= 5; i++) {
+      console.log(i);  // 1, 2, 3, 4, 5
+    }
+
+    // Half-open range (excludes upper bound)
+    for (let i = 0; i < 3; i++) {
+      console.log(i);  // 0, 1, 2
+    }
+
+    // Iterating over an object
+    const ages: Record<string, number> = { Alice: 30, Bob: 25 };
+    for (const [name, age] of Object.entries(ages)) {
+      console.log(`${name} is ${age}`);
+    }
+
+    // Iterating over a string
+    for (const char of "Swift") {
+      console.log(char);  // S, w, i, f, t
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -174,21 +253,42 @@ for i in 1...20 where i % 3 == 0 {
 
 A while loop repeats a block of code while a condition is true.
 
-```swift
-var countdown = 5
-while countdown > 0 {
-    print("\(countdown)...")
-    countdown -= 1
-}
-print("Liftoff!")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    var countdown = 5
+    while countdown > 0 {
+        print("\(countdown)...")
+        countdown -= 1
+    }
+    print("Liftoff!")
 
-// Practical example: finding first power of 2 greater than 1000
-var power = 1
-while power <= 1000 {
-    power *= 2
-}
-print(power)  // 1024
-```
+    // Practical example: finding first power of 2 greater than 1000
+    var power = 1
+    while power <= 1000 {
+        power *= 2
+    }
+    print(power)  // 1024
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    let countdown = 5;
+    while (countdown > 0) {
+      console.log(`${countdown}...`);
+      countdown -= 1;
+    }
+    console.log("Liftoff!");
+
+    // Practical example: finding first power of 2 greater than 1000
+    let power = 1;
+    while (power <= 1000) {
+      power *= 2;
+    }
+    console.log(power);  // 1024
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -218,37 +318,75 @@ print("Total: \(result)")
 
 The `guard` statement requires a condition to be true in order for execution to continue. It is designed for early exits.
 
-```swift
-func greet(name: String?) {
-    guard let unwrappedName = name else {
-        print("No name provided!")
-        return
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func greet(name: String?) {
+        guard let unwrappedName = name else {
+            print("No name provided!")
+            return
+        }
+        // unwrappedName is available here
+        print("Hello, \(unwrappedName)!")
     }
-    // unwrappedName is available here
-    print("Hello, \(unwrappedName)!")
-}
 
-greet(name: "Alice")  // "Hello, Alice!"
-greet(name: nil)       // "No name provided!"
-```
+    greet(name: "Alice")  // "Hello, Alice!"
+    greet(name: nil)       // "No name provided!"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function greet(name: string | null): void {
+      if (!name) {
+        console.log("No name provided!");
+        return;
+      }
+      // name is narrowed to string here
+      console.log(`Hello, ${name}!`);
+    }
+
+    greet("Alice");  // "Hello, Alice!"
+    greet(null);     // "No name provided!"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ### guard with Multiple Conditions
 
-```swift
-func processAge(_ age: Int?) {
-    guard let age = age, age >= 0, age <= 150 else {
-        print("Invalid age")
-        return
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    func processAge(_ age: Int?) {
+        guard let age = age, age >= 0, age <= 150 else {
+            print("Invalid age")
+            return
+        }
+        print("Age is \(age)")
     }
-    print("Age is \(age)")
-}
 
-processAge(25)    // "Age is 25"
-processAge(-5)    // "Invalid age"
-processAge(nil)   // "Invalid age"
-```
+    processAge(25)    // "Age is 25"
+    processAge(-5)    // "Invalid age"
+    processAge(nil)   // "Invalid age"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    function processAge(age: number | null): void {
+      if (age === null || age < 0 || age > 150) {
+        console.log("Invalid age");
+        return;
+      }
+      console.log(`Age is ${age}`);
+    }
+
+    processAge(25);    // "Age is 25"
+    processAge(-5);    // "Invalid age"
+    processAge(null);  // "Invalid age"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

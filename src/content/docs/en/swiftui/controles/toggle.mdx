@@ -4,6 +4,7 @@ description: How to use Toggle in SwiftUI to create on/off switches.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `Toggle` lets the user switch between an on and off state.
 
@@ -13,30 +14,104 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Basic Usage
 
-```swift
-struct ToggleExample: View {
-    @State private var wifiEnabled = true
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct ToggleExample: View {
+        @State private var wifiEnabled = true
 
-    var body: some View {
-        Toggle("Wi-Fi", isOn: $wifiEnabled)
-            .padding()
+        var body: some View {
+            Toggle("Wi-Fi", isOn: $wifiEnabled)
+                .padding()
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function ToggleExample() {
+      const [wifiEnabled, setWifiEnabled] = useState(true);
+
+      return (
+        <label className="flex items-center gap-3 p-4">
+          <span>Wi-Fi</span>
+          <input
+            type="checkbox"
+            role="switch"
+            checked={wifiEnabled}
+            onChange={() => setWifiEnabled(!wifiEnabled)}
+            className="h-6 w-11 appearance-none rounded-full bg-gray-300 transition-colors checked:bg-green-500
+              after:ml-0.5 after:mt-0.5 after:block after:h-5 after:w-5 after:rounded-full after:bg-white
+              after:transition-transform checked:after:translate-x-5"
+          />
+        </label>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Toggle Styles
 
-```swift
-VStack(spacing: 20) {
-    Toggle("Switch", isOn: $option1)
-        .toggleStyle(.switch)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    VStack(spacing: 20) {
+        Toggle("Switch", isOn: $option1)
+            .toggleStyle(.switch)
 
-    Toggle("Button", isOn: $option2)
-        .toggleStyle(.button)
-}
-```
+        Toggle("Button", isOn: $option2)
+            .toggleStyle(.button)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    export default function ToggleStyles() {
+      const [option1, setOption1] = useState(false);
+      const [option2, setOption2] = useState(false);
+
+      return (
+        <div className="flex flex-col gap-5">
+          {/* Switch style */}
+          <label className="flex items-center gap-3">
+            <span>Switch</span>
+            <input
+              type="checkbox"
+              role="switch"
+              checked={option1}
+              onChange={() => setOption1(!option1)}
+              className="h-6 w-11 appearance-none rounded-full bg-gray-300 transition-colors checked:bg-green-500
+                after:ml-0.5 after:mt-0.5 after:block after:h-5 after:w-5 after:rounded-full after:bg-white
+                after:transition-transform checked:after:translate-x-5"
+            />
+          </label>
+
+          {/* Button style */}
+          <button
+            onClick={() => setOption2(!option2)}
+            className={`rounded-lg px-4 py-2 font-medium transition-colors ${
+              option2
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            Button
+          </button>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -55,25 +130,74 @@ Place `Toggle` inside a `Form` or `List` for native iOS settings appearance.
 
 ## Full Example
 
-```swift
-struct SettingsView: View {
-    @State private var notifications = true
-    @State private var sound = true
-    @State private var darkMode = false
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct SettingsView: View {
+        @State private var notifications = true
+        @State private var sound = true
+        @State private var darkMode = false
 
-    var body: some View {
-        Form {
-            Section("General") {
-                Toggle("Notifications", isOn: $notifications)
-                Toggle("Sound", isOn: $sound)
-            }
-            Section("Appearance") {
-                Toggle("Dark Mode", isOn: $darkMode)
-                    .tint(.indigo)
+        var body: some View {
+            Form {
+                Section("General") {
+                    Toggle("Notifications", isOn: $notifications)
+                    Toggle("Sound", isOn: $sound)
+                }
+                Section("Appearance") {
+                    Toggle("Dark Mode", isOn: $darkMode)
+                        .tint(.indigo)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+    import { useState } from "react";
+
+    function Toggle({ label, checked, onChange, tint = "bg-green-500" }: {
+      label: string; checked: boolean; onChange: () => void; tint?: string;
+    }) {
+      return (
+        <label className="flex items-center justify-between py-3">
+          <span>{label}</span>
+          <input
+            type="checkbox"
+            role="switch"
+            checked={checked}
+            onChange={onChange}
+            className={`h-6 w-11 appearance-none rounded-full bg-gray-300 transition-colors
+              after:ml-0.5 after:mt-0.5 after:block after:h-5 after:w-5 after:rounded-full after:bg-white
+              after:transition-transform checked:after:translate-x-5 checked:${tint}`}
+          />
+        </label>
+      );
+    }
+
+    export default function SettingsView() {
+      const [notifications, setNotifications] = useState(true);
+      const [sound, setSound] = useState(true);
+      const [darkMode, setDarkMode] = useState(false);
+
+      return (
+        <form className="mx-auto max-w-md divide-y rounded-xl bg-white shadow">
+          <fieldset className="p-4">
+            <legend className="mb-2 text-sm font-semibold text-gray-500">General</legend>
+            <Toggle label="Notifications" checked={notifications} onChange={() => setNotifications(!notifications)} />
+            <Toggle label="Sound" checked={sound} onChange={() => setSound(!sound)} />
+          </fieldset>
+          <fieldset className="p-4">
+            <legend className="mb-2 text-sm font-semibold text-gray-500">Appearance</legend>
+            <Toggle label="Dark Mode" checked={darkMode} onChange={() => setDarkMode(!darkMode)} tint="bg-indigo-500" />
+          </fieldset>
+        </form>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

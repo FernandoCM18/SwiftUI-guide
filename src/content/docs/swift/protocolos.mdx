@@ -4,6 +4,7 @@ description: Aprende sobre protocolos en Swift, incluyendo declaración, conform
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## ¿Qué son los protocolos?
 
@@ -11,89 +12,180 @@ Un protocolo define un contrato de métodos, propiedades y otros requisitos que 
 
 ## Declaración de un protocolo
 
-```swift
-protocol Describible {
-    var descripcion: String { get }
-    func describir()
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Describible {
+        var descripcion: String { get }
+        func describir()
+    }
 
-protocol Identificable {
-    var id: String { get set }
-}
-```
+    protocol Identificable {
+        var id: String { get set }
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Describible {
+        readonly descripcion: string;
+        describir(): void;
+    }
+
+    interface Identificable {
+        id: string;
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Conformidad a un protocolo
 
-```swift
-protocol Describible {
-    var descripcion: String { get }
-    func describir()
-}
-
-struct Producto: Describible {
-    var nombre: String
-    var precio: Double
-
-    // Implementación requerida
-    var descripcion: String {
-        return "\(nombre) - \(precio)€"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Describible {
+        var descripcion: String { get }
+        func describir()
     }
 
-    func describir() {
-        print(descripcion)
-    }
-}
+    struct Producto: Describible {
+        var nombre: String
+        var precio: Double
 
-let producto = Producto(nombre: "Teclado", precio: 49.99)
-producto.describir()  // "Teclado - 49.99€"
-```
+        // Implementación requerida
+        var descripcion: String {
+            return "\(nombre) - \(precio)€"
+        }
+
+        func describir() {
+            print(descripcion)
+        }
+    }
+
+    let producto = Producto(nombre: "Teclado", precio: 49.99)
+    producto.describir()  // "Teclado - 49.99€"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Describible {
+        readonly descripcion: string;
+        describir(): void;
+    }
+
+    class Producto implements Describible {
+        constructor(
+            public nombre: string,
+            public precio: number
+        ) {}
+
+        get descripcion(): string {
+            return `${this.nombre} - ${this.precio}€`;
+        }
+
+        describir(): void {
+            console.log(this.descripcion);
+        }
+    }
+
+    const producto = new Producto("Teclado", 49.99);
+    producto.describir(); // "Teclado - 49.99€"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Protocolos con métodos
 
-```swift
-protocol Calculable {
-    func area() -> Double
-    func perimetro() -> Double
-}
-
-struct Rectangulo: Calculable {
-    var ancho: Double
-    var alto: Double
-
-    func area() -> Double {
-        return ancho * alto
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Calculable {
+        func area() -> Double
+        func perimetro() -> Double
     }
 
-    func perimetro() -> Double {
-        return 2 * (ancho + alto)
+    struct Rectangulo: Calculable {
+        var ancho: Double
+        var alto: Double
+
+        func area() -> Double {
+            return ancho * alto
+        }
+
+        func perimetro() -> Double {
+            return 2 * (ancho + alto)
+        }
     }
-}
 
-struct Circulo: Calculable {
-    var radio: Double
+    struct Circulo: Calculable {
+        var radio: Double
 
-    func area() -> Double {
-        return .pi * radio * radio
+        func area() -> Double {
+            return .pi * radio * radio
+        }
+
+        func perimetro() -> Double {
+            return 2 * .pi * radio
+        }
     }
 
-    func perimetro() -> Double {
-        return 2 * .pi * radio
+    let formas: [Calculable] = [
+        Rectangulo(ancho: 5, alto: 3),
+        Circulo(radio: 4)
+    ]
+
+    for forma in formas {
+        print("Área: \(forma.area()), Perímetro: \(forma.perimetro())")
     }
-}
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Calculable {
+        area(): number;
+        perimetro(): number;
+    }
 
-let formas: [Calculable] = [
-    Rectangulo(ancho: 5, alto: 3),
-    Circulo(radio: 4)
-]
+    class Rectangulo implements Calculable {
+        constructor(public ancho: number, public alto: number) {}
 
-for forma in formas {
-    print("Área: \(forma.area()), Perímetro: \(forma.perimetro())")
-}
-```
+        area(): number {
+            return this.ancho * this.alto;
+        }
+
+        perimetro(): number {
+            return 2 * (this.ancho + this.alto);
+        }
+    }
+
+    class Circulo implements Calculable {
+        constructor(public radio: number) {}
+
+        area(): number {
+            return Math.PI * this.radio * this.radio;
+        }
+
+        perimetro(): number {
+            return 2 * Math.PI * this.radio;
+        }
+    }
+
+    const formas: Calculable[] = [
+        new Rectangulo(5, 3),
+        new Circulo(4),
+    ];
+
+    for (const forma of formas) {
+        console.log(`Área: ${forma.area()}, Perímetro: ${forma.perimetro()}`);
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -124,26 +216,52 @@ print("Encendido: \(luz.encendido)")  // true
 
 ## Herencia de protocolos
 
-```swift
-protocol Nombrable {
-    var nombre: String { get }
-}
-
-protocol Saludable: Nombrable {
-    func saludar() -> String
-}
-
-struct Usuario: Saludable {
-    var nombre: String
-
-    func saludar() -> String {
-        return "¡Hola! Soy \(nombre)"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Nombrable {
+        var nombre: String { get }
     }
-}
 
-let usuario = Usuario(nombre: "Ana")
-print(usuario.saludar())
-```
+    protocol Saludable: Nombrable {
+        func saludar() -> String
+    }
+
+    struct Usuario: Saludable {
+        var nombre: String
+
+        func saludar() -> String {
+            return "¡Hola! Soy \(nombre)"
+        }
+    }
+
+    let usuario = Usuario(nombre: "Ana")
+    print(usuario.saludar())
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Nombrable {
+        readonly nombre: string;
+    }
+
+    interface Saludable extends Nombrable {
+        saludar(): string;
+    }
+
+    class Usuario implements Saludable {
+        constructor(public readonly nombre: string) {}
+
+        saludar(): string {
+            return `¡Hola! Soy ${this.nombre}`;
+        }
+    }
+
+    const usuario = new Usuario("Ana");
+    console.log(usuario.saludar());
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -151,28 +269,51 @@ print(usuario.saludar())
 
 Puedes requerir que un tipo conforme a múltiples protocolos.
 
-```swift
-protocol Nombrable {
-    var nombre: String { get }
-}
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Nombrable {
+        var nombre: String { get }
+    }
 
-protocol ConEdad {
-    var edad: Int { get }
-}
+    protocol ConEdad {
+        var edad: Int { get }
+    }
 
-// El parámetro debe conformar AMBOS protocolos
-func presentar(_ persona: Nombrable & ConEdad) {
-    print("\(persona.nombre), \(persona.edad) años")
-}
+    // El parámetro debe conformar AMBOS protocolos
+    func presentar(_ persona: Nombrable & ConEdad) {
+        print("\(persona.nombre), \(persona.edad) años")
+    }
 
-struct Empleado: Nombrable, ConEdad {
-    var nombre: String
-    var edad: Int
-}
+    struct Empleado: Nombrable, ConEdad {
+        var nombre: String
+        var edad: Int
+    }
 
-let empleado = Empleado(nombre: "Carlos", edad: 30)
-presentar(empleado)
-```
+    let empleado = Empleado(nombre: "Carlos", edad: 30)
+    presentar(empleado)
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    interface Nombrable {
+        nombre: string;
+    }
+
+    interface ConEdad {
+        edad: number;
+    }
+
+    // El parámetro debe cumplir AMBAS interfaces (intersection type)
+    function presentar(persona: Nombrable & ConEdad): void {
+        console.log(`${persona.nombre}, ${persona.edad} años`);
+    }
+
+    const empleado: Nombrable & ConEdad = { nombre: "Carlos", edad: 30 };
+    presentar(empleado);
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -180,44 +321,91 @@ presentar(empleado)
 
 Las extensiones permiten proporcionar implementaciones por defecto.
 
-```swift
-protocol Saludable {
-    var nombre: String { get }
-    func saludar() -> String
-}
-
-// Implementación por defecto
-extension Saludable {
-    func saludar() -> String {
-        return "¡Hola! Soy \(nombre)"
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    protocol Saludable {
+        var nombre: String { get }
+        func saludar() -> String
     }
 
-    func despedir() -> String {
-        return "¡Adiós de parte de \(nombre)!"
+    // Implementación por defecto
+    extension Saludable {
+        func saludar() -> String {
+            return "¡Hola! Soy \(nombre)"
+        }
+
+        func despedir() -> String {
+            return "¡Adiós de parte de \(nombre)!"
+        }
     }
-}
 
-struct Robot: Saludable {
-    var nombre: String
-    // No necesita implementar saludar(), usa el valor por defecto
-}
-
-struct Humano: Saludable {
-    var nombre: String
-
-    // Puede sobreescribir la implementación por defecto
-    func saludar() -> String {
-        return "¡Buenos días! Me llamo \(nombre)"
+    struct Robot: Saludable {
+        var nombre: String
+        // No necesita implementar saludar(), usa el valor por defecto
     }
-}
 
-let robot = Robot(nombre: "R2D2")
-let humano = Humano(nombre: "María")
+    struct Humano: Saludable {
+        var nombre: String
 
-print(robot.saludar())    // "¡Hola! Soy R2D2"
-print(humano.saludar())   // "¡Buenos días! Me llamo María"
-print(robot.despedir())   // "¡Adiós de parte de R2D2!"
-```
+        // Puede sobreescribir la implementación por defecto
+        func saludar() -> String {
+            return "¡Buenos días! Me llamo \(nombre)"
+        }
+    }
+
+    let robot = Robot(nombre: "R2D2")
+    let humano = Humano(nombre: "María")
+
+    print(robot.saludar())    // "¡Hola! Soy R2D2"
+    print(humano.saludar())   // "¡Buenos días! Me llamo María"
+    print(robot.despedir())   // "¡Adiós de parte de R2D2!"
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```typescript
+    // TS no tiene extensiones de protocolo, pero se puede lograr
+    // algo similar con funciones de utilidad o mixins.
+
+    interface Saludable {
+        nombre: string;
+        saludar(): string;
+    }
+
+    // Funciones de utilidad como implementaciones por defecto
+    function saludarPorDefecto(s: Saludable): string {
+        return `¡Hola! Soy ${s.nombre}`;
+    }
+
+    function despedir(s: Saludable): string {
+        return `¡Adiós de parte de ${s.nombre}!`;
+    }
+
+    class Robot implements Saludable {
+        constructor(public nombre: string) {}
+
+        saludar(): string {
+            return saludarPorDefecto(this);
+        }
+    }
+
+    class Humano implements Saludable {
+        constructor(public nombre: string) {}
+
+        saludar(): string {
+            return `¡Buenos días! Me llamo ${this.nombre}`;
+        }
+    }
+
+    const robot = new Robot("R2D2");
+    const humano = new Humano("María");
+
+    console.log(robot.saludar());    // "¡Hola! Soy R2D2"
+    console.log(humano.saludar());   // "¡Buenos días! Me llamo María"
+    console.log(despedir(robot));    // "¡Adiós de parte de R2D2!"
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 

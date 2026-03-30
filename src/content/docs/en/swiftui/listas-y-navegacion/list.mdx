@@ -4,6 +4,7 @@ description: How to use List in SwiftUI to display collections of data in rows.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `List` displays a scrollable collection of data in rows, similar to `UITableView`.
 
@@ -13,53 +14,159 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Basic Usage
 
-```swift
-let fruits = ["Apple", "Banana", "Orange", "Grape"]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    let fruits = ["Apple", "Banana", "Orange", "Grape"]
 
-List(fruits, id: \.self) { fruit in
-    Text(fruit)
-}
-```
+    List(fruits, id: \.self) { fruit in
+        Text(fruit)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    const fruits = ["Apple", "Banana", "Orange", "Grape"];
+
+    export default function FruitList() {
+      return (
+        <ul className="divide-y divide-gray-200">
+          {fruits.map((fruit) => (
+            <li key={fruit} className="px-4 py-3">
+              {fruit}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Sections
 
-```swift
-List {
-    Section("Fruits") {
-        Text("Apple")
-        Text("Banana")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    List {
+        Section("Fruits") {
+            Text("Apple")
+            Text("Banana")
+        }
+        Section("Vegetables") {
+            Text("Carrot")
+            Text("Broccoli")
+        }
     }
-    Section("Vegetables") {
-        Text("Carrot")
-        Text("Broccoli")
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    const sections = [
+      { title: "Fruits", items: ["Apple", "Banana"] },
+      { title: "Vegetables", items: ["Carrot", "Broccoli"] },
+    ];
+
+    export default function SectionedList() {
+      return (
+        <div className="divide-y divide-gray-200">
+          {sections.map((section) => (
+            <div key={section.title}>
+              <h3 className="px-4 py-2 text-sm font-semibold text-gray-500 bg-gray-50">
+                {section.title}
+              </h3>
+              <ul>
+                {section.items.map((item) => (
+                  <li key={item} className="px-4 py-3">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      );
     }
-}
-```
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Swipe Actions
 
-```swift
-List {
-    ForEach(items) { item in
-        Text(item.title)
-            .swipeActions(edge: .trailing) {
-                Button(role: .destructive) { } label: {
-                    Label("Delete", systemImage: "trash")
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    List {
+        ForEach(items) { item in
+            Text(item.title)
+                .swipeActions(edge: .trailing) {
+                    Button(role: .destructive) { } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
                 }
-            }
-            .swipeActions(edge: .leading) {
-                Button { } label: {
-                    Label("Favorite", systemImage: "star")
+                .swipeActions(edge: .leading) {
+                    Button { } label: {
+                        Label("Favorite", systemImage: "star")
+                    }
+                    .tint(.yellow)
                 }
-                .tint(.yellow)
-            }
+        }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    interface Item {
+      id: string;
+      title: string;
+    }
+
+    export default function SwipeActionList({ items }: { items: Item[] }) {
+      const [list, setList] = useState(items);
+
+      const handleDelete = (id: string) => {
+        setList((prev) => prev.filter((item) => item.id !== id));
+      };
+
+      const handleFavorite = (id: string) => {
+        console.log("Favorited", id);
+      };
+
+      return (
+        <ul className="divide-y divide-gray-200">
+          {list.map((item) => (
+            <li key={item.id} className="flex items-center justify-between px-4 py-3">
+              <span>{item.title}</span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleFavorite(item.id)}
+                  className="rounded bg-yellow-400 px-2 py-1 text-sm"
+                >
+                  ★ Favorite
+                </button>
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  className="rounded bg-red-500 px-2 py-1 text-sm text-white"
+                >
+                  🗑 Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -78,33 +185,86 @@ Use `List` with `.onDelete` and `EditButton()` to create editable lists.
 
 ## Full Example
 
-```swift
-struct ContactsView: View {
-    @State private var contacts = ["Ana", "Carlos", "Diana", "Eduardo"]
-    @State private var search = ""
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct ContactsView: View {
+        @State private var contacts = ["Ana", "Carlos", "Diana", "Eduardo"]
+        @State private var search = ""
 
-    var filtered: [String] {
-        search.isEmpty ? contacts : contacts.filter { $0.localizedCaseInsensitiveContains(search) }
-    }
+        var filtered: [String] {
+            search.isEmpty ? contacts : contacts.filter { $0.localizedCaseInsensitiveContains(search) }
+        }
 
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(filtered, id: \.self) { contact in
-                    HStack {
-                        Image(systemName: "person.circle.fill")
-                            .foregroundStyle(.blue)
-                        Text(contact)
+        var body: some View {
+            NavigationStack {
+                List {
+                    ForEach(filtered, id: \.self) { contact in
+                        HStack {
+                            Image(systemName: "person.circle.fill")
+                                .foregroundStyle(.blue)
+                            Text(contact)
+                        }
                     }
+                    .onDelete { contacts.remove(atOffsets: $0) }
                 }
-                .onDelete { contacts.remove(atOffsets: $0) }
+                .navigationTitle("Contacts")
+                .searchable(text: $search)
+                .toolbar { EditButton() }
             }
-            .navigationTitle("Contacts")
-            .searchable(text: $search)
-            .toolbar { EditButton() }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useState } from "react";
+
+    const initialContacts = ["Ana", "Carlos", "Diana", "Eduardo"];
+
+    export default function ContactsPage() {
+      const [contacts, setContacts] = useState(initialContacts);
+      const [search, setSearch] = useState("");
+
+      const filtered = contacts.filter((c) =>
+        c.toLowerCase().includes(search.toLowerCase())
+      );
+
+      const handleDelete = (name: string) => {
+        setContacts((prev) => prev.filter((c) => c !== name));
+      };
+
+      return (
+        <div className="mx-auto max-w-md">
+          <h1 className="p-4 text-2xl font-bold">Contacts</h1>
+          <input
+            type="search"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full border-b px-4 py-2 outline-none focus:border-blue-500"
+          />
+          <ul className="divide-y divide-gray-200">
+            {filtered.map((contact) => (
+              <li key={contact} className="flex items-center gap-3 px-4 py-3">
+                <span className="text-2xl text-blue-500">👤</span>
+                <span className="flex-1">{contact}</span>
+                <button
+                  onClick={() => handleDelete(contact)}
+                  className="text-sm text-red-500"
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

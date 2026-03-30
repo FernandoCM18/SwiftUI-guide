@@ -4,6 +4,7 @@ description: How to use ScrollView in SwiftUI to create scrollable content.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `ScrollView` creates scrollable areas when content exceeds the available space.
 
@@ -13,38 +14,86 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Vertical (Default)
 
-```swift
-ScrollView {
-    VStack(spacing: 20) {
-        ForEach(0..<20) { i in
-            Text("Item \(i)")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.blue.opacity(0.1))
-                .clipShape(.rect(cornerRadius: 10))
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    ScrollView {
+        VStack(spacing: 20) {
+            ForEach(0..<20) { i in
+                Text("Item \(i)")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue.opacity(0.1))
+                    .clipShape(.rect(cornerRadius: 10))
+            }
         }
+        .padding()
     }
-    .padding()
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function VerticalScroll() {
+      return (
+        <div className="h-96 overflow-y-auto p-4">
+          <div className="flex flex-col gap-5">
+            {Array.from({ length: 20 }, (_, i) => (
+              <div
+                key={i}
+                className="w-full rounded-lg bg-blue-50 p-4 text-center"
+              >
+                Item {i}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Horizontal
 
-```swift
-ScrollView(.horizontal, showsIndicators: false) {
-    HStack(spacing: 16) {
-        ForEach(0..<10) { i in
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.purple.opacity(0.3))
-                .frame(width: 150, height: 200)
-                .overlay(Text("Card \(i)").font(.headline))
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    ScrollView(.horizontal, showsIndicators: false) {
+        HStack(spacing: 16) {
+            ForEach(0..<10) { i in
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.purple.opacity(0.3))
+                    .frame(width: 150, height: 200)
+                    .overlay(Text("Card \(i)").font(.headline))
+            }
         }
+        .padding()
     }
-    .padding()
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    export default function HorizontalScroll() {
+      return (
+        <div className="overflow-x-auto scrollbar-hide p-4">
+          <div className="flex gap-4">
+            {Array.from({ length: 10 }, (_, i) => (
+              <div
+                key={i}
+                className="flex h-[200px] w-[150px] shrink-0 items-center justify-center rounded-xl bg-purple-100 font-semibold"
+              >
+                Card {i}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -52,21 +101,61 @@ ScrollView(.horizontal, showsIndicators: false) {
 
 Scroll programmatically to specific views:
 
-```swift
-ScrollViewReader { proxy in
-    VStack {
-        Button("Go to bottom") {
-            withAnimation { proxy.scrollTo("last", anchor: .bottom) }
-        }
-        ScrollView {
-            ForEach(0..<50) { i in
-                Text("Row \(i)").id(i).padding()
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    ScrollViewReader { proxy in
+        VStack {
+            Button("Go to bottom") {
+                withAnimation { proxy.scrollTo("last", anchor: .bottom) }
             }
-            Text("End").id("last")
+            ScrollView {
+                ForEach(0..<50) { i in
+                    Text("Row \(i)").id(i).padding()
+                }
+                Text("End").id("last")
+            }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    "use client";
+
+    import { useRef } from "react";
+
+    export default function ScrollToBottom() {
+      const endRef = useRef<HTMLDivElement>(null);
+
+      const scrollToEnd = () => {
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
+      };
+
+      return (
+        <div>
+          <button
+            onClick={scrollToEnd}
+            className="mb-2 rounded bg-blue-500 px-4 py-2 text-white"
+          >
+            Go to bottom
+          </button>
+          <div className="h-96 overflow-y-auto">
+            {Array.from({ length: 50 }, (_, i) => (
+              <div key={i} className="p-3">
+                Row {i}
+              </div>
+            ))}
+            <div ref={endRef} className="p-3">
+              End
+            </div>
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -76,33 +165,68 @@ Use `LazyVStack` or `LazyHStack` inside `ScrollView` for better performance with
 
 ## Full Example
 
-```swift
-struct GalleryView: View {
-    let categories = ["Recent", "Favorites", "Shared"]
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct GalleryView: View {
+        let categories = ["Recent", "Favorites", "Shared"]
 
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                ForEach(categories, id: \.self) { category in
-                    VStack(alignment: .leading) {
-                        Text(category).font(.title2).bold().padding(.horizontal)
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(0..<8) { i in
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color.accentColor.opacity(0.2))
-                                        .frame(width: 120, height: 120)
-                                        .overlay(Image(systemName: "photo").font(.largeTitle))
+        var body: some View {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    ForEach(categories, id: \.self) { category in
+                        VStack(alignment: .leading) {
+                            Text(category).font(.title2).bold().padding(.horizontal)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 12) {
+                                    ForEach(0..<8) { i in
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(Color.accentColor.opacity(0.2))
+                                            .frame(width: 120, height: 120)
+                                            .overlay(Image(systemName: "photo").font(.largeTitle))
+                                    }
                                 }
+                                .padding(.horizontal)
                             }
-                            .padding(.horizontal)
                         }
                     }
                 }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    const categories = ["Recent", "Favorites", "Shared"];
+
+    export default function GalleryPage() {
+      return (
+        <div className="h-screen overflow-y-auto">
+          <div className="flex flex-col gap-6 py-4">
+            {categories.map((category) => (
+              <section key={category}>
+                <h2 className="px-4 text-xl font-bold">{category}</h2>
+                <div className="overflow-x-auto scrollbar-hide px-4 pt-2">
+                  <div className="flex gap-3">
+                    {Array.from({ length: 8 }, (_, i) => (
+                      <div
+                        key={i}
+                        className="flex h-[120px] w-[120px] shrink-0 items-center justify-center rounded-xl bg-blue-100 text-3xl"
+                      >
+                        🖼
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />

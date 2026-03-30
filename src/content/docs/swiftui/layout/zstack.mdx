@@ -4,6 +4,7 @@ description: Cómo usar ZStack en SwiftUI para superponer vistas en capas.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 `ZStack` (Z-axis Stack) superpone sus vistas hijas una encima de otra, creando capas. La primera vista está al fondo y la última al frente.
 
@@ -13,34 +14,63 @@ import PlaygroundLink from '@components/PlaygroundLink.astro';
 
 ## Uso básico
 
-```swift
-ZStack {
-    Color.blue           // Fondo
-    Text("Hola Mundo")   // Frente
-        .foregroundStyle(.white)
-        .font(.largeTitle)
-}
-```
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    ZStack {
+        Color.blue           // Fondo
+        Text("Hola Mundo")   // Frente
+            .foregroundStyle(.white)
+            .font(.largeTitle)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <div className="relative bg-blue-500">
+      <p className="absolute inset-0 flex items-center justify-center text-white text-3xl font-bold">
+        Hola Mundo
+      </p>
+    </div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
 ## Alineación
 
-```swift
-ZStack(alignment: .bottomTrailing) {
-    Image(systemName: "photo")
-        .resizable()
-        .frame(width: 200, height: 200)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    ZStack(alignment: .bottomTrailing) {
+        Image(systemName: "photo")
+            .resizable()
+            .frame(width: 200, height: 200)
 
-    // Insignia en la esquina inferior derecha
-    Text("Nuevo")
-        .padding(6)
-        .background(Color.red)
-        .foregroundStyle(.white)
-        .clipShape(.rect(cornerRadius: 8))
-        .padding(8)
-}
-```
+        // Insignia en la esquina inferior derecha
+        Text("Nuevo")
+            .padding(6)
+            .background(Color.red)
+            .foregroundStyle(.white)
+            .clipShape(.rect(cornerRadius: 8))
+            .padding(8)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <div className="relative w-[200px] h-[200px]">
+      <img src="/photo.png" alt="Foto" className="w-full h-full object-cover" />
+
+      {/* Insignia en la esquina inferior derecha */}
+      <span className="absolute bottom-2 right-2 px-2 py-1 bg-red-500 text-white text-sm rounded-lg">
+        Nuevo
+      </span>
+    </div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -54,24 +84,42 @@ Opciones de alineación:
 
 Las vistas se apilan en orden de declaración:
 
-```swift
-ZStack {
-    // Capa 1: fondo
-    RoundedRectangle(cornerRadius: 20)
-        .fill(Color.purple)
-        .frame(width: 200, height: 200)
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    ZStack {
+        // Capa 1: fondo
+        RoundedRectangle(cornerRadius: 20)
+            .fill(Color.purple)
+            .frame(width: 200, height: 200)
 
-    // Capa 2: medio
-    RoundedRectangle(cornerRadius: 15)
-        .fill(Color.purple.opacity(0.6))
-        .frame(width: 150, height: 150)
+        // Capa 2: medio
+        RoundedRectangle(cornerRadius: 15)
+            .fill(Color.purple.opacity(0.6))
+            .frame(width: 150, height: 150)
 
-    // Capa 3: frente
-    Text("SwiftUI")
-        .font(.title)
-        .foregroundStyle(.white)
-}
-```
+        // Capa 3: frente
+        Text("SwiftUI")
+            .font(.title)
+            .foregroundStyle(.white)
+    }
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    <div className="relative w-[200px] h-[200px] flex items-center justify-center">
+      {/* Capa 1: fondo */}
+      <div className="absolute inset-0 bg-purple-600 rounded-[20px]" />
+
+      {/* Capa 2: medio */}
+      <div className="absolute w-[150px] h-[150px] bg-purple-600/60 rounded-[15px]" />
+
+      {/* Capa 3: frente */}
+      <span className="relative text-xl font-bold text-white">SwiftUI</span>
+    </div>
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
 
@@ -81,45 +129,74 @@ Usa `.zIndex()` para cambiar el orden de apilamiento sin mover las vistas en el 
 
 ## Ejemplo completo
 
-```swift
-struct TarjetaConBadgeView: View {
-    let notificaciones = 5
+<Tabs syncKey="lang">
+  <TabItem label="Swift">
+    ```swift
+    struct TarjetaConBadgeView: View {
+        let notificaciones = 5
 
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-            // Tarjeta principal
-            VStack(alignment: .leading, spacing: 12) {
-                Image(systemName: "envelope.fill")
-                    .font(.largeTitle)
-                    .foregroundStyle(.blue)
+        var body: some View {
+            ZStack(alignment: .topTrailing) {
+                // Tarjeta principal
+                VStack(alignment: .leading, spacing: 12) {
+                    Image(systemName: "envelope.fill")
+                        .font(.largeTitle)
+                        .foregroundStyle(.blue)
 
-                Text("Mensajes")
-                    .font(.headline)
+                    Text("Mensajes")
+                        .font(.headline)
 
-                Text("Tienes mensajes sin leer")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            .padding()
-            .frame(width: 180, height: 150)
-            .background(Color(.systemBackground))
-            .clipShape(.rect(cornerRadius: 16))
-            .shadow(radius: 4)
+                    Text("Tienes mensajes sin leer")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
+                .frame(width: 180, height: 150)
+                .background(Color(.systemBackground))
+                .clipShape(.rect(cornerRadius: 16))
+                .shadow(radius: 4)
 
-            // Badge de notificación
-            if notificaciones > 0 {
-                Text("\(notificaciones)")
-                    .font(.caption2)
-                    .bold()
-                    .foregroundStyle(.white)
-                    .frame(width: 24, height: 24)
-                    .background(Color.red)
-                    .clipShape(Circle())
-                    .offset(x: 8, y: -8)
+                // Badge de notificación
+                if notificaciones > 0 {
+                    Text("\(notificaciones)")
+                        .font(.caption2)
+                        .bold()
+                        .foregroundStyle(.white)
+                        .frame(width: 24, height: 24)
+                        .background(Color.red)
+                        .clipShape(Circle())
+                        .offset(x: 8, y: -8)
+                }
             }
         }
     }
-}
-```
+    ```
+  </TabItem>
+  <TabItem label="React (Next.js)">
+    ```tsx
+    function TarjetaConBadge() {
+      const notificaciones = 5;
+
+      return (
+        <div className="relative w-[180px] h-[150px]">
+          {/* Tarjeta principal */}
+          <div className="flex flex-col items-start gap-3 p-4 w-full h-full bg-white rounded-2xl shadow-md">
+            <span className="text-3xl text-blue-500">✉️</span>
+            <h3 className="font-semibold">Mensajes</h3>
+            <p className="text-xs text-gray-500">Tienes mensajes sin leer</p>
+          </div>
+
+          {/* Badge de notificación */}
+          {notificaciones > 0 && (
+            <span className="absolute -top-2 -right-2 w-6 h-6 flex items-center justify-center bg-red-500 text-white text-xs font-bold rounded-full">
+              {notificaciones}
+            </span>
+          )}
+        </div>
+      );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 <PlaygroundLink />
