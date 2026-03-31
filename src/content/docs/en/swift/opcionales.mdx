@@ -27,7 +27,7 @@ Optionals are one of Swift's most important features. An optional represents a v
     var isActive: Bool? = nil
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     let name: string = "Alice";         // Must always have a value
     let nickname: string | null = null;  // Can be null
@@ -79,7 +79,7 @@ The safest way to unwrap an optional is with `if let`. The unwrapped value is on
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const input: string | null = "42";
 
@@ -141,7 +141,7 @@ Use `guard let` for early exits. The unwrapped value remains available after the
     validateUser(name: "Bob", age: 15)     // "Invalid user data"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     function processInput(input: string | null): void {
       if (input === null) {
@@ -196,7 +196,7 @@ The nil coalescing operator provides a default value when the optional is nil.
     print(result)  // "Default"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const savedUsername: string | null = null;
     const displayName = savedUsername ?? "Guest";
@@ -269,7 +269,7 @@ Optional chaining lets you call properties, methods, and subscripts on an option
     print(bobCity)    // "Unknown"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     interface Address {
       street: string;

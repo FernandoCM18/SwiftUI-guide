@@ -35,7 +35,7 @@ Aplica `@Observable` a una clase para que SwiftUI observe automáticamente todos
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { createContext, useContext, useState, ReactNode } from "react";
@@ -123,7 +123,7 @@ Con `@Observable`, crea el ViewModel con `@State` en la vista que lo posee:
     #Preview { ContadorView() }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { useContador, ContadorProvider } from "./ContadorProvider";
@@ -205,7 +205,7 @@ Para pasar el ViewModel a una vista hija sin `@EnvironmentObject`, simplemente p
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { useContador, ContadorProvider } from "./ContadorProvider";
@@ -296,7 +296,7 @@ Para compartir un ViewModel en toda la jerarquía de vistas, usa `@Environment` 
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { createContext, useContext, useState, ReactNode } from "react";

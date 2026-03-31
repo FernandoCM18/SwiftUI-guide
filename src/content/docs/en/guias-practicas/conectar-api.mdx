@@ -38,7 +38,7 @@ Use `Codable` to automatically map JSON to Swift structs:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // JSON from the API:
     // { "id": 1, "name": "iPhone 16", "price": 999.99, "in_stock": true }
@@ -111,7 +111,7 @@ If the API uses `snake_case`, you can avoid manual `CodingKeys` by configuring t
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const BASE_URL = "https://api.example.com";
 
@@ -168,7 +168,7 @@ If the API uses `snake_case`, you can avoid manual `CodingKeys` by configuring t
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     "use client";
 
@@ -256,7 +256,7 @@ If the API uses `snake_case`, you can avoid manual `CodingKeys` by configuring t
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
 
@@ -361,7 +361,7 @@ Use `.task { }` instead of `.onAppear` for async calls. It automatically cancels
     let created: Product = try await APIService.shared.post("/products", body: new)
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     async function apiPost<T, R>(endpoint: string, body: T): Promise<R> {
       const res = await fetch(`${BASE_URL}${endpoint}`, {
@@ -416,7 +416,7 @@ Use `.task { }` instead of `.onAppear` for async calls. It automatically cancels
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     async function apiFetchAuth<T>(
       endpoint: string,
@@ -513,7 +513,7 @@ Use `.task { }` instead of `.onAppear` for async calls. It automatically cancels
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
 

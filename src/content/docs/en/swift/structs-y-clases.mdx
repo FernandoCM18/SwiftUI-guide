@@ -33,7 +33,7 @@ Structs are **value types** -- when you copy them, you get an independent copy.
     print(copy.x)    // 99
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     interface Point {
       x: number;
@@ -84,7 +84,7 @@ Classes are **reference types** -- when you copy them, both variables point to t
     print(dog.name)  // "Buddy" (changed!)
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     class Animal {
       name: string;
@@ -155,7 +155,7 @@ With classes, assigning to a new variable does not create a copy. Both variables
     print(rect.height)  // 10.0
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     class Rectangle {
       width: number;
@@ -255,7 +255,7 @@ Both structs and classes can have methods.
     calc.display()  // "Result: 30.0"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     class Calculator {
       result: number = 0;
@@ -305,7 +305,7 @@ Struct methods that modify properties must be marked with `mutating`. Classes do
     print(MathConstants.circleArea(radius: 5))    // 78.539...
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     class MathConstants {
       static readonly pi = 3.14159265358979;
@@ -398,7 +398,7 @@ Only classes support inheritance. A class can inherit properties and methods fro
     // "Traveling at 120.0 km/h in gear 4, battery at 85.0%"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     class Vehicle {
       speed: number = 0;

@@ -33,7 +33,7 @@ Enumerations (enums) define a common type for a group of related values, enablin
     print(heading)  // east
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Union types are the idiomatic TS equivalent
     type Direction = "north" | "south" | "east" | "west";
@@ -113,7 +113,7 @@ Each enum case can have a pre-populated value (raw value) of the same type.
     print(unknown)  // nil
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // String enum
     enum Coin {
@@ -197,7 +197,7 @@ Unlike raw values, associated values let each case carry different types of data
     // Prints: "QR code: ABCDEFGHIJKLMNOP"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Discriminated union: each variant has a "type" tag
     type Barcode =
@@ -250,7 +250,7 @@ Unlike raw values, associated values let each case carry different types of data
     handleResult(.loading(progress: 0.75))
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     type NetworkResult =
       | { status: "success"; data: string; statusCode: number }
@@ -307,7 +307,7 @@ Conforming to `CaseIterable` gives you a collection of all cases.
     print(options)  // ["Coffee", "Tea", "Juice", "Water"]
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     enum Beverage {
       Coffee = "Coffee",
@@ -371,7 +371,7 @@ Enums can have computed properties, methods, and initializers.
     print(boiling.inCelsius)      // 100.0
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Use standalone functions that operate on the union type
     type Temperature =

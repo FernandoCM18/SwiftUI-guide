@@ -54,7 +54,7 @@ Una buena organización del proyecto facilita el mantenimiento, la colaboración
     └── Info.plist
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```
     mi-app/
     ├── app/
@@ -138,7 +138,7 @@ Para apps más grandes, organiza por **funcionalidad** en lugar de por tipo de a
     └── Resources/
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```
     mi-app/
     ├── app/
@@ -212,7 +212,7 @@ Para apps pequeñas, la organización por tipo (Models/, Views/, ViewModels/) es
     struct TarjetaProducto: View { }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Componentes: PascalCase (sin sufijo "View")
     function ProductoDetalle() { }
@@ -259,7 +259,7 @@ Para apps pequeñas, la organización por tipo (Models/, Views/, ViewModels/) es
     var onSeleccionar: (Producto) -> Void
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Variables: camelCase (igual que Swift)
     const nombreUsuario: string;
@@ -328,7 +328,7 @@ Para apps pequeñas, la organización por tipo (Models/, Views/, ViewModels/) es
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
 
@@ -433,7 +433,7 @@ Abstrae el origen de datos detrás de un protocolo:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Interface (equivalente a Protocol)
     interface ProductoRepository {
@@ -507,7 +507,7 @@ Abstrae el origen de datos detrás de un protocolo:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // MAL: un componente gigante con todo
     function HomePage() {
@@ -560,7 +560,7 @@ Abstrae el origen de datos detrás de un protocolo:
         .estiloTarjeta()
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Crear un componente wrapper (equivalente a ViewModifier)
     import { cn } from "@/lib/utils";
@@ -621,7 +621,7 @@ Abstrae el origen de datos detrás de un protocolo:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Con Storybook (storybook.js.org)
     import type { Meta, StoryObj } from "@storybook/react";
@@ -679,7 +679,7 @@ Abstrae el origen de datos detrás de un protocolo:
         .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     export const APP_CONSTANTS = {
       appName: "MiApp",
@@ -739,7 +739,7 @@ Abstrae el origen de datos detrás de un protocolo:
     let vmTest = ProductosViewModel(repository: MockProductoRepository())
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
 

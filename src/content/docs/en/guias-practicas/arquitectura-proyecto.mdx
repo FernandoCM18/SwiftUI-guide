@@ -54,7 +54,7 @@ Good project organization facilitates maintenance, collaboration, and scalabilit
     └── Info.plist
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```
     my-app/
     ├── app/                      # App Router entry
@@ -141,7 +141,7 @@ For larger apps, organize by **feature** instead of file type:
     └── Resources/
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```
     my-app/
     ├── app/
@@ -214,7 +214,7 @@ For small apps, organizing by type (Models/, Views/, ViewModels/) is sufficient.
     struct ProductCard: View { }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Pages: page.tsx inside route folder
     // app/products/[id]/page.tsx
@@ -261,7 +261,7 @@ For small apps, organizing by type (Models/, Views/, ViewModels/) is sufficient.
     var onSelect: (Product) -> Void
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // State: nouns in camelCase
     const [userName, setUserName] = useState("");
@@ -328,7 +328,7 @@ For small apps, organizing by type (Models/, Views/, ViewModels/) is sufficient.
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
 
@@ -434,7 +434,7 @@ Abstract the data source behind a protocol:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Interface (replaces Protocol)
     interface ProductRepository {
@@ -492,7 +492,7 @@ Abstract the data source behind a protocol:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // BAD: one giant component with everything
     function HomePage() {
@@ -541,7 +541,7 @@ Abstract the data source behind a protocol:
         .cardStyle()
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Wrapper component (replaces ViewModifier)
     function Card({ children }: { children: React.ReactNode }) {
@@ -593,7 +593,7 @@ Abstract the data source behind a protocol:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Storybook stories (equivalent to #Preview)
     // ProductCard.stories.tsx
@@ -646,7 +646,7 @@ Abstract the data source behind a protocol:
         .clipShape(.rect(cornerRadius: AppConstants.UI.cornerRadius))
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // lib/constants.ts
     export const APP_NAME = "MyApp";
@@ -700,7 +700,7 @@ Abstract the data source behind a protocol:
     let vmTest = ProductsViewModel(repository: MockProductRepository())
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
 

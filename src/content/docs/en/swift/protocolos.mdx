@@ -37,7 +37,7 @@ Protocols define a blueprint of methods, properties, and other requirements that
     dog.describe()  // "Dog named Rex"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     interface Describable {
       readonly description: string;
@@ -143,7 +143,7 @@ print(lightSwitch)  // off
     doc.save()
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     interface Printable {
       printDetails(): void;
@@ -208,7 +208,7 @@ Protocols can inherit from other protocols.
     print(person.greet())
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     interface Named {
       readonly name: string;
@@ -278,7 +278,7 @@ Protocol extensions let you provide default implementations for any method or pr
     print(teacher.greet())  // "I'm Professor Smith."
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // TS has no direct equivalent to protocol extensions.
     // Use a utility function to provide default behavior.
@@ -394,7 +394,7 @@ Swift encourages building functionality through protocol composition rather than
     duck.swim()  // "Swimming down to 2.0 meters"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     interface Flying {
       maxAltitude: number;

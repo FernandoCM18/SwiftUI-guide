@@ -30,7 +30,7 @@ Integers are whole numbers with no fractional component. Swift provides signed a
     print(UInt.min)  // 0
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const age: number = 30;
     const population = 7_900_000_000;  // Underscores for readability
@@ -66,7 +66,7 @@ For numbers with decimal places, Swift offers `Double` (64-bit) and `Float` (32-
     let tiny = 1.5e-4                     // 0.00015
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const pi: number = 3.14159265358979;
     const gravity: number = 9.81;
@@ -114,7 +114,7 @@ Strings are collections of characters. Swift strings are Unicode-compliant and v
     print(greeting.contains("World"))  // true
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const greeting = "Hello, World!";
     const multiline = `This is a
@@ -162,7 +162,7 @@ Booleans represent `true` or `false` and are used extensively in control flow.
     print(x != 3)   // true
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const isVisible = true;
     const isHidden = false;
@@ -213,7 +213,7 @@ Arrays are ordered collections of values of the same type.
     print(sorted)               // [1, 2, 3, 4, 5]
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Creating arrays
     let numbers: number[] = [1, 2, 3, 4, 5];
@@ -273,7 +273,7 @@ Dictionaries store key-value pairs with no defined ordering.
     print(capitals.values)      // All values
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Creating objects (most common Dictionary equivalent)
     const capitals: Record<string, string> = {
@@ -336,7 +336,7 @@ Sets are unordered collections of unique values.
     colors.remove("Red")
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Creating sets
     const colors = new Set<string>(["Red", "Green", "Blue"]);
@@ -398,7 +398,7 @@ Tuples group multiple values into a single compound value. The values can be of 
     print(coordinates.1)  // 5
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Typed tuples
     const point: [number, number] = [10.0, 20.0];
@@ -460,7 +460,7 @@ Swift does not automatically convert between types. You must convert explicitly.
     let invalid = Int("hello")    // nil
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const integer = 42;
     const decimal = 3.14;

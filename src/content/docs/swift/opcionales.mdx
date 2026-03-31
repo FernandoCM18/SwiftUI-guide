@@ -24,7 +24,7 @@ Un opcional en Swift representa un valor que puede existir o ser `nil` (ausente)
     // let otro: String = nil  // Error de compilación
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // En TypeScript, usamos union types con null o undefined
     const nombre: string = "Ana";
@@ -87,7 +87,7 @@ La forma más común y segura de extraer el valor de un opcional.
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const posibleNumero: number | null = parseInt("123") || null;
 
@@ -138,7 +138,7 @@ La forma más común y segura de extraer el valor de un opcional.
     procesarUsuario(nombre: "Luis", edad: nil)  // "Error: edad es requerida"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     function procesarUsuario(nombre: string | null, edad: number | null): void {
         if (nombre === null) {
@@ -192,7 +192,7 @@ Proporciona un valor por defecto cuando el opcional es nil.
     print("Max intentos: \(maxIntentos), Timeout: \(timeout)")
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     const nombreUsuario: string | null = null;
     const nombreMostrado = nombreUsuario ?? "Invitado";
@@ -276,7 +276,7 @@ Permite acceder a propiedades, métodos y subíndices de un opcional de forma se
     print(calleMayusculas ?? "N/A")  // "GRAN VÍA 1"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     interface Direccion {
         calle: string;

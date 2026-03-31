@@ -43,7 +43,7 @@ Las enumeraciones (enums) definen un tipo con un conjunto finito de valores posi
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Opción 1: Union type (más idiomático en TS)
     type Direccion = "norte" | "sur" | "este" | "oeste";
@@ -112,7 +112,7 @@ Los enums pueden tener un valor asociado fijo de tipo String, Int, Double, etc.
     print(Color.rojo.rawValue)  // "rojo"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Enum numérico con valores explícitos
     enum Planeta {
@@ -182,7 +182,7 @@ Permiten adjuntar datos diferentes a cada caso del enum.
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // En TS, los associated values se modelan con discriminated unions
     // usando un campo "type" como discriminador
@@ -237,7 +237,7 @@ Permiten adjuntar datos diferentes a cada caso del enum.
     manejarResultado(.sinConexion)
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     type ResultadoRed =
         | { status: "exito"; datos: string; codigo: number }
@@ -306,7 +306,7 @@ Permiten adjuntar datos diferentes a cada caso del enum.
     print(semaforo.descripcion)  // "Precaución"
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     type Semaforo = "rojo" | "amarillo" | "verde";
 
@@ -364,7 +364,7 @@ El protocolo `CaseIterable` proporciona una colección de todos los casos del en
     print("Opciones: \(opciones)")
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     enum Bebida {
         Cafe = "Café",
