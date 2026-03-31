@@ -16,13 +16,15 @@ export default defineConfig({
     starlight({
       title: 'Guía Swift & SwiftUI',
       customCss: ['./src/styles/code-appearance.css', './src/styles/reading-progress.css'],
+      components: {
+        MarkdownContent: './src/components/MarkdownContent.astro',
+      },
       lastUpdated: true,
       head: [
         { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
         { tag: 'meta', attrs: { property: 'og:site_name', content: 'Guía Swift & SwiftUI' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary' } },
         { tag: 'meta', attrs: { 'http-equiv': 'X-Content-Type-Options', content: 'nosniff' } },
-        { tag: 'script', attrs: { src: '/SwiftUI-guide/reading-progress.js', defer: true } },
       ],
       defaultLocale: 'root',
       locales: {
