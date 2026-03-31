@@ -103,6 +103,13 @@
     updateSidebar();
   }
 
-  // astro:page-load fires on every navigation including the first page load
+  // astro:page-load fires on navigations when View Transitions are enabled.
+  // DOMContentLoaded covers the initial page load in all cases.
   document.addEventListener('astro:page-load', init);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
