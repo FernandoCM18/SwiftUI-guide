@@ -1,60 +1,60 @@
 ---
 title: Funciones
-description: Aprende a declarar funciones en Swift, con parámetros, valores de retorno, valores por defecto y closures.
+description: Aprende a declarar y usar funciones en Swift, con parámetros, tipos de retorno, etiquetas de argumentos y closures.
 ---
 
 import PlaygroundLink from '@components/PlaygroundLink.astro';
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
-## Funciones en Swift
+## Bloques de código reutilizables
 
-Las funciones son bloques de código reutilizables que realizan una tarea específica. En Swift, las funciones son ciudadanos de primera clase, lo que significa que pueden asignarse a variables, pasarse como argumentos y retornarse desde otras funciones.
+Las funciones son bloques de código autocontenidos que realizan una tarea específica. Son uno de los elementos fundamentales más importantes en Swift.
 
 ## Declaración básica
 
 <Tabs syncKey="lang">
   <TabItem label="Swift">
     ```swift
-    // Función sin parámetros ni retorno
     func saludar() {
         print("¡Hola, mundo!")
     }
-    saludar()
 
-    // Función con parámetros
-    func saludarA(nombre: String) {
-        print("¡Hola, \(nombre)!")
-    }
-    saludarA(nombre: "Carlos")
+    saludar()  // "¡Hola, mundo!"
     ```
   </TabItem>
   <TabItem label="React (Next.js)">
     ```typescript
-    // Función sin parámetros ni retorno
     function saludar(): void {
       console.log("¡Hola, mundo!");
     }
-    saludar();
 
-    // Función con parámetros
-    function saludarA(nombre: string): void {
-      console.log(`¡Hola, ${nombre}!`);
-    }
-    saludarA("Carlos");
-
-    // Arrow function equivalente
-    const saludarB = (nombre: string): void => {
-      console.log(`¡Hola, ${nombre}!`);
-    };
+    saludar(); // "¡Hola, mundo!"
     ```
   </TabItem>
 </Tabs>
 
 <PlaygroundLink />
 
-## Valores de retorno
+## Funciones con parámetros
 
-Usa `->` para especificar el tipo de retorno.
+```swift
+func saludar(persona: String) {
+    print("¡Hola, \(persona)!")
+}
+
+saludar(persona: "Ana")  // "¡Hola, Ana!"
+
+// Múltiples parámetros
+func saludar(persona: String, de ciudad: String) {
+    print("¡Hola, \(persona) de \(ciudad)!")
+}
+
+saludar(persona: "Luis", de: "Madrid")
+```
+
+<PlaygroundLink />
+
+## Valores de retorno
 
 <Tabs syncKey="lang">
   <TabItem label="Swift">
@@ -62,21 +62,32 @@ Usa `->` para especificar el tipo de retorno.
     func sumar(a: Int, b: Int) -> Int {
         return a + b
     }
-    let resultado = sumar(a: 5, b: 3)
-    print("5 + 3 = \(resultado)")
 
-    // Retorno implícito (funciones de una sola expresión)
+    let resultado = sumar(a: 5, b: 3)
+    print(resultado)  // 8
+
+    // Retorno implícito en funciones de una sola expresión
     func multiplicar(a: Int, b: Int) -> Int {
-        a * b  // No necesita 'return' explícito
+        a * b
     }
-    print("4 × 7 = \(multiplicar(a: 4, b: 7))")
+
+    print(multiplicar(a: 4, b: 7))  // 28
 
     // Retornar múltiples valores con tuplas
-    func dividir(_ a: Int, entre b: Int) -> (cociente: Int, resto: Int) {
-        return (a / b, a % b)
+    func minimoMaximo(arreglo: [Int]) -> (min: Int, max: Int)? {
+        guard let primero = arreglo.first else { return nil }
+        var min = primero
+        var max = primero
+        for valor in arreglo {
+            if valor < min { min = valor }
+            if valor > max { max = valor }
+        }
+        return (min, max)
     }
-    let division = dividir(17, entre: 5)
-    print("Cociente: \(division.cociente), Resto: \(division.resto)")
+
+    if let limites = minimoMaximo(arreglo: [3, 1, 7, 2, 9]) {
+        print("Min: \(limites.min), Max: \(limites.max)")
+    }
     ```
   </TabItem>
   <TabItem label="React (Next.js)">
@@ -84,45 +95,57 @@ Usa `->` para especificar el tipo de retorno.
     function sumar(a: number, b: number): number {
       return a + b;
     }
+
     const resultado = sumar(5, 3);
-    console.log(`5 + 3 = ${resultado}`);
+    console.log(resultado); // 8
 
-    // Arrow function con retorno implícito
-    const multiplicar = (a: number, b: number): number => a * b;
-    console.log(`4 × 7 = ${multiplicar(4, 7)}`);
-
-    // Retornar múltiples valores con un objeto desestructurado
-    function dividir(a: number, b: number): { cociente: number; resto: number } {
-      return { cociente: Math.floor(a / b), resto: a % b };
+    function multiplicar(a: number, b: number): number {
+      return a * b;
     }
-    const { cociente, resto } = dividir(17, 5);
-    console.log(`Cociente: ${cociente}, Resto: ${resto}`);
+
+    console.log(multiplicar(4, 7)); // 28
+
+    // Retornar múltiples valores con un objeto
+    function minimoMaximo(arreglo: number[]): { min: number; max: number } | null {
+      if (arreglo.length === 0) return null;
+      return {
+        min: Math.min(...arreglo),
+        max: Math.max(...arreglo),
+      };
+    }
+
+    const limites = minimoMaximo([3, 1, 7, 2, 9]);
+    if (limites) {
+      console.log(`Min: ${limites.min}, Max: ${limites.max}`);
+    }
     ```
   </TabItem>
 </Tabs>
 
 <PlaygroundLink />
 
-## Etiquetas de argumentos
+## Etiquetas de argumentos y nombres de parámetros
 
-Swift permite tener una etiqueta externa y un nombre interno para cada parámetro.
+Las funciones en Swift pueden tener tanto una **etiqueta de argumento** (usada al llamar) como un **nombre de parámetro** (usado dentro de la función).
 
 ```swift
-// Etiqueta externa diferente al nombre interno
-func enviarMensaje(de remitente: String, para destinatario: String) {
-    print("\(remitente) → \(destinatario)")
+// 'para' es la etiqueta, 'persona' es el nombre del parámetro
+func saludar(para persona: String) -> String {
+    "¡Hola, \(persona)!"
 }
-enviarMensaje(de: "Ana", para: "Luis")
+print(saludar(para: "Carlos"))
 
-// Omitir etiqueta externa con _
-func potencia(_ base: Int, elevadoA exponente: Int) -> Int {
-    var resultado = 1
-    for _ in 1...exponente {
-        resultado *= base
-    }
-    return resultado
+// Omitir la etiqueta con _
+func cuadrado(_ numero: Int) -> Int {
+    numero * numero
 }
-print(potencia(2, elevadoA: 10))  // 1024
+print(cuadrado(5))  // 25
+
+// Etiquetas personalizadas para mayor legibilidad
+func mover(de origen: String, a destino: String) {
+    print("Viajando de \(origen) a \(destino)")
+}
+mover(de: "París", a: "Tokio")
 ```
 
 <PlaygroundLink />
@@ -132,28 +155,22 @@ print(potencia(2, elevadoA: 10))  // 1024
 <Tabs syncKey="lang">
   <TabItem label="Swift">
     ```swift
-    func crearUsuario(nombre: String, edad: Int = 18, pais: String = "España") -> String {
-        return "\(nombre), \(edad) años, \(pais)"
+    func saludar(nombre: String, saludo: String = "Hola") {
+        print("\(saludo), \(nombre)!")
     }
 
-    print(crearUsuario(nombre: "Ana"))                    // Usa valores por defecto
-    print(crearUsuario(nombre: "Luis", edad: 25))         // Solo cambia edad
-    print(crearUsuario(nombre: "María", pais: "México"))  // Solo cambia país
+    saludar(nombre: "Ana")                       // "Hola, Ana!"
+    saludar(nombre: "Ana", saludo: "Buenos días") // "Buenos días, Ana!"
     ```
   </TabItem>
   <TabItem label="React (Next.js)">
     ```typescript
-    function crearUsuario(
-      nombre: string,
-      edad: number = 18,
-      pais: string = "España"
-    ): string {
-      return `${nombre}, ${edad} años, ${pais}`;
+    function saludar(nombre: string, saludo: string = "Hola"): void {
+      console.log(`${saludo}, ${nombre}!`);
     }
 
-    console.log(crearUsuario("Ana"));
-    console.log(crearUsuario("Luis", 25));
-    console.log(crearUsuario("María", undefined, "México"));
+    saludar("Ana");                  // "Hola, Ana!"
+    saludar("Ana", "Buenos días");   // "Buenos días, Ana!"
     ```
   </TabItem>
 </Tabs>
@@ -162,36 +179,43 @@ print(potencia(2, elevadoA: 10))  // 1024
 
 ## Parámetros variádicos
 
-Aceptan cero o más valores del mismo tipo.
+Un parámetro variádico acepta cero o más valores del mismo tipo.
 
 ```swift
 func promedio(_ numeros: Double...) -> Double {
     guard !numeros.isEmpty else { return 0 }
-    let suma = numeros.reduce(0, +)
-    return suma / Double(numeros.count)
+    let total = numeros.reduce(0, +)
+    return total / Double(numeros.count)
 }
 
-print(promedio(10, 20, 30))       // 20.0
-print(promedio(5, 8, 12, 3, 7))   // 7.0
+print(promedio(10, 20, 30))  // 20.0
+print(promedio(5, 15))       // 10.0
 ```
 
 <PlaygroundLink />
 
 ## Parámetros inout
 
-Por defecto, los parámetros son constantes. Usa `inout` para modificar el valor original.
+Por defecto, los parámetros son constantes. Usa `inout` para permitir modificaciones.
 
 ```swift
-func intercambiar(_ a: inout Int, _ b: inout Int) {
-    let temporal = a
-    a = b
-    b = temporal
+func doblarEnLugar(_ numero: inout Int) {
+    numero *= 2
 }
 
-var x = 10
-var y = 20
+var miNumero = 10
+doblarEnLugar(&miNumero)
+print(miNumero)  // 20
+
+func intercambiar(_ a: inout Int, _ b: inout Int) {
+    let temp = a
+    a = b
+    b = temp
+}
+
+var x = 5, y = 10
 intercambiar(&x, &y)
-print("x = \(x), y = \(y)")  // x = 20, y = 10
+print("x: \(x), y: \(y)")  // "x: 10, y: 5"
 ```
 
 <PlaygroundLink />
@@ -202,53 +226,53 @@ Usa `inout` con moderación. En la mayoría de casos es mejor retornar un nuevo 
 
 ## Funciones como tipos
 
-Las funciones tienen un tipo definido por sus parámetros y retorno.
+Las funciones en Swift son tipos de primera clase. Puedes asignarlas a variables y pasarlas como argumentos.
 
 <Tabs syncKey="lang">
   <TabItem label="Swift">
     ```swift
-    // El tipo de esta función es (Int, Int) -> Int
     func sumar(_ a: Int, _ b: Int) -> Int { a + b }
     func restar(_ a: Int, _ b: Int) -> Int { a - b }
 
-    // Asignar función a una variable
+    // Tipo de función: (Int, Int) -> Int
     var operacion: (Int, Int) -> Int = sumar
     print(operacion(10, 5))  // 15
 
     operacion = restar
     print(operacion(10, 5))  // 5
 
-    // Función como parámetro
-    func aplicar(_ funcion: (Int, Int) -> Int, a: Int, b: Int) -> Int {
-        return funcion(a, b)
+    // Funciones como parámetros
+    func aplicar(_ a: Int, _ b: Int, operacion: (Int, Int) -> Int) -> Int {
+        operacion(a, b)
     }
-    print(aplicar(sumar, a: 3, b: 4))   // 7
-    print(aplicar(restar, a: 3, b: 4))  // -1
+
+    print(aplicar(10, 5, operacion: sumar))   // 15
+    print(aplicar(10, 5, operacion: restar))  // 5
     ```
   </TabItem>
   <TabItem label="React (Next.js)">
     ```typescript
-    // El tipo de esta función es (a: number, b: number) => number
     const sumar = (a: number, b: number): number => a + b;
     const restar = (a: number, b: number): number => a - b;
 
-    // Asignar función a una variable con tipo explícito
+    // Tipo de función: (a: number, b: number) => number
     let operacion: (a: number, b: number) => number = sumar;
     console.log(operacion(10, 5)); // 15
 
     operacion = restar;
     console.log(operacion(10, 5)); // 5
 
-    // Función como parámetro
+    // Funciones como parámetros
     function aplicar(
-      fn: (a: number, b: number) => number,
       a: number,
-      b: number
+      b: number,
+      operacion: (a: number, b: number) => number
     ): number {
-      return fn(a, b);
+      return operacion(a, b);
     }
-    console.log(aplicar(sumar, 3, 4));  // 7
-    console.log(aplicar(restar, 3, 4)); // -1
+
+    console.log(aplicar(10, 5, sumar));   // 15
+    console.log(aplicar(10, 5, restar));  // 5
     ```
   </TabItem>
 </Tabs>
@@ -257,151 +281,129 @@ Las funciones tienen un tipo definido por sus parámetros y retorno.
 
 ## Closures
 
-Los closures son bloques de código autocontenidos que capturan valores de su contexto. Son el equivalente a las lambdas o funciones anónimas en otros lenguajes.
+Los closures son bloques de código autocontenidos que pueden pasarse y usarse en el código. Son esencialmente funciones sin nombre.
 
 <Tabs syncKey="lang">
   <TabItem label="Swift">
     ```swift
     // Sintaxis completa de un closure
-    let saludoClosure = { (nombre: String) -> String in
+    let saludar = { (nombre: String) -> String in
         return "¡Hola, \(nombre)!"
     }
-    print(saludoClosure("Swift"))
+    print(saludar("Ana"))  // "¡Hola, Ana!"
 
-    // Closure como argumento
-    let numeros = [5, 2, 8, 1, 9, 3]
-    let ordenados = numeros.sorted(by: { (a: Int, b: Int) -> Bool in
+    // Closures con sorted
+    let nombres = ["Carlos", "Ana", "Luis"]
+
+    // Sintaxis completa
+    let ordenados1 = nombres.sorted(by: { (a: String, b: String) -> Bool in
         return a < b
     })
-    print(ordenados)  // [1, 2, 3, 5, 8, 9]
+
+    // Abreviado: inferencia de tipos + retorno implícito
+    let ordenados2 = nombres.sorted(by: { a, b in a < b })
+
+    // Más corto: nombres abreviados de argumentos
+    let ordenados3 = nombres.sorted(by: { $0 < $1 })
+
+    // Más corto aún: operador como función
+    let ordenados4 = nombres.sorted(by: <)
+
+    print(ordenados4)  // ["Ana", "Carlos", "Luis"]
     ```
   </TabItem>
   <TabItem label="React (Next.js)">
     ```typescript
-    // Arrow function (equivalente a un closure)
-    const saludoClosure = (nombre: string): string => {
+    // Arrow function (equivalente a los closures)
+    const saludar = (nombre: string): string => {
       return `¡Hola, ${nombre}!`;
     };
-    console.log(saludoClosure("TypeScript"));
+    console.log(saludar("Ana")); // "¡Hola, Ana!"
 
-    // Arrow function como argumento
-    const numeros = [5, 2, 8, 1, 9, 3];
-    const ordenados = numeros.sort((a: number, b: number): number => {
-      return a - b;
-    });
-    console.log(ordenados); // [1, 2, 3, 5, 8, 9]
+    // Ordenar con un comparador
+    const nombres = ["Carlos", "Ana", "Luis"];
+
+    const ordenados = [...nombres].sort((a, b) => a.localeCompare(b));
+
+    console.log(ordenados); // ["Ana", "Carlos", "Luis"]
     ```
   </TabItem>
 </Tabs>
 
 <PlaygroundLink />
 
-### Sintaxis abreviada de closures
+## Sintaxis de trailing closure
 
-Swift permite simplificar los closures de varias formas.
-
-```swift
-let numeros = [5, 2, 8, 1, 9, 3]
-
-// 1. Inferencia de tipos
-let v1 = numeros.sorted(by: { a, b in return a < b })
-
-// 2. Retorno implícito
-let v2 = numeros.sorted(by: { a, b in a < b })
-
-// 3. Nombres abreviados ($0, $1, ...)
-let v3 = numeros.sorted(by: { $0 < $1 })
-
-// 4. Operador como closure
-let v4 = numeros.sorted(by: <)
-
-// 5. Trailing closure
-let v5 = numeros.sorted { $0 < $1 }
-
-print(v5)  // [1, 2, 3, 5, 8, 9]
-```
-
-<PlaygroundLink />
-
-### Closures con map, filter y reduce
+Cuando el último parámetro de una función es un closure, puedes escribirlo fuera de los paréntesis.
 
 <Tabs syncKey="lang">
   <TabItem label="Swift">
     ```swift
     let numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-    // map: transforma cada elemento
-    let dobles = numeros.map { $0 * 2 }
-    print("Dobles: \(dobles)")  // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+    // Llamada estándar
+    let pares = numeros.filter({ $0 % 2 == 0 })
 
-    // filter: filtra elementos que cumplan una condición
-    let pares = numeros.filter { $0 % 2 == 0 }
-    print("Pares: \(pares)")  // [2, 4, 6, 8, 10]
+    // Trailing closure
+    let impares = numeros.filter { $0 % 2 != 0 }
 
-    // reduce: combina todos los elementos en un solo valor
-    let suma = numeros.reduce(0) { $0 + $1 }
-    print("Suma: \(suma)")  // 55
-
-    // Encadenar operaciones
+    // Encadenando con trailing closures
     let resultado = numeros
-        .filter { $0 % 2 == 0 }   // Solo pares
-        .map { $0 * $0 }           // Elevar al cuadrado
-        .reduce(0, +)              // Sumar todo
-    print("Suma de cuadrados de pares: \(resultado)")  // 220
+        .filter { $0 % 2 == 0 }
+        .map { $0 * $0 }
+        .sorted { $0 > $1 }
+
+    print(resultado)  // [100, 64, 36, 16, 4]
     ```
   </TabItem>
   <TabItem label="React (Next.js)">
     ```typescript
     const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    // map: transforma cada elemento
-    const dobles = numeros.map((n) => n * 2);
-    console.log("Dobles:", dobles); // [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-
-    // filter: filtra elementos que cumplan una condición
     const pares = numeros.filter((n) => n % 2 === 0);
-    console.log("Pares:", pares); // [2, 4, 6, 8, 10]
 
-    // reduce: combina todos los elementos en un solo valor
-    const suma = numeros.reduce((acc, n) => acc + n, 0);
-    console.log("Suma:", suma); // 55
+    const impares = numeros.filter((n) => n % 2 !== 0);
 
-    // Encadenar operaciones
+    // Encadenando métodos de arreglo
     const resultado = numeros
       .filter((n) => n % 2 === 0)
       .map((n) => n * n)
-      .reduce((acc, n) => acc + n, 0);
-    console.log("Suma de cuadrados de pares:", resultado); // 220
+      .sort((a, b) => b - a);
+
+    console.log(resultado); // [100, 64, 36, 16, 4]
     ```
   </TabItem>
 </Tabs>
 
 <PlaygroundLink />
 
-### Captura de valores
+## Captura de valores
 
-Los closures capturan referencias a variables de su contexto.
+Los closures capturan y almacenan referencias a variables y constantes de su contexto.
 
 ```swift
 func crearContador() -> () -> Int {
     var cuenta = 0
-    let incrementar = {
+    return {
         cuenta += 1
         return cuenta
     }
-    return incrementar
 }
 
 let contador = crearContador()
 print(contador())  // 1
 print(contador())  // 2
 print(contador())  // 3
+
+// Cada contador tiene su propio estado capturado
+let otroContador = crearContador()
+print(otroContador())  // 1
 ```
 
 <PlaygroundLink />
 
-:::tip
-Los trailing closures hacen el código más legible, especialmente cuando el closure es el último argumento de una función. Úsalos siempre que puedas.
+:::note
+Los closures son tipos de referencia. Cuando asignas un closure a múltiples variables, todas comparten el mismo estado capturado.
 :::
 
 ## Resumen
@@ -409,10 +411,10 @@ Los trailing closures hacen el código más legible, especialmente cuando el clo
 | Concepto | Sintaxis |
 |----------|----------|
 | Función básica | `func nombre() { }` |
+| Con parámetros | `func nombre(etiqueta param: Tipo) { }` |
 | Con retorno | `func nombre() -> Tipo { }` |
-| Etiquetas | `func f(externo interno: Tipo)` |
-| Omitir etiqueta | `func f(_ param: Tipo)` |
-| Valor por defecto | `func f(param: Tipo = valor)` |
-| Variádico | `func f(_ params: Tipo...)` |
-| inout | `func f(_ param: inout Tipo)` |
+| Valor por defecto | `func nombre(param: Tipo = defecto) { }` |
+| Variádico | `func nombre(_ items: Tipo...) { }` |
+| inout | `func nombre(_ param: inout Tipo) { }` |
 | Closure | `{ (params) -> Tipo in cuerpo }` |
+| Trailing closure | `funcion { cuerpo }` |
