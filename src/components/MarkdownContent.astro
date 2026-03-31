@@ -1,17 +1,27 @@
-(function () {
-  'use strict';
+---
+// Replicates Starlight's MarkdownContent and appends a reading-progress button.
+import '../styles/reading-progress.css';
+---
 
+<div class="sl-markdown-content">
+  <slot />
+</div>
+
+<div id="rp-container">
+  <button id="rp-btn" type="button" aria-pressed="false">Marcar como leído</button>
+</div>
+
+<script>
   const STORAGE_KEY = 'swiftui-guide-read-v1';
 
   function getLang() {
     return /\/en\//.test(window.location.pathname) ? 'en' : 'es';
   }
 
-  function t(key) {
-    return {
-      mark: { es: 'Marcar como leído', en: 'Mark as read' },
-      read: { es: '✓ Leído', en: '✓ Read' },
-    }[key][getLang()];
+  function label(key) {
+    const lang = getLang();
+    if (key === 'read') return lang === 'en' ? '✓ Read' : '✓ Leído';
+    return lang === 'en' ? 'Mark as read' : 'Marcar como leído';
   }
 
   function getReadPages() {
@@ -33,11 +43,11 @@
     if (i === -1) pages.push(path);
     else pages.splice(i, 1);
     setReadPages(pages);
-    return i === -1; // returns new read state
+    return i === -1;
   }
 
   function updateBtn(btn, read) {
-    btn.textContent = read ? t('read') : t('mark');
+    btn.textContent = label(read ? 'read' : 'mark');
     btn.dataset.read = String(read);
     btn.setAttribute('aria-pressed', String(read));
   }
@@ -56,21 +66,14 @@
     });
   }
 
-  function inject() {
-    const content = document.querySelector('.sl-markdown-content');
-    if (!content) return;
-
-    document.getElementById('rp-container')?.remove();
+  function init() {
+    const btn = document.getElementById('rp-btn');
+    if (!btn || btn.dataset.initialized) return;
+    btn.dataset.initialized = 'true';
 
     const path = window.location.pathname;
-    const read = isRead(path);
-
-    const container = document.createElement('div');
-    container.id = 'rp-container';
-
-    const btn = document.createElement('button');
-    btn.id = 'rp-btn';
-    updateBtn(btn, read);
+    updateBtn(btn, isRead(path));
+    updateSidebar();
 
     btn.addEventListener('click', () => {
       const newState = toggleRead(path);
@@ -78,18 +81,16 @@
       updateSidebar();
     });
 
-    container.appendChild(btn);
-    content.after(container);
-
-    if (!read) {
+    if (!isRead(path)) {
       const onScroll = () => {
         const reached = window.scrollY + window.innerHeight >=
           document.documentElement.scrollHeight * 0.9;
         if (reached) {
           window.removeEventListener('scroll', onScroll);
-          if (!isRead(path)) {
+          const btn2 = document.getElementById('rp-btn');
+          if (btn2 && !isRead(path)) {
             toggleRead(path);
-            updateBtn(btn, true);
+            updateBtn(btn2, true);
             updateSidebar();
           }
         }
@@ -98,18 +99,13 @@
     }
   }
 
-  function init() {
-    inject();
-    updateSidebar();
-  }
-
-  // astro:page-load fires on navigations when View Transitions are enabled.
-  // DOMContentLoaded covers the initial page load in all cases.
-  document.addEventListener('astro:page-load', init);
-
+  // Astro bundles and defers this script automatically.
+  // DOMContentLoaded covers the initial load; astro:page-load covers
+  // client-side navigations (View Transitions, if ever enabled).
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
-})();
+  document.addEventListener('astro:page-load', init);
+</script>
