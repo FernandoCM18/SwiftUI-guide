@@ -1,0 +1,42 @@
+/* ── Reading progress button ─────────────────────────────── */
+
+#rp-container {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--sl-color-gray-5);
+  text-align: center;
+}
+
+#rp-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1.4rem;
+  border: 2px solid var(--sl-color-accent);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--sl-color-accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+#rp-btn:hover {
+  background: var(--sl-color-accent);
+  color: var(--sl-color-black);
+}
+
+#rp-btn[data-read="true"] {
+  background: var(--sl-color-accent);
+  color: var(--sl-color-black);
+}
+
+/* ── Sidebar read indicators ─────────────────────────────── */
+
+.sidebar-content a[data-rp-read="true"]::after {
+  content: '✓';
+  margin-left: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--sl-color-accent);
+  font-weight: 700;
+}
