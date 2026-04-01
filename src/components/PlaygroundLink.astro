@@ -3,7 +3,7 @@ interface Props {
   url?: string;
 }
 const { url = 'https://swiftfiddle.com/' } = Astro.props;
-const isEnglish = Astro.url.pathname.startsWith('/en/');
+const isEnglish = Astro.url.pathname.includes('/en/');
 const label = isEnglish ? 'Try in Swift Playground →' : 'Probar en Swift Playground →';
 ---
 <blockquote>

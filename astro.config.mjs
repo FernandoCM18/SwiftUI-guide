@@ -38,18 +38,7 @@ export default defineConfig({
         {
           label: 'Swift',
           translations: { en: 'Swift' },
-          items: [
-            { slug: 'swift' },
-            { slug: 'swift/variables-y-constantes' },
-            { slug: 'swift/tipos-de-datos' },
-            { slug: 'swift/flujo-de-control' },
-            { slug: 'swift/funciones' },
-            { slug: 'swift/concurrencia' },
-            { slug: 'swift/structs-y-clases' },
-            { slug: 'swift/opcionales' },
-            { slug: 'swift/protocolos' },
-            { slug: 'swift/enumeraciones' },
-          ],
+          autogenerate: { directory: 'swift' },
         },
         {
           label: 'SwiftUI',
@@ -59,84 +48,49 @@ export default defineConfig({
             {
               label: 'Texto e Imágenes',
               translations: { en: 'Text & Images' },
-              items: [
-                { slug: 'swiftui/texto/text' },
-                { slug: 'swiftui/texto/label' },
-                { slug: 'swiftui/texto/image' },
-              ],
+              autogenerate: { directory: 'swiftui/texto' },
             },
             {
               label: 'Controles',
               translations: { en: 'Controls' },
-              items: [
-                { slug: 'swiftui/controles/button' },
-                { slug: 'swiftui/controles/toggle' },
-                { slug: 'swiftui/controles/slider' },
-                { slug: 'swiftui/controles/picker' },
-                { slug: 'swiftui/controles/textfield' },
-              ],
+              autogenerate: { directory: 'swiftui/controles' },
             },
             {
               label: 'Layout',
               translations: { en: 'Layout' },
-              items: [
-                { slug: 'swiftui/layout/vstack' },
-                { slug: 'swiftui/layout/hstack' },
-                { slug: 'swiftui/layout/zstack' },
-              ],
+              autogenerate: { directory: 'swiftui/layout' },
             },
             {
               label: 'Listas y Navegación',
               translations: { en: 'Lists & Navigation' },
-              items: [
-                { slug: 'swiftui/listas-y-navegacion/list' },
-                { slug: 'swiftui/listas-y-navegacion/scrollview' },
-                { slug: 'swiftui/listas-y-navegacion/navigationstack' },
-              ],
+              autogenerate: { directory: 'swiftui/listas-y-navegacion' },
             },
             {
               label: 'Presentación',
               translations: { en: 'Presentation' },
-              items: [
-                { slug: 'swiftui/presentacion/sheet' },
-                { slug: 'swiftui/presentacion/alert' },
-                { slug: 'swiftui/presentacion/tabview' },
-              ],
+              autogenerate: { directory: 'swiftui/presentacion' },
             },
             {
               label: 'Estado',
               translations: { en: 'State' },
-              items: [
-                { slug: 'swiftui/estado/observable' },
-              ],
+              autogenerate: { directory: 'swiftui/estado' },
             },
             {
               label: 'Efectos',
               translations: { en: 'Effects' },
-              items: [
-                { slug: 'swiftui/efectos/liquid-glass' },
-              ],
+              autogenerate: { directory: 'swiftui/efectos' },
             },
             {
               label: 'Animaciones',
               translations: { en: 'Animations' },
-              items: [
-                { slug: 'swiftui/animaciones/keyframe' },
-                { slug: 'swiftui/animaciones/phase-animator' },
-              ],
+              autogenerate: { directory: 'swiftui/animaciones' },
             },
           ],
         },
-{
+        {
           label: 'Guías Prácticas',
           translations: { en: 'Practical Guides' },
-          items: [
-            { slug: 'guias-practicas/viewmodels-mvvm' },
-            { slug: 'guias-practicas/conectar-api' },
-            { slug: 'guias-practicas/assets-imagenes-colores' },
-            { slug: 'guias-practicas/arquitectura-proyecto' },
-            { slug: 'guias-practicas/swiftdata' },
-          ],
+          autogenerate: { directory: 'guias-practicas' },
         },
       ],
     }),
