@@ -35,7 +35,7 @@ Apply `@Observable` to a class so SwiftUI automatically observes all its propert
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { createContext, useContext, useState } from "react";
@@ -124,7 +124,7 @@ With `@Observable`, create the ViewModel with `@State` in the owning view:
     #Preview { CounterView() }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { useCounter, CounterProvider } from "./counter-context";
@@ -206,7 +206,7 @@ To pass the ViewModel to a child view without `@EnvironmentObject`, just pass it
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { useCounter, CounterProvider } from "./counter-context";
@@ -297,7 +297,7 @@ To share a ViewModel across the entire view hierarchy, use `@Environment` with a
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     "use client";
     import { createContext, useContext, useState } from "react";

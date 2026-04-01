@@ -31,7 +31,7 @@ El macro `@Model` convierte una clase Swift en un modelo persistente. Todas sus 
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Con Prisma ORM — definir en prisma/schema.prisma:
     // model Tarea {
@@ -81,7 +81,7 @@ El macro `@Model` convierte una clase Swift en un modelo persistente. Todas sus 
     .modelContainer(for: [Tarea.self, Proyecto.self, Etiqueta.self])
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // lib/db.ts — Singleton del cliente Prisma
     import { PrismaClient } from "@prisma/client";
@@ -142,7 +142,7 @@ El macro `@Model` convierte una clase Swift en un modelo persistente. Todas sus 
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // app/tareas/page.tsx — Server Component (carga datos en el servidor)
     import { db } from "@/lib/db";
@@ -193,7 +193,7 @@ El macro `@Model` convierte una clase Swift en un modelo persistente. Todas sus 
     ) var pendientesOrdenadas: [Tarea]
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Ordenar por fecha, más reciente primero
     const tareas = await db.tarea.findMany({
@@ -252,7 +252,7 @@ El macro `@Model` convierte una clase Swift en un modelo persistente. Todas sus 
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // app/tareas/actions.ts — Server Actions (CRUD)
     "use server";
@@ -327,7 +327,7 @@ SwiftData maneja relaciones con `@Relationship`:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // prisma/schema.prisma
     // model Proyecto {
@@ -407,7 +407,7 @@ Cuando cambias el modelo, SwiftData necesita migrar los datos existentes. Define
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // 1. Modifica el schema en prisma/schema.prisma:
     // model Tarea {

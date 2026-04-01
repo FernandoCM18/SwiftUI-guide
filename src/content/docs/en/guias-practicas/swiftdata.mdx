@@ -31,7 +31,7 @@ The `@Model` macro converts a Swift class into a persistent model. All its store
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // prisma/schema.prisma
     // model Task {
@@ -82,7 +82,7 @@ The `@Model` macro converts a Swift class into a persistent model. All its store
     .modelContainer(for: [Task.self, Project.self, Tag.self])
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // lib/prisma.ts — singleton Prisma client (replaces ModelContainer)
     import { PrismaClient } from "@prisma/client";
@@ -140,7 +140,7 @@ The `@Model` macro converts a Swift class into a persistent model. All its store
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Server Component — data is fetched on the server (replaces @Query)
     import { prisma } from "@/lib/prisma";
@@ -197,7 +197,7 @@ The `@Model` macro converts a Swift class into a persistent model. All its store
     ) var sortedPending: [Task]
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Sort by date, most recent first
     const tasks = await prisma.task.findMany({
@@ -256,7 +256,7 @@ The `@Model` macro converts a Swift class into a persistent model. All its store
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // app/tasks/actions.ts — Server Actions (replace ModelContext)
     "use server";
@@ -321,7 +321,7 @@ SwiftData handles relationships with `@Relationship`:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // prisma/schema.prisma
     //
@@ -397,7 +397,7 @@ When you change the model, SwiftData needs to migrate existing data. Define a `V
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // Prisma handles migrations via the CLI instead of code.
 

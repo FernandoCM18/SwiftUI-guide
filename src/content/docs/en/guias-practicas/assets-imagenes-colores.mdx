@@ -42,7 +42,7 @@ MyImage/
         .frame(width: 200, height: 200)
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Image from public/ folder
     import Image from "next/image";
@@ -85,7 +85,7 @@ Apple provides over 5,000 free icons with **SF Symbols**. They are vector-based,
         .font(.largeTitle)
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Using lucide-react (popular icon library)
     import { Heart, Star, Bell, HardDrive } from "lucide-react";
@@ -161,7 +161,7 @@ MyColor/
     let myColor = Color(hex: "#FF5733") // Requires extension
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // Color from Tailwind theme (tailwind.config.ts)
     <p className="text-my-color">Hello</p>
@@ -205,7 +205,7 @@ MyColor/
     let green = Color(hex: "#34C759")
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```typescript
     // tailwind.config.ts — extend the color palette
     import type { Config } from "tailwindcss";
@@ -265,20 +265,11 @@ The app icon is configured in `Assets.xcassets` → `AppIcon`:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
-    // App icon is configured in app/layout.tsx metadata
-    // or via public/favicon.ico + app/icon.tsx
-
-    // app/layout.tsx
-    import type { Metadata } from "next";
-
-    export const metadata: Metadata = {
-      icons: {
-        icon: "/favicon.ico",
-        apple: "/apple-icon.png",
-      },
-    };
+    // In React, place icons in /public and reference them in index.html:
+    // <link rel="icon" href="/favicon.ico" />
+    // <link rel="apple-touch-icon" href="/apple-icon.png" />
     ```
   </TabItem>
 </Tabs>
@@ -310,7 +301,7 @@ The app icon is configured in `Assets.xcassets` → `AppIcon`:
     .clipShape(RoundedRectangle(cornerRadius: 12))
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     // next/image handles loading and optimization automatically
     import Image from "next/image";
@@ -372,7 +363,7 @@ The app icon is configured in `Assets.xcassets` → `AppIcon`:
     }
     ```
   </TabItem>
-  <TabItem label="React (Next.js)">
+  <TabItem label="React">
     ```tsx
     import Image from "next/image";
 
